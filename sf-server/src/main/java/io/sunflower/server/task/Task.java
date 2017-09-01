@@ -1,8 +1,10 @@
-package io.sunflower.server;
+package io.sunflower.server.task;
 
 import com.google.common.collect.ImmutableMultimap;
 
 import java.io.PrintWriter;
+
+import io.sunflower.server.handler.TaskHandler;
 
 /**
  * An arbitrary administrative task which can be performed via the admin interface.

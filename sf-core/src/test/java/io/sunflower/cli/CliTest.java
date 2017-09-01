@@ -106,7 +106,7 @@ public class CliTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
-        when(location.toString()).thenReturn("dw-thing.jar");
+        when(location.toString()).thenReturn("sf-thing.jar");
         when(location.getVersion()).thenReturn(Optional.of("1.0.0"));
         bootstrap.addCommand(command);
         bootstrap.addCommand(new CustomCommand());
@@ -162,7 +162,7 @@ public class CliTest {
 
         assertThat(stdOut.toString())
             .isEqualTo(String.format(
-                "usage: java -jar dw-thing.jar [-h] [-v] {check,custom} ...%n" +
+                "usage: java -jar sf-thing.jar [-h] [-v] {check,custom} ...%n" +
                     "%n" +
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
@@ -183,7 +183,7 @@ public class CliTest {
 
         assertThat(stdOut.toString())
             .isEqualTo(String.format(
-                "usage: java -jar dw-thing.jar [-h] [-v] {check,custom} ...%n" +
+                "usage: java -jar sf-thing.jar [-h] [-v] {check,custom} ...%n" +
                     "%n" +
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
@@ -204,7 +204,7 @@ public class CliTest {
 
         assertThat(stdOut.toString())
             .isEqualTo(String.format(
-                "usage: java -jar dw-thing.jar [-h] [-v] {check,custom} ...%n" +
+                "usage: java -jar sf-thing.jar [-h] [-v] {check,custom} ...%n" +
                     "%n" +
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
@@ -226,7 +226,7 @@ public class CliTest {
 
         assertThat(stdOut.toString())
             .isEqualTo(String.format(
-                "usage: java -jar dw-thing.jar check [-h] [file]%n" +
+                "usage: java -jar sf-thing.jar check [-h] [file]%n" +
                     "%n" +
                     "Parses and validates the configuration file%n" +
                     "%n" +
@@ -251,7 +251,7 @@ public class CliTest {
 
         assertThat(stdOut.toString())
             .isEqualTo(String.format(
-                "usage: java -jar dw-thing.jar check [-h] [file]%n" +
+                "usage: java -jar sf-thing.jar check [-h] [file]%n" +
                     "%n" +
                     "Parses and validates the configuration file%n" +
                     "%n" +
@@ -279,7 +279,7 @@ public class CliTest {
         assertThat(stdErr.toString())
             .isEqualTo(String.format(
                 "unrecognized arguments: '--yes'%n" +
-                    "usage: java -jar dw-thing.jar [-h] [-v] {check,custom} ...%n" +
+                    "usage: java -jar sf-thing.jar [-h] [-v] {check,custom} ...%n" +
                     "%n" +
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
@@ -301,7 +301,7 @@ public class CliTest {
         assertThat(stdErr.toString())
             .isEqualTo(String.format(
                 "unrecognized arguments: '--yes'%n" +
-                    "usage: java -jar dw-thing.jar check [-h] [file]%n" +
+                    "usage: java -jar sf-thing.jar check [-h] [file]%n" +
                     "%n" +
                     "Parses and validates the configuration file%n" +
                     "%n" +
@@ -324,7 +324,7 @@ public class CliTest {
         assertThat(stdErr.toString())
             .isEqualTo(String.format(
                 "invalid choice: 'plop' (choose from 'check', 'custom')%n" +
-                    "usage: java -jar dw-thing.jar [-h] [-v] {check,custom} ...%n" +
+                    "usage: java -jar sf-thing.jar [-h] [-v] {check,custom} ...%n" +
                     "%n" +
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +

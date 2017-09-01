@@ -1,4 +1,4 @@
-package io.sunflower.server;
+package io.sunflower.server.handler;
 
 import com.codahale.metrics.Timer;
 

@@ -2,6 +2,7 @@ package io.sunflower.metrics;
 
 import com.google.common.io.Resources;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Before;
@@ -12,6 +13,7 @@ import java.io.File;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.DiscoverableSubtypeResolver;
 import io.sunflower.jackson.Jackson;
+import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.validation.BaseValidator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +23,7 @@ public class CsvReporterFactoryTest {
     private final YamlConfigurationFactory<MetricsFactory> factory =
         new YamlConfigurationFactory<>(MetricsFactory.class,
             BaseValidator.newValidator(),
-            objectMapper, "dw");
+            objectMapper, "sf");
 
     @Before
     public void setUp() throws Exception {
@@ -42,7 +44,7 @@ public class CsvReporterFactoryTest {
         dir.delete();
 
         MetricsFactory config = factory.build(new File(Resources.getResource("yaml/metrics.yml").toURI()));
-//        config.configure(new LifecycleEnvironment(), new MetricRegistry());
+        config.configure(new LifecycleEnvironment(), new MetricRegistry());
         assertThat(dir.exists()).isEqualTo(true);
     }
 }

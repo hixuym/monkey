@@ -1,8 +1,10 @@
-package io.sunflower.server;
+package io.sunflower.server.task;
 
 import com.google.common.collect.ImmutableMultimap;
 
 import java.io.PrintWriter;
+
+import io.sunflower.server.handler.TaskHandler;
 
 /**
  * A task which can be performed via the admin interface and provides the post body of the request.

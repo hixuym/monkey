@@ -1,4 +1,4 @@
-package io.sunflower.server;
+package io.sunflower.server.task;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;

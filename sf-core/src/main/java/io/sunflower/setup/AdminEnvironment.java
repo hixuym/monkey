@@ -7,10 +7,10 @@ import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.sunflower.server.GarbageCollectionTask;
-import io.sunflower.server.LogConfigurationTask;
-import io.sunflower.server.Task;
-import io.sunflower.server.TaskHandler;
+import io.sunflower.server.task.GarbageCollectionTask;
+import io.sunflower.server.task.LogConfigurationTask;
+import io.sunflower.server.task.Task;
+import io.sunflower.server.handler.TaskHandler;
 import io.sunflower.server.setup.ServerEnvironment;
 
 import static com.google.common.base.MoreObjects.firstNonNull;

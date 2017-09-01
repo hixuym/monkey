@@ -36,10 +36,6 @@
         </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
             <artifactId>sf-metrics</artifactId>
         </dependency>
         <dependency>

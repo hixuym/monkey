@@ -24,6 +24,6 @@ public class PrefixedExtendedThrowableProxyConverterTest {
     public void prefixesExceptionsWithExclamationMarks() throws Exception {
         assertThat(converter.throwableProxyToString(proxy))
             .startsWith(String.format("! java.io.IOException: noo%n" +
-                "! at io.sunflower.logging.PrefixedExtendedThrowableProxyConverterTest.<init>(PrefixedExtendedThrowableProxyConverterTest.java:14)%n"));
+                "! at io.sunflower.logging.PrefixedExtendedThrowableProxyConverterTest.<init>(PrefixedExtendedThrowableProxyConverterTest.java:15)%n"));
     }
 }

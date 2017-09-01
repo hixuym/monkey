@@ -47,7 +47,7 @@ public class JsonConfigurationFactoryTest extends BaseConfigurationFactoryTest {
             assertThat(e)
                 .hasMessageContaining(String.format(
                     "%s has an error:%n" +
-                        "  * Malformed JSON at line: 8, column: 7;",
+                        "  * Malformed JSON",
                     malformedAdvancedFile.getName()));
         }
     }
