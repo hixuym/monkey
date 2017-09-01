@@ -27,8 +27,6 @@ import io.sunflower.setup.Environment;
  */
 public class InjectionBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    public static final String SF_INJECTOR = "$sf_injector_context_key$";
-
     private final Application application;
 
     private List<Module> moduleToLoad = Lists.newArrayList();
@@ -41,21 +39,12 @@ public class InjectionBundle<T extends Configuration> implements ConfiguredBundl
         this.moduleToLoad.addAll(Arrays.asList(modules));
     }
 
-    public static Injector getInjector(Environment environment) {
-        Injector injector = (Injector) environment.getAttribute(SF_INJECTOR);
-
-        if (injector == null) {
-            throw new RuntimeException("please add InjectionBundle to Bootstrap.");
-        }
-
-        return injector;
-    }
-
     @Override
     public void run(T configuration, Environment environment) throws Exception {
 
-        moduleToLoad.add(new AbstractModule() {
+        Injector parent = Guice.createInjector(Stage.PRODUCTION, new AbstractModule() {
             @Override
+            @SuppressWarnings("unchecked")
             protected void configure() {
                 bind(application.getConfigurationClass()).toInstance(configuration);
                 bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
@@ -65,9 +54,7 @@ public class InjectionBundle<T extends Configuration> implements ConfiguredBundl
             }
         });
 
-        Injector injector = Guice.createInjector(Stage.PRODUCTION, moduleToLoad);
-
-        environment.setAttribute(SF_INJECTOR, injector);
+        environment.putInstance(Injector.class, parent.createChildInjector(moduleToLoad));
     }
 
     @Override

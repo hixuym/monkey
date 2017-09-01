@@ -47,6 +47,10 @@
             <artifactId>sf-configuration</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-lifecycle</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
@@ -61,6 +65,10 @@
         <dependency>
             <groupId>net.sourceforge.argparse4j</groupId>
             <artifactId>argparse4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-server</artifactId>
         </dependency>
     </dependencies>
 

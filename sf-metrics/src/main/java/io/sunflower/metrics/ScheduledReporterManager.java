@@ -2,12 +2,13 @@ package io.sunflower.metrics;
 
 import com.codahale.metrics.ScheduledReporter;
 
+import io.sunflower.lifecycle.Managed;
 import io.sunflower.util.Duration;
 
 /**
  * Manages a {@link ScheduledReporter} lifecycle.
  */
-public class ScheduledReporterManager {
+public class ScheduledReporterManager implements Managed {
     private final ScheduledReporter reporter;
     private final Duration period;
 
@@ -25,7 +26,7 @@ public class ScheduledReporterManager {
     /**
      * Begins reporting metrics using the configured {@link ScheduledReporter}.
      */
-//    @Override
+    @Override
     public void start() throws Exception {
         reporter.start(period.getQuantity(), period.getUnit());
     }
@@ -33,7 +34,7 @@ public class ScheduledReporterManager {
     /**
      * Stops the configured {@link ScheduledReporter} from reporting metrics.
      */
-//    @Override
+    @Override
     public void stop() throws Exception {
         reporter.stop();
     }

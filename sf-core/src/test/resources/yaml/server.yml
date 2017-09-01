@@ -11,8 +11,8 @@ serverPush:
   enabled: true
   refererHosts: ["sunflower.io"]
   refererPorts: [8445]
-applicationConnectors:
-  - type: http
+applicationListeners:
+  - type: server
     port: 0
     bindHost: "localhost"
     acceptorThreads: 2

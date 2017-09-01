@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-lifecycle</artifactId>
+    <artifactId>sf-server</artifactId>
 
-    <name>Sunflower Lifecycle Module</name>
+    <name>Sunflower Http Server Module</name>
 
     <dependencyManagement>
         <dependencies>
@@ -27,21 +27,28 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-annotation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-logging</artifactId>
-            <scope>test</scope>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-core</artifactId>
         </dependency>
     </dependencies>
 

@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import io.sunflower.logging.DefaultLoggingFactory;
 import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
+import io.sunflower.server.DefaultServerFactory;
+import io.sunflower.server.ServerFactory;
 
 /**
  * An object representation of the YAML configuration file. Extend this with your own configuration
@@ -53,7 +55,7 @@ import io.sunflower.metrics.MetricsFactory;
  * }
  * </pre>
  * <p/>
- * Dropwizard will parse the given YAML file and provide an {@code ExampleConfiguration} instance
+ * Sunflower will parse the given YAML file and provide an {@code ExampleConfiguration} instance
  * to your application whose {@code getName()} method will return {@code "Random Person"} and whose
  * {@code getAge()} method will return {@code 43}.
  *
@@ -65,8 +67,21 @@ public class Configuration {
     private LoggingFactory logging;
 
     @Valid
+    private ServerFactory server = new DefaultServerFactory();
+
+    @Valid
     @NotNull
     private MetricsFactory metrics = new MetricsFactory();
+
+    @JsonProperty("server")
+    public ServerFactory getServerFactory() {
+        return server;
+    }
+
+    @JsonProperty("server")
+    public void setServerFactory(ServerFactory server) {
+        this.server = server;
+    }
 
     /**
      * Returns the logging-specific section of the configuration file.

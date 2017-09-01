@@ -1,6 +1,9 @@
 package io.sunflower.setup;
 
 import com.google.common.collect.Maps;
+import com.google.common.reflect.MutableTypeToInstanceMap;
+import com.google.common.reflect.TypeToInstanceMap;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
@@ -9,8 +12,14 @@ import com.codahale.metrics.health.SharedHealthCheckRegistries;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.validation.Validator;
+
+import io.sunflower.server.setup.ServerEnvironment;
+import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 
 import static java.util.Objects.requireNonNull;
 
@@ -25,10 +34,14 @@ public class Environment {
 
     private Validator validator;
 
-    /**
-     *
-     */
+    private final LifecycleEnvironment lifecycleEnvironment;
+    private final ServerEnvironment serverEnvironment;
+    private final AdminEnvironment adminEnvironment;
+
+    private final ExecutorService healthCheckExecutorService;
+
     private final Map<String, Object> attributes = Maps.newConcurrentMap();
+    private final TypeToInstanceMap<Object> typeToInstanceMap = new MutableTypeToInstanceMap<>();
 
     /**
      * Creates a new environment.
@@ -47,6 +60,20 @@ public class Environment {
         this.metricRegistry = metricRegistry;
         this.healthCheckRegistry = healthCheckRegistry;
         this.validator = validator;
+
+        this.lifecycleEnvironment = new LifecycleEnvironment();
+
+        this.adminEnvironment = new AdminEnvironment(healthCheckRegistry, metricRegistry);
+
+        this.serverEnvironment = new ServerEnvironment();
+
+        this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
+            .workQueue(new ArrayBlockingQueue<>(1))
+            .minThreads(1)
+            .maxThreads(4)
+            .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+            .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
+            .build();
 
         try {
             SharedMetricRegistries.getDefault();
@@ -77,6 +104,18 @@ public class Environment {
 
     public Object getAttribute(String key) {
         return this.attributes.get(key);
+    }
+
+    public <T> void putInstance(Class<T> type, T instance) {
+        this.typeToInstanceMap.putInstance(type, instance);
+    }
+
+    public <T> T getInstance(Class<T> type) {
+        return this.typeToInstanceMap.getInstance(type);
+    }
+
+    public TypeToInstanceMap<Object> getTypeToInstanceMap() {
+        return typeToInstanceMap;
     }
 
     /**
@@ -119,5 +158,26 @@ public class Environment {
      */
     public HealthCheckRegistry healthChecks() {
         return healthCheckRegistry;
+    }
+
+    /**
+     * Returns the application's {@link LifecycleEnvironment}.
+     */
+    public LifecycleEnvironment lifecycle() {
+        return lifecycleEnvironment;
+    }
+
+    public AdminEnvironment admin() {
+        return this.adminEnvironment;
+    }
+
+    public ServerEnvironment server() {
+        return this.serverEnvironment;
+    }
+    /**
+     * Returns an {@link ExecutorService} to run time bound health checks
+     */
+    public ExecutorService getHealthCheckExecutorService() {
+        return healthCheckExecutorService;
     }
 }

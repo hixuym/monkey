@@ -3,6 +3,7 @@ package io.sunflower.metrics;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.util.Duration;
 
 /**
@@ -82,18 +84,18 @@ public class MetricsFactory {
      * @param registry    the metric registry to report metrics from.
      */
 
-//    public void configure(LifecycleEnvironment environment, MetricRegistry registry) {
-//        for (ReporterFactory reporter : reporters) {
-//            try {
-//                final ScheduledReporterManager manager =
-//                        new ScheduledReporterManager(reporter.build(registry),
-//                                                     reporter.getFrequency().orElseGet(this::getFrequency));
-//                environment.manage(manager);
-//            } catch (Exception e) {
-//                LOGGER.warn("Failed to create reporter, metrics may not be properly reported.", e);
-//            }
-//        }
-//    }
+    public void configure(LifecycleEnvironment environment, MetricRegistry registry) {
+        for (ReporterFactory reporter : reporters) {
+            try {
+                final ScheduledReporterManager manager =
+                        new ScheduledReporterManager(reporter.build(registry),
+                                                     reporter.getFrequency().orElseGet(this::getFrequency));
+                environment.manage(manager);
+            } catch (Exception e) {
+                LOGGER.warn("Failed to create reporter, metrics may not be properly reported.", e);
+            }
+        }
+    }
 
     @Override
     public String toString() {

@@ -50,6 +50,8 @@
         <module>sf-metrics</module>
         <module>sf-core</module>
         <module>sf-inject</module>
+        <module>sf-lifecycle</module>
+        <module>sf-server</module>
     </modules>
 
     <licenses>

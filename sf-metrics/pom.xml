@@ -32,6 +32,10 @@
         </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>
+            <artifactId>sf-lifecycle</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.sunflower</groupId>
             <artifactId>sf-validation</artifactId>
         </dependency>
         <dependency>
