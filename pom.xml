@@ -52,6 +52,7 @@
         <module>sf-inject</module>
         <module>sf-lifecycle</module>
         <module>sf-server</module>
+        <module>sf-example</module>
     </modules>
 
     <licenses>

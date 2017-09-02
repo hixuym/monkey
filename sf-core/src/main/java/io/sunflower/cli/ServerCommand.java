@@ -37,6 +37,11 @@ public class ServerCommand<T extends Configuration> extends ConfiguredCommand<T>
     }
 
     @Override
+    protected Class<T> getConfigurationClass() {
+        return application.getConfigurationClass();
+    }
+
+    @Override
     protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration) throws Exception {
         final Environment environment = new Environment(bootstrap.getApplication().getName(),
             bootstrap.getObjectMapper(),
