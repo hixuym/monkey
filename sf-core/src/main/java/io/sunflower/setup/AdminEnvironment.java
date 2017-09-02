@@ -7,11 +7,15 @@ import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.sunflower.server.task.GarbageCollectionTask;
-import io.sunflower.server.task.LogConfigurationTask;
-import io.sunflower.server.task.Task;
-import io.sunflower.server.handler.TaskHandler;
-import io.sunflower.server.setup.ServerEnvironment;
+import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.LifeCycle;
+import io.sunflower.lifecycle.setup.LifecycleEnvironment;
+import io.sunflower.undertow.handler.GarbageCollectionTask;
+import io.sunflower.undertow.handler.LogConfigurationTask;
+import io.sunflower.undertow.handler.Task;
+import io.sunflower.undertow.handler.TaskHandler;
+import io.sunflower.undertow.setup.UndertowEnvironment;
+import io.undertow.server.handlers.PathHandler;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
@@ -19,23 +23,37 @@ import static java.util.Objects.requireNonNull;
 /**
  * Created by michael on 17/9/1.
  */
-public class AdminEnvironment extends ServerEnvironment {
+public class AdminEnvironment extends UndertowEnvironment {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminEnvironment.class);
 
     private final HealthCheckRegistry healthChecks;
 
-    private final TaskHandler taskHandler;
+    private final TaskHandler tasks;
 
-    public AdminEnvironment(HealthCheckRegistry healthChecks, MetricRegistry metricRegistry) {
+    public AdminEnvironment(PathHandler handlerContext,
+                            HealthCheckRegistry healthChecks,
+                            MetricRegistry metricRegistry,
+                            LifecycleEnvironment lifecycle) {
+
+        super(handlerContext);
+
         this.healthChecks = healthChecks;
         this.healthChecks.register("deadlocks", new ThreadDeadlockHealthCheck());
-        this.taskHandler = new TaskHandler(metricRegistry);
+        this.tasks = new TaskHandler(metricRegistry);
 
-        taskHandler.add(new GarbageCollectionTask());
-        taskHandler.add(new LogConfigurationTask());
+        tasks.add(new GarbageCollectionTask());
+        tasks.add(new LogConfigurationTask());
 
-        addHandler(TaskHandler.MAPPING, taskHandler);
+        addUndertowHandler(TaskHandler.MAPPING, tasks);
+
+        lifecycle.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                logTasks();
+                logHealthChecks();
+            }
+        });
     }
 
     /**
@@ -44,13 +62,13 @@ public class AdminEnvironment extends ServerEnvironment {
      * @param task a task
      */
     public void addTask(Task task) {
-        taskHandler.add(requireNonNull(task));
+        tasks.add(requireNonNull(task));
     }
 
     private void logTasks() {
         final StringBuilder stringBuilder = new StringBuilder(1024).append(String.format("%n%n"));
 
-        for (Task task : taskHandler.getTasks()) {
+        for (Task task : tasks.getTasks()) {
             final String taskClassName = firstNonNull(task.getClass().getCanonicalName(), task.getClass().getName());
             stringBuilder.append(String.format("    %-7s /tasks/%s (%s)%n",
                 "POST",

@@ -19,8 +19,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import io.sunflower.server.setup.ServerEnvironment;
+import io.sunflower.undertow.setup.UndertowEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
+import io.undertow.Handlers;
+import io.undertow.server.handlers.PathHandler;
 
 import static java.util.Objects.requireNonNull;
 
@@ -37,8 +39,11 @@ public class Environment {
     private Validator validator;
 
     private final LifecycleEnvironment lifecycleEnvironment;
-    private final ServerEnvironment serverEnvironment;
+    private final UndertowEnvironment undertowEnvironment;
     private final AdminEnvironment adminEnvironment;
+
+    private final PathHandler applicationContext;
+    private final PathHandler adminContext;
 
     private final ExecutorService healthCheckExecutorService;
 
@@ -67,9 +72,11 @@ public class Environment {
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 
-        this.adminEnvironment = new AdminEnvironment(healthCheckRegistry, metricRegistry);
+        this.adminContext = Handlers.path();
+        this.adminEnvironment = new AdminEnvironment(adminContext, healthCheckRegistry, metricRegistry, lifecycleEnvironment);
 
-        this.serverEnvironment = new ServerEnvironment();
+        this.applicationContext = Handlers.path();
+        this.undertowEnvironment = new UndertowEnvironment(applicationContext);
 
         this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
             .workQueue(new ArrayBlockingQueue<>(1))
@@ -184,13 +191,21 @@ public class Environment {
         return this.adminEnvironment;
     }
 
-    public ServerEnvironment server() {
-        return this.serverEnvironment;
+    public UndertowEnvironment undertow() {
+        return this.undertowEnvironment;
     }
     /**
      * Returns an {@link ExecutorService} to run time bound health checks
      */
     public ExecutorService getHealthCheckExecutorService() {
         return healthCheckExecutorService;
+    }
+
+    public PathHandler getApplicationContext() {
+        return applicationContext;
+    }
+
+    public PathHandler getAdminContext() {
+        return adminContext;
     }
 }

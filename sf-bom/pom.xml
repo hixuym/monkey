@@ -859,7 +859,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-server</artifactId>
+                <artifactId>sf-undertow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -873,6 +873,38 @@
                 <artifactId>sf-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-migrations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-sec</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-mail</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

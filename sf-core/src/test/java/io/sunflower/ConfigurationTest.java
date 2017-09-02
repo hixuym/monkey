@@ -10,7 +10,7 @@ import java.util.stream.StreamSupport;
 
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.AppenderFactory;
-import io.sunflower.server.ListenerFactory;
+import io.sunflower.undertow.ConnectorFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +35,7 @@ public class ConfigurationTest {
 
 
         mapper.getSubtypeResolver()
-            .registerSubtypes(StreamSupport.stream(ServiceLoader.load(ListenerFactory.class).spliterator(), false)
+            .registerSubtypes(StreamSupport.stream(ServiceLoader.load(ConnectorFactory.class).spliterator(), false)
                 .map(Object::getClass)
                 .collect(Collectors.toList())
                 .toArray(dummyArray));

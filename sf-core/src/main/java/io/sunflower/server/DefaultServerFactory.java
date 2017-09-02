@@ -16,6 +16,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import io.sunflower.setup.Environment;
+import io.sunflower.undertow.HttpConnectorFactory;
+import io.sunflower.undertow.ConnectorFactory;
+import io.sunflower.undertow.Server;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
 
@@ -32,14 +35,14 @@ import io.undertow.UndertowOptions;
  * <td>Description</td>
  * </tr>
  * <tr>
- * <td>{@code applicationListeners}</td>
- * <td>An {@link HttpListenerFactory HTTP connector} listening on port 8080.</td>
- * <td>A set of {@link ListenerFactory connectors} which will handle application requests.</td>
+ * <td>{@code applicationConnectors}</td>
+ * <td>An {@link HttpConnectorFactory HTTP connector} listening on port 8080.</td>
+ * <td>A set of {@link ConnectorFactory connectors} which will handle application requests.</td>
  * </tr>
  * <tr>
- * <td>{@code adminListeners}</td>
- * <td>An {@link HttpListenerFactory HTTP connector} listening on port 8081.</td>
- * <td>A set of {@link ListenerFactory connectors} which will handle admin requests.</td>
+ * <td>{@code adminConnectors}</td>
+ * <td>An {@link HttpConnectorFactory HTTP connector} listening on port 8081.</td>
+ * <td>A set of {@link ConnectorFactory connectors} which will handle admin requests.</td>
  * </tr>
  * <tr>
  * <td>{@code adminMaxThreads}</td>
@@ -64,17 +67,14 @@ public class DefaultServerFactory extends AbstractServerFactory {
 
     @Valid
     @NotNull
-    private List<ListenerFactory> applicationListeners = Collections.singletonList(HttpListenerFactory.application());
+    private List<ConnectorFactory> applicationConnectors = Collections.singletonList(HttpConnectorFactory.application());
 
     @Valid
     @NotNull
-    private List<ListenerFactory> adminListeners = Collections.singletonList(HttpListenerFactory.admin());
+    private List<ConnectorFactory> adminConnectors = Collections.singletonList(HttpConnectorFactory.admin());
 
     @NotEmpty
     private String applicationContextPath = "/";
-
-    @NotEmpty
-    private String adminContextPath = "/";
 
     @JsonProperty
     public String getApplicationContextPath() {
@@ -87,33 +87,23 @@ public class DefaultServerFactory extends AbstractServerFactory {
     }
 
     @JsonProperty
-    public String getAdminContextPath() {
-        return adminContextPath;
+    public List<ConnectorFactory> getApplicationConnectors() {
+        return applicationConnectors;
     }
 
     @JsonProperty
-    public void setAdminContextPath(final String adminContextPath) {
-        this.adminContextPath = adminContextPath;
+    public void setApplicationConnectors(List<ConnectorFactory> applicationConnectors) {
+        this.applicationConnectors = applicationConnectors;
     }
 
     @JsonProperty
-    public List<ListenerFactory> getApplicationListeners() {
-        return applicationListeners;
+    public List<ConnectorFactory> getAdminConnectors() {
+        return adminConnectors;
     }
 
     @JsonProperty
-    public void setApplicationListeners(List<ListenerFactory> applicationListeners) {
-        this.applicationListeners = applicationListeners;
-    }
-
-    @JsonProperty
-    public List<ListenerFactory> getAdminListeners() {
-        return adminListeners;
-    }
-
-    @JsonProperty
-    public void setAdminListeners(List<ListenerFactory> adminListeners) {
-        this.adminListeners = adminListeners;
+    public void setAdminConnectors(List<ConnectorFactory> adminConnectors) {
+        this.adminConnectors = adminConnectors;
     }
 
     @Override
@@ -126,21 +116,24 @@ public class DefaultServerFactory extends AbstractServerFactory {
             // NOTE: should ninja not use equals chars within its cookie values?
             .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
 
-        LOGGER.info("Registering ninja handler with root path prefix: {}", applicationContextPath);
-        for (ListenerFactory factory : applicationListeners) {
+        LOGGER.info("Registering application handler with root path prefix: {}", applicationContextPath);
+        for (ConnectorFactory factory : applicationConnectors) {
             Undertow.ListenerBuilder listenerBuilder = factory.build();
-            listenerBuilder.setRootHandler(createApplicationHandler(applicationContextPath));
+            listenerBuilder.setRootHandler(environment.getApplicationContext());
             undertowBuilder.addListener(listenerBuilder);
         }
 
-        LOGGER.info("Registering admin handler with root path prefix: {}", adminContextPath);
-        for (ListenerFactory factory : adminListeners) {
+        for (ConnectorFactory factory : adminConnectors) {
             Undertow.ListenerBuilder listenerBuilder = factory.build();
-            listenerBuilder.setRootHandler(createAdminHandler(adminContextPath));
+            listenerBuilder.setRootHandler(environment.getAdminContext());
             undertowBuilder.addListener(listenerBuilder);
         }
 
-        return new Server(undertowBuilder.build());
+        Server server = new Server(undertowBuilder.build());
+
+        environment.lifecycle().attach(server);
+
+        return server;
     }
 
     @Override
@@ -150,10 +143,9 @@ public class DefaultServerFactory extends AbstractServerFactory {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-            .add("applicationListeners", applicationListeners)
-            .add("adminListeners", adminListeners)
+            .add("applicationConnectors", applicationConnectors)
+            .add("adminConnectors", adminConnectors)
             .add("applicationContextPath", applicationContextPath)
-            .add("adminContextPath", adminContextPath)
             .toString();
     }
 }

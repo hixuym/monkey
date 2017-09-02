@@ -320,7 +320,7 @@ public class ExtensionLoader<T> {
 
     private ConcurrentMap<String, Class<T>> loadExtensionClasses(String prefix) {
         String fullName = prefix + type.getName();
-        List<String> classNames = new ArrayList<String>();
+        List<String> classNames = new ArrayList<>();
 
         try {
             Enumeration<URL> urls;
@@ -331,7 +331,7 @@ public class ExtensionLoader<T> {
             }
 
             if (urls == null || !urls.hasMoreElements()) {
-                return new ConcurrentHashMap<String, Class<T>>();
+                return new ConcurrentHashMap<>();
             }
 
             while (urls.hasMoreElements()) {
@@ -341,7 +341,7 @@ public class ExtensionLoader<T> {
             }
         } catch (Exception e) {
             throw new ExtensionLoaderException(
-                "ExtensionLoader loadExtensionClasses error, prefix: " + prefix + " type: " + type.getClass(), e);
+                "ExtensionLoader loadExtensionClasses error, prefix: " + prefix + " type: " + type, e);
         }
 
         return loadClass(classNames);

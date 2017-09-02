@@ -52,9 +52,14 @@
         <module>sf-core</module>
         <module>sf-inject</module>
         <module>sf-lifecycle</module>
-        <module>sf-server</module>
+        <module>sf-undertow</module>
         <module>sf-example</module>
         <module>sf-extension</module>
+        <module>sf-db</module>
+        <module>sf-migrations</module>
+        <module>sf-mybatis</module>
+        <module>sf-sec</module>
+        <module>sf-mail</module>
     </modules>
 
     <licenses>
@@ -67,8 +72,8 @@
 
     <scm>
         <url>https://github.com/hixuym/sunflower</url>
-        <connection>scm:git:file://localhost/Volumes/DT/git-repos/sunflower.git</connection>
-        <developerConnection>scm:git:file://localhost/Volumes/DT/git-repos/sunflower.git
+        <connection>scm:git:file://localhost/Volumes/DT/git-repos/sf.git</connection>
+        <developerConnection>scm:git:file://localhost/Volumes/DT/git-repos/sf.git
         </developerConnection>
         <tag>HEAD</tag>
     </scm>

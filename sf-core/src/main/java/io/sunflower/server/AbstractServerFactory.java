@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import javax.validation.constraints.Min;
 
+import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 
 /**
@@ -207,13 +208,5 @@ public abstract class AbstractServerFactory implements ServerFactory {
             // don't display the banner if there isn't one
             LOGGER.info("Starting {}", name);
         }
-    }
-
-    protected HttpHandler createApplicationHandler(String applicationContext) {
-        return null;
-    }
-
-    protected HttpHandler createAdminHandler(String adminContext) {
-        return null;
     }
 }

@@ -4,20 +4,20 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
-import io.undertow.Undertow;
+import io.sunflower.undertow.Server;
 
 /**
- * A factory for building {@link Undertow.Builder} instances for Sunflower applications.
+ * A factory for building {@link Server} instances for Sunflower applications.
  *
  * @see DefaultServerFactory
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultServerFactory.class)
 public interface ServerFactory extends Discoverable {
     /**
-     * Build a server for the given Sunflower application.
+     * Build a undertow for the given Sunflower application.
      *
      * @param environment the application's environment
-     * @return a {@link Undertow.Builder} running the Sunflower application
+     * @return a {@link Server} running the Sunflower application
      */
     Server build(Environment environment);
 

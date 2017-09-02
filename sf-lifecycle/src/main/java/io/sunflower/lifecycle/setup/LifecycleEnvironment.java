@@ -1,8 +1,5 @@
 package io.sunflower.lifecycle.setup;
 
-import com.google.common.util.concurrent.AbstractIdleService;
-import com.google.common.util.concurrent.Service;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,29 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 
+import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.ContainerLifeCycle;
+import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.Managed;
-import io.sunflower.lifecycle.LifecycleListener;
 
 import static java.util.Objects.requireNonNull;
 
 public class LifecycleEnvironment {
     private static final Logger LOGGER = LoggerFactory.getLogger(LifecycleEnvironment.class);
 
-    private final List<Service> managedObjects;
-
-    private final List<LifecycleListener> lifecycleListeners;
+    private final List<LifeCycle> managedObjects;
+    private final List<LifeCycle.Listener> lifecycleListeners;
 
     public LifecycleEnvironment() {
         this.managedObjects = new ArrayList<>();
         this.lifecycleListeners = new ArrayList<>();
     }
 
-    public List<Service> getManagedObjects() {
+    public List<LifeCycle> getManagedObjects() {
         return managedObjects;
-    }
-
-    public List<LifecycleListener> getLifecycleListeners() {
-        return lifecycleListeners;
     }
 
     /**
@@ -43,26 +37,26 @@ public class LifecycleEnvironment {
      * @param managed a managed object
      */
     public void manage(Managed managed) {
-        Managed m = requireNonNull(managed);
-        managedObjects.add(new AbstractIdleService() {
+
+        managedObjects.add(new AbstractLifeCycle() {
             @Override
-            protected void startUp() throws Exception {
-                m.start();
+            protected void doStart() throws Exception {
+                requireNonNull(managed).start();
             }
 
             @Override
-            protected void shutDown() throws Exception {
-                m.stop();
+            protected void doStop() throws Exception {
+                requireNonNull(managed).stop();
             }
         });
     }
 
     /**
-     * Adds the given Jetty {@link Service} instances to the server's lifecycle.
+     * Adds the given Jetty {@link LifeCycle} instances to the server's lifecycle.
      *
-     * @param managed a Jetty-managed object
+     * @param managed a managed object
      */
-    public void manage(Service managed) {
+    public void manage(LifeCycle managed) {
         managedObjects.add(requireNonNull(managed));
     }
 
@@ -86,8 +80,22 @@ public class LifecycleEnvironment {
         return new ScheduledExecutorServiceBuilder(this, nameFormat, useDaemonThreads);
     }
 
-    public void addListener(LifecycleListener listener) {
+    public void addLifeCycleListener(LifeCycle.Listener listener) {
         lifecycleListeners.add(listener);
     }
 
+    public void attach(ContainerLifeCycle container) {
+        for (LifeCycle object : managedObjects) {
+            container.addBean(object);
+        }
+        container.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                LOGGER.debug("managed objects = {}", managedObjects);
+            }
+        });
+        for (LifeCycle.Listener listener : lifecycleListeners) {
+            container.addLifeCycleListener(listener);
+        }
+    }
 }

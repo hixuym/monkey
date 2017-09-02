@@ -73,12 +73,12 @@ public class Configuration {
     @NotNull
     private MetricsFactory metrics = new MetricsFactory();
 
-    @JsonProperty("server")
+    @JsonProperty("undertow")
     public ServerFactory getServerFactory() {
         return server;
     }
 
-    @JsonProperty("server")
+    @JsonProperty("undertow")
     public void setServerFactory(ServerFactory server) {
         this.server = server;
     }

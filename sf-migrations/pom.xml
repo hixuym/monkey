@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-mail</artifactId>
+    <artifactId>sf-migrations</artifactId>
 
-    <name>Sunflower Mail Postoffice Module</name>
+    <name>Sunflower Database Migrations Module</name>
 
     <dependencyManagement>
         <dependencies>
