@@ -199,8 +199,7 @@ public abstract class AbstractServerFactory implements ServerFactory {
 
     protected void printBanner(String name) {
         try {
-            final String banner = WINDOWS_NEWLINE.matcher(Resources.toString(Resources.getResource("banner.txt"),
-                StandardCharsets.UTF_8))
+            final String banner = WINDOWS_NEWLINE.matcher(Resources.toString(Resources.getResource("banner.txt"), StandardCharsets.UTF_8))
                 .replaceAll("\n")
                 .replace("\n", String.format("%n"));
             LOGGER.info(String.format("Starting {}%n{}"), name, banner);

@@ -62,6 +62,10 @@
             <groupId>io.sunflower</groupId>
             <artifactId>sf-validation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-extension</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

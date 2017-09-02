@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import io.sunflower.server.setup.ServerEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
@@ -32,6 +33,7 @@ public class Environment {
     private final HealthCheckRegistry healthCheckRegistry;
     private final ObjectMapper objectMapper;
 
+    private ValidatorFactory validatorFactory;
     private Validator validator;
 
     private final LifecycleEnvironment lifecycleEnvironment;
@@ -52,6 +54,7 @@ public class Environment {
     public Environment(String name,
                        ObjectMapper objectMapper,
                        Validator validator,
+                       ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
                        HealthCheckRegistry healthCheckRegistry) {
@@ -60,6 +63,7 @@ public class Environment {
         this.metricRegistry = metricRegistry;
         this.healthCheckRegistry = healthCheckRegistry;
         this.validator = validator;
+        this.validatorFactory = validatorFactory;
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -93,9 +97,10 @@ public class Environment {
     public Environment(String name,
                        ObjectMapper objectMapper,
                        Validator validator,
+                       ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader) {
-        this(name, objectMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
+        this(name, objectMapper, validator, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry());
     }
 
     public void setAttribute(String key, Object val) {
@@ -144,6 +149,14 @@ public class Environment {
      */
     public void setValidator(Validator validator) {
         this.validator = requireNonNull(validator);
+    }
+
+    public ValidatorFactory getValidatorFactory() {
+        return validatorFactory;
+    }
+
+    public void setValidatorFactory(ValidatorFactory validatorFactory) {
+        this.validatorFactory = validatorFactory;
     }
 
     /**

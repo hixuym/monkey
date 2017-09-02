@@ -43,15 +43,17 @@ public class ServerCommand<T extends Configuration> extends ConfiguredCommand<T>
 
     @Override
     protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration) throws Exception {
-        final Environment environment = new Environment(bootstrap.getApplication().getName(),
+        final Environment environment = new Environment(application.getName(),
             bootstrap.getObjectMapper(),
             bootstrap.getValidatorFactory().getValidator(),
+            bootstrap.getValidatorFactory(),
             bootstrap.getMetricRegistry(),
             bootstrap.getClassLoader(),
             bootstrap.getHealthCheckRegistry());
 
         configuration.getMetricsFactory().configure(environment.lifecycle(), environment.metrics());
         configuration.getServerFactory().configure(environment);
+
         Server server = configuration.getServerFactory().build(environment);
 
         environment.lifecycle().manage(server);

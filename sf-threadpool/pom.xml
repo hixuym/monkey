@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-conf</artifactId>
+    <artifactId>sf-threadpool</artifactId>
 
-    <name>Sunflower Configuration Module</name>
+    <name>Sunflower Thread Pool Module</name>
 
     <dependencyManagement>
         <dependencies>

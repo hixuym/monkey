@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceConfigurationError;
@@ -190,6 +191,26 @@ public class ExtensionLoader<T> {
         }
 
         return loader;
+    }
+
+    public Map<String, T> getExtensionMap() {
+        checkInit();
+
+        if (extensionClasses.size() == 0) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, T> exts = new HashMap<>(extensionClasses.size());
+
+        for (Map.Entry<String, Class<T>> entry : extensionClasses.entrySet()) {
+            exts.put(entry.getKey(), getExtension(entry.getKey()));
+        }
+
+        return exts;
+    }
+
+    public List<T> getExtensions() {
+        return getExtensions(null);
     }
 
     /**
