@@ -46,6 +46,7 @@
         <module>sf-configuration</module>
         <module>sf-jackson</module>
         <module>sf-util</module>
+        <module>sf-reflect</module>
         <module>sf-validation</module>
         <module>sf-metrics</module>
         <module>sf-core</module>
@@ -53,6 +54,7 @@
         <module>sf-lifecycle</module>
         <module>sf-server</module>
         <module>sf-example</module>
+        <module>sf-extension</module>
     </modules>
 
     <licenses>

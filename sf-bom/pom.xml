@@ -29,14 +29,12 @@
         <guava.version>23.0</guava.version>
         <guice.version>4.1.0</guice.version>
         <jackson.version>2.9.0</jackson.version>
-        <fastjson.version>1.2.32</fastjson.version>
         <metrics3.version>3.2.4</metrics3.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <h2.version>1.4.194</h2.version>
         <mysql.version>6.0.6</mysql.version>
         <freemarker.version>2.3.26-incubating</freemarker.version>
-        <ebean.version>10.3.1</ebean.version>
         <mybatis.version>3.4.4</mybatis.version>
         <undertow.version>1.4.19.Final</undertow.version>
         <netty.version>4.1.15.Final</netty.version>
@@ -46,10 +44,9 @@
         <jwt.version>3.2.0</jwt.version>
         <validator.version>5.4.1.Final</validator.version>
         <flyway.version>4.2.0</flyway.version>
-        <kotlin.version>1.1.4-2</kotlin.version>
         <websocket.version>1.1</websocket.version>
         <sharding-jdbc.version>1.4.2</sharding-jdbc.version>
-        <typesafe.config.version>1.3.1</typesafe.config.version>
+        <joda-time.version>2.9.9</joda-time.version>
     </properties>
 
     <dependencyManagement>
@@ -57,7 +54,7 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.9.9</version>
+                <version>${joda-time.version}</version>
             </dependency>
 
             <!-- 配置文件 -->
@@ -68,12 +65,6 @@
                 <groupId>commons-configuration</groupId>
                 <artifactId>commons-configuration</artifactId>
                 <version>1.10</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.typesafe</groupId>
-                <artifactId>config</artifactId>
-                <version>${typesafe.config.version}</version>
             </dependency>
 
             <!-- excellent io lib -->
@@ -227,25 +218,6 @@
                 </exclusions>
             </dependency>
 
-            <!-- kotlin stauff -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-test-junit</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-
             <!-- apache commons library. -->
             <dependency>
                 <groupId>commons-pool</groupId>
@@ -322,18 +294,6 @@
 
             <!-- json serialize -->
             <dependency>
-                <groupId>com.squareup.moshi</groupId>
-                <artifactId>moshi</artifactId>
-                <version>1.5.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.caucho</groupId>
                 <artifactId>hessian</artifactId>
                 <version>4.0.38</version>
@@ -386,32 +346,6 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-core</artifactId>
                 <version>${flyway.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.ebean</groupId>
-                <artifactId>ebean</artifactId>
-                <version>${ebean.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.ebean</groupId>
-                        <artifactId>ebean-dbmigration</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.avaje</groupId>
-                        <artifactId>avaje-classpath-scanner</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.avaje</groupId>
-                        <artifactId>avaje-datasource</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>persistence-api</artifactId>
-                <version>1.0</version>
             </dependency>
 
             <dependency>
@@ -874,7 +808,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-threadpool</artifactId>
@@ -927,6 +860,17 @@
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-reflect</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
