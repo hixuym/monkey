@@ -13,7 +13,7 @@ import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.undertow.handler.GarbageCollectionTask;
 import io.sunflower.undertow.handler.LogConfigurationTask;
 import io.sunflower.undertow.handler.Task;
-import io.sunflower.undertow.handler.TaskHandler;
+import io.sunflower.undertow.handler.TaskManager;
 import io.sunflower.undertow.setup.UndertowEnvironment;
 import io.undertow.server.handlers.PathHandler;
 
@@ -29,7 +29,7 @@ public class AdminEnvironment extends UndertowEnvironment {
 
     private final HealthCheckRegistry healthChecks;
 
-    private final TaskHandler tasks;
+    private final TaskManager tasks;
 
     public AdminEnvironment(PathHandler handlerContext,
                             HealthCheckRegistry healthChecks,
@@ -40,12 +40,12 @@ public class AdminEnvironment extends UndertowEnvironment {
 
         this.healthChecks = healthChecks;
         this.healthChecks.register("deadlocks", new ThreadDeadlockHealthCheck());
-        this.tasks = new TaskHandler(metricRegistry);
+        this.tasks = new TaskManager(metricRegistry);
 
         tasks.add(new GarbageCollectionTask());
         tasks.add(new LogConfigurationTask());
 
-        addUndertowHandler(TaskHandler.MAPPING, tasks);
+        addUndertowHandler(TaskManager.MAPPING, TaskManager.createHandler(tasks));
 
         lifecycle.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override

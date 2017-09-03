@@ -19,6 +19,8 @@ import javax.validation.Validator;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
+import io.sunflower.inject.lifecycle.LifecycleSupport;
+import io.sunflower.inject.scheduler.SchedulerSupport;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
@@ -53,6 +55,9 @@ public class InjectionBundle<T extends Configuration> implements ConfiguredBundl
                 bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
             }
         });
+
+        moduleToLoad.add(LifecycleSupport.getModule());
+        moduleToLoad.add(SchedulerSupport.getModule());
 
         environment.putInstance(Injector.class, parent.createChildInjector(moduleToLoad));
     }

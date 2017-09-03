@@ -16,13 +16,10 @@ import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
@@ -31,6 +28,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.server.handlers.BlockingHandler;
+import io.undertow.server.handlers.form.EagerFormParsingHandler;
+import io.undertow.server.handlers.form.FormParserFactory;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
@@ -40,10 +40,10 @@ import static com.codahale.metrics.MetricRegistry.name;
 /**
  * Created by michael on 17/9/1.
  */
-public class TaskHandler implements HttpHandler {
+public class TaskManager implements HttpHandler {
 
     private static final long serialVersionUID = 7404713218661358124L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskManager.class);
     private final ConcurrentMap<String, Task> tasks;
     private final ConcurrentMap<Task, TaskExecutor> taskExecutors;
 
@@ -51,10 +51,25 @@ public class TaskHandler implements HttpHandler {
 
     public final static String MAPPING = "tasks";
 
+    public static HttpHandler createHandler(TaskManager manager) {
+
+        HttpHandler h = manager;
+
+        // then eagerly parse form data (which is then included as an attachment)
+        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
+        formParserFactoryBuilder.setDefaultCharset("utf-8");
+        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
+
+        // then requests MUST be blocking for IO to function
+        h = new BlockingHandler(h);
+
+        return h;
+    }
+
     /**
-     * Creates a new TaskServlet.
+     * Creates a new TaskManager.
      */
-    public TaskHandler(MetricRegistry metricRegistry) {
+    public TaskManager(MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
         this.tasks = new ConcurrentHashMap<>();
         this.taskExecutors = new ConcurrentHashMap<>();
@@ -72,14 +87,13 @@ public class TaskHandler implements HttpHandler {
                     .forEach(output::println);
             }
 
-            exchange.endExchange();
-        } else if (tasks.containsKey(exchange.getRequestPath())) {
+        } else if (tasks.containsKey(exchange.getRelativePath())) {
             exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
-            exchange.endExchange();
         } else {
             exchange.setStatusCode(StatusCodes.NOT_FOUND);
-            exchange.endExchange();
         }
+
+        exchange.endExchange();
     }
 
     private void doPost(HttpServerExchange exchange) {
@@ -90,7 +104,6 @@ public class TaskHandler implements HttpHandler {
             try {
                 final TaskExecutor taskExecutor = taskExecutors.get(task);
                 taskExecutor.executeTask(getParams(exchange), getBody(exchange), output);
-
                 exchange.endExchange();
             } catch (Exception e) {
                 LOGGER.error("Error running {}", task.getName(), e);
