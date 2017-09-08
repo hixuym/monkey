@@ -118,6 +118,7 @@ public class Configuration {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
+            .add("server", server)
             .add("logging", logging)
             .add("metrics", metrics)
             .toString();

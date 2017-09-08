@@ -898,6 +898,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-gizmo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
@@ -905,6 +910,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-strings</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

@@ -27,24 +27,31 @@ import io.sunflower.setup.Environment;
 /**
  * Created by michael on 17/8/31.
  */
-public class InjectionBundle<T extends Configuration> implements ConfiguredBundle<T> {
+public class InjectBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private final Application application;
 
     private List<Module> moduleToLoad = Lists.newArrayList();
+    private Stage stage = Stage.PRODUCTION;
 
-    public InjectionBundle(Application application) {
+    public InjectBundle(Application application) {
         this.application = application;
     }
 
-    public void addModule(Module... modules) {
+    public InjectBundle modules(Module... modules) {
         this.moduleToLoad.addAll(Arrays.asList(modules));
+        return this;
+    }
+
+    public InjectBundle stage(Stage stage) {
+        this.stage = stage;
+        return this;
     }
 
     @Override
     public void run(T configuration, Environment environment) throws Exception {
 
-        Injector parent = Guice.createInjector(Stage.PRODUCTION, new AbstractModule() {
+        Injector parent = Guice.createInjector(stage, new AbstractModule() {
             @Override
             @SuppressWarnings("unchecked")
             protected void configure() {

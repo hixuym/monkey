@@ -16,9 +16,9 @@ package io.sunflower.reflect;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * A unchecked wrapper for any of Java's checked reflection exceptions:
+ * A unchecked wrapper for any of Java's checked reflection exception:
  * <p>
- * These exceptions are
+ * These exception are
  * <ul>
  * <li> {@link ClassNotFoundException}</li>
  * <li> {@link IllegalAccessException}</li>

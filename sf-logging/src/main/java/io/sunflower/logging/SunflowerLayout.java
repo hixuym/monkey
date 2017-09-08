@@ -9,7 +9,7 @@ import ch.qos.logback.classic.PatternLayout;
  * A base layout for Dropwizard.
  * <ul>
  * <li>Disables pattern headers.</li>
- * <li>Prefixes logged exceptions with {@code !}.</li>
+ * <li>Prefixes logged exception with {@code !}.</li>
  * <li>Sets the pattern to the given timezone.</li>
  * </ul>
  */

@@ -53,7 +53,7 @@ public abstract class BaseConfigurationFactory<T> implements ConfigurationFactor
      * Creates a new configuration factory for the given class.
      *
      * @param parserFactory  the factory that creates the parser used
-     * @param formatName     the name of the format parsed by this factory (used in exceptions)
+     * @param formatName     the name of the format parsed by this factory (used in exception)
      * @param klass          the configuration class
      * @param validator      the validator to use
      * @param propertyPrefix the system property name prefix used by overrides
