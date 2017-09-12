@@ -50,7 +50,7 @@ public class LifecycleManagerImpl implements LifecycleManager {
     @Override
     public void start() {
         startTime = System.currentTimeMillis();
-        log.info("Starting Ninja application...");
+        log.info("Starting managed lifecycle...");
         state = State.STARTING;
         // First, ensure that all singleton scoped bindings are instantiated, so that they can be started.  It is not
         // until they are instantiated that LifecycleSupport has an opportunity to register them.
@@ -83,18 +83,18 @@ public class LifecycleManagerImpl implements LifecycleManager {
         }
         lifecycleRegister.start();
         long time = System.currentTimeMillis() - startTime;
-        log.info("Sunflower application started in {}ms", time);
+        log.info("Sunflower managed lifecycle started in {}ms", time);
         state = lifecycleRegister.isStarted() ? State.STARTED : State.STOPPED;
     }
 
     @Override
     public void stop() {
         long start = System.currentTimeMillis();
-        log.info("Stopping Sunflower application...");
+        log.info("Stopping managed lifecycle...");
         state = State.STOPPING;
         lifecycleRegister.stop();
         long time = System.currentTimeMillis() - start;
-        log.info("Sunflower application stopped in {}ms", time);
+        log.info("Sunflower managed lifecycle stopped in {}ms", time);
         state = lifecycleRegister.isStarted() ? State.STARTED : State.STOPPED;
     }
 

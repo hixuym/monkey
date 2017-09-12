@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,13 @@
 
 package io.sunflower.gizmo;
 
+import com.google.common.collect.Maps;
+
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.collect.Maps;
-import java.util.Iterator;
 
 /**
  * A route
@@ -31,26 +32,26 @@ public class Route {
     //Matches: {id} AND {id: .*?}
     // group(1) extracts the name of the group (in that case "id").
     // group(3) extracts the regex if defined
-    final static Pattern PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE 
-        = Pattern.compile("\\{(.*?)(:\\s(.*?))?}");
+    final static Pattern PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE
+        = Pattern.compile("\\{(.*?)(:\\s(.*?))?\\}");
 
     /**
      * This regex matches everything in between path slashes.
      */
     final static String VARIABLE_ROUTES_DEFAULT_REGEX = "([^/]*)";
-    
+
     //private static final String PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE = "\\{.*?:\\s(.*?)\\}";
     private final String httpMethod;
     private final String uri;
     private final Method controllerMethod;
     private final FilterChain filterChain;
-    private final Map<String,RouteParameter> parameters;
+    private final Map<String, RouteParameter> parameters;
     private final Pattern regex;
 
     public Route(String httpMethod,
-            String uri,
-            Method controllerMethod,
-            FilterChain filterChain) {
+                 String uri,
+                 Method controllerMethod,
+                 FilterChain filterChain) {
         this.httpMethod = httpMethod;
         this.uri = uri;
         this.controllerMethod = controllerMethod;
@@ -86,10 +87,10 @@ public class Route {
         return controllerMethod;
     }
 
-    public Map<String,RouteParameter> getParameters() {
+    public Map<String, RouteParameter> getParameters() {
         return parameters;
     }
-    
+
     /**
      * Matches /index to /index or /me/1 to /person/{id}
      *
@@ -128,7 +129,7 @@ public class Route {
                 map.put(parameterName, m.group(i));
             }
         }
-        
+
         return map;
     }
 
@@ -159,14 +160,14 @@ public class Route {
             // If it is not provided by the user the group 3 is null.
             String namedVariablePartOfRoute = matcher.group(3);
             String namedVariablePartOfORouteReplacedWithRegex;
-            
+
             if (namedVariablePartOfRoute != null) {
                 // we convert that into a regex matcher group itself
-                namedVariablePartOfORouteReplacedWithRegex 
+                namedVariablePartOfORouteReplacedWithRegex
                     = "(" + Matcher.quoteReplacement(namedVariablePartOfRoute) + ")";
             } else {
                 // we convert that into the default namedVariablePartOfRoute regex group
-                namedVariablePartOfORouteReplacedWithRegex 
+                namedVariablePartOfORouteReplacedWithRegex
                     = VARIABLE_ROUTES_DEFAULT_REGEX;
             }
             // we replace the current namedVariablePartOfRoute group

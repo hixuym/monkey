@@ -18,9 +18,12 @@ package io.sunflower.gizmo;
 
 import com.google.inject.Provider;
 
+import io.sunflower.gizmo.params.ControllerMethodInvoker;
+
 /**
  * The end of the filter chain
  *
+ * @author James Roper
  */
 class FilterChainEnd implements FilterChain {
 
@@ -35,6 +38,18 @@ class FilterChainEnd implements FilterChain {
 
     @Override
     public Result next(Context context) {
-        return controllerMethodInvoker.invoke(targetObjectProvider.get(), context);
+        Result controllerResult = (Result) controllerMethodInvoker.invoke(
+            targetObjectProvider.get(), context);
+
+        if (controllerResult instanceof AsyncResult) {
+            // Make sure handle async has been called
+            context.handleAsync();
+            Result newResult = context.controllerReturned();
+            if (newResult != null) {
+                controllerResult = newResult;
+            }
+        }
+
+        return controllerResult;
     }
 }

@@ -31,11 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import io.sunflower.gizmo.util.MethodReference;
+import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.utils.MethodReference;
 
 public class RouterImpl implements Router {
     static private final Logger logger = LoggerFactory.getLogger(RouterImpl.class);
 
+    private final GizmoConfiguration configuration;
     private final List<RouteBuilderImpl> allRouteBuilders = new ArrayList<>();
     private final Injector injector;
     private List<Route> routes;
@@ -45,13 +47,12 @@ public class RouterImpl implements Router {
     private final String VARIABLE_PART_PATTERN_WITH_PLACEHOLDER = "\\{(%s)(:\\s([^}]*))?\\}";
     private final Provider<RouteBuilderImpl> routeBuilderImplProvider;
 
-    private final GizmoConfiguration gizmoConfiguration;
-
     @Inject
-    public RouterImpl(Injector injector, GizmoConfiguration gizmoConfiguration,
+    public RouterImpl(Injector injector,
+                      GizmoConfiguration configuration,
                       Provider<RouteBuilderImpl> routeBuilderImplProvider) {
         this.injector = injector;
-        this.gizmoConfiguration = gizmoConfiguration;
+        this.configuration = configuration;
         this.routeBuilderImplProvider = routeBuilderImplProvider;
     }
 
@@ -69,6 +70,112 @@ public class RouterImpl implements Router {
         }
 
         return null;
+
+    }
+
+    @Override
+    public String getReverseRoute(
+        Class<?> controllerClass,
+        String controllerMethodName) {
+
+        Optional<Map<String, Object>> parameterMap = Optional.empty();
+
+        return getReverseRoute(controllerClass, controllerMethodName, parameterMap);
+
+    }
+
+    @Override
+    public String getReverseRoute(Class<?> controllerClass,
+                                  String controllerMethodName,
+                                  Object... parameterMap) {
+
+        if (parameterMap.length % 2 != 0) {
+            logger.error("Always provide key (as String) value (as Object) pairs in parameterMap. That means providing e.g. 2, 4, 6... objects.");
+            return null;
+
+        }
+
+        Map<String, Object> map = new HashMap<>(parameterMap.length / 2);
+        for (int i = 0; i < parameterMap.length; i += 2) {
+            map.put((String) parameterMap[i], parameterMap[i + 1]);
+        }
+
+        return getReverseRoute(controllerClass, controllerMethodName, Optional.of(map));
+
+    }
+
+    @Override
+    public String getReverseRoute(Class<?> controllerClass,
+                                  String controllerMethodName,
+                                  Map<String, Object> parameterMap) {
+        Optional<Map<String, Object>> parameterMapOptional
+            = Optional.ofNullable(parameterMap);
+
+        return getReverseRoute(
+            controllerClass, controllerMethodName,
+            parameterMapOptional);
+    }
+
+    @Override
+    public String getReverseRoute(
+        Class<?> controllerClass,
+        String controllerMethodName,
+        Optional<Map<String, Object>> parameterMap) {
+
+        try {
+            ReverseRouter.Builder reverseRouteBuilder
+                = new ReverseRouter(configuration, this)
+                .with(controllerClass, controllerMethodName);
+
+            if (parameterMap.isPresent()) {
+                // pathOrQueryParams are not escaped with the deprecated method of creating
+                // reverse routes.  use ReverseRouter!
+                parameterMap.get().forEach((name, value) -> {
+                    // path or query param?
+                    if (reverseRouteBuilder.getRoute().getParameters().containsKey(name)) {
+                        reverseRouteBuilder.rawPathParam(name, value);
+                    } else {
+                        reverseRouteBuilder.rawQueryParam(name, value);
+                    }
+                });
+            }
+
+            return reverseRouteBuilder.build();
+        } catch (IllegalArgumentException e) {
+            logger.error("Unable to cleanly build reverse route", e);
+            return null;
+        }
+    }
+
+    @Override
+    public String getReverseRoute(MethodReference controllerMethodRef) {
+        return getReverseRoute(
+            controllerMethodRef.getDeclaringClass(),
+            controllerMethodRef.getMethodName());
+    }
+
+    @Override
+    public String getReverseRoute(MethodReference controllerMethodRef, Map<String, Object> parameterMap) {
+        return getReverseRoute(
+            controllerMethodRef.getDeclaringClass(),
+            controllerMethodRef.getMethodName(),
+            parameterMap);
+    }
+
+    @Override
+    public String getReverseRoute(MethodReference controllerMethodRef, Object... parameterMap) {
+        return getReverseRoute(
+            controllerMethodRef.getDeclaringClass(),
+            controllerMethodRef.getMethodName(),
+            parameterMap);
+    }
+
+    @Override
+    public String getReverseRoute(MethodReference controllerMethodRef, Optional<Map<String, Object>> parameterMap) {
+        return getReverseRoute(
+            controllerMethodRef.getDeclaringClass(),
+            controllerMethodRef.getMethodName(),
+            parameterMap);
     }
 
     @Override

@@ -21,11 +21,11 @@ import java.util.regex.Matcher;
 
 /**
  * Parameter in a Route.
- * 
+ *
  * @author Joe Lauer
  */
 public class RouteParameter {
-    
+
     // eg. {id: [0-9]+}
     private final int index;    // index of where token starts
     private final String token; // "{id: [0-9]+}"
@@ -41,6 +41,7 @@ public class RouteParameter {
 
     /**
      * Gets the index of where the token starts in the original uri.
+     *
      * @return An index of where the token is
      */
     public int getIndex() {
@@ -49,14 +50,16 @@ public class RouteParameter {
 
     /**
      * The exact string of the parameter such as "{id: [0-9]+}" in "{id: [0-9]+}"
+     *
      * @return The parameter token
      */
     public String getToken() {
         return token;
     }
-    
+
     /**
      * The name of the parameter such as "id" in "{id: [0-9]+}"
+     *
      * @return The name of the parameter
      */
     public String getName() {
@@ -65,23 +68,23 @@ public class RouteParameter {
 
     /**
      * The regex of the parameter such as "[0-9]+" in "{id: [0-9]+}"
-     * @return The regex of the parameter or null if no regex was included
-     *      for the parameter.
+     *
+     * @return The regex of the parameter or null if no regex was included for the parameter.
      */
     public String getRegex() {
         return regex;
     }
-    
+
     /**
      * Parse a path such as "/user/{id: [0-9]+}/email/{addr}" for the named
      * parameters.
+     *
      * @param path The path to parse
-     * @return A map containing the named parameters in the order they were
-     *      parsed or null if no parameters were parsed.
+     * @return A map containing the named parameters in the order they were parsed or null if no parameters were parsed.
      */
     static public Map<String, RouteParameter> parse(String path) {
-        Map<String,RouteParameter> params = new LinkedHashMap<>();
-        
+        Map<String, RouteParameter> params = new LinkedHashMap<>();
+
         // extract any named parameters
         Matcher matcher = Route.PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE.matcher(path);
         while (matcher.find()) {
@@ -89,8 +92,8 @@ public class RouteParameter {
                 matcher.start(0), matcher.group(0), matcher.group(1), matcher.group(3));
             params.put(param.getName(), param);
         }
-        
+
         return params;
     }
-    
+
 }

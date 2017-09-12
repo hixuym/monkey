@@ -53,7 +53,7 @@ public class Validators {
      *
      * @author Thibault Meyer
      */
-    private static class GizmoContextMsgInterpolator implements MessageInterpolator.Context, Serializable {
+    private static class NinjaContextMsgInterpolator implements MessageInterpolator.Context, Serializable {
 
         private final Object value;
         private final ConstraintDescriptor<?> descriptor;
@@ -64,7 +64,7 @@ public class Validators {
          * @param value      value being validated
          * @param descriptor Constraint being validated
          */
-        public GizmoContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
+        public NinjaContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
             this.value = value;
             this.descriptor = descriptor;
         }
@@ -73,7 +73,7 @@ public class Validators {
          * Get the constraint descriptor.
          *
          * @return The constraint descriptor
-         * @see ConstraintDescriptor
+         * @see javax.validation.metadata.ConstraintDescriptor
          */
         @Override
         public ConstraintDescriptor<?> getConstraintDescriptor() {
@@ -110,7 +110,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(Object value, String field, Context context) {
@@ -124,7 +124,7 @@ public class Validators {
                 for (final javax.validation.ConstraintViolation<Object> violation : violations) {
                     final String violationMessage = validatorFactory.getMessageInterpolator().interpolate(
                         violation.getMessageTemplate(),
-                        new GizmoContextMsgInterpolator(value, violation.getConstraintDescriptor()),
+                        new NinjaContextMsgInterpolator(value, violation.getConstraintDescriptor()),
                         localeToUse
                     );
                     final String messageKey = violation.getMessageTemplate().replaceAll("[{}]", "");
@@ -132,6 +132,31 @@ public class Validators {
                         messageKey, violation.getPropertyPath().toString(), violationMessage, violation.getInvalidValue());
                     validation.addViolation(constraintViolation);
                 }
+            }
+        }
+
+        @Override
+        public Class<Object> getValidatedType() {
+            return Object.class;
+        }
+    }
+
+    public static class RequiredValidator implements Validator<Object> {
+
+        private final Required required;
+
+        public RequiredValidator(Required required) {
+            this.required = required;
+        }
+
+        @Override
+        public void validate(Object value, String field, Context context) {
+            if (value == null) {
+                context.getValidation().addViolation(
+                    new ConstraintViolation(
+                        this.required.key(),
+                        fieldKey(field, this.required.fieldKey()),
+                        this.required.message()));
             }
         }
 
@@ -154,7 +179,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -192,7 +217,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -227,7 +252,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -262,7 +287,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -299,7 +324,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -334,7 +359,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(Number value, String field, Context context) {
@@ -374,7 +399,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
+         * @param context The Ninja request context
          */
         @Override
         public void validate(String value, String field, Context context) {

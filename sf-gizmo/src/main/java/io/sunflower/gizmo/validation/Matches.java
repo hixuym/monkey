@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,21 +36,21 @@ public @interface Matches {
 
     /**
      * The key for the violation message
-     * 
+     *
      * @return The key of the violation message
      */
     String key() default "validation.matches.violation";
 
     /**
      * Default message if the key isn't found
-     * 
+     *
      * @return The default message
      */
     String message() default "{0} is doesn't match the format {1}";
 
     /**
      * The key for formatting the field
-     * 
+     *
      * @return The key
      */
     String fieldKey() default "";

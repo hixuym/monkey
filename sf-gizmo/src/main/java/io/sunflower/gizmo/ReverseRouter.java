@@ -28,15 +28,18 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import io.sunflower.gizmo.util.LambdaRoute;
-import io.sunflower.gizmo.util.MethodReference;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
+import io.sunflower.gizmo.ReverseRouter.Builder;
+import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.utils.LambdaRoute;
+import io.sunflower.gizmo.utils.MethodReference;
 
 /**
  * Reverse routing. Lookup the uri associated with a controller method.
  *
  * @author Joe Lauer (jjlauer)
  */
-public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder> {
+public class ReverseRouter implements WithControllerMethod<Builder> {
     static private final Logger log = LoggerFactory.getLogger(ReverseRouter.class);
 
     static public class Builder {
@@ -71,7 +74,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
          * @param name  The path parameter name
          * @param value The path parameter value
          * @return A reference to this builder
-         * @see #rawPathParam(String, Object)
+         * @see #rawPathParam(java.lang.String, java.lang.Object)
          */
         public Builder pathParam(String name, Object value) {
             return setPathParam(name, value, false);
@@ -84,7 +87,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
          * @param name  The path parameter name
          * @param value The path parameter value
          * @return A reference to this builder
-         * @see #pathParam(String, Object)
+         * @see #pathParam(java.lang.String, java.lang.Object)
          */
         public Builder rawPathParam(String name, Object value) {
             return setPathParam(name, value, true);
@@ -115,7 +118,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
          * @param name  The queryParam string parameter name
          * @param value The queryParam string parameter value
          * @return A reference to this builder
-         * @see #rawQueryParam(String, Object)
+         * @see #rawQueryParam(java.lang.String, java.lang.Object)
          */
         public Builder queryParam(String name, Object value) {
             return setQueryParam(name, value, false);
@@ -128,7 +131,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
          * @param name  The queryParam string parameter name
          * @param value The queryParam string parameter value
          * @return A reference to this builder
-         * @see #queryParam(String, Object)
+         * @see #queryParam(java.lang.String, java.lang.Object)
          */
         public Builder rawQueryParam(String name, Object value) {
             return setQueryParam(name, value, true);
@@ -231,9 +234,9 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
         }
 
         /**
-         * Builds the result as a <code>gizmo.Result</code> redirect.
+         * Builds the result as a <code>Result</code> redirect.
          *
-         * @return A Gizmo redirect result
+         * @return A Ninja redirect result
          */
         public Result redirect() {
             return Results.redirect(build());
@@ -245,12 +248,13 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
         }
     }
 
+    private final GizmoConfiguration configuration;
     private final Router router;
-    private final GizmoConfiguration gizmoConfiguration;
 
     @Inject
-    public ReverseRouter(GizmoConfiguration gizmoConfiguration, Router router) {
-        this.gizmoConfiguration = gizmoConfiguration;
+    public ReverseRouter(GizmoConfiguration configuration,
+                         Router router) {
+        this.configuration = configuration;
         this.router = router;
     }
 
@@ -284,7 +288,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
     @Override
-    public Builder with(ControllerMethods.ControllerMethod controllerMethod) {
+    public Builder with(ControllerMethod controllerMethod) {
         LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
 
         // only need the functional method for the reverse lookup
@@ -298,7 +302,7 @@ public class ReverseRouter implements WithControllerMethod<ReverseRouter.Builder
             controllerClass, methodName);
 
         if (route.isPresent()) {
-            return new Builder(gizmoConfiguration.getContextPath(), route.get());
+            return new Builder(this.configuration.getApplicationContextPath(), route.get());
         }
 
         throw new IllegalArgumentException("Reverse route not found for " +

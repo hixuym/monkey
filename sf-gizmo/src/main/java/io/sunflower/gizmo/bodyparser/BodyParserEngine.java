@@ -16,7 +16,6 @@
 
 package io.sunflower.gizmo.bodyparser;
 
-
 import io.sunflower.gizmo.Context;
 
 public interface BodyParserEngine {

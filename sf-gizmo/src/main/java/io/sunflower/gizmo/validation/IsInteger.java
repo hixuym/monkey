@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * Validates that the field is an integer. Only needed if you want to customise
  * the validation messages.
- * 
+ *
  * @author James Roper
  */
 @WithValidator(Validators.IntegerValidator.class)
@@ -33,21 +33,21 @@ import java.lang.annotation.Target;
 public @interface IsInteger {
     /**
      * The key for the violation message
-     * 
+     *
      * @return The key of the violation message
      */
     String key() default KEY;
 
     /**
      * Default message if the key isn't found
-     * 
+     *
      * @return The default message
      */
     String message() default MESSAGE;
 
     /**
      * The key for formatting the field
-     * 
+     *
      * @return The key
      */
     String fieldKey() default "";

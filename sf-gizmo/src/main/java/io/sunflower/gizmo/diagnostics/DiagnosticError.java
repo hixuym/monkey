@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,20 +18,21 @@ package io.sunflower.gizmo.diagnostics;
 
 import java.net.URI;
 import java.util.List;
-import ninja.Context;
-import ninja.Renderable;
-import ninja.Result;
+
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Renderable;
+import io.sunflower.gizmo.Result;
 
 /**
  * Represents an application error/exception that includes extra
  * information in order to diagnose it. Knows how to render itself as the
  * renderable inside a <code>Result</code>.
- * 
+ *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)
  */
 public class DiagnosticError implements Renderable {
- 
+
     private final String title;
     private final Throwable throwable;
     /** can either be from jar, classpath, or file */
@@ -43,25 +44,25 @@ public class DiagnosticError implements Renderable {
     private final Result underlyingResult;
 
     public DiagnosticError(String title,
-                            Throwable throwable,
-                            Result underlyingResult) {
+                           Throwable throwable,
+                           Result underlyingResult) {
         // error with no source found
-        this (title, throwable, null, null, -1, -1, underlyingResult);
+        this(title, throwable, null, null, -1, -1, underlyingResult);
     }
-    
+
     public DiagnosticError(String title,
-                            Throwable throwable,
-                            URI sourceLocation,
-                            List<String> sourceLines,
-                            int lineNumberOfSourceLines,
-                            int lineNumberOfError,
-                            Result underlyingResult) {
+                           Throwable throwable,
+                           URI sourceLocation,
+                           List<String> sourceLines,
+                           int lineNumberOfSourceLines,
+                           int lineNumberOfError,
+                           Result underlyingResult) {
         this.throwable = throwable;
         this.title = title;
         this.sourceLocation = sourceLocation;
         this.sourceLines = sourceLines;
         this.lineNumberOfSourceLines = lineNumberOfSourceLines;
-        this.lineNumberOfError =  lineNumberOfError;
+        this.lineNumberOfError = lineNumberOfError;
         this.underlyingResult = underlyingResult;
     }
 
@@ -92,11 +93,11 @@ public class DiagnosticError implements Renderable {
     public Result getUnderlyingResult() {
         return underlyingResult;
     }
-    
+
     @Override
     public void render(Context context, Result result) {
         DiagnosticErrorRenderer
             .tryToRender(context, result, this, true);
     }
-    
+
 }

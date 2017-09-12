@@ -18,6 +18,8 @@ package io.sunflower.gizmo;
 
 import java.util.List;
 
+import io.sunflower.gizmo.utils.MethodReference;
+
 public interface RouteBuilder extends WithControllerMethod<Void> {
 
     RouteBuilder route(String uri);
@@ -31,4 +33,17 @@ public interface RouteBuilder extends WithControllerMethod<Void> {
     RouteBuilder filters(List<Class<? extends Filter>> filters);
 
     void with(Class<?> controllerClass, String controllerMethod);
+
+    @Deprecated
+    void with(MethodReference controllerMethodRef);
+
+    /**
+     * A static result to return for this route.
+     * @param result The result to return on every request.
+     * @deprecated Use the functional interface methods to supply a new result
+     *      for each route request.  Its recommended to use <code>() -> Results.redirect("/")</code>.
+     */
+    @Deprecated
+    void with(Result result);
+
 }

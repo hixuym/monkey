@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.Server;
 
 /**
  * A factory for building {@link Server} instances for Sunflower applications.

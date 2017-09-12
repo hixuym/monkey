@@ -19,7 +19,7 @@
     <name>Sunflower Bom</name>
 
     <description>
-        Bill of materials to make sure a consistent set of versions is used for Sunflower modules.
+        Bill of materials to make sure a consistent set of versions is used for Sunflower generics.
     </description>
 
     <properties>
@@ -759,7 +759,7 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- sunflower modules -->
+            <!-- sunflogenericsules -->
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-core</artifactId>

@@ -10,7 +10,6 @@ import java.util.stream.StreamSupport;
 
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.AppenderFactory;
-import io.sunflower.undertow.ConnectorFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,11 +33,11 @@ public class ConfigurationTest {
                 .toArray(dummyArray));
 
 
-        mapper.getSubtypeResolver()
-            .registerSubtypes(StreamSupport.stream(ServiceLoader.load(ConnectorFactory.class).spliterator(), false)
-                .map(Object::getClass)
-                .collect(Collectors.toList())
-                .toArray(dummyArray));
+//        mapper.getSubtypeResolver()
+//            .registerSubtypes(StreamSupport.stream(ServiceLoader.load(ConnectorFactory.class).spliterator(), false)
+//                .map(Object::getClass)
+//                .collect(Collectors.toList())
+//                .toArray(dummyArray));
 
 
         // Issue-96: some types were not serializable

@@ -15,18 +15,18 @@
  */
 package io.sunflower.gizmo;
 
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod0;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod1;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod10;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod2;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod3;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod4;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod5;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod6;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod7;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod8;
-import static io.sunflower.gizmo.ControllerMethods.ControllerMethod9;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod0;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod1;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod10;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod2;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod3;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod4;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod5;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod6;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod7;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod8;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod9;
 
 /**
  * Interface that exposes multiple with methods that accept a large number of

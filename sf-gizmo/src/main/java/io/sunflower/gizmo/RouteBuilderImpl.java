@@ -33,7 +33,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import io.sunflower.gizmo.util.LambdaRoute;
+import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
+import io.sunflower.gizmo.application.ApplicationFilters;
+import io.sunflower.gizmo.params.ControllerMethodInvoker;
+import io.sunflower.gizmo.utils.LambdaRoute;
+import io.sunflower.gizmo.utils.MethodReference;
+import io.sunflower.gizmo.utils.NinjaBaseDirectoryResolver;
+import io.sunflower.gizmo.utils.SwissKnife;
 
 public class RouteBuilderImpl implements RouteBuilder {
     private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
@@ -47,13 +53,13 @@ public class RouteBuilderImpl implements RouteBuilder {
     private Optional<Object> targetObject;          // instance to invoke
     private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
     private final List<Class<? extends Filter>> localFilters;
-    private final ControllerMethodInvokerFactory controllerMethodInvokerFactory;
+    private final NinjaBaseDirectoryResolver ninjaBaseDirectoryResolver;
 
     @Inject
-    public RouteBuilderImpl(ControllerMethodInvokerFactory controllerMethodInvokerFactory) {
+    public RouteBuilderImpl(NinjaBaseDirectoryResolver ninjaBaseDirectoryResolver) {
         this.implementationMethod = Optional.empty();
         this.targetObject = Optional.empty();
-        this.controllerMethodInvokerFactory = controllerMethodInvokerFactory;
+        this.ninjaBaseDirectoryResolver = ninjaBaseDirectoryResolver;
         this.globalFiltersOptional = Optional.empty();
         this.localFilters = Lists.newArrayList();
     }
@@ -100,7 +106,19 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     @Override
-    public Void with(ControllerMethods.ControllerMethod controllerMethod) {
+    @Deprecated
+    public void with(MethodReference methodRef) {
+        with(methodRef.getDeclaringClass(), methodRef.getMethodName());
+    }
+
+    @Override
+    @Deprecated
+    public void with(final Result result) {
+        with(ControllerMethods.of(() -> result));
+    }
+
+    @Override
+    public Void with(ControllerMethod controllerMethod) {
         LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
         this.functionalMethod = lambdaRoute.getFunctionalMethod();
         this.implementationMethod = lambdaRoute.getImplementationMethod();
@@ -150,7 +168,7 @@ public class RouteBuilderImpl implements RouteBuilder {
      * We are reloading when there are changes. So this is almost as good as
      * compile time checking.
      *
-     * @param controllerClass  The controller class
+     * @param controllerClass       The controller class
      * @param controllerMethod The method
      * @return The actual method
      */
@@ -192,8 +210,8 @@ public class RouteBuilderImpl implements RouteBuilder {
             log.error("Error in route configuration!!!");
             log.error("Can not find Controller " + controllerClass.getName()
                 + " and method " + controllerMethod);
-            log.error("Hint: make sure the controller returns a gizmo.Result!");
-            log.error("Hint: Gizmo does not allow more than one method with the same name!");
+            log.error("Hint: make sure the controller returns a Result!");
+            log.error("Hint: Ninja does not allow more than one method with the same name!");
         }
         return null;
     }
@@ -237,18 +255,18 @@ public class RouteBuilderImpl implements RouteBuilder {
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-//            String globalFiltersWithPrefixMaybe
-//                = ninjaBaseDirectoryResolver.resolveApplicationClassName(GLOBAL_FILTERS_DEFAULT_LOCATION);
+            String globalFiltersWithPrefixMaybe
+                = ninjaBaseDirectoryResolver.resolveApplicationClassName(GLOBAL_FILTERS_DEFAULT_LOCATION);
 
-//            if (SwissKnife.doesClassExist(globalFiltersWithPrefixMaybe, this)) {
-            try {
-//                    Class<?> globalFiltersClass = Class.forName(globalFiltersWithPrefixMaybe);
-//                    ApplicationFilters globalFilters = (ApplicationFilters) injector.getInstance(globalFiltersClass);
-//                    globalFilters.addFilters(allFilters);
-            } catch (Exception exception) {
-                // That simply means the user did not configure conf.Filters.
+            if (SwissKnife.doesClassExist(globalFiltersWithPrefixMaybe, this)) {
+                try {
+                    Class<?> globalFiltersClass = Class.forName(globalFiltersWithPrefixMaybe);
+                    ApplicationFilters globalFilters = (ApplicationFilters) injector.getInstance(globalFiltersClass);
+                    globalFilters.addFilters(allFilters);
+                } catch (Exception exception) {
+                    // That simply means the user did not configure conf.Filters.
+                }
             }
-//            }
         }
 
         return allFilters;
@@ -268,7 +286,7 @@ public class RouteBuilderImpl implements RouteBuilder {
 
             // invoke functional method with optionally using impl for argument extraction
             ControllerMethodInvoker methodInvoker
-                = controllerMethodInvokerFactory.build(
+                = ControllerMethodInvoker.build(
                 functionalMethod, implementationMethod.orElse(functionalMethod), injector);
 
             return new FilterChainEnd(targetProvider, methodInvoker);

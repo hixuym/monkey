@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 /**
  * An HTTP cookie
  *
+ * @author James Roper
  */
 public class Cookie {
     private final String name;

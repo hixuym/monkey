@@ -19,12 +19,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import io.sunflower.undertow.setup.UndertowEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
-import io.undertow.Handlers;
-import io.undertow.server.handlers.PathHandler;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A Sunflower application's environment.
@@ -35,19 +30,15 @@ public class Environment {
     private final HealthCheckRegistry healthCheckRegistry;
     private final ObjectMapper objectMapper;
 
-    private ValidatorFactory validatorFactory;
-    private Validator validator;
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     private final LifecycleEnvironment lifecycleEnvironment;
-    private final UndertowEnvironment undertowEnvironment;
-    private final AdminEnvironment adminEnvironment;
-
-    private final PathHandler applicationContext;
-    private final PathHandler adminContext;
 
     private final ExecutorService healthCheckExecutorService;
 
     private final Map<String, Object> attributes = Maps.newConcurrentMap();
+
     private final TypeToInstanceMap<Object> typeToInstanceMap = new MutableTypeToInstanceMap<>();
 
     /**
@@ -71,12 +62,6 @@ public class Environment {
         this.validatorFactory = validatorFactory;
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
-
-        this.adminContext = Handlers.path();
-        this.adminEnvironment = new AdminEnvironment(adminContext, healthCheckRegistry, metricRegistry, lifecycleEnvironment);
-
-        this.applicationContext = Handlers.path();
-        this.undertowEnvironment = new UndertowEnvironment(applicationContext);
 
         this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
             .workQueue(new ArrayBlockingQueue<>(1))
@@ -118,7 +103,7 @@ public class Environment {
         return this.attributes.get(key);
     }
 
-    public <T> void putInstance(Class<T> type, T instance) {
+    public <T> void bind(Class<T> type, T instance) {
         this.typeToInstanceMap.putInstance(type, instance);
     }
 
@@ -151,19 +136,8 @@ public class Environment {
         return validator;
     }
 
-    /**
-     * Sets the application's {@link Validator}.
-     */
-    public void setValidator(Validator validator) {
-        this.validator = requireNonNull(validator);
-    }
-
     public ValidatorFactory getValidatorFactory() {
         return validatorFactory;
-    }
-
-    public void setValidatorFactory(ValidatorFactory validatorFactory) {
-        this.validatorFactory = validatorFactory;
     }
 
     /**
@@ -187,13 +161,6 @@ public class Environment {
         return lifecycleEnvironment;
     }
 
-    public AdminEnvironment admin() {
-        return this.adminEnvironment;
-    }
-
-    public UndertowEnvironment undertow() {
-        return this.undertowEnvironment;
-    }
     /**
      * Returns an {@link ExecutorService} to run time bound health checks
      */
@@ -201,11 +168,4 @@ public class Environment {
         return healthCheckExecutorService;
     }
 
-    public PathHandler getApplicationContext() {
-        return applicationContext;
-    }
-
-    public PathHandler getAdminContext() {
-        return adminContext;
-    }
 }

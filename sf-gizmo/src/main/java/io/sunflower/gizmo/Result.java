@@ -16,7 +16,6 @@
 
 package io.sunflower.gizmo;
 
-import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -34,7 +33,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import io.sunflower.gizmo.exception.InternalServerErrorException;
+import io.sunflower.gizmo.exceptions.InternalServerErrorException;
+import io.sunflower.gizmo.utils.DateUtil;
+import io.sunflower.gizmo.utils.NoHttpBody;
+import io.sunflower.gizmo.utils.ResponseStreams;
+import io.sunflower.gizmo.utils.SwissKnife;
 
 public class Result {
 
@@ -84,10 +87,6 @@ public class Result {
     // to be bypassed. This effectively means you'll return only headers and no body
     // useful for "no content" style responses.
     public static final NoHttpBody NO_HTTP_BODY = new NoHttpBody();
-
-    // intentionally left empty. Just a marker class.
-    public static class NoHttpBody {
-    }
 
     // /////////////////////////////////////////////////////////////////////////
     // Finally we got to the core of this class...
@@ -206,13 +205,13 @@ public class Result {
             } else {
                 map = Maps.newHashMap();
                 // add original this.renderable
-                map.put(getRealClassNameLowerCamelCase(this.renderable), this.renderable);
+                map.put(SwissKnife.getRealClassNameLowerCamelCase(this.renderable), this.renderable);
                 this.renderable = map;
 
             }
 
             // add object of this method
-            String key = getRealClassNameLowerCamelCase(object);
+            String key = SwissKnife.getRealClassNameLowerCamelCase(object);
             if (map.containsKey(key)) {
                 throw new IllegalArgumentException(
                     String.format(
@@ -222,7 +221,7 @@ public class Result {
                         key));
 
             } else {
-                map.put(getRealClassNameLowerCamelCase(object), object);
+                map.put(SwissKnife.getRealClassNameLowerCamelCase(object), object);
             }
 
 
@@ -230,10 +229,6 @@ public class Result {
 
 
         return this;
-    }
-
-    private String getRealClassNameLowerCamelCase(Object object) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, object.getClass().getSimpleName());
     }
 
     /**
@@ -292,9 +287,12 @@ public class Result {
 
             } else {
                 map = Maps.newHashMap();
-                map.put(getRealClassNameLowerCamelCase(this.renderable), this.renderable);
+                map.put(
+                    SwissKnife.getRealClassNameLowerCamelCase(this.renderable),
+                    this.renderable);
 
                 this.renderable = map;
+
             }
 
             map.put(entry.getKey(), entry.getValue());
@@ -330,7 +328,7 @@ public class Result {
      */
     public Result render(String key, Object value) {
 
-        render(new AbstractMap.SimpleEntry<>(key, value));
+        render(new AbstractMap.SimpleEntry<String, Object>(key, value));
 
         return this;
 
@@ -368,26 +366,30 @@ public class Result {
     @Deprecated
     public Result renderRaw(final String string) {
 
-        Renderable renderable = (context, result) -> {
+        Renderable renderable = new Renderable() {
 
-            if (result.getContentType() == null) {
-                result.contentType(Result.TEXT_PLAIN);
+            @Override
+            public void render(Context context, Result result) {
+
+                if (result.getContentType() == null) {
+                    result.contentType(Result.TEXT_PLAIN);
+                }
+
+                ResponseStreams resultJsonCustom = context
+                    .finalizeHeaders(result);
+
+                try (Writer writer = resultJsonCustom.getWriter()) {
+
+                    writer.write(string);
+
+                } catch (IOException ioException) {
+
+                    logger.error(
+                        "Error rendering raw String via renderRaw(...)",
+                        ioException);
+                }
+
             }
-
-            ResponseStreams resultJsonCustom = context
-                .finalizeHeaders(result);
-
-            try (Writer writer = resultJsonCustom.getWriter()) {
-
-                writer.write(string);
-
-            } catch (IOException ioException) {
-
-                logger.error(
-                    "Error rendering raw String via renderRaw(...)",
-                    ioException);
-            }
-
         };
 
         render(renderable);
@@ -413,19 +415,23 @@ public class Result {
      */
     public Result renderRaw(final byte[] bytes) {
 
-        Renderable renderable = (context, result) -> {
-            if (result.getContentType() == null) {
-                result.contentType(Result.APPLICATION_OCTET_STREAM);
-            }
-            ResponseStreams responseStreams = context
-                .finalizeHeaders(result);
+        Renderable renderable = new Renderable() {
 
-            try (OutputStream outputStream = responseStreams.getOutputStream()) {
+            @Override
+            public void render(Context context, Result result) {
+                if (result.getContentType() == null) {
+                    result.contentType(Result.APPLICATION_OCTET_STREAM);
+                }
+                ResponseStreams responseStreams = context
+                    .finalizeHeaders(result);
 
-                outputStream.write(bytes);
+                try (OutputStream outputStream = responseStreams.getOutputStream()) {
 
-            } catch (IOException ioException) {
-                throw new InternalServerErrorException(ioException);
+                    outputStream.write(bytes);
+
+                } catch (IOException ioException) {
+                    throw new InternalServerErrorException(ioException);
+                }
             }
         };
 
@@ -709,7 +715,7 @@ public class Result {
     }
 
     /**
-     * Set the content type of this result to .
+     * Set the content type of this result to {@link Result#APPLICATON_XML}.
      *
      * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATON_XML}.
      */
@@ -735,9 +741,8 @@ public class Result {
     public Result doNotCacheContent() {
 
         addHeader(CACHE_CONTROL, CACHE_CONTROL_DEFAULT_NOCACHE_VALUE);
-        //TODO
-//        addHeader(DATE, DateUtil.formatForHttpHeader(System.currentTimeMillis()));
-//        addHeader(EXPIRES, DateUtil.formatForHttpHeader(0L));
+        addHeader(DATE, DateUtil.formatForHttpHeader(System.currentTimeMillis()));
+        addHeader(EXPIRES, DateUtil.formatForHttpHeader(0L));
 
         return this;
 

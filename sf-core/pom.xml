@@ -62,10 +62,6 @@
             <groupId>net.sourceforge.argparse4j</groupId>
             <artifactId>argparse4j</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-undertow</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

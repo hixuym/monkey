@@ -92,6 +92,7 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
                 cleanup();
             }
         }
+
     }
 
     protected void cleanupAsynchronously() {

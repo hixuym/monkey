@@ -9,8 +9,8 @@ import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
+import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.Server;
 
 /**
  * Runs a application as an HTTP server.

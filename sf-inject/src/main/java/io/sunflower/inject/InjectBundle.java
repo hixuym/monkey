@@ -1,6 +1,8 @@
 package io.sunflower.inject;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToInstanceMap;
+import com.google.common.reflect.TypeToken;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -10,9 +12,11 @@ import com.google.inject.Stage;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.doclint.Env;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Validator;
 
@@ -34,11 +38,13 @@ public class InjectBundle<T extends Configuration> implements ConfiguredBundle<T
     private List<Module> moduleToLoad = Lists.newArrayList();
     private Stage stage = Stage.PRODUCTION;
 
+    private Injector injector;
+
     public InjectBundle(Application application) {
         this.application = application;
     }
 
-    public InjectBundle modules(Module... modules) {
+    public InjectBundle install(Module... modules) {
         this.moduleToLoad.addAll(Arrays.asList(modules));
         return this;
     }
@@ -53,20 +59,30 @@ public class InjectBundle<T extends Configuration> implements ConfiguredBundle<T
 
         Injector parent = Guice.createInjector(stage, new AbstractModule() {
             @Override
-            @SuppressWarnings("unchecked")
             protected void configure() {
-                bind(application.getConfigurationClass()).toInstance(configuration);
                 bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
                 bind(Validator.class).toInstance(environment.getValidator());
                 bind(MetricRegistry.class).toInstance(environment.metrics());
                 bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
+                bind(Environment.class).toInstance(environment);
+                TypeToInstanceMap<Object> typeToInstanceMap = environment.getTypeToInstanceMap();
+
+                for (Map.Entry<TypeToken<? extends Object>, Object> e : typeToInstanceMap.entrySet()) {
+                    bind((Class) e.getKey().getType()).toInstance(e.getValue());
+                }
             }
         });
 
         moduleToLoad.add(LifecycleSupport.getModule());
         moduleToLoad.add(SchedulerSupport.getModule());
 
-        environment.putInstance(Injector.class, parent.createChildInjector(moduleToLoad));
+        this.injector = parent.createChildInjector(moduleToLoad);
+
+        environment.bind(Injector.class, injector);
+    }
+
+    public Injector getInjector() {
+        return injector;
     }
 
     @Override

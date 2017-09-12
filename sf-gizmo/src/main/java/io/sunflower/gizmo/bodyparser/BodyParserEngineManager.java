@@ -16,8 +16,11 @@
 
 package io.sunflower.gizmo.bodyparser;
 
+import com.google.inject.ImplementedBy;
+
 import java.util.Set;
 
+@ImplementedBy(BodyParserEngineManagerImpl.class)
 public interface BodyParserEngineManager {
 
     /**

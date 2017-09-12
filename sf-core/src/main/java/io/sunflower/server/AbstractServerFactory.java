@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 import javax.validation.constraints.Min;
 
 import io.sunflower.setup.Environment;
-import io.undertow.server.HttpHandler;
 
 /**
  * A base class for {@link ServerFactory} implementations.
@@ -29,17 +28,14 @@ import io.undertow.server.HttpHandler;
  * <tr>
  * <td>{@code requestLog}</td>
  * <td></td>
- * <td>The {@link RequestLogFactory request log} configuration.</td>
  * </tr>
  * <tr>
  * <td>{@code gzip}</td>
  * <td></td>
- * <td>The {@link GzipHandlerFactory GZIP} configuration.</td>
  * </tr>
  * <tr>
  * <td>{@code serverPush}</td>
  * <td></td>
- * <td>The {@link ServerPushFilterFactory} configuration.</td>
  * </tr>
  * <tr>
  * <td>{@code maxThreads}</td>

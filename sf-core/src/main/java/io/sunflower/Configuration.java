@@ -62,25 +62,33 @@ import io.sunflower.server.ServerFactory;
  * @see <a href="http://www.yaml.org/YAML_for_ruby.html">YAML Cookbook</a>
  */
 public class Configuration {
+    @Valid
+    @NotNull
+    private ServerFactory server = new DefaultServerFactory();
 
     @Valid
     private LoggingFactory logging;
 
     @Valid
-    private ServerFactory server = new DefaultServerFactory();
-
-    @Valid
     @NotNull
     private MetricsFactory metrics = new MetricsFactory();
 
-    @JsonProperty("undertow")
+    /**
+     * Returns the server-specific section of the configuration file.
+     *
+     * @return server-specific configuration parameters
+     */
+    @JsonProperty("server")
     public ServerFactory getServerFactory() {
         return server;
     }
 
-    @JsonProperty("undertow")
-    public void setServerFactory(ServerFactory server) {
-        this.server = server;
+    /**
+     * Sets the HTTP-specific section of the configuration file.
+     */
+    @JsonProperty("server")
+    public void setServerFactory(ServerFactory factory) {
+        this.server = factory;
     }
 
     /**

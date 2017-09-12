@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
 package io.sunflower.gizmo.diagnostics;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.Files;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,49 +30,49 @@ import java.util.List;
 
 /**
  * Utility class for reading lines (snippet) from a source file.
- * 
+ *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)
  */
 public class SourceSnippetHelper {
-    
+
     static public SourceSnippet readFromQualifiedSourceCodePath(File baseDirectory,
-                                                                    String packageName,
-                                                                    String fileName,
-                                                                    int lineFrom,
-                                                                    int lineTo) throws IOException {
+                                                                String packageName,
+                                                                String fileName,
+                                                                int lineFrom,
+                                                                int lineTo) throws IOException {
         // try to find source template as local file
         if (baseDirectory != null) {
             File templateFile = new File(
-                baseDirectory.getAbsolutePath() 
-                + File.separator 
-                + packageName.replace(".", File.separator)
-                + File.separator 
-                + fileName);
+                baseDirectory.getAbsolutePath()
+                    + File.separator
+                    + packageName.replace(".", File.separator)
+                    + File.separator
+                    + fileName);
             return readFromFile(templateFile, lineFrom, lineTo);
         }
-        
+
         return null;
     }
-    
+
     static public SourceSnippet readFromRelativeFilePath(File baseDirectory,
-                                                            String templateRelativePath,
-                                                            int lineFrom,
-                                                            int lineTo) throws IOException {
+                                                         String templateRelativePath,
+                                                         int lineFrom,
+                                                         int lineTo) throws IOException {
         // try to find source template as local file
         if (baseDirectory != null && templateRelativePath != null) {
             File templateFile = new File(baseDirectory.getAbsolutePath()
-                    + File.separator
-                    + templateRelativePath);
+                + File.separator
+                + templateRelativePath);
             return readFromFile(templateFile, lineFrom, lineTo);
         }
-        
+
         return null;
     }
-    
+
     static public SourceSnippet readFromFile(File file,
-                                            int lineFrom,
-                                            int lineTo) throws IOException {
+                                             int lineFrom,
+                                             int lineTo) throws IOException {
         // try to find source as local file
         if (file != null) {
             if (file.exists()) {
@@ -82,14 +82,14 @@ public class SourceSnippetHelper {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     static private SourceSnippet readFromInputStream(InputStream is,
-                                                        URI source,
-                                                        int lineFrom,
-                                                        int lineTo) throws IOException {
+                                                     URI source,
+                                                     int lineFrom,
+                                                     int lineTo) throws IOException {
         // did the user provide a strange range (e.g. negative values)?
         // this sometimes may happen when a range is provided like an error
         // on line 3 and you want 5 before and 5 after
@@ -98,24 +98,22 @@ public class SourceSnippetHelper {
             int intendedRange = lineTo - lineFrom;
             lineFrom = 1;
             lineTo = lineFrom + intendedRange;
-        }
-        else if (lineFrom < 0 && lineTo < 0) {
+        } else if (lineFrom < 0 && lineTo < 0) {
             if (lineFrom < lineTo) {
                 int intendedRange = -1 * (lineFrom - lineTo);
                 lineFrom = 1;
                 lineTo = lineFrom + intendedRange;
-            }
-            else {
+            } else {
                 // giving up
                 return null;
             }
         }
-        
+
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(is, Charsets.UTF_8));
-        
+            new InputStreamReader(is, Charsets.UTF_8));
+
         List<String> lines = new ArrayList<>();
-  
+
         int i = 0;
         String line;
         while ((line = in.readLine()) != null) {
@@ -128,11 +126,11 @@ public class SourceSnippetHelper {
                 }
             }
         }
-        
+
         if (lines.isEmpty()) {
             return null;
         }
-        
+
         // since file may not contain enough lines for requested lineTo -- 
         // we calculate the actual range here by number read "from" line
         // since we are inclusive and not zero based we adjust the "from" by 1

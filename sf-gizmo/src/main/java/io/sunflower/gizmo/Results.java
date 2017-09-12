@@ -18,6 +18,9 @@ package io.sunflower.gizmo;
 
 import java.util.Optional;
 
+import io.sunflower.gizmo.utils.NoHttpBody;
+
+
 /**
  * Convenience methods for the generation of Results.
  *
@@ -32,7 +35,8 @@ public class Results {
 
     public static Result status(int statusCode) {
 
-        return new Result(statusCode);
+        Result result = new Result(statusCode);
+        return result;
 
     }
 
@@ -81,7 +85,7 @@ public class Results {
      * render a text in the Http body by default. 
      *
      * If you wish to do so please
-     * remove the {@link Result.NoHttpBody} that is set as renderable of
+     * remove the {@link NoHttpBody} that is set as renderable of
      * the Result.
      *
      * @param url
@@ -105,7 +109,7 @@ public class Results {
      * render a text in the Http body by default. 
      *
      * If you wish to do so please
-     * remove the {@link Result.NoHttpBody} that is set as renderable of
+     * remove the {@link NoHttpBody} that is set as renderable of
      * the Result.
      *
      * @param url
@@ -164,6 +168,12 @@ public class Results {
     public static Result TODO() {
         Result result = status(Result.SC_501_NOT_IMPLEMENTED);
         result.contentType(Result.APPLICATION_JSON);
+
         return result;
     }
+
+    public static AsyncResult async() {
+        return new AsyncResult();
+    }
+
 }
