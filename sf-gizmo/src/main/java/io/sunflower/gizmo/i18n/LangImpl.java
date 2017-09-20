@@ -28,7 +28,7 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.utils.NinjaConstant;
+import io.sunflower.gizmo.utils.GizmoConstant;
 
 @Singleton
 public class LangImpl implements Lang {
@@ -156,7 +156,7 @@ public class LangImpl implements Lang {
 
 
         Cookie cookie = Cookie.builder(applicationCookiePrefix
-            + NinjaConstant.LANG_COOKIE_SUFFIX, "")
+            + GizmoConstant.LANG_COOKIE_SUFFIX, "")
             .setMaxAge(TEN_YEARS).build();
 
 

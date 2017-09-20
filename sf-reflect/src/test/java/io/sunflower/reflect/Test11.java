@@ -21,11 +21,11 @@ package io.sunflower.reflect;
 public class Test11 {
 
 
-    public static final int     SF_INT1 = new Integer(0);
+    public static final int SF_INT1 = new Integer(0);
     public static final Integer SF_INT2 = new Integer(0);
-    public final int            F_INT1 = new Integer(0);
-    public final Integer        F_INT2 = new Integer(0);
+    public final int F_INT1 = new Integer(0);
+    public final Integer F_INT2 = new Integer(0);
 
-    public static Test11   S_DATA;
-    public Test11         I_DATA;
+    public static Test11 S_DATA;
+    public Test11 I_DATA;
 }

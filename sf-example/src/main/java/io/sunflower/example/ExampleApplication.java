@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 
 import ch.qos.logback.classic.Level;
 import io.sunflower.Application;
-import io.sunflower.Configuration;
 import io.sunflower.gizmo.GizmoBundle;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.application.ApplicationRoutes;

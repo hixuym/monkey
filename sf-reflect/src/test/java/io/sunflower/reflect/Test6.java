@@ -15,11 +15,16 @@ package io.sunflower.reflect;
 
 public interface Test6 {
     void setFoo(String s);
+
     void setBar(boolean b);
+
     void setBaz(String baz);
+
     void testIgnore();
 
     String getFoo();
+
     boolean isBar();
+
     String getBaz();
 }

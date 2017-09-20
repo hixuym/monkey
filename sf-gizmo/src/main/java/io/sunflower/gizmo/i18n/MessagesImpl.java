@@ -68,8 +68,7 @@ public class MessagesImpl implements Messages {
 
     }
 
-    @Override
-    public Map<Object, Object> getAll(Optional<String> language) {
+    private Map<Object, Object> getAll(Optional<String> language) {
 
         return Maps.newHashMap();
 

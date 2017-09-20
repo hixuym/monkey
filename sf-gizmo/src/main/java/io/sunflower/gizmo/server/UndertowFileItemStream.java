@@ -15,21 +15,23 @@
  */
 package io.sunflower.gizmo.server;
 
-import io.undertow.server.handlers.form.FormData.FormValue;
-import io.undertow.util.Headers;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.fileupload.FileItemStream;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+
+import io.undertow.server.handlers.form.FormData.FormValue;
+import io.undertow.util.Headers;
+
 /**
  * Wraps an Undertow FormValue to supply an Apache Commons Upload FileItemStream.
- * 
+ *
  * @author joelauer
  */
 public class UndertowFileItemStream implements FileItemStream {
-    
+
     final private String name;
     final private FormValue value;
 
@@ -52,7 +54,7 @@ public class UndertowFileItemStream implements FileItemStream {
     public String getFieldName() {
         return name;
     }
-    
+
     @Override
     public String getName() {
         return value.getFileName();
@@ -65,12 +67,12 @@ public class UndertowFileItemStream implements FileItemStream {
 
     @Override
     public FileItemHeaders getHeaders() {
-        throw new UnsupportedOperationException("GizmoUndertow does not support this yet");
+        throw new UnsupportedOperationException("GizmoServer does not support this yet");
     }
 
     @Override
     public void setHeaders(FileItemHeaders fih) {
-        throw new UnsupportedOperationException("GizmoUndertow does not support this yet");
+        throw new UnsupportedOperationException("GizmoServer does not support this yet");
     }
-    
+
 }

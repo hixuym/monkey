@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo;
@@ -70,111 +67,6 @@ public class RouterImpl implements Router {
 
         return null;
 
-    }
-
-    @Override
-    public String getReverseRoute(
-        Class<?> controllerClass,
-        String controllerMethodName) {
-
-        Optional<Map<String, Object>> parameterMap = Optional.empty();
-
-        return getReverseRoute(controllerClass, controllerMethodName, parameterMap);
-
-    }
-
-    @Override
-    public String getReverseRoute(Class<?> controllerClass,
-                                  String controllerMethodName,
-                                  Object... parameterMap) {
-
-        if (parameterMap.length % 2 != 0) {
-            logger.error("Always provide key (as String) value (as Object) pairs in parameterMap. That means providing e.g. 2, 4, 6... objects.");
-            return null;
-
-        }
-
-        Map<String, Object> map = new HashMap<>(parameterMap.length / 2);
-        for (int i = 0; i < parameterMap.length; i += 2) {
-            map.put((String) parameterMap[i], parameterMap[i + 1]);
-        }
-
-        return getReverseRoute(controllerClass, controllerMethodName, Optional.of(map));
-
-    }
-
-    @Override
-    public String getReverseRoute(Class<?> controllerClass,
-                                  String controllerMethodName,
-                                  Map<String, Object> parameterMap) {
-        Optional<Map<String, Object>> parameterMapOptional
-            = Optional.ofNullable(parameterMap);
-
-        return getReverseRoute(
-            controllerClass, controllerMethodName,
-            parameterMapOptional);
-    }
-
-    @Override
-    public String getReverseRoute(
-        Class<?> controllerClass,
-        String controllerMethodName,
-        Optional<Map<String, Object>> parameterMap) {
-
-        try {
-            ReverseRouter.Builder reverseRouteBuilder
-                = new ReverseRouter(configuration, this)
-                .with(controllerClass, controllerMethodName);
-
-            if (parameterMap.isPresent()) {
-                // pathOrQueryParams are not escaped with the deprecated method of creating
-                // reverse routes.  use ReverseRouter!
-                parameterMap.get().forEach((name, value) -> {
-                    // path or query param?
-                    if (reverseRouteBuilder.getRoute().getParameters().containsKey(name)) {
-                        reverseRouteBuilder.rawPathParam(name, value);
-                    } else {
-                        reverseRouteBuilder.rawQueryParam(name, value);
-                    }
-                });
-            }
-
-            return reverseRouteBuilder.build();
-        } catch (IllegalArgumentException e) {
-            logger.error("Unable to cleanly build reverse route", e);
-            return null;
-        }
-    }
-
-    @Override
-    public String getReverseRoute(MethodReference controllerMethodRef) {
-        return getReverseRoute(
-            controllerMethodRef.getDeclaringClass(),
-            controllerMethodRef.getMethodName());
-    }
-
-    @Override
-    public String getReverseRoute(MethodReference controllerMethodRef, Map<String, Object> parameterMap) {
-        return getReverseRoute(
-            controllerMethodRef.getDeclaringClass(),
-            controllerMethodRef.getMethodName(),
-            parameterMap);
-    }
-
-    @Override
-    public String getReverseRoute(MethodReference controllerMethodRef, Object... parameterMap) {
-        return getReverseRoute(
-            controllerMethodRef.getDeclaringClass(),
-            controllerMethodRef.getMethodName(),
-            parameterMap);
-    }
-
-    @Override
-    public String getReverseRoute(MethodReference controllerMethodRef, Optional<Map<String, Object>> parameterMap) {
-        return getReverseRoute(
-            controllerMethodRef.getDeclaringClass(),
-            controllerMethodRef.getMethodName(),
-            parameterMap);
     }
 
     @Override

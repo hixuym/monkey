@@ -146,7 +146,7 @@ public class CookieEncryption {
     private String getHelperLogMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append("Invalid key provided. Check if application secret is properly set.").append(System.lineSeparator());
-        sb.append("You can remove '").append(NinjaConstant.applicationSecret).append("' key in configuration file ");
+        sb.append("You can remove gizmo.applicationSecret key in configuration file ");
         sb.append("and restart application. Gizmo will generate new key for you.");
         return sb.toString();
     }

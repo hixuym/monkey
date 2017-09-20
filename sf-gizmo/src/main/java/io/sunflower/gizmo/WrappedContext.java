@@ -1,22 +1,17 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo;
-
-import org.apache.commons.fileupload.FileItemIterator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,11 +39,6 @@ public class WrappedContext implements Context {
     }
 
     @Override
-    public String getRequestUri() {
-        return wrapped.getRequestUri();
-    }
-
-    @Override
     public String getHostname() {
         return wrapped.getHostname();
     }
@@ -61,16 +51,6 @@ public class WrappedContext implements Context {
     @Override
     public String getRemoteAddr() {
         return wrapped.getRemoteAddr();
-    }
-
-    @Override
-    public FlashScope getFlashCookie() {
-        return wrapped.getFlashCookie();
-    }
-
-    @Override
-    public Session getSessionCookie() {
-        return wrapped.getSessionCookie();
     }
 
     @Override
@@ -174,31 +154,6 @@ public class WrappedContext implements Context {
     }
 
     @Override
-    public boolean isAsync() {
-        return wrapped.isAsync();
-    }
-
-    @Override
-    public void handleAsync() {
-        wrapped.handleAsync();
-    }
-
-    @Override
-    public void returnResultAsync(Result result) {
-        wrapped.returnResultAsync(result);
-    }
-
-    @Override
-    public void asyncRequestComplete() {
-        wrapped.asyncRequestComplete();
-    }
-
-    @Override
-    public Result controllerReturned() {
-        return wrapped.controllerReturned();
-    }
-
-    @Override
     public ResponseStreams finalizeHeaders(Result result) {
         return wrapped.finalizeHeaders(result);
     }
@@ -231,11 +186,6 @@ public class WrappedContext implements Context {
     @Override
     public boolean isMultipart() {
         return wrapped.isMultipart();
-    }
-
-    @Override
-    public FileItemIterator getFileItemIterator() {
-        return wrapped.getFileItemIterator();
     }
 
     @Override

@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo.session;
@@ -29,7 +26,7 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.CookieDataCodec;
-import io.sunflower.gizmo.utils.NinjaConstant;
+import io.sunflower.gizmo.utils.GizmoConstant;
 
 /**
  * Default FlashScope implementation.
@@ -51,7 +48,7 @@ public class FlashScopeImpl implements FlashScope {
     public void init(Context context) {
         // get flash cookie:
         Cookie flashCookie = context.getCookie(applicationCookiePrefix
-            + NinjaConstant.FLASH_SUFFIX);
+            + GizmoConstant.FLASH_SUFFIX);
 
         if (flashCookie != null) {
             try {
@@ -72,11 +69,11 @@ public class FlashScopeImpl implements FlashScope {
         if (outgoingFlashCookieData.isEmpty()) {
             // only need to buid a cookie (to empty its contents) if one currently exists
             if (context.hasCookie(applicationCookiePrefix
-                + NinjaConstant.FLASH_SUFFIX)) {
+                + GizmoConstant.FLASH_SUFFIX)) {
 
                 // build empty flash cookie
                 Cookie.Builder cookie = Cookie.builder(applicationCookiePrefix
-                    + NinjaConstant.FLASH_SUFFIX, "");
+                    + GizmoConstant.FLASH_SUFFIX, "");
                 cookie.setPath(context.getContextPath() + "/");
                 cookie.setSecure(false);
                 cookie.setMaxAge(0);
@@ -89,7 +86,7 @@ public class FlashScopeImpl implements FlashScope {
                 String flashData = CookieDataCodec.encode(outgoingFlashCookieData);
 
                 Cookie.Builder cookie = Cookie.builder(applicationCookiePrefix
-                    + NinjaConstant.FLASH_SUFFIX, flashData);
+                    + GizmoConstant.FLASH_SUFFIX, flashData);
                 cookie.setPath(context.getContextPath() + "/");
                 cookie.setSecure(false);
                 // "-1" does not set "Expires" for that cookie
@@ -144,15 +141,6 @@ public class FlashScopeImpl implements FlashScope {
         this.validateKey(key);
         currentFlashCookieData.put(key, value);
         outgoingFlashCookieData.put(key, value);
-    }
-
-    @Override
-    public void put(String key, Object value) {
-        this.validateKey(key);
-        if (value == null) {
-            put(key, (String) null);
-        }
-        put(key, value + "");
     }
 
     @Override

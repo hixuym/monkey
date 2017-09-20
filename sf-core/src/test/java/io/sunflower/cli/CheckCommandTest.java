@@ -1,11 +1,13 @@
 package io.sunflower.cli;
 
+import net.sourceforge.argparse4j.inf.Namespace;
+
+import org.junit.Test;
+
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import net.sourceforge.argparse4j.inf.Namespace;
-import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -29,13 +31,13 @@ public class CheckCommandTest {
     @Test
     public void hasAName() throws Exception {
         assertThat(command.getName())
-                .isEqualTo("check");
+            .isEqualTo("check");
     }
 
     @Test
     public void hasADescription() throws Exception {
         assertThat(command.getDescription())
-                .isEqualTo("Parses and validates the configuration file");
+            .isEqualTo("Parses and validates the configuration file");
     }
 
     @Test

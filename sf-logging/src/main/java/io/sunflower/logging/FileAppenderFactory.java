@@ -30,86 +30,28 @@ import io.sunflower.validation.ValidationMethod;
  * An {@link AppenderFactory} implementation which provides an appender that writes events to a file, archiving older
  * files as it goes.
  * <p/>
- * <b>Configuration Parameters:</b>
- * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>{@code type}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The appender type. Must be {@code file}.</td>
- * </tr>
- * <tr>
- * <td>{@code threshold}</td>
- * <td>{@code ALL}</td>
- * <td>The lowest level of events to write to the file.</td>
- * </tr>
- * <tr>
- * <td>{@code currentLogFilename}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The filename where current events are logged.</td>
- * </tr>
- * <tr>
- * <td>{@code archive}</td>
- * <td>{@code true}</td>
- * <td>Whether or not to archive old events in separate files.</td>
- * </tr>
- * <tr>
- * <td>{@code archivedLogFilenamePattern}</td>
- * <td><b>REQUIRED</b> if {@code archive} is {@code true}.</td>
- * <td>
- * The filename pattern for archived files.
- * If {@code maxFileSize} is specified, rollover is size-based, and the pattern must contain {@code %i} for
- * an integer index of the archived file.
- * Otherwise rollover is date-based, and the pattern must contain {@code %d}, which is replaced with the
- * date in {@code yyyy-MM-dd} form.
- * If the pattern ends with {@code .gz} or {@code .zip}, files will be compressed as they are archived.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code archivedFileCount}</td>
- * <td>{@code 5}</td>
- * <td>
- * The number of archived files to keep. Must be greater than or equal to {@code 0}. Zero is a
- * special value signifying to keep infinite logs (use with caution)
- * </td>
- * </tr>
- * <tr>
- * <td>{@code maxFileSize}</td>
- * <td>(unlimited)</td>
- * <td>
- * The maximum size of the currently active file before a rollover is triggered. The value can be expressed
- * in bytes, kilobytes, megabytes, gigabytes, and terabytes by appending B, K, MB, GB, or TB to the
- * numeric value.  Examples include 100MB, 1GB, 1TB.  Sizes can also be spelled out, such as 100 megabytes,
- * 1 gigabyte, 1 terabyte.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code timeZone}</td>
- * <td>{@code UTC}</td>
- * <td>The time zone to which event timestamps will be converted.</td>
- * </tr>
- * <tr>
- * <td>{@code logFormat}</td>
- * <td>the default format</td>
- * <td>
- * The Logback pattern with which events will be formatted. See
- * <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
- * for details.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code bufferSize}</td>
- * <td>8KB</td>
- * <td>
- * The buffer size of the underlying FileAppender (setting added in logback 1.1.10). Increasing this from
- * the default of 8KB to 256KB is reported to significantly reduce thread contention.
- * </td>
- * </tr>
- * </table>
+ * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td> </tr> <tr>
+ * <td>{@code type}</td> <td><b>REQUIRED</b></td> <td>The appender type. Must be {@code file}.</td> </tr> <tr>
+ * <td>{@code threshold}</td> <td>{@code ALL}</td> <td>The lowest level of events to write to the file.</td> </tr> <tr>
+ * <td>{@code currentLogFilename}</td> <td><b>REQUIRED</b></td> <td>The filename where current events are logged.</td>
+ * </tr> <tr> <td>{@code archive}</td> <td>{@code true}</td> <td>Whether or not to archive old events in separate
+ * files.</td> </tr> <tr> <td>{@code archivedLogFilenamePattern}</td> <td><b>REQUIRED</b> if {@code archive} is {@code
+ * true}.</td> <td> The filename pattern for archived files. If {@code maxFileSize} is specified, rollover is
+ * size-based, and the pattern must contain {@code %i} for an integer index of the archived file. Otherwise rollover is
+ * date-based, and the pattern must contain {@code %d}, which is replaced with the date in {@code yyyy-MM-dd} form. If
+ * the pattern ends with {@code .gz} or {@code .zip}, files will be compressed as they are archived. </td> </tr> <tr>
+ * <td>{@code archivedFileCount}</td> <td>{@code 5}</td> <td> The number of archived files to keep. Must be greater than
+ * or equal to {@code 0}. Zero is a special value signifying to keep infinite logs (use with caution) </td> </tr> <tr>
+ * <td>{@code maxFileSize}</td> <td>(unlimited)</td> <td> The maximum size of the currently active file before a
+ * rollover is triggered. The value can be expressed in bytes, kilobytes, megabytes, gigabytes, and terabytes by
+ * appending B, K, MB, GB, or TB to the numeric value.  Examples include 100MB, 1GB, 1TB.  Sizes can also be spelled
+ * out, such as 100 megabytes, 1 gigabyte, 1 terabyte. </td> </tr> <tr> <td>{@code timeZone}</td> <td>{@code UTC}</td>
+ * <td>The time zone to which event timestamps will be converted.</td> </tr> <tr> <td>{@code logFormat}</td> <td>the
+ * default format</td> <td> The Logback pattern with which events will be formatted. See <a
+ * href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a> for details. </td>
+ * </tr> <tr> <td>{@code bufferSize}</td> <td>8KB</td> <td> The buffer size of the underlying FileAppender (setting
+ * added in logback 1.1.10). Increasing this from the default of 8KB to 256KB is reported to significantly reduce thread
+ * contention. </td> </tr> </table>
  *
  * @see AbstractAppenderFactory
  */

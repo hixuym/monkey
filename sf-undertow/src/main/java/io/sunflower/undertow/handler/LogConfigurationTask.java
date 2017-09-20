@@ -12,24 +12,10 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 
 /**
- * Sets the logging level for a number of loggers
- * <p>
- * <b>Parameters:</b>
- * <table>
- * <tr>
- * <td>Name</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>logger</td>
- * <td>One or more logger names to be configured with the specified log level.</td>
- * </tr>
- * <tr>
- * <td>level</td>
- * <td>An optional {@link Level} to configure. If not provided, the log level will be set to null.</td>
- * </tr>
- * </table>
- * </p>
+ * Sets the logging level for a number of loggers <p> <b>Parameters:</b> <table> <tr> <td>Name</td> <td>Description</td>
+ * </tr> <tr> <td>logger</td> <td>One or more logger names to be configured with the specified log level.</td> </tr>
+ * <tr> <td>level</td> <td>An optional {@link Level} to configure. If not provided, the log level will be set to
+ * null.</td> </tr> </table> </p>
  */
 public class LogConfigurationTask extends Task {
 

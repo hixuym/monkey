@@ -18,7 +18,7 @@ package io.sunflower.reflect;
  */
 public class Test2 {
 
-    public final Object          n;
+    public final Object n;
     public final ConstructorType constructorType;
 
     public Test2() {

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import javax.validation.Validator;
 
 /**
- * A factory class for loading YAML configuration files, binding them to configuration objects, and
- * validating their constraints. Allows for overriding configuration parameters from system properties.
+ * A factory class for loading YAML configuration files, binding them to configuration objects, and validating their
+ * constraints. Allows for overriding configuration parameters from system properties.
  *
  * @param <T> the type of the configuration objects to produce
  */

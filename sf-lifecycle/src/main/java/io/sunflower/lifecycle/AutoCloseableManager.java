@@ -1,11 +1,10 @@
 package io.sunflower.lifecycle;
 
 /**
- * An implementation of the Managed Interface for {@link AutoCloseable} instances. Adding an
- * {@code AutoCloseableManager} instance to the application's environment ties that object’s lifecycle to
- * that of the application’s HTTP server. After the server has stopped (and after its graceful
- * shutdown period) the {@link #stop()} method is called, which will trigger the call to {@link
- * AutoCloseable#close()}
+ * An implementation of the Managed Interface for {@link AutoCloseable} instances. Adding an {@code
+ * AutoCloseableManager} instance to the application's environment ties that object’s lifecycle to that of the
+ * application’s HTTP server. After the server has stopped (and after its graceful shutdown period) the {@link #stop()}
+ * method is called, which will trigger the call to {@link AutoCloseable#close()}
  *
  * <p>Usage :</p>
  * <pre>

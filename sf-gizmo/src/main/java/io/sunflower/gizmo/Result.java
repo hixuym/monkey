@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo;
@@ -25,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
@@ -72,13 +68,8 @@ public class Result {
     public static final String TEXT_HTML = "text/html";
     public static final String TEXT_PLAIN = "text/plain";
     public static final String APPLICATION_JSON = "application/json";
-    /* @deprecated Naming mistake - Please use APPLICATION_JSON instead! */
-    @Deprecated
-    public static final String APPLICATON_JSON = APPLICATION_JSON;
     public static final String APPLICATION_JSONP = "application/javascript";
     /* @deprecated Naming mistake - Please use APPLICATION_JSONP instead! */
-    @Deprecated
-    public static final String APPLICATON_JSONP = APPLICATION_JSONP;
     public static final String APPLICATION_XML = "application/xml";
     public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
@@ -334,70 +325,6 @@ public class Result {
 
     }
 
-
-    /**
-     * This method directly renders the String to the output. It completely
-     * bypasses any rendering engine.
-     *
-     * Thus you can render anything you want.
-     *
-     * Chaining of resultRaw().resultRaw()... is NOT supported. Mixing with
-     * render() is NOT supported.
-     *
-     * It is always recommended to implement your own RenderingEngine OR use
-     * existing rendering engines.
-     *
-     * Example: <code>
-     * public Result controllerMethod() {
-     *    String customJson = "{\"user\" : \"john@woo.com\"}";
-     *
-     *    return Results.json().renderRaw(customJson);
-     * }
-     * </code>
-     *
-     * @param string
-     *            The string to render.
-     * @return A result that will render the string directly to the output
-     *         stream.
-     * @deprecated => use text().render(string), html().render(string),
-     *             json().render(string), xml().render(string), or
-     *             contentType(type).render(string).
-     */
-    @Deprecated
-    public Result renderRaw(final String string) {
-
-        Renderable renderable = new Renderable() {
-
-            @Override
-            public void render(Context context, Result result) {
-
-                if (result.getContentType() == null) {
-                    result.contentType(Result.TEXT_PLAIN);
-                }
-
-                ResponseStreams resultJsonCustom = context
-                    .finalizeHeaders(result);
-
-                try (Writer writer = resultJsonCustom.getWriter()) {
-
-                    writer.write(string);
-
-                } catch (IOException ioException) {
-
-                    logger.error(
-                        "Error rendering raw String via renderRaw(...)",
-                        ioException);
-                }
-
-            }
-        };
-
-        render(renderable);
-
-        return this;
-
-    }
-
     /**
      * This method directly renders the byte array to the output. It
      * completely bypasses any rendering engine.
@@ -459,18 +386,6 @@ public class Result {
      */
     public Result charset(String charset) {
         this.charset = charset;
-        return this;
-    }
-
-    /**
-     * Sets the content type
-     *
-     * @param contentType
-     * @Deprecated => please use shortcut contentType(...)
-     */
-    @Deprecated
-    public Result setContentType(String contentType) {
-        this.contentType = contentType;
         return this;
     }
 
@@ -715,9 +630,9 @@ public class Result {
     }
 
     /**
-     * Set the content type of this result to {@link Result#APPLICATON_XML}.
+     * Set the content type of this result to {@link Result#APPLICATION_XML}.
      *
-     * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATON_XML}.
+     * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATION_XML}.
      */
     public Result xml() {
         contentType = APPLICATION_XML;

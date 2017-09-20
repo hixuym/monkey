@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 package io.sunflower.gizmo.utils;
 
@@ -29,12 +26,12 @@ import java.net.UnknownHostException;
 import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Route;
 import io.sunflower.gizmo.bodyparser.BodyParserEngine;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
 import io.sunflower.gizmo.params.ParamParsers;
-import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.validation.Validation;
@@ -111,21 +108,9 @@ abstract public class AbstractContext implements Context.Impl {
         return validation;
     }
 
-    @Deprecated
-    @Override
-    public FlashScope getFlashCookie() {
-        return flashScope;
-    }
-
     @Override
     public FlashScope getFlashScope() {
         return flashScope;
-    }
-
-    @Deprecated
-    @Override
-    public Session getSessionCookie() {
-        return session;
     }
 
     @Override
@@ -293,11 +278,6 @@ abstract public class AbstractContext implements Context.Impl {
     @Override
     public void unsetCookie(Cookie cookie) {
         addCookie(Cookie.builder(cookie).setMaxAge(0).build());
-    }
-
-    @Override
-    public void asyncRequestComplete() {
-        returnResultAsync(null);
     }
 
     protected ResponseStreams finalizeHeaders(Result result, Boolean handleFlashAndSessionCookie) {

@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo.validation;
@@ -53,7 +50,7 @@ public class Validators {
      *
      * @author Thibault Meyer
      */
-    private static class NinjaContextMsgInterpolator implements MessageInterpolator.Context, Serializable {
+    private static class GizmoContextMsgInterpolator implements MessageInterpolator.Context, Serializable {
 
         private final Object value;
         private final ConstraintDescriptor<?> descriptor;
@@ -64,7 +61,7 @@ public class Validators {
          * @param value      value being validated
          * @param descriptor Constraint being validated
          */
-        public NinjaContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
+        public GizmoContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
             this.value = value;
             this.descriptor = descriptor;
         }
@@ -124,7 +121,7 @@ public class Validators {
                 for (final javax.validation.ConstraintViolation<Object> violation : violations) {
                     final String violationMessage = validatorFactory.getMessageInterpolator().interpolate(
                         violation.getMessageTemplate(),
-                        new NinjaContextMsgInterpolator(value, violation.getConstraintDescriptor()),
+                        new GizmoContextMsgInterpolator(value, violation.getConstraintDescriptor()),
                         localeToUse
                     );
                     final String messageKey = violation.getMessageTemplate().replaceAll("[{}]", "");
@@ -132,31 +129,6 @@ public class Validators {
                         messageKey, violation.getPropertyPath().toString(), violationMessage, violation.getInvalidValue());
                     validation.addViolation(constraintViolation);
                 }
-            }
-        }
-
-        @Override
-        public Class<Object> getValidatedType() {
-            return Object.class;
-        }
-    }
-
-    public static class RequiredValidator implements Validator<Object> {
-
-        private final Required required;
-
-        public RequiredValidator(Required required) {
-            this.required = required;
-        }
-
-        @Override
-        public void validate(Object value, String field, Context context) {
-            if (value == null) {
-                context.getValidation().addViolation(
-                    new ConstraintViolation(
-                        this.required.key(),
-                        fieldKey(field, this.required.fieldKey()),
-                        this.required.message()));
             }
         }
 
@@ -194,111 +166,6 @@ public class Validators {
                         new ConstraintViolation(this.length.minKey(),
                             fieldKey(field, this.length.fieldKey()),
                             this.length.minMessage(), this.length.min(), value));
-                }
-            }
-        }
-
-        @Override
-        public Class<String> getValidatedType() {
-            return String.class;
-        }
-    }
-
-    public static class IntegerValidator implements Validator<String> {
-
-        private final IsInteger isInteger;
-
-        public IntegerValidator(IsInteger integer) {
-            this.isInteger = integer;
-        }
-
-        /**
-         * Validate the given value
-         *
-         * @param value   The value, may be null
-         * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
-         */
-        @Override
-        public void validate(String value, String field, Context context) {
-            if (value != null) {
-                try {
-                    Long.parseLong(value);
-                } catch (NumberFormatException e) {
-                    context.getValidation().addViolation(
-                        new ConstraintViolation(this.isInteger.key(),
-                            fieldKey(field, this.isInteger.fieldKey()),
-                            this.isInteger.message(), value));
-                }
-            }
-        }
-
-        @Override
-        public Class<String> getValidatedType() {
-            return String.class;
-        }
-    }
-
-    public static class FloatValidator implements Validator<String> {
-
-        private final IsFloat isFloat;
-
-        public FloatValidator(IsFloat aFloat) {
-            this.isFloat = aFloat;
-        }
-
-        /**
-         * Validate the given value
-         *
-         * @param value   The value, may be null
-         * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
-         */
-        @Override
-        public void validate(String value, String field, Context context) {
-            if (value != null) {
-                try {
-                    Double.parseDouble(value);
-                } catch (NumberFormatException e) {
-                    context.getValidation().addViolation(
-                        new ConstraintViolation(this.isFloat.key(),
-                            fieldKey(field, this.isFloat.fieldKey()),
-                            this.isFloat.message(), value));
-                }
-            }
-        }
-
-        @Override
-        public Class<String> getValidatedType() {
-            return String.class;
-        }
-    }
-
-    public static class DateValidator implements Validator<String> {
-
-        private final IsDate isDate;
-
-        public DateValidator(IsDate aDate) {
-            this.isDate = aDate;
-        }
-
-        /**
-         * Validate the given value
-         *
-         * @param value   The value, may be null
-         * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
-         */
-        @Override
-        public void validate(String value, String field, Context context) {
-            if (value != null) {
-                try {
-                    Double.parseDouble(value);
-                } catch (NumberFormatException e) {
-                    context.getValidation().addViolation(
-                        new ConstraintViolation(this.isDate.key(),
-                            fieldKey(field, this.isDate.fieldKey()),
-                            this.isDate.message(), value));
                 }
             }
         }
@@ -383,48 +250,6 @@ public class Validators {
         @Override
         public Class<Number> getValidatedType() {
             return Number.class;
-        }
-    }
-
-    public static class EnumValidator implements Validator<String> {
-
-        private final IsEnum isEnum;
-
-        public EnumValidator(IsEnum anEnum) {
-            this.isEnum = anEnum;
-        }
-
-        /**
-         * Validate the given value
-         *
-         * @param value   The value, may be null
-         * @param field   The name of the field being validated, if applicable
-         * @param context The Gizmo request context
-         */
-        @Override
-        public void validate(String value, String field, Context context) {
-            if (value != null) {
-                Enum<?>[] values = this.isEnum.enumClass().getEnumConstants();
-                for (Enum<?> v : values) {
-                    if (this.isEnum.caseSensitive()) {
-                        if (v.name().equals(value)) {
-                            return;
-                        }
-                    } else {
-                        if (v.name().equalsIgnoreCase(value)) {
-                            return;
-                        }
-                    }
-                }
-
-                context.getValidation().addViolation(new ConstraintViolation(
-                    IsEnum.KEY, field, IsEnum.MESSAGE, value, this.isEnum.enumClass().getName()));
-            }
-        }
-
-        @Override
-        public Class<String> getValidatedType() {
-            return String.class;
         }
     }
 }

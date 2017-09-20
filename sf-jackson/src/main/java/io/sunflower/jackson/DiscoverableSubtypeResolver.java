@@ -20,8 +20,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 /**
- * A subtype resolver which discovers subtypes via
- * {@code META-INF/services/Discoverable}.
+ * A subtype resolver which discovers subtypes via {@code META-INF/services/Discoverable}.
  */
 public class DiscoverableSubtypeResolver extends StdSubtypeResolver {
     private static final long serialVersionUID = 1L;

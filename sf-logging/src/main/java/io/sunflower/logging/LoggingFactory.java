@@ -15,8 +15,8 @@ public interface LoggingFactory extends Discoverable {
     void stop();
 
     /**
-     * Mainly useful in testing to reset the logging to a sane default before
-     * the next test configures logging to a desired level.
+     * Mainly useful in testing to reset the logging to a sane default before the next test configures logging to a
+     * desired level.
      */
     void reset();
 }

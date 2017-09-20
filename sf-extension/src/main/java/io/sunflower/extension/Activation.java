@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
 
 /**
  * Spi有多个实现时，可以根据条件进行过滤、排序后再返回。
- *
  */
 
 @Documented

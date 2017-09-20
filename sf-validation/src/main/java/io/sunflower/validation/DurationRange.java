@@ -19,8 +19,7 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * The annotated element has to be in the appropriate range. Apply on
- * {@link io.sunflower.util.Duration} instances.
+ * The annotated element has to be in the appropriate range. Apply on {@link io.sunflower.util.Duration} instances.
  */
 @Documented
 @Constraint(validatedBy = {})

@@ -38,8 +38,8 @@ public interface Container {
     <T> T getBean(Class<T> clazz);
 
     /**
-     * Removes the given bean.
-     * If the bean is-a {@link Listener}, then also do an implicit {@link #removeEventListener(Listener)}.
+     * Removes the given bean. If the bean is-a {@link Listener}, then also do an implicit {@link
+     * #removeEventListener(Listener)}.
      *
      * @param o the bean to remove
      * @return whether the bean was removed
@@ -71,8 +71,7 @@ public interface Container {
     void unmanage(Object bean);
 
     /**
-     * Manages a bean already contained by this aggregate, so that it is started/stopped/destroyed with this
-     * aggregate.
+     * Manages a bean already contained by this aggregate, so that it is started/stopped/destroyed with this aggregate.
      *
      * @param bean The bean to manage (must already have been added).
      */
@@ -88,9 +87,8 @@ public interface Container {
     boolean addBean(Object o, boolean managed);
 
     /**
-     * A listener for Container events.
-     * If an added bean implements this interface it will receive the events
-     * for this container.
+     * A listener for Container events. If an added bean implements this interface it will receive the events for this
+     * container.
      */
     interface Listener {
         void beanAdded(Container parent, Object child);
@@ -99,9 +97,8 @@ public interface Container {
     }
 
     /**
-     * Inherited Listener.
-     * If an added bean implements this interface, then it will
-     * be added to all contained beans that are themselves Containers
+     * Inherited Listener. If an added bean implements this interface, then it will be added to all contained beans that
+     * are themselves Containers
      */
     interface InheritedListener extends Listener {
     }

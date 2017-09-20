@@ -40,9 +40,8 @@ public class Injectors {
     }
 
     /**
-     * Returns an instance of the given type with the {@link Named}
-     * annotation value. <p> This method allows you to switch this code
-     * <code>injector.getInstance(Key.get(type, Names.named(name)));</code> <p> to the more concise
+     * Returns an instance of the given type with the {@link Named} annotation value. <p> This method allows you to
+     * switch this code <code>injector.getInstance(Key.get(type, Names.named(name)));</code> <p> to the more concise
      * <code>Injectors.getInstance(injector, type, name);</code>
      */
     public static <T> T getInstance(Injector injector, Class<T> type, String name) {
@@ -218,8 +217,8 @@ public class Injectors {
     }
 
     /**
-     * Creates an injector for the given set of services. This is equivalent to calling {@link
-     * #createInjector(Stage, Module...)} with Stage.DEVELOPMENT.
+     * Creates an injector for the given set of services. This is equivalent to calling {@link #createInjector(Stage,
+     * Module...)} with Stage.DEVELOPMENT.
      *
      * @throws CreationException if one or more errors occur during injector construction
      */
@@ -228,8 +227,8 @@ public class Injectors {
     }
 
     /**
-     * Creates an injector for the given set of services. This is equivalent to calling {@link
-     * #createInjector(Stage, Iterable)} with Stage.DEVELOPMENT.
+     * Creates an injector for the given set of services. This is equivalent to calling {@link #createInjector(Stage,
+     * Iterable)} with Stage.DEVELOPMENT.
      *
      * @throws CreationException if one or more errors occur during injector creation
      */

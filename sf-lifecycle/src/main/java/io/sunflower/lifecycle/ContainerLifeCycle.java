@@ -10,38 +10,25 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A ContainerLifeCycle is an {@link LifeCycle} implementation for a collection of contained beans.
- * <p>
- * Beans can be added to the ContainerLifeCycle either as managed beans or as unmanaged beans.
- * A managed bean is started, stopped and destroyed with the aggregate.
- * An unmanaged bean is associated with the aggregate for the purposes of dump, but its
- * lifecycle must be managed externally.
- * <p>
- * When a {@link LifeCycle} bean is added without a managed state being specified the state is
- * determined heuristically:
- * <ul>
- * <li>If the added bean is running, it will be added as an unmanaged bean.</li>
- * <li>If the added bean is !running and the container is !running, it will be added as an AUTO bean (see below).</li>
- * <li>If the added bean is !running and the container is starting, it will be added as a managed bean
- * and will be started (this handles the frequent case of new beans added during calls to doStart).</li>
- * <li>If the added bean is !running and the container is started, it will be added as an unmanaged bean.</li>
- * </ul>
- * When the container is started, then all contained managed beans will also be started.
- * Any contained AUTO beans will be check for their status and if already started will be switched unmanaged beans,
- * else they will be started and switched to managed beans.
- * Beans added after a container is started are not started and their state needs to be explicitly managed.
- * <p>
- * When stopping the container, a contained bean will be stopped by this aggregate only if it
- * is started by this aggregate.
- * <p>
- * The methods {@link #addBean(Object, boolean)}, {@link #manage(Object)} and {@link #unmanage(Object)} can be used to
- * explicitly control the life cycle relationship.
- * <p>
- * If adding a bean that is shared between multiple {@link ContainerLifeCycle} instances, then it should be started
- * before being added, so it is unmanaged, or the API must be used to explicitly set it as unmanaged.
- * <p>
- * This class also provides utility methods to dump deep structures of objects.
- * In the dump, the following symbols are used to indicate the type of contained object:
+ * A ContainerLifeCycle is an {@link LifeCycle} implementation for a collection of contained beans. <p> Beans can be
+ * added to the ContainerLifeCycle either as managed beans or as unmanaged beans. A managed bean is started, stopped and
+ * destroyed with the aggregate. An unmanaged bean is associated with the aggregate for the purposes of dump, but its
+ * lifecycle must be managed externally. <p> When a {@link LifeCycle} bean is added without a managed state being
+ * specified the state is determined heuristically: <ul> <li>If the added bean is running, it will be added as an
+ * unmanaged bean.</li> <li>If the added bean is !running and the container is !running, it will be added as an AUTO
+ * bean (see below).</li> <li>If the added bean is !running and the container is starting, it will be added as a managed
+ * bean and will be started (this handles the frequent case of new beans added during calls to doStart).</li> <li>If the
+ * added bean is !running and the container is started, it will be added as an unmanaged bean.</li> </ul> When the
+ * container is started, then all contained managed beans will also be started. Any contained AUTO beans will be check
+ * for their status and if already started will be switched unmanaged beans, else they will be started and switched to
+ * managed beans. Beans added after a container is started are not started and their state needs to be explicitly
+ * managed. <p> When stopping the container, a contained bean will be stopped by this aggregate only if it is started by
+ * this aggregate. <p> The methods {@link #addBean(Object, boolean)}, {@link #manage(Object)} and {@link
+ * #unmanage(Object)} can be used to explicitly control the life cycle relationship. <p> If adding a bean that is shared
+ * between multiple {@link ContainerLifeCycle} instances, then it should be started before being added, so it is
+ * unmanaged, or the API must be used to explicitly set it as unmanaged. <p> This class also provides utility methods to
+ * dump deep structures of objects. In the dump, the following symbols are used to indicate the type of contained
+ * object:
  * <pre>
  * SomeContainerLifeCycleInstance
  *   +- contained POJO instance
@@ -170,12 +157,10 @@ public class ContainerLifeCycle extends AbstractLifeCycle implements Container, 
     }
 
     /**
-     * Adds the given bean, detecting whether to manage it or not.
-     * If the bean is a {@link LifeCycle}, then it will be managed if it is not
-     * already started and not managed if it is already started.
-     * The {@link #addBean(Object, boolean)}
-     * method should be used if this is not correct, or the {@link #manage(Object)} and {@link #unmanage(Object)}
-     * methods may be used after an add to change the status.
+     * Adds the given bean, detecting whether to manage it or not. If the bean is a {@link LifeCycle}, then it will be
+     * managed if it is not already started and not managed if it is already started. The {@link #addBean(Object,
+     * boolean)} method should be used if this is not correct, or the {@link #manage(Object)} and {@link
+     * #unmanage(Object)} methods may be used after an add to change the status.
      *
      * @param o the bean object to add
      * @return true if the bean was added, false if it was already present
@@ -272,10 +257,8 @@ public class ContainerLifeCycle extends AbstractLifeCycle implements Container, 
     }
 
     /**
-     * Adds a managed lifecycle.
-     * <p>This is a convenience method that uses addBean(lifecycle,true)
-     * and then ensures that the added bean is started iff this container
-     * is running.  Exception from nested calls to start are caught and
+     * Adds a managed lifecycle. <p>This is a convenience method that uses addBean(lifecycle,true) and then ensures that
+     * the added bean is started iff this container is running.  Exception from nested calls to start are caught and
      * wrapped as RuntimeExceptions
      *
      * @param lifecycle the managed lifecycle to add
@@ -314,8 +297,7 @@ public class ContainerLifeCycle extends AbstractLifeCycle implements Container, 
     }
 
     /**
-     * Manages a bean already contained by this aggregate, so that it is started/stopped/destroyed with this
-     * aggregate.
+     * Manages a bean already contained by this aggregate, so that it is started/stopped/destroyed with this aggregate.
      *
      * @param bean The bean to manage (must already have been added).
      */

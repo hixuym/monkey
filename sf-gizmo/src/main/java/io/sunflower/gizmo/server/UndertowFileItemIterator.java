@@ -15,18 +15,18 @@
  */
 package io.sunflower.gizmo.server;
 
-import java.io.IOException;
-import java.util.List;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
- *
  * @author joelauer
  */
 public class UndertowFileItemIterator implements FileItemIterator {
-    
+
     final private List<UndertowFileItemStream> items;
     private int index;
 
@@ -45,11 +45,11 @@ public class UndertowFileItemIterator implements FileItemIterator {
         if (index >= items.size()) {
             return null;
         }
-        
+
         FileItemStream fis = items.get(index);
-        
+
         index++;
-        
+
         return fis;
     }
 }

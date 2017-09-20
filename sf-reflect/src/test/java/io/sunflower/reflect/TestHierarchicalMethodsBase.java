@@ -26,6 +26,7 @@ public class TestHierarchicalMethodsBase {
     public String pub_base_method(int number) {
         return PUBLIC_RESULT;
     }
+
     public String pub_method(int number) {
         return PUBLIC_RESULT;
     }

@@ -14,8 +14,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * A constraint that allows one to specify a port range, but still allow 0 as the port value to
- * indicate dynamically allocated ports.
+ * A constraint that allows one to specify a port range, but still allow 0 as the port value to indicate dynamically
+ * allocated ports.
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Retention(RUNTIME)

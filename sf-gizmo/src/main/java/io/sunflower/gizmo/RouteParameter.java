@@ -76,8 +76,7 @@ public class RouteParameter {
     }
 
     /**
-     * Parse a path such as "/user/{id: [0-9]+}/email/{addr}" for the named
-     * parameters.
+     * Parse a path such as "/user/{id: [0-9]+}/email/{addr}" for the named parameters.
      *
      * @param path The path to parse
      * @return A map containing the named parameters in the order they were parsed or null if no parameters were parsed.

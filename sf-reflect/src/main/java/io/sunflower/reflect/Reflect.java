@@ -27,9 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A wrapper for an {@link Object} or {@link Class} upon which reflective calls
- * can be made.
- * <p>
+ * A wrapper for an {@link Object} or {@link Class} upon which reflective calls can be made. <p>
  * An example of using <code>Reflect</code> is <code><pre>
  * // Static import all reflection methods to decrease verbosity
  * import static org.joor.Reflect.*;
@@ -53,9 +51,7 @@ public class Reflect {
     // ---------------------------------------------------------------------
 
     /**
-     * Wrap a class name.
-     * <p>
-     * This is the same as calling <code>on(Class.forName(name))</code>
+     * Wrap a class name. <p> This is the same as calling <code>on(Class.forName(name))</code>
      *
      * @param name A fully qualified class name
      * @return A wrapped class object, to be used for further reflection.
@@ -67,9 +63,7 @@ public class Reflect {
     }
 
     /**
-     * Wrap a class name, loading it via a given class loader.
-     * <p>
-     * This is the same as calling
+     * Wrap a class name, loading it via a given class loader. <p> This is the same as calling
      * <code>on(Class.forName(name, classLoader))</code>
      *
      * @param name        A fully qualified class name.
@@ -83,11 +77,8 @@ public class Reflect {
     }
 
     /**
-     * Wrap a class.
-     * <p>
-     * Use this when you want to access static fields and methods on a
-     * {@link Class} object, or as a basis for constructing objects of that
-     * class using {@link #create(Object...)}
+     * Wrap a class. <p> Use this when you want to access static fields and methods on a {@link Class} object, or as a
+     * basis for constructing objects of that class using {@link #create(Object...)}
      *
      * @param clazz The class to be wrapped
      * @return A wrapped class object, to be used for further reflection.
@@ -97,10 +88,7 @@ public class Reflect {
     }
 
     /**
-     * Wrap an object.
-     * <p>
-     * Use this when you want to access instance fields and methods on any
-     * {@link Object}
+     * Wrap an object. <p> Use this when you want to access instance fields and methods on any {@link Object}
      *
      * @param object The object to be wrapped
      * @return A wrapped object, to be used for further reflection.
@@ -114,10 +102,8 @@ public class Reflect {
     }
 
     /**
-     * Conveniently render an {@link AccessibleObject} accessible.
-     * <p>
-     * To prevent {@link SecurityException}, this is only done if the argument
-     * object and its declaring class are non-public.
+     * Conveniently render an {@link AccessibleObject} accessible. <p> To prevent {@link SecurityException}, this is
+     * only done if the argument object and its declaring class are non-public.
      *
      * @param accessible The object to render accessible
      * @return The argument object rendered accessible
@@ -233,15 +219,10 @@ public class Reflect {
     }
 
     /**
-     * Get a field value.
-     * <p>
-     * This is roughly equivalent to {@link Field#get(Object)}. If the wrapped
-     * object is a {@link Class}, then this will get a value from a static
-     * member field. If the wrapped object is any other {@link Object}, then
-     * this will get a value from an instance member field.
-     * <p>
-     * If you want to "navigate" to a wrapped version of the field, use
-     * {@link #field(String)} instead.
+     * Get a field value. <p> This is roughly equivalent to {@link Field#get(Object)}. If the wrapped object is a {@link
+     * Class}, then this will get a value from a static member field. If the wrapped object is any other {@link Object},
+     * then this will get a value from an instance member field. <p> If you want to "navigate" to a wrapped version of
+     * the field, use {@link #field(String)} instead.
      *
      * @param name The field name
      * @return The field value
@@ -253,12 +234,9 @@ public class Reflect {
     }
 
     /**
-     * Get a wrapped field.
-     * <p>
-     * This is roughly equivalent to {@link Field#get(Object)}. If the wrapped
-     * object is a {@link Class}, then this will wrap a static member field. If
-     * the wrapped object is any other {@link Object}, then this wrap an
-     * instance member field.
+     * Get a wrapped field. <p> This is roughly equivalent to {@link Field#get(Object)}. If the wrapped object is a
+     * {@link Class}, then this will wrap a static member field. If the wrapped object is any other {@link Object}, then
+     * this wrap an instance member field.
      *
      * @param name The field name
      * @return The wrapped field
@@ -298,13 +276,9 @@ public class Reflect {
     }
 
     /**
-     * Get a Map containing field names and wrapped values for the fields'
-     * values.
-     * <p>
-     * If the wrapped object is a {@link Class}, then this will return static
-     * fields. If the wrapped object is any other {@link Object}, then this will
-     * return instance fields.
-     * <p>
+     * Get a Map containing field names and wrapped values for the fields' values. <p> If the wrapped object is a {@link
+     * Class}, then this will return static fields. If the wrapped object is any other {@link Object}, then this will
+     * return instance fields. <p>
      * These two calls are equivalent <code><pre>
      * on(object).field("myField");
      * on(object).fields().get("myField");
@@ -334,10 +308,7 @@ public class Reflect {
     }
 
     /**
-     * Call a method by its name.
-     * <p>
-     * This is a convenience method for calling
-     * <code>call(name, new Object[0])</code>
+     * Call a method by its name. <p> This is a convenience method for calling <code>call(name, new Object[0])</code>
      *
      * @param name The method name
      * @return The wrapped method result or the same wrapped object if the method returns <code>void</code>, to be used
@@ -350,16 +321,11 @@ public class Reflect {
     }
 
     /**
-     * Call a method by its name.
-     * <p>
-     * This is roughly equivalent to {@link Method#invoke(Object, Object...)}.
-     * If the wrapped object is a {@link Class}, then this will invoke a static
-     * method. If the wrapped object is any other {@link Object}, then this will
-     * invoke an instance method.
-     * <p>
-     * Just like {@link Method#invoke(Object, Object...)}, this will try to wrap
-     * primitive types or unwrap primitive type wrappers if applicable. If
-     * several methods are applicable, by that rule, the first one encountered
+     * Call a method by its name. <p> This is roughly equivalent to {@link Method#invoke(Object, Object...)}. If the
+     * wrapped object is a {@link Class}, then this will invoke a static method. If the wrapped object is any other
+     * {@link Object}, then this will invoke an instance method. <p> Just like {@link Method#invoke(Object, Object...)},
+     * this will try to wrap primitive types or unwrap primitive type wrappers if applicable. If several methods are
+     * applicable, by that rule, the first one encountered
      * is called. i.e. when calling <code><pre>
      * on(...).call("method", 1, 1);
      * </pre></code> The first of the following methods will be called:
@@ -370,14 +336,10 @@ public class Reflect {
      * public void method(Number param1, Object param2);
      * public void method(int param1, Object param2);
      * </pre></code>
-     * <p>
-     * The best matching method is searched for with the following strategy:
-     * <ol>
-     * <li>public method with exact signature match in class hierarchy</li>
-     * <li>non-public method with exact signature match on declaring class</li>
-     * <li>public method with similar signature in class hierarchy</li>
-     * <li>non-public method with similar signature on declaring class</li>
-     * </ol>
+     * <p> The best matching method is searched for with the following strategy: <ol> <li>public method with exact
+     * signature match in class hierarchy</li> <li>non-public method with exact signature match on declaring class</li>
+     * <li>public method with similar signature in class hierarchy</li> <li>non-public method with similar signature on
+     * declaring class</li> </ol>
      *
      * @param name The method name
      * @param args The method arguments
@@ -408,11 +370,9 @@ public class Reflect {
     }
 
     /**
-     * Searches a method with the exact same signature as desired.
-     * <p>
-     * If a public method is found in the class hierarchy, this method is returned.
-     * Otherwise a private method with the exact same signature is returned.
-     * If no exact match could be found, we let the {@code NoSuchMethodException} pass through.
+     * Searches a method with the exact same signature as desired. <p> If a public method is found in the class
+     * hierarchy, this method is returned. Otherwise a private method with the exact same signature is returned. If no
+     * exact match could be found, we let the {@code NoSuchMethodException} pass through.
      */
     private Method exactMethod(String name, Class<?>[] types) throws NoSuchMethodException {
         Class<?> t = type();
@@ -439,12 +399,10 @@ public class Reflect {
     }
 
     /**
-     * Searches a method with a similar signature as desired using
-     * {@link #isSimilarSignature(java.lang.reflect.Method, String, Class[])}.
-     * <p>
-     * First public methods are searched in the class hierarchy, then private
-     * methods on the declaring class. If a method could be found, it is
-     * returned, otherwise a {@code NoSuchMethodException} is thrown.
+     * Searches a method with a similar signature as desired using {@link #isSimilarSignature(java.lang.reflect.Method,
+     * String, Class[])}. <p> First public methods are searched in the class hierarchy, then private methods on the
+     * declaring class. If a method could be found, it is returned, otherwise a {@code NoSuchMethodException} is
+     * thrown.
      */
     private Method similarMethod(String name, Class<?>[] types) throws NoSuchMethodException {
         Class<?> t = type();
@@ -473,18 +431,15 @@ public class Reflect {
     }
 
     /**
-     * Determines if a method has a "similar" signature, especially if wrapping
-     * primitive argument types would result in an exactly matching signature.
+     * Determines if a method has a "similar" signature, especially if wrapping primitive argument types would result in
+     * an exactly matching signature.
      */
     private boolean isSimilarSignature(Method possiblyMatchingMethod, String desiredMethodName, Class<?>[] desiredParamTypes) {
         return possiblyMatchingMethod.getName().equals(desiredMethodName) && match(possiblyMatchingMethod.getParameterTypes(), desiredParamTypes);
     }
 
     /**
-     * Call a constructor.
-     * <p>
-     * This is a convenience method for calling
-     * <code>create(new Object[0])</code>
+     * Call a constructor. <p> This is a convenience method for calling <code>create(new Object[0])</code>
      *
      * @return The wrapped new object, to be used for further reflection.
      * @throws ReflectException If any reflection exception occurred.
@@ -495,16 +450,11 @@ public class Reflect {
     }
 
     /**
-     * Call a constructor.
-     * <p>
-     * This is roughly equivalent to {@link Constructor#newInstance(Object...)}.
-     * If the wrapped object is a {@link Class}, then this will create a new
-     * object of that class. If the wrapped object is any other {@link Object},
-     * then this will create a new object of the same type.
-     * <p>
-     * Just like {@link Constructor#newInstance(Object...)}, this will try to
-     * wrap primitive types or unwrap primitive type wrappers if applicable. If
-     * several constructors are applicable, by that rule, the first one
+     * Call a constructor. <p> This is roughly equivalent to {@link Constructor#newInstance(Object...)}. If the wrapped
+     * object is a {@link Class}, then this will create a new object of that class. If the wrapped object is any other
+     * {@link Object}, then this will create a new object of the same type. <p> Just like {@link
+     * Constructor#newInstance(Object...)}, this will try to wrap primitive types or unwrap primitive type wrappers if
+     * applicable. If several constructors are applicable, by that rule, the first one
      * encountered is called. i.e. when calling <code><pre>
      * on(C.class).create(1, 1);
      * </pre></code> The first of the following constructors will be applied:
@@ -544,8 +494,7 @@ public class Reflect {
     }
 
     /**
-     * Create a proxy for the wrapped object allowing to typesafely invoke
-     * methods on it using a custom interface
+     * Create a proxy for the wrapped object allowing to typesafely invoke methods on it using a custom interface
      *
      * @param proxyType The interface type that is implemented by the proxy
      * @return A proxy for the wrapped object
@@ -618,8 +567,7 @@ public class Reflect {
     // ---------------------------------------------------------------------
 
     /**
-     * Check whether two arrays of types match, converting primitive types to
-     * their corresponding wrappers.
+     * Check whether two arrays of types match, converting primitive types to their corresponding wrappers.
      */
     private boolean match(Class<?>[] declaredTypes, Class<?>[] actualTypes) {
         if (declaredTypes.length == actualTypes.length) {
@@ -762,8 +710,7 @@ public class Reflect {
     }
 
     /**
-     * Get a wrapper type for a primitive type, or the argument type itself, if
-     * it is not a primitive type.
+     * Get a wrapper type for a primitive type, or the argument type itself, if it is not a primitive type.
      */
     public static Class<?> wrapper(Class<?> type) {
         if (type == null) {

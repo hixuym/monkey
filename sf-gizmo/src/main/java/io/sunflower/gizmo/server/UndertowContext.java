@@ -3,7 +3,6 @@ package io.sunflower.gizmo.server;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -102,12 +101,6 @@ public class UndertowContext extends AbstractContext {
         }
 
         return requestPath;
-    }
-
-    @Deprecated
-    @Override
-    public String getRequestUri() {
-        return exchange.getRequestURI();
     }
 
     @Override
@@ -381,45 +374,6 @@ public class UndertowContext extends AbstractContext {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public FileItemIterator getFileItemIterator() {
-        if (this.formData == null) {
-            return null;
-        }
-
-        // create list of file items
-        final List<UndertowFileItemStream> items = new ArrayList<>();
-
-        Iterator<String> it = this.formData.iterator();
-        while (it.hasNext()) {
-            String name = it.next();
-            FormData.FormValue value = this.formData.getFirst(name);
-            items.add(new UndertowFileItemStream(name, value));
-        }
-
-        return new UndertowFileItemIterator(items);
-    }
-
-    @Override
-    public void handleAsync() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isAsync() {
-        return false;
-    }
-
-    @Override
-    public void returnResultAsync(Result result) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Result controllerReturned() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

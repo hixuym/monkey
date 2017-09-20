@@ -26,12 +26,9 @@ import io.sunflower.util.Enums;
 /**
  * A module for deserializing enums that is more permissive than the default.
  * <p/>
- * This deserializer is more permissive in the following ways:
- * <ul>
- * <li>Whitespace is permitted but stripped from the input.</li>
- * <li>Dashes and periods in the value are converted to underscores.</li>
- * <li>Matching against the enum values is case insensitive.</li>
- * </ul>
+ * This deserializer is more permissive in the following ways: <ul> <li>Whitespace is permitted but stripped from the
+ * input.</li> <li>Dashes and periods in the value are converted to underscores.</li> <li>Matching against the enum
+ * values is case insensitive.</li> </ul>
  */
 public class FuzzyEnumModule extends Module {
     private static class PermissiveEnumDeserializer extends StdScalarDeserializer<Enum<?>> {

@@ -14,30 +14,11 @@ import javax.validation.constraints.NotNull;
 /**
  * A factory for configuring and building {@link ConsoleReporter} instances.
  * <p/>
- * <b>Configuration Parameters:</b>
- * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>timeZone</td>
- * <td>UTC</td>
- * <td>The timezone to display dates/times for.</td>
- * </tr>
- * <tr>
- * <td>output</td>
- * <td>stdout</td>
- * <td>The stream to write to. One of {@code stdout} or {@code stderr}.</td>
- * </tr>
- * <tr>
- * <td colspan="3">See {@link BaseFormattedReporterFactory} for more options.</td>
- * </tr>
- * <tr>
- * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
- * </tr>
- * </table>
+ * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td> </tr> <tr>
+ * <td>timeZone</td> <td>UTC</td> <td>The timezone to display dates/times for.</td> </tr> <tr> <td>output</td>
+ * <td>stdout</td> <td>The stream to write to. One of {@code stdout} or {@code stderr}.</td> </tr> <tr> <td
+ * colspan="3">See {@link BaseFormattedReporterFactory} for more options.</td> </tr> <tr> <td colspan="3">See {@link
+ * BaseReporterFactory} for more options.</td> </tr> </table>
  */
 @JsonTypeName("console")
 public class ConsoleReporterFactory extends BaseFormattedReporterFactory {

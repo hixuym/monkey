@@ -4,9 +4,7 @@ package io.sunflower.lifecycle;
 import java.util.EventListener;
 
 /**
- * The lifecycle interface for generic components.
- * <br>
- * Classes implementing this interface have a defined life cycle
+ * The lifecycle interface for generic components. <br> Classes implementing this interface have a defined life cycle
  * defined by the methods of this interface.
  */
 public interface LifeCycle {
@@ -25,9 +23,8 @@ public interface LifeCycle {
     /* ------------------------------------------------------------ */
 
     /**
-     * Stops the component.
-     * The component may wait for current activities to complete
-     * normally, but it can be interrupted.
+     * Stops the component. The component may wait for current activities to complete normally, but it can be
+     * interrupted.
      *
      * @throws Exception If the component fails to stop
      * @see #isStopped()
@@ -94,8 +91,7 @@ public interface LifeCycle {
     /* ------------------------------------------------------------ */
 
     /**
-     * Listener.
-     * A listener for Lifecycle events.
+     * Listener. A listener for Lifecycle events.
      */
     interface Listener extends EventListener {
         void lifeCycleStarting(LifeCycle event);
@@ -111,8 +107,8 @@ public interface LifeCycle {
 
 
     /**
-     * Utility to start an object if it is a LifeCycle and to convert
-     * any exception thrown to a {@link RuntimeException}
+     * Utility to start an object if it is a LifeCycle and to convert any exception thrown to a {@link
+     * RuntimeException}
      *
      * @param object The instance to start.
      * @throws RuntimeException if the call to start throws an exception.
@@ -128,8 +124,7 @@ public interface LifeCycle {
     }
 
     /**
-     * Utility to stop an object if it is a LifeCycle and to convert
-     * any exception thrown to a {@link RuntimeException}
+     * Utility to stop an object if it is a LifeCycle and to convert any exception thrown to a {@link RuntimeException}
      *
      * @param object The instance to stop.
      * @throws RuntimeException if the call to stop throws an exception.

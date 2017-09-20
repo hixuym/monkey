@@ -1,40 +1,51 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo.params;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import org.joda.time.LocalDateTime;
-
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import io.sunflower.gizmo.validation.ConstraintViolation;
-import io.sunflower.gizmo.validation.IsDate;
-import io.sunflower.gizmo.validation.IsEnum;
-import io.sunflower.gizmo.validation.IsFloat;
-import io.sunflower.gizmo.validation.IsInteger;
 import io.sunflower.gizmo.validation.Validation;
+import io.sunflower.util.Dates;
+import io.sunflower.util.Duration;
+import io.sunflower.util.Size;
+
+import static io.sunflower.gizmo.utils.GizmoConstant.DATE_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.DATE_MESSAGE;
+import static io.sunflower.gizmo.utils.GizmoConstant.DURATION_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.DURATION_MESSAGE;
+import static io.sunflower.gizmo.utils.GizmoConstant.ENUM_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.ENUM_MESSAGE;
+import static io.sunflower.gizmo.utils.GizmoConstant.FLOAT_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.INT_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.INT_MESSAGE;
+import static io.sunflower.gizmo.utils.GizmoConstant.SIZE_KEY;
+import static io.sunflower.gizmo.utils.GizmoConstant.SIZE_MESSAGE;
+
 
 /**
  * Built in parsers for parameters
@@ -44,7 +55,7 @@ import io.sunflower.gizmo.validation.Validation;
  */
 @Singleton
 public class ParamParsers {
-    private static final Map<Class<?>, ParamParser<?>> PARAM_PARSERS =
+    private static final ImmutableMap<Class<?>, ParamParser<?>> PARAM_PARSERS =
         ImmutableMap.<Class<?>, ParamParser<?>>builder()
             .put(Integer.class, new IntegerParamParser())
             .put(int.class, new PrimitiveIntegerParamParser())
@@ -64,6 +75,10 @@ public class ParamParsers {
             .put(Character.class, new CharacterParamParser())
             .put(char.class, new PrimitiveCharacterParamParser())
             .put(Date.class, new DateParamParser())
+            .put(LocalDate.class, new LocalDateParamParser())
+            .put(LocalDateTime.class, new LocalDateTimeParamParser())
+            .put(Size.class, new SizeParamParser())
+            .put(Duration.class, new DurationParamParser())
             .build();
 
     private final Set<ParamParser> customParsers;
@@ -92,34 +107,10 @@ public class ParamParsers {
         }
 
         if (targetType.isEnum()) {
-            return new GenericEnumParamParser((Class<Enum>) targetType);
+            return new GenericEnumParamParser(targetType);
         }
 
         return PARAM_PARSERS.get(targetType);
-    }
-
-    /**
-     * Registering enums is not anymore needed, the EnumParser will handle all possible enum values, ignoring case.
-     */
-    @Deprecated
-    public static <E extends Enum<E>> void unregisterEnum(final Class<E> enumClass) {
-        // Not anymore used
-    }
-
-    /**
-     * Registering enums is not anymore needed, the EnumParser will handle all possible enum values, ignoring case.
-     */
-    @Deprecated
-    public static <E extends Enum<E>> void registerEnum(final Class<E> enumClass) {
-        // Not anymore used 
-    }
-
-    /**
-     * Registering enums is not anymore needed, the EnumParser will handle all possible enum values, ignoring case.
-     */
-    @Deprecated
-    public static <E extends Enum<E>> void registerEnum(final Class<E> enumClass, final boolean caseSensitive) {
-        // Not anymore used
     }
 
     public ArrayParamParser<?> getArrayParser(Class<?> targetType) {
@@ -148,6 +139,48 @@ public class ParamParsers {
         return null;
     }
 
+    public static class SizeParamParser implements ParamParser<Size> {
+        @Override
+        public Size parseParameter(String field, String parameterValue, Validation validation) {
+            if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
+                return null;
+            } else {
+                try {
+                    return Size.parse(parameterValue);
+                } catch (IllegalArgumentException e) {
+                    validation.addViolation(new ConstraintViolation(SIZE_KEY, field, SIZE_MESSAGE, parameterValue));
+                    return null;
+                }
+            }
+        }
+
+        @Override
+        public Class<Size> getParsedType() {
+            return Size.class;
+        }
+    }
+
+    public static class DurationParamParser implements ParamParser<Duration> {
+        @Override
+        public Duration parseParameter(String field, String parameterValue, Validation validation) {
+            if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
+                return null;
+            } else {
+                try {
+                    return Duration.parse(parameterValue);
+                } catch (IllegalArgumentException e) {
+                    validation.addViolation(new ConstraintViolation(DURATION_KEY, field, DURATION_MESSAGE, parameterValue));
+                    return null;
+                }
+            }
+        }
+
+        @Override
+        public Class<Duration> getParsedType() {
+            return Duration.class;
+        }
+    }
+
     public static class PrimitiveIntegerParamParser implements ParamParser<Integer> {
         @Override
         public Integer parseParameter(String field, String parameterValue, Validation validation) {
@@ -158,7 +191,7 @@ public class ParamParsers {
                     return Integer.parseInt(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0;
                 }
             }
@@ -180,7 +213,7 @@ public class ParamParsers {
                     return Integer.parseInt(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -246,7 +279,7 @@ public class ParamParsers {
                     return Long.parseLong(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -268,7 +301,7 @@ public class ParamParsers {
                     return Long.parseLong(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0L;
                 }
             }
@@ -290,7 +323,7 @@ public class ParamParsers {
                     return Float.parseFloat(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsFloat.KEY, field, IsFloat.MESSAGE, parameterValue));
+                        FLOAT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -312,7 +345,7 @@ public class ParamParsers {
                     return Float.parseFloat(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsFloat.KEY, field, IsFloat.MESSAGE, parameterValue));
+                        FLOAT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0f;
                 }
             }
@@ -334,7 +367,7 @@ public class ParamParsers {
                     return Double.parseDouble(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsFloat.KEY, field, IsFloat.MESSAGE, parameterValue));
+                        FLOAT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -356,7 +389,7 @@ public class ParamParsers {
                     return Double.parseDouble(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsFloat.KEY, field, IsFloat.MESSAGE, parameterValue));
+                        FLOAT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0d;
                 }
             }
@@ -371,7 +404,7 @@ public class ParamParsers {
     public static class StringParamParser implements ParamParser<String> {
         @Override
         public String parseParameter(String field, String parameterValue, Validation validation) {
-            if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
+            if (parameterValue == null || validation.hasViolation(field)) {
                 return null;
             } else {
                 return parameterValue;
@@ -394,7 +427,7 @@ public class ParamParsers {
                     return Byte.parseByte(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -416,7 +449,7 @@ public class ParamParsers {
                     return Byte.parseByte(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0;
                 }
             }
@@ -438,7 +471,7 @@ public class ParamParsers {
                     return Short.parseShort(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -460,7 +493,7 @@ public class ParamParsers {
                     return Short.parseShort(parameterValue);
                 } catch (NumberFormatException e) {
                     validation.addViolation(new ConstraintViolation(
-                        IsInteger.KEY, field, IsInteger.MESSAGE, parameterValue));
+                        INT_KEY, field, INT_MESSAGE, parameterValue));
                     return 0;
                 }
             }
@@ -518,7 +551,7 @@ public class ParamParsers {
             if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
                 return null;
             } else {
-                // Equals ignore case will keep backward compatibility                
+                // Equals ignore case will keep backward compatibility
                 for (E value : getParsedType().getEnumConstants()) {
                     if (value.name().equalsIgnoreCase(parameterValue)) {
                         return value;
@@ -526,7 +559,7 @@ public class ParamParsers {
                 }
 
                 validation.addViolation(new ConstraintViolation(
-                    IsEnum.KEY, field, IsEnum.MESSAGE, new Object[]{parameterValue, getParsedType().getName()}));
+                    ENUM_KEY, field, ENUM_MESSAGE, new Object[]{parameterValue, getParsedType().getName()}));
                 return null;
             }
         }
@@ -537,6 +570,53 @@ public class ParamParsers {
         }
     }
 
+    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter LOCAL_DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+    public static class LocalDateParamParser implements ParamParser<LocalDate> {
+        @Override
+        public LocalDate parseParameter(String field, String parameterValue, Validation validation) {
+            if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
+                return null;
+            } else {
+                try {
+                    return LocalDate.parse(parameterValue, LOCAL_DATE_FORMATER);
+                } catch (DateTimeParseException e) {
+                    validation.addViolation(new ConstraintViolation(DATE_KEY, field, DATE_MESSAGE, parameterValue));
+                    return null;
+                }
+            }
+        }
+
+        @Override
+        public Class<LocalDate> getParsedType() {
+            return LocalDate.class;
+        }
+    }
+
+
+    public static class LocalDateTimeParamParser implements ParamParser<LocalDateTime> {
+        @Override
+        public LocalDateTime parseParameter(String field, String parameterValue, Validation validation) {
+            if (parameterValue == null || parameterValue.isEmpty() || validation.hasViolation(field)) {
+                return null;
+            } else {
+                try {
+                    return LocalDateTime.parse(parameterValue, LOCAL_DATE_TIME_FORMATER);
+                } catch (DateTimeParseException e) {
+                    validation.addViolation(new ConstraintViolation(DATE_KEY, field, DATE_MESSAGE, parameterValue));
+                    return null;
+                }
+            }
+        }
+
+        @Override
+        public Class<LocalDateTime> getParsedType() {
+            return LocalDateTime.class;
+        }
+    }
+
     public static class DateParamParser implements ParamParser<Date> {
         @Override
         public Date parseParameter(String field, String parameterValue, Validation validation) {
@@ -544,10 +624,12 @@ public class ParamParsers {
                 return null;
             } else {
                 try {
-                    return new LocalDateTime(parameterValue).toDate();
-                } catch (IllegalArgumentException e) {
-                    validation.addViolation(new ConstraintViolation(
-                        IsDate.KEY, field, IsDate.MESSAGE, parameterValue));
+                    if (parameterValue.contains(":")) {
+                        return Dates.asUtilDate(LocalDateTime.parse(parameterValue, LOCAL_DATE_TIME_FORMATER));
+                    }
+                    return Dates.asUtilDate(LocalDate.parse(parameterValue, LOCAL_DATE_FORMATER));
+                } catch (DateTimeParseException e) {
+                    validation.addViolation(new ConstraintViolation(DATE_KEY, field, DATE_MESSAGE, parameterValue));
                     return null;
                 }
             }
@@ -682,5 +764,4 @@ public class ParamParsers {
             return itemType;
         }
     }
-
 }

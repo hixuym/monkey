@@ -18,14 +18,13 @@ package io.sunflower.gizmo;
 import java.io.Serializable;
 
 /**
- * Functional interfaces for Gizmo controller methods accepting up to X
- * number of arguments with type inference.
+ * Functional interfaces for Gizmo controller methods accepting up to X number of arguments with type inference.
  */
 public class ControllerMethods {
 
     /**
-     * Marker interface that all functional interfaces will extend.  Useful for
-     * simple validation an object is a ControllerMethod.
+     * Marker interface that all functional interfaces will extend.  Useful for simple validation an object is a
+     * ControllerMethod.
      */
     public interface ControllerMethod extends Serializable {
     }

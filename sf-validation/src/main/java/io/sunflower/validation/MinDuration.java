@@ -17,8 +17,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * The annotated element must be a {@link io.sunflower.util.Duration}
- * whose value must be higher or equal to the specified minimum.
+ * The annotated element must be a {@link io.sunflower.util.Duration} whose value must be higher or equal to the
+ * specified minimum.
  * <p/>
  * <code>null</code> elements are considered valid
  */

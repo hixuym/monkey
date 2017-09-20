@@ -36,7 +36,7 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
 
-        GizmoUndertow undertow = environment.guicey().injector().getInstance(GizmoUndertow.class);
+        GizmoServer undertow = environment.guicey().injector().getInstance(GizmoServer.class);
 
         try {
             undertow.addLifeCycleListener(new LifeCycleListener());

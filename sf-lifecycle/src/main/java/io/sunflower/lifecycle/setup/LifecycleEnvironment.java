@@ -30,9 +30,8 @@ public class LifecycleEnvironment {
     }
 
     /**
-     * Adds the given {@link Managed} instance to the set of objects managed by the server's
-     * lifecycle. When the server starts, {@code managed} will be started. When the server stops,
-     * {@code managed} will be stopped.
+     * Adds the given {@link Managed} instance to the set of objects managed by the server's lifecycle. When the server
+     * starts, {@code managed} will be started. When the server stops, {@code managed} will be stopped.
      *
      * @param managed a managed object
      */

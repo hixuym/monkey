@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.Mark;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -122,9 +122,8 @@ public class ConfigurationParsingException extends ConfigurationException {
         /**
          * Returns a list of suggestions.
          * <p/>
-         * If a {@link #getSuggestionBase() suggestion-base} has been set, the suggestions will be
-         * sorted according to the suggestion-base such that suggestions close to the base appear
-         * first in the list.
+         * If a {@link #getSuggestionBase() suggestion-base} has been set, the suggestions will be sorted according to
+         * the suggestion-base such that suggestions close to the base appear first in the list.
          *
          * @return a list of suggestions, or the empty list if there are no suggestions available.
          */
@@ -321,7 +320,7 @@ public class ConfigurationParsingException extends ConfigurationException {
              */
             @Override
             public int compare(String a, String b) {
-
+                LevenshteinDistance levenshteinDistance = LevenshteinDistance.getDefaultInstance();
                 // shortcuts
                 if (a.equals(b)) {
                     return 0; // comparing the same value; don't bother
@@ -332,8 +331,8 @@ public class ConfigurationParsingException extends ConfigurationException {
                 }
 
                 // determine which of the two is closer to the base and order it first
-                return Integer.compare(StringUtils.getLevenshteinDistance(a, base),
-                    StringUtils.getLevenshteinDistance(b, base));
+                return Integer.compare(levenshteinDistance.apply(a, base),
+                    levenshteinDistance.apply(b, base));
             }
 
             private void writeObject(ObjectOutputStream stream) throws IOException {

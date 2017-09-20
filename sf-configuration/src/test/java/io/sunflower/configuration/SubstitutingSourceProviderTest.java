@@ -2,8 +2,8 @@ package io.sunflower.configuration;
 
 import com.google.common.io.ByteStreams;
 
-import org.apache.commons.lang3.text.StrLookup;
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StrLookup;
+import org.apache.commons.text.StrSubstitutor;
 import org.junit.Test;
 
 import java.io.BufferedInputStream;

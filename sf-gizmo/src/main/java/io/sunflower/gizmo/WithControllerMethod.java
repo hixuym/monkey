@@ -29,8 +29,7 @@ import io.sunflower.gizmo.ControllerMethods.ControllerMethod8;
 import io.sunflower.gizmo.ControllerMethods.ControllerMethod9;
 
 /**
- * Interface that exposes multiple with methods that accept a large number of
- * various argument combinations.
+ * Interface that exposes multiple with methods that accept a large number of various argument combinations.
  *
  * @param <T> The result to return
  */

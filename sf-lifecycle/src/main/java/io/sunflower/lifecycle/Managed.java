@@ -1,8 +1,7 @@
 package io.sunflower.lifecycle;
 
 /**
- * An interface for objects which need to be started and stopped as the application is started or
- * stopped.
+ * An interface for objects which need to be started and stopped as the application is started or stopped.
  */
 public interface Managed {
     /**

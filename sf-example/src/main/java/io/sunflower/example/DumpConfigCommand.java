@@ -2,7 +2,6 @@ package io.sunflower.example;
 
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import io.sunflower.Configuration;
 import io.sunflower.cli.ConfiguredCommand;
 import io.sunflower.setup.Bootstrap;
 

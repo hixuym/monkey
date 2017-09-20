@@ -5,8 +5,7 @@ import java.net.URL;
 import java.util.Optional;
 
 /**
- * A class which encapsulates the location on the local filesystem of the JAR in which the current
- * code is executing.
+ * A class which encapsulates the location on the local filesystem of the JAR in which the current code is executing.
  */
 public class JarLocation {
     private final Class<?> klass;

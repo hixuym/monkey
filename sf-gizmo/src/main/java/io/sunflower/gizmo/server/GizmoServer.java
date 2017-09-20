@@ -13,10 +13,10 @@
 
 package io.sunflower.gizmo.server;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,9 +49,9 @@ import io.undertow.server.handlers.form.FormParserFactory;
 /**
  * Ninja standalone based on Undertow.
  */
-public class GizmoUndertow extends ContainerLifeCycle {
+public class GizmoServer extends ContainerLifeCycle {
 
-    private Logger logger = LoggerFactory.getLogger(GizmoUndertow.class);
+    private Logger logger = LoggerFactory.getLogger(GizmoServer.class);
 
     private final GizmoConfiguration configuration;
     private final Environment environment;
@@ -62,7 +62,7 @@ public class GizmoUndertow extends ContainerLifeCycle {
     protected HttpHandler applicationHandler;
     private HttpHandler adminHandler;
 
-    protected GizmoUndertowHandler gizmoUndertowHandler;
+    protected GizmoHttpHandler gizmoHttpHandler;
     protected SSLContext sslContext;
 
     private final Gizmo gizmo;
@@ -70,7 +70,7 @@ public class GizmoUndertow extends ContainerLifeCycle {
     private final Injector injector;
 
     @Inject
-    public GizmoUndertow(Environment environment, GizmoConfiguration configuration) {
+    public GizmoServer(Environment environment, GizmoConfiguration configuration) {
         this.configuration = configuration;
         this.environment = environment;
         this.injector = environment.guicey().injector();
@@ -166,7 +166,7 @@ public class GizmoUndertow extends ContainerLifeCycle {
 
         h.addPrefixPath("tasks", TaskManager.createHandler(manager));
 
-        if (StringUtils.isNotEmpty(configuration.getAdminContextPath())) {
+        if (!Strings.isNullOrEmpty(configuration.getAdminContextPath())) {
             h = new PathHandler().addPrefixPath(configuration.getAdminContextPath(), h);
         }
 
@@ -175,12 +175,12 @@ public class GizmoUndertow extends ContainerLifeCycle {
 
     protected HttpHandler createApplicationHandler() {
         // root handler for ninja app
-        this.gizmoUndertowHandler = new GizmoUndertowHandler();
+        this.gizmoHttpHandler = new GizmoHttpHandler();
 
         // slipstream injector into undertow handler BEFORE server starts
-        this.gizmoUndertowHandler.init(injector, configuration.getApplicationContextPath());
+        this.gizmoHttpHandler.init(injector, configuration.getApplicationContextPath());
 
-        HttpHandler h = this.gizmoUndertowHandler;
+        HttpHandler h = this.gizmoHttpHandler;
 
         // wireshark enabled?
         if (configuration.isTraceEnabled()) {
@@ -199,7 +199,7 @@ public class GizmoUndertow extends ContainerLifeCycle {
         h = new BlockingHandler(h);
 
         // then a context if one exists
-        if (StringUtils.isNotEmpty(configuration.getApplicationContextPath())) {
+        if (!Strings.isNullOrEmpty(configuration.getApplicationContextPath())) {
             h = new PathHandler().addPrefixPath(configuration.getApplicationContextPath(), h);
         }
 

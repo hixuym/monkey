@@ -1,10 +1,11 @@
 package io.sunflower;
 
-import io.sunflower.setup.Bootstrap;
-import io.sunflower.setup.Environment;
 import org.junit.Test;
 
 import java.io.File;
+
+import io.sunflower.setup.Bootstrap;
+import io.sunflower.setup.Environment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +17,8 @@ public class ApplicationTest {
         boolean fatalError = false;
 
         @Override
-        public void run(FakeConfiguration configuration, Environment environment) {}
+        public void run(FakeConfiguration configuration, Environment environment) {
+        }
 
         @Override
         protected void onFatalError() {
@@ -48,20 +50,20 @@ public class ApplicationTest {
     @Test
     public void hasAReferenceToItsTypeParameter() throws Exception {
         assertThat(new FakeApplication().getConfigurationClass())
-                .isSameAs(FakeConfiguration.class);
+            .isSameAs(FakeConfiguration.class);
     }
 
     @Test
     public void canDetermineConfiguration() throws Exception {
         assertThat(new PoserApplication().getConfigurationClass())
-                .isSameAs(FakeConfiguration.class);
+            .isSameAs(FakeConfiguration.class);
     }
 
     @Test
     public void canDetermineWrappedConfiguration() throws Exception {
         final PoserApplication application = new PoserApplication();
         assertThat(new WrapperApplication<>(application).getConfigurationClass())
-                .isSameAs(FakeConfiguration.class);
+            .isSameAs(FakeConfiguration.class);
     }
 
     @Test

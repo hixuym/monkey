@@ -19,8 +19,10 @@ package io.sunflower.reflect;
 public interface Test5 {
 
     String substring(int beginIndex);
+
     String substring(int beginIndex, int endIndex);
 
     String substring(Integer beginIndex);
+
     String substring(Integer beginIndex, Integer endIndex);
 }

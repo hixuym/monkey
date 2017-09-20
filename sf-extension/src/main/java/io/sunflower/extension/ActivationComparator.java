@@ -20,7 +20,6 @@ import java.util.Comparator;
 
 /**
  * Priority comparator
- *
  */
 
 public class ActivationComparator<T> implements Comparator<T> {

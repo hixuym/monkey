@@ -18,8 +18,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * The annotated element must be a {@link io.sunflower.util.Size}
- * whose value must be less than or equal to the specified maximum.
+ * The annotated element must be a {@link io.sunflower.util.Size} whose value must be less than or equal to the
+ * specified maximum.
  * <p/>
  * <code>null</code> elements are considered valid
  */

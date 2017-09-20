@@ -28,8 +28,8 @@ import io.undertow.server.HttpServerExchange;
 /**
  * Handles a request from Undertow and then delegates to Ninja.
  */
-public class GizmoUndertowHandler implements HttpHandler {
-    private static final Logger log = LoggerFactory.getLogger(GizmoUndertowHandler.class);
+public class GizmoHttpHandler implements HttpHandler {
+    private static final Logger log = LoggerFactory.getLogger(GizmoHttpHandler.class);
 
     private Injector injector;
     private String context;

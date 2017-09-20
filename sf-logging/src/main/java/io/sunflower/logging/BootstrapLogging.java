@@ -14,12 +14,10 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 
 /**
- * Utility class to configure logging before the sunflower yml
- * configuration has been read, parsed, and the provided logging
- * strategy has been applied.
+ * Utility class to configure logging before the sunflower yml configuration has been read, parsed, and the provided
+ * logging strategy has been applied.
  * <p/>
- * N.B. The methods in this class have run once semantics,
- * multiple calls are idempotent
+ * N.B. The methods in this class have run once semantics, multiple calls are idempotent
  */
 public class BootstrapLogging {
 

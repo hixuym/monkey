@@ -2,7 +2,7 @@ package io.sunflower.configuration;
 
 import com.google.common.io.ByteStreams;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StrSubstitutor;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,8 +12,8 @@ import java.nio.charset.StandardCharsets;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A delegating {@link ConfigurationSourceProvider} which replaces variables in the underlying configuration
- * source according to the rules of a custom {@link org.apache.commons.lang3.text.StrSubstitutor}.
+ * A delegating {@link ConfigurationSourceProvider} which replaces variables in the underlying configuration source
+ * according to the rules of a custom {@link org.apache.commons.lang3.text.StrSubstitutor}.
  */
 public class SubstitutingSourceProvider implements ConfigurationSourceProvider {
     private final ConfigurationSourceProvider delegate;
@@ -23,7 +23,7 @@ public class SubstitutingSourceProvider implements ConfigurationSourceProvider {
      * Create a new instance.
      *
      * @param delegate    The underlying {@link ConfigurationSourceProvider}.
-     * @param substitutor The custom {@link org.apache.commons.lang3.text.StrSubstitutor} implementation.
+     * @param substitutor The custom {@link StrSubstitutor} implementation.
      */
     public SubstitutingSourceProvider(ConfigurationSourceProvider delegate, StrSubstitutor substitutor) {
         this.delegate = requireNonNull(delegate);

@@ -46,7 +46,6 @@
         <module>sf-configuration</module>
         <module>sf-jackson</module>
         <module>sf-util</module>
-        <module>sf-strings</module>
         <module>sf-reflect</module>
         <module>sf-validation</module>
         <module>sf-metrics</module>

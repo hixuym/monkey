@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo;
@@ -37,9 +34,7 @@ import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.application.ApplicationFilters;
 import io.sunflower.gizmo.params.ControllerMethodInvoker;
 import io.sunflower.gizmo.utils.LambdaRoute;
-import io.sunflower.gizmo.utils.MethodReference;
-import io.sunflower.gizmo.utils.NinjaBaseDirectoryResolver;
-import io.sunflower.gizmo.utils.SwissKnife;
+import io.sunflower.inject.Injectors;
 
 public class RouteBuilderImpl implements RouteBuilder {
     private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
@@ -53,13 +48,11 @@ public class RouteBuilderImpl implements RouteBuilder {
     private Optional<Object> targetObject;          // instance to invoke
     private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
     private final List<Class<? extends Filter>> localFilters;
-    private final NinjaBaseDirectoryResolver ninjaBaseDirectoryResolver;
 
     @Inject
-    public RouteBuilderImpl(NinjaBaseDirectoryResolver ninjaBaseDirectoryResolver) {
+    public RouteBuilderImpl() {
         this.implementationMethod = Optional.empty();
         this.targetObject = Optional.empty();
-        this.ninjaBaseDirectoryResolver = ninjaBaseDirectoryResolver;
         this.globalFiltersOptional = Optional.empty();
         this.localFilters = Lists.newArrayList();
     }
@@ -106,18 +99,6 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     @Override
-    @Deprecated
-    public void with(MethodReference methodRef) {
-        with(methodRef.getDeclaringClass(), methodRef.getMethodName());
-    }
-
-    @Override
-    @Deprecated
-    public void with(final Result result) {
-        with(ControllerMethods.of(() -> result));
-    }
-
-    @Override
     public Void with(ControllerMethod controllerMethod) {
         LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
         this.functionalMethod = lambdaRoute.getFunctionalMethod();
@@ -159,16 +140,14 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     /**
-     * Routes are usually defined in conf/Routes.java as
-     * router.GET().route("/teapot").with(FilterController.class, "teapot");
+     * Routes are usually defined in conf/Routes.java as router.GET().route("/teapot").with(FilterController.class,
+     * "teapot");
      *
-     * Unfortunately "teapot" is not checked by the compiler. We do that here at
-     * runtime.
+     * Unfortunately "teapot" is not checked by the compiler. We do that here at runtime.
      *
-     * We are reloading when there are changes. So this is almost as good as
-     * compile time checking.
+     * We are reloading when there are changes. So this is almost as good as compile time checking.
      *
-     * @param controllerClass       The controller class
+     * @param controllerClass  The controller class
      * @param controllerMethod The method
      * @return The actual method
      */
@@ -247,25 +226,18 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     private List<Class<? extends Filter>> calculateGlobalFilters(
-        Optional<List<Class<? extends Filter>>> globalFiltersList,
-        Injector injector) {
+        Optional<List<Class<? extends Filter>>> globalFiltersList, Injector injector) {
         List<Class<? extends Filter>> allFilters = Lists.newArrayList();
+
         // Setting globalFilters in route will deactivate the filters defined
         // by conf.Filters
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-            String globalFiltersWithPrefixMaybe
-                = ninjaBaseDirectoryResolver.resolveApplicationClassName(GLOBAL_FILTERS_DEFAULT_LOCATION);
+            Set<ApplicationFilters> filters = Injectors.getInstancesOf(injector, ApplicationFilters.class);
 
-            if (SwissKnife.doesClassExist(globalFiltersWithPrefixMaybe, this)) {
-                try {
-                    Class<?> globalFiltersClass = Class.forName(globalFiltersWithPrefixMaybe);
-                    ApplicationFilters globalFilters = (ApplicationFilters) injector.getInstance(globalFiltersClass);
-                    globalFilters.addFilters(allFilters);
-                } catch (Exception exception) {
-                    // That simply means the user did not configure conf.Filters.
-                }
+            if (!filters.isEmpty()) {
+                filters.iterator().next().addFilters(allFilters);
             }
         }
 

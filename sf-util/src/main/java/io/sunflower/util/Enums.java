@@ -10,12 +10,9 @@ public class Enums {
     /**
      * Convert a string to an enum with more permissive rules than {@link Enum} valueOf().
      * <p/>
-     * This method is more permissive in the following ways:
-     * <ul>
-     * <li>Whitespace is permitted but stripped from the input.</li>
-     * <li>Dashes and periods in the value are converted to underscores.</li>
-     * <li>Matching against the enum values is case insensitive.</li>
-     * </ul>
+     * This method is more permissive in the following ways: <ul> <li>Whitespace is permitted but stripped from the
+     * input.</li> <li>Dashes and periods in the value are converted to underscores.</li> <li>Matching against the enum
+     * values is case insensitive.</li> </ul>
      *
      * @param value     The string to convert.
      * @param constants The list of constants for the {@link Enum} to which you wish to convert.

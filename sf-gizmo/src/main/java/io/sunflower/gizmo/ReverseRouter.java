@@ -66,9 +66,8 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         }
 
         /**
-         * Add a parameter as a path replacement. Will validate the path parameter
-         * exists. This method will URL encode the values when building the final
-         * result.
+         * Add a parameter as a path replacement. Will validate the path parameter exists. This method will URL encode
+         * the values when building the final result.
          *
          * @param name  The path parameter name
          * @param value The path parameter value
@@ -80,8 +79,8 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         }
 
         /**
-         * Identical to <code>path</code> except the path parameter value will
-         * NOT be url encoded when building the final url.
+         * Identical to <code>path</code> except the path parameter value will NOT be url encoded when building the
+         * final url.
          *
          * @param name  The path parameter name
          * @param value The path parameter value
@@ -111,8 +110,8 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         }
 
         /**
-         * Add a parameter as a queryParam string value. This method will URL encode
-         * the values when building the final result.
+         * Add a parameter as a queryParam string value. This method will URL encode the values when building the final
+         * result.
          *
          * @param name  The queryParam string parameter name
          * @param value The queryParam string parameter value
@@ -124,8 +123,8 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         }
 
         /**
-         * Identical to <code>queryParam</code> except the queryParam string value will
-         * NOT be url encoded when building the final url.
+         * Identical to <code>queryParam</code> except the queryParam string value will NOT be url encoded when building
+         * the final url.
          *
          * @param name  The queryParam string parameter name
          * @param value The queryParam string parameter value
@@ -269,8 +268,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     }
 
     /**
-     * Retrieves a the reverse route for the method reference (e.g. controller
-     * class and method name).
+     * Retrieves a the reverse route for the method reference (e.g. controller class and method name).
      *
      * @param methodRef The reference to a method
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
@@ -280,8 +278,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     }
 
     /**
-     * Retrieves a the reverse route for a method referenced with Java-8
-     * lambdas (functional method references).
+     * Retrieves a the reverse route for a method referenced with Java-8 lambdas (functional method references).
      *
      * @param controllerMethod The Java-8 style method reference such as <code>ApplicationController::index</code>.
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.

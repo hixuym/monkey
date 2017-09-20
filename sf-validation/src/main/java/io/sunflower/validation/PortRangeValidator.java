@@ -4,8 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Allow 0 to indicate dynamic port range allocation. If not zero, it must be within the {min,max}
- * range, inclusive.
+ * Allow 0 to indicate dynamic port range allocation. If not zero, it must be within the {min,max} range, inclusive.
  */
 public class PortRangeValidator implements ConstraintValidator<PortRange, Integer> {
     private int min;

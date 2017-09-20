@@ -5,6 +5,15 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.UniformReservoir;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.hibernate.validator.HibernateValidator;
+import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
@@ -14,13 +23,6 @@ import io.sunflower.validation.valuehandling.GuavaOptionalValidatedValueUnwrappe
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;
-import org.hibernate.validator.HibernateValidator;
-import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,13 +42,13 @@ public class BootstrapTest {
     @Test
     public void hasAnApplication() throws Exception {
         assertThat(bootstrap.getApplication())
-                .isEqualTo(application);
+            .isEqualTo(application);
     }
 
     @Test
     public void hasAnObjectMapper() throws Exception {
         assertThat(bootstrap.getObjectMapper())
-                .isNotNull();
+            .isNotNull();
     }
 
     @Test
@@ -58,27 +60,27 @@ public class BootstrapTest {
     @Test
     public void defaultsToUsingFilesForConfiguration() throws Exception {
         assertThat(bootstrap.getConfigurationSourceProvider())
-                .isInstanceOfAny(FileConfigurationSourceProvider.class);
+            .isInstanceOfAny(FileConfigurationSourceProvider.class);
     }
 
     @Test
     public void defaultsToUsingTheDefaultClassLoader() throws Exception {
         assertThat(bootstrap.getClassLoader())
-                .isEqualTo(Thread.currentThread().getContextClassLoader());
+            .isEqualTo(Thread.currentThread().getContextClassLoader());
     }
 
     @Test
     public void comesWithJvmInstrumentation() throws Exception {
         bootstrap.registerMetrics();
         assertThat(bootstrap.getMetricRegistry().getNames())
-                .contains("jvm.buffers.mapped.capacity", "jvm.threads.count", "jvm.memory.heap.usage",
-                        "jvm.attribute.vendor", "jvm.classloader.loaded", "jvm.filedescriptor");
+            .contains("jvm.buffers.mapped.capacity", "jvm.threads.count", "jvm.memory.heap.usage",
+                "jvm.attribute.vendor", "jvm.classloader.loaded", "jvm.filedescriptor");
     }
 
     @Test
     public void defaultsToDefaultConfigurationFactoryFactory() throws Exception {
         assertThat(bootstrap.getConfigurationFactoryFactory())
-                .isInstanceOf(DefaultConfigurationFactoryFactory.class);
+            .isInstanceOf(DefaultConfigurationFactoryFactory.class);
     }
 
     @Test
@@ -94,8 +96,8 @@ public class BootstrapTest {
         bootstrap.registerMetrics();
 
         assertThat(newRegistry.getNames())
-                .contains("jvm.buffers.mapped.capacity", "jvm.threads.count", "jvm.memory.heap.usage",
-                        "jvm.attribute.vendor", "jvm.classloader.loaded", "jvm.filedescriptor");
+            .contains("jvm.buffers.mapped.capacity", "jvm.threads.count", "jvm.memory.heap.usage",
+                "jvm.attribute.vendor", "jvm.classloader.loaded", "jvm.filedescriptor");
     }
 
     @Test
@@ -109,19 +111,19 @@ public class BootstrapTest {
         // can't unwrap nested classes it knows how to unwrap.
         // https://hibernate.atlassian.net/browse/HV-904
         assertThat(validatorFactory.getValidatedValueHandlers())
-                .extractingResultOf("getClass")
-                .containsSubsequence(GuavaOptionalValidatedValueUnwrapper.class,
-                                     OptionalDoubleValidatedValueUnwrapper.class,
-                                     OptionalIntValidatedValueUnwrapper.class,
-                                     OptionalLongValidatedValueUnwrapper.class);
+            .extractingResultOf("getClass")
+            .containsSubsequence(GuavaOptionalValidatedValueUnwrapper.class,
+                OptionalDoubleValidatedValueUnwrapper.class,
+                OptionalIntValidatedValueUnwrapper.class,
+                OptionalLongValidatedValueUnwrapper.class);
     }
 
     @Test
     public void canUseCustomValidatorFactory() throws Exception {
         ValidatorFactory factory = Validation
-                .byProvider(HibernateValidator.class)
-                .configure()
-                .buildValidatorFactory();
+            .byProvider(HibernateValidator.class)
+            .configure()
+            .buildValidatorFactory();
         bootstrap.setValidatorFactory(factory);
 
         assertThat(bootstrap.getValidatorFactory()).isSameAs(factory);

@@ -18,7 +18,7 @@ package io.sunflower.reflect;
  */
 public class Test10 {
 
-    public final String  s;
+    public final String s;
     public final Integer i;
 
     Test10(int i) {

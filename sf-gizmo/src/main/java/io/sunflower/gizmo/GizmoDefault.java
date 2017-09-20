@@ -18,39 +18,23 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
 import java.util.Optional;
-import java.util.Properties;
-
-import javax.management.RuntimeErrorException;
 
 import io.sunflower.gizmo.diagnostics.DiagnosticError;
 import io.sunflower.gizmo.diagnostics.DiagnosticErrorBuilder;
 import io.sunflower.gizmo.exceptions.BadRequestException;
 import io.sunflower.gizmo.exceptions.RenderingException;
 import io.sunflower.gizmo.i18n.Messages;
+import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.Message;
-import io.sunflower.gizmo.utils.NinjaConstant;
 import io.sunflower.gizmo.utils.ResultHandler;
 import io.sunflower.inject.lifecycle.LifecycleManager;
 
 public class GizmoDefault implements Gizmo {
     private static final Logger logger = LoggerFactory.getLogger(GizmoDefault.class);
 
-    /**
-     * The most important thing: A cool logo.
-     */
-    private final String NINJA_LOGO = "\n"
-        + " _______  .___ _______        ____.  _____   \n"
-        + " \\      \\ |   |\\      \\      |    | /  _  \\  \n"
-        + " /   |   \\|   |/   |   \\     |    |/  /_\\  \\ \n"
-        + "/    |    \\   /    |    \\/\\__|    /    |    \\  http://www.ninjaframework.org\n"
-        + "\\____|__  /___\\____|__  /\\________\\____|__  /  @ninjaframework\n"
-        + "     web\\/framework   \\/                  \\/   {}\n";
-
-
     @Inject
-    protected LifecycleManager lifecycleService;
+    protected LifecycleManager lifecycleManager;
 
     @Inject
     protected Router router;
@@ -63,7 +47,6 @@ public class GizmoDefault implements Gizmo {
 
     @Inject
     GizmoConfiguration configuration;
-
 
     /**
      * Whether diagnostics are enabled. If enabled then the default system/views will be skipped and a detailed
@@ -125,28 +108,20 @@ public class GizmoDefault implements Gizmo {
         Result result, Context context) {
 
         try {
-            if (context.isAsync()) {
-                context.returnResultAsync(result);
-            } else {
-                resultHandler.handleResult(result, context);
-            }
+            resultHandler.handleResult(result, context);
         } catch (Exception exceptionCausingRenderError) {
-            logger.error("Unable to handle result. That's really really fishy.",
-                exceptionCausingRenderError);
+            logger.error("Unable to handle result. That's really really fishy.", exceptionCausingRenderError);
         }
     }
 
     @Override
     public void onFrameworkStart() {
-
-        showSplashScreenViaLogger();
-
-        lifecycleService.start();
+        lifecycleManager.start();
     }
 
     @Override
     public void onFrameworkShutdown() {
-        lifecycleService.stop();
+        lifecycleManager.stop();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -233,8 +208,8 @@ public class GizmoDefault implements Gizmo {
 
         String messageI18n
             = messages.getWithDefault(
-            NinjaConstant.I18N_NINJA_SYSTEM_INTERNAL_SERVER_ERROR_TEXT_KEY,
-            NinjaConstant.I18N_NINJA_SYSTEM_INTERNAL_SERVER_ERROR_TEXT_DEFAULT,
+            GizmoConstant.I18N_SYSTEM_INTERNAL_SERVER_ERROR_TEXT_KEY,
+            GizmoConstant.I18N_SYSTEM_INTERNAL_SERVER_ERROR_TEXT_DEFAULT,
             context,
             Optional.<Result>empty());
 
@@ -264,8 +239,8 @@ public class GizmoDefault implements Gizmo {
 
         String messageI18n
             = messages.getWithDefault(
-            NinjaConstant.I18N_NINJA_SYSTEM_NOT_FOUND_TEXT_KEY,
-            NinjaConstant.I18N_NINJA_SYSTEM_NOT_FOUND_TEXT_DEFAULT,
+            GizmoConstant.I18N_SYSTEM_NOT_FOUND_TEXT_KEY,
+            GizmoConstant.I18N_SYSTEM_NOT_FOUND_TEXT_DEFAULT,
             context,
             Optional.<Result>empty());
 
@@ -295,8 +270,8 @@ public class GizmoDefault implements Gizmo {
 
         String messageI18n
             = messages.getWithDefault(
-            NinjaConstant.I18N_NINJA_SYSTEM_BAD_REQUEST_TEXT_KEY,
-            NinjaConstant.I18N_NINJA_SYSTEM_BAD_REQUEST_TEXT_DEFAULT,
+            GizmoConstant.I18N_SYSTEM_BAD_REQUEST_TEXT_KEY,
+            GizmoConstant.I18N_SYSTEM_BAD_REQUEST_TEXT_DEFAULT,
             context,
             Optional.<Result>empty());
 
@@ -326,8 +301,8 @@ public class GizmoDefault implements Gizmo {
 
         String messageI18n
             = messages.getWithDefault(
-            NinjaConstant.I18N_NINJA_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_KEY,
-            NinjaConstant.I18N_NINJA_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_DEFAULT,
+            GizmoConstant.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_KEY,
+            GizmoConstant.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_DEFAULT,
             context,
             Optional.<Result>empty());
 
@@ -361,8 +336,8 @@ public class GizmoDefault implements Gizmo {
 
         String messageI18n
             = messages.getWithDefault(
-            NinjaConstant.I18N_NINJA_SYSTEM_FORBIDDEN_REQUEST_TEXT_KEY,
-            NinjaConstant.I18N_NINJA_SYSTEM_FORBIDDEN_REQUEST_TEXT_DEFAULT,
+            GizmoConstant.I18N_SYSTEM_FORBIDDEN_REQUEST_TEXT_KEY,
+            GizmoConstant.I18N_SYSTEM_FORBIDDEN_REQUEST_TEXT_DEFAULT,
             context,
             Optional.<Result>empty());
 
@@ -377,44 +352,4 @@ public class GizmoDefault implements Gizmo {
         return result;
 
     }
-
-    /**
-     * Simply reads a property resource file that contains the version of this Gizmo build. Helps to identify the Gizmo
-     * version currently running.
-     *
-     * @return The version of Gizmo. Eg. "1.6-SNAPSHOT" while developing of "1.6" when released.
-     */
-    private final String readNinjaVersion() {
-
-        // location of the properties file
-        String LOCATION_OF_NINJA_BUILTIN_PROPERTIES = "io/sunflower/gizmo/ninja-builtin.properties";
-        // and the key inside the properties file.
-        String NINJA_VERSION_PROPERTY_KEY = "ninja.version";
-
-        String ninjaVersion;
-        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(LOCATION_OF_NINJA_BUILTIN_PROPERTIES)) {
-
-            Properties prop = new Properties();
-            prop.load(stream);
-
-            ninjaVersion = prop.getProperty(NINJA_VERSION_PROPERTY_KEY);
-
-        } catch (Exception e) {
-            //this should not happen. Never.
-            throw new RuntimeErrorException(new Error("Something is wrong with your build. Cannot find resource " + LOCATION_OF_NINJA_BUILTIN_PROPERTIES));
-        }
-
-        return ninjaVersion;
-
-    }
-
-    private final void showSplashScreenViaLogger() {
-
-        String ninjaVersion = readNinjaVersion();
-
-        // log Gizmo splash screen
-        logger.info(NINJA_LOGO, ninjaVersion);
-
-    }
-
 }

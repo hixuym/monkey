@@ -12,13 +12,9 @@ import io.sunflower.util.Duration;
 /**
  * A service provider interface for creating metrics {@link ScheduledReporter reporters}.
  * <p/>
- * To create your own, just:
- * <ol>
- * <li>Create a class which implements {@link ReporterFactory}.</li>
- * <li>Annotate it with {@code @JsonTypeName} and give it a unique type name.</li>
- * <li>Add a {@code META-INF/services/ReporterFactory}
- * file with your implementation's full class name to the class path.</li>
- * </ol>
+ * To create your own, just: <ol> <li>Create a class which implements {@link ReporterFactory}.</li> <li>Annotate it with
+ * {@code @JsonTypeName} and give it a unique type name.</li> <li>Add a {@code META-INF/services/ReporterFactory} file
+ * with your implementation's full class name to the class path.</li> </ol>
  *
  * @see ConsoleReporterFactory
  * @see CsvReporterFactory

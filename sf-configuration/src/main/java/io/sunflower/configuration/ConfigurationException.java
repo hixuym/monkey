@@ -5,11 +5,8 @@ import java.util.Collection;
 /**
  * Base class for problems with a Configuration object.
  * <p/>
- * Refer to the implementations for different classes of problems:
- * <ul>
- * <li>Parsing errors: {@link ConfigurationParsingException}</li>
- * <li>Validation errors: {@link ConfigurationValidationException}</li>
- * </ul>
+ * Refer to the implementations for different classes of problems: <ul> <li>Parsing errors: {@link
+ * ConfigurationParsingException}</li> <li>Validation errors: {@link ConfigurationValidationException}</li> </ul>
  */
 public abstract class ConfigurationException extends Exception {
     protected static final String NEWLINE = String.format("%n");

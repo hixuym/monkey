@@ -214,8 +214,8 @@ public class ExtensionLoader<T> {
     }
 
     /**
-     * 有些地方需要spi的所有激活的instances，所以需要能返回一个列表的方法 注意：1 SpiMeta 中的active 为true； 2
-     * 按照spiMeta中的sequence进行排序 FIXME： 是否需要对singleton来区分对待，后面再考虑 fishermen
+     * 有些地方需要spi的所有激活的instances，所以需要能返回一个列表的方法 注意：1 SpiMeta 中的active 为true； 2 按照spiMeta中的sequence进行排序 FIXME：
+     * 是否需要对singleton来区分对待，后面再考虑 fishermen
      */
     @SuppressWarnings("unchecked")
     public List<T> getExtensions(String key) {

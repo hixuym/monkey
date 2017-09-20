@@ -10,8 +10,8 @@ public interface ServerLifeCycleListener extends EventListener {
     void started(Server server);
 
     /**
-     * Return the local port of the first {@link io.undertow.Undertow.ListenerInfo} in the
-     * provided {@link Server} instance.
+     * Return the local port of the first {@link io.undertow.Undertow.ListenerInfo} in the provided {@link Server}
+     * instance.
      *
      * @param server Server instance to use
      * @return First local port of the server instance
@@ -21,9 +21,9 @@ public interface ServerLifeCycleListener extends EventListener {
     }
 
     /**
-     * Return the local port of the last {@link io.undertow.Undertow.ListenerInfo} in the
-     * provided {@link Server} instance. This may be the same value as returned
-     * by {@link #getLocalPort(Server)} if using the "simple" server configuration.
+     * Return the local port of the last {@link io.undertow.Undertow.ListenerInfo} in the provided {@link Server}
+     * instance. This may be the same value as returned by {@link #getLocalPort(Server)} if using the "simple" server
+     * configuration.
      *
      * @param server Server instance to use
      * @return Last local port or the server instance

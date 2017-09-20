@@ -13,8 +13,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Validates a bean predicate method as returning true. Bean predicates must be of the form
- * {@code isSomething} or they'll be silently ignored.
+ * Validates a bean predicate method as returning true. Bean predicates must be of the form {@code isSomething} or
+ * they'll be silently ignored.
  */
 @Target({TYPE, ANNOTATION_TYPE, METHOD})
 @Retention(RUNTIME)

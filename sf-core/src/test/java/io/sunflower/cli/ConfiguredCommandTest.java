@@ -1,13 +1,15 @@
 package io.sunflower.cli;
 
+import net.sourceforge.argparse4j.inf.Namespace;
+
+import org.junit.Test;
+import org.mockito.Mockito;
+
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.configuration.ConfigurationFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import net.sourceforge.argparse4j.inf.Namespace;
-import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

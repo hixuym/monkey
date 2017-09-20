@@ -36,8 +36,7 @@ import io.sunflower.validation.BaseValidator;
 import static java.util.Objects.requireNonNull;
 
 /**
- * The pre-start application environment, containing everything required to bootstrap a Dropwizard
- * command.
+ * The pre-start application environment, containing everything required to bootstrap a Dropwizard command.
  *
  * @param <T> the configuration type
  */
@@ -77,8 +76,7 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Registers the JVM metrics to the metric registry and start to report
-     * the registry metrics via JMX.
+     * Registers the JVM metrics to the metric registry and start to report the registry metrics via JMX.
      */
     public void registerMetrics() {
         if (metricsAreRegistered) {
@@ -178,9 +176,9 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Sets the given {@link ObjectMapper} to the bootstrap.
-     * <p<b>WARNING:</b> The mapper should be created by {@link Jackson#newMinimalObjectMapper()}
-     * or {@link Jackson#newObjectMapper()}, otherwise it will not work with Dropwizard.</p>
+     * Sets the given {@link ObjectMapper} to the bootstrap. <p<b>WARNING:</b> The mapper should be created by {@link
+     * Jackson#newMinimalObjectMapper()} or {@link Jackson#newObjectMapper()}, otherwise it will not work with
+     * Dropwizard.</p>
      *
      * @param objectMapper an {@link ObjectMapper}
      */

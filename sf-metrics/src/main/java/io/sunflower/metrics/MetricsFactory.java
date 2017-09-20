@@ -18,27 +18,13 @@ import io.sunflower.util.Duration;
 /**
  * A factory for configuring the metrics sub-system for the environment.
  * <p/>
- * Configures an optional list of {@link com.codahale.metrics.ScheduledReporter reporters} with a
- * default {@link #frequency}.
+ * Configures an optional list of {@link com.codahale.metrics.ScheduledReporter reporters} with a default {@link
+ * #frequency}.
  * <p/>
- * <b>Configuration Parameters:</b>
- * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>frequency</td>
- * <td>1 minute</td>
- * <td>The frequency to report metrics. Overridable per-reporter.</td>
- * </tr>
- * <tr>
- * <td>reporters</td>
- * <td>No reporters.</td>
- * <td>A list of {@link ReporterFactory reporters} to report metrics.</td>
- * </tr>
- * </table>
+ * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td> </tr> <tr>
+ * <td>frequency</td> <td>1 minute</td> <td>The frequency to report metrics. Overridable per-reporter.</td> </tr> <tr>
+ * <td>reporters</td> <td>No reporters.</td> <td>A list of {@link ReporterFactory reporters} to report metrics.</td>
+ * </tr> </table>
  */
 public class MetricsFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetricsFactory.class);
@@ -72,11 +58,9 @@ public class MetricsFactory {
     }
 
     /**
-     * Configures the given lifecycle with the {@link com.codahale.metrics.ScheduledReporter
-     * reporters} configured for the given registry.
-     * <p />
-     * The reporters are tied in to the given lifecycle, such that their {@link #getFrequency()
-     * frequency} for reporting metrics begins when the lifecycle {@link
+     * Configures the given lifecycle with the {@link com.codahale.metrics.ScheduledReporter reporters} configured for
+     * the given registry. <p /> The reporters are tied in to the given lifecycle, such that their {@link
+     * #getFrequency() frequency} for reporting metrics begins when the lifecycle {@link
      *
      * @param environment the lifecycle to manage the reporters.
      * @param registry    the metric registry to report metrics from.

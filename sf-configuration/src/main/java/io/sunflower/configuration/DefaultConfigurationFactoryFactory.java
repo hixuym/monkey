@@ -20,9 +20,8 @@ public class DefaultConfigurationFactoryFactory<T> implements ConfigurationFacto
     }
 
     /**
-     * Provides additional configuration for the {@link ObjectMapper} used to read
-     * the configuration. By default {@link DeserializationFeature#FAIL_ON_UNKNOWN_PROPERTIES}
-     * is enabled to protect against misconfiguration.
+     * Provides additional configuration for the {@link ObjectMapper} used to read the configuration. By default {@link
+     * DeserializationFeature#FAIL_ON_UNKNOWN_PROPERTIES} is enabled to protect against misconfiguration.
      *
      * @param objectMapper template to be configured
      * @return configured object mapper

@@ -17,8 +17,7 @@
 package io.sunflower.gizmo.utils;
 
 /**
- * A pojo to be renderd as Json or Xml.
- * Used for instance to display error messages when a route is not found.
+ * A pojo to be renderd as Json or Xml. Used for instance to display error messages when a route is not found.
  */
 public class Message {
 

@@ -27,8 +27,7 @@ public class Lambdas {
     private static final Logger log = LoggerFactory.getLogger(Lambdas.class);
 
     /**
-     * The kind of lambda.  Lambdas in Java can either be references to methods
-     * or anonymously defined.
+     * The kind of lambda.  Lambdas in Java can either be references to methods or anonymously defined.
      * https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html
      */
     public enum Kind {
@@ -142,9 +141,8 @@ public class Lambdas {
     }
 
     /**
-     * Tries to get a SerializedLambda from an Object by searching the class
-     * hierarchy for a <code>writeReplace</code> method.  The lambda must
-     * be serializable in order for this method to return a value.
+     * Tries to get a SerializedLambda from an Object by searching the class hierarchy for a <code>writeReplace</code>
+     * method.  The lambda must be serializable in order for this method to return a value.
      *
      * @param lambda An object that is an instance of a functional interface.
      * @return The SerializedLambda

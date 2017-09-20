@@ -19,8 +19,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * Compound key of a Class and the name of a method in it. Primarily used for
- * reverse route lookups.
+ * Compound key of a Class and the name of a method in it. Primarily used for reverse route lookups.
  */
 public class MethodReference {
 

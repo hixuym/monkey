@@ -30,8 +30,8 @@ import javax.validation.Validator;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A generic factory class for loading configuration files, binding them to configuration objects, and
- * validating their constraints. Allows for overriding configuration parameters from system properties.
+ * A generic factory class for loading configuration files, binding them to configuration objects, and validating their
+ * constraints. Allows for overriding configuration parameters from system properties.
  *
  * @param <T> the type of the configuration objects to produce
  */
