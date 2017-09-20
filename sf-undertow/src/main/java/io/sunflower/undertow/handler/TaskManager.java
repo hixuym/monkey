@@ -83,6 +83,8 @@ public class TaskManager implements HttpHandler {
                     .map(Task::getName)
                     .sorted()
                     .forEach(output::println);
+
+                output.flush();
             }
 
         } else if (tasks.containsKey(exchange.getRelativePath())) {

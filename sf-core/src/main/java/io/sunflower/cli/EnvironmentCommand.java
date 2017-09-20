@@ -1,7 +1,5 @@
 package io.sunflower.cli;
 
-import com.google.inject.AbstractModule;
-
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import io.sunflower.Application;
@@ -45,7 +43,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
         application.run(configuration, environment);
 
-        environment.guicy().commit();
+        environment.guicey().commit();
 
         run(environment, namespace, configuration);
     }

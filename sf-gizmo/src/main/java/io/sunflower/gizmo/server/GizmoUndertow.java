@@ -14,19 +14,26 @@
 package io.sunflower.gizmo.server;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
+import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 
-import ch.qos.logback.classic.Level;
+import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.Router;
+import io.sunflower.gizmo.application.ApplicationRoutes;
+import io.sunflower.inject.Injectors;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
+import io.sunflower.undertow.ConnectorFactory;
+import io.sunflower.undertow.handler.Task;
+import io.sunflower.undertow.handler.TaskManager;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
@@ -51,43 +58,58 @@ public class GizmoUndertow extends ContainerLifeCycle {
 
     protected Undertow undertow;
     protected boolean undertowStarted;                      // undertow fails on stop() if start() never called
-    protected HttpHandler undertowHandler;
+
+    protected HttpHandler applicationHandler;
+    private HttpHandler adminHandler;
+
     protected GizmoUndertowHandler gizmoUndertowHandler;
     protected SSLContext sslContext;
 
+    private final Gizmo gizmo;
+
+    private final Injector injector;
+
     @Inject
     public GizmoUndertow(Environment environment, GizmoConfiguration configuration) {
-
         this.configuration = configuration;
         this.environment = environment;
+        this.injector = environment.guicey().injector();
 
+        this.gizmo = injector.getInstance(Gizmo.class);
         environment.lifecycle().attach(this);
     }
-
 
     @Override
     public void doStart() throws Exception {
 
-        // create chain of undertow handlers
-        this.undertowHandler = createHttpHandler();
+        this.initRoutes();
+
+        this.gizmo.onFrameworkStart();
 
         this.undertow = createUndertow();
-
-        // slipstream injector into undertow handler BEFORE server starts
-        this.gizmoUndertowHandler.init(environment.guicy().injector(), configuration.getApplicationContextPath());
-
         String version = undertow.getClass().getPackage().getImplementationVersion();
-
         logger.info("Trying to start undertow v{} {}", version, configuration.getLoggableIdentifier());
-
         this.undertow.start();
         undertowStarted = true;
-
         logger.info("Started undertow v{} {}", version, configuration.getLoggableIdentifier());
+    }
+
+    private void initRoutes() {
+        Set<ApplicationRoutes> routes = Injectors.getInstancesOf(injector, ApplicationRoutes.class);
+
+        Router router = injector.getInstance(Router.class);
+
+        for (ApplicationRoutes route : routes) {
+            route.init(router);
+        }
+
+        router.compileRoutes();
     }
 
     @Override
     public void doStop() {
+        this.gizmo.onFrameworkShutdown();
+
         if (this.undertow != null && undertowStarted) {
             logger.info("Trying to stop undertow {}", configuration.getLoggableIdentifier());
             this.undertow.stop();
@@ -96,11 +118,67 @@ public class GizmoUndertow extends ContainerLifeCycle {
         }
     }
 
-    // sub-classes may be interested in these
+    private Undertow createUndertow() {
 
-    protected HttpHandler createHttpHandler() {
+        Undertow.Builder undertowBuilder = Undertow.builder()
+            // NOTE: should ninja not use equals chars within its cookie values?
+            .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
+
+        logger.info("Undertow h2 protocol (undertow.http2 = {})", configuration.isHttp2Enabled());
+
+        undertowBuilder.setServerOption(UndertowOptions.ENABLE_HTTP2, configuration.isHttp2Enabled());
+
+        this.applicationHandler = createApplicationHandler();
+
+        for (ConnectorFactory connectorFactory : configuration.getApplicationConnectors()) {
+            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
+
+            listenerBuilder.setRootHandler(applicationHandler);
+
+            undertowBuilder.addListener(listenerBuilder);
+        }
+
+        this.adminHandler = createAdminHandler(environment);
+
+        for (ConnectorFactory connectorFactory : configuration.getAdminConnectors()) {
+            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
+
+            listenerBuilder.setRootHandler(adminHandler);
+
+            undertowBuilder.addListener(listenerBuilder);
+        }
+
+        return undertowBuilder.build();
+    }
+
+    // sub-classes may be interested in these
+    protected HttpHandler createAdminHandler(Environment environment) {
+
+        TaskManager manager = injector.getInstance(TaskManager.class);
+
+        Set<Task> taskSet = Injectors.getInstancesOf(injector, Task.class);
+
+        for (Task task : taskSet) {
+            manager.add(task);
+        }
+
+        PathHandler h = new PathHandler();
+
+        h.addPrefixPath("tasks", TaskManager.createHandler(manager));
+
+        if (StringUtils.isNotEmpty(configuration.getAdminContextPath())) {
+            h = new PathHandler().addPrefixPath(configuration.getAdminContextPath(), h);
+        }
+
+        return h;
+    }
+
+    protected HttpHandler createApplicationHandler() {
         // root handler for ninja app
         this.gizmoUndertowHandler = new GizmoUndertowHandler();
+
+        // slipstream injector into undertow handler BEFORE server starts
+        this.gizmoUndertowHandler.init(injector, configuration.getApplicationContextPath());
 
         HttpHandler h = this.gizmoUndertowHandler;
 
@@ -126,62 +204,5 @@ public class GizmoUndertow extends ContainerLifeCycle {
         }
 
         return h;
-    }
-
-    protected Undertow.Builder createUndertowBuilder() throws Exception {
-        Undertow.Builder undertowBuilder = Undertow.builder()
-            .setHandler(this.undertowHandler)
-            // NOTE: should ninja not use equals chars within its cookie values?
-            .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
-
-        if (configuration.isPortEnabled()) {
-            undertowBuilder.addHttpListener(configuration.getPort(), configuration.getHost());
-        }
-
-        if (configuration.isSslPortEnabled()) {
-            this.sslContext = createSSLContext();
-
-            // workaround for chrome issue w/ JVM and self-signed certs triggering
-            // an IOException that can safely be ignored
-            ch.qos.logback.classic.Logger root
-                = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("io.undertow.request.io");
-            root.setLevel(Level.WARN);
-
-            undertowBuilder.addHttpsListener(configuration.getSslPort(), configuration.getHost(), this.sslContext);
-        }
-
-        logger.info("Undertow h2 protocol (undertow.http2 = {})", configuration.isHttp2Enabled());
-        undertowBuilder.setServerOption(UndertowOptions.ENABLE_HTTP2, configuration.isHttp2Enabled());
-
-        return undertowBuilder;
-    }
-
-    protected Undertow createUndertow() throws Exception {
-        return createUndertowBuilder().build();
-    }
-
-    protected SSLContext createSSLContext() throws Exception {
-        if (configuration.getSslKeystoreUri() == null) {
-            throw new IllegalStateException("Unable to create SSL context. Configuration key "
-                + " has empty value.  Please check your configuration file.");
-        }
-
-        if (configuration.getSslKeystorePass() == null) {
-            throw new IllegalStateException("Unable to create SSL context. Configuration key "
-                + " has empty value.  Please check your configuration file.");
-        }
-
-        if (configuration.getSslTruststoreUri() == null) {
-            throw new IllegalStateException("Unable to create SSL context. Configuration key "
-                + " has empty value.  Please check your configuration file.");
-        }
-
-        if (configuration.getSslTruststorePass() == null) {
-            throw new IllegalStateException("Unable to create SSL context. Configuration key "
-                + " has empty value.  Please check your configuration file.");
-        }
-
-        return ServerHelper.createSSLContext(new URI(configuration.getSslKeystoreUri()), configuration.getSslKeystorePass().toCharArray(),
-            new URI(configuration.getSslTruststoreUri()), configuration.getSslTruststorePass().toCharArray());
     }
 }

@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 
+import ch.qos.logback.classic.Level;
 import io.sunflower.validation.ValidationMethod;
 import io.undertow.Undertow;
 
@@ -535,6 +536,12 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
         builder.setPort(getPort());
         builder.setHost(getBindHost());
         builder.setType(Undertow.ListenerType.HTTPS);
+
+        // workaround for chrome issue w/ JVM and self-signed certs triggering
+        // an IOException that can safely be ignored
+        ch.qos.logback.classic.Logger root
+            = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("io.undertow.request.io");
+        root.setLevel(Level.WARN);
 
         this.sslContext = createSslContext();
 

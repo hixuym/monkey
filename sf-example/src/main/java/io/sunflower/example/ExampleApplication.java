@@ -1,10 +1,13 @@
 package io.sunflower.example;
 
+import com.google.inject.AbstractModule;
+
 import ch.qos.logback.classic.Level;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.gizmo.GizmoBundle;
 import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.gizmo.server.ServerCommand;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -43,6 +46,13 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 
     @Override
     public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
+
+        environment.guicey().addModule(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(ApplicationRoutes.class).to(Routes.class);
+            }
+        });
     }
 
 }

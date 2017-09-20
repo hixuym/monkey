@@ -19,9 +19,9 @@ import io.sunflower.inject.LoggerProvider;
 import io.sunflower.inject.lifecycle.LifecycleSupport;
 import io.sunflower.inject.scheduler.SchedulerSupport;
 
-public class GuicyEnvironment {
+public class GuiceyEnvironment {
 
-    static Logger LOG = LoggerFactory.getLogger(GuicyEnvironment.class);
+    static Logger LOG = LoggerFactory.getLogger(GuiceyEnvironment.class);
 
     private final List<Module> moduleLoaded = Lists.newArrayList();
 
@@ -31,7 +31,7 @@ public class GuicyEnvironment {
 
     private AtomicBoolean commited = new AtomicBoolean(false);
 
-    public GuicyEnvironment() {
+    public GuiceyEnvironment() {
         System.setProperty("file.encoding", "utf-8");
         addModule(LifecycleSupport.getModule(), SchedulerSupport.getModule(), new AbstractModule() {
             @Override
