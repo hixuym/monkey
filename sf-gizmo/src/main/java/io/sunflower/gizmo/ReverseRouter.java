@@ -30,7 +30,6 @@ import javax.inject.Inject;
 
 import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.ReverseRouter.Builder;
-import io.sunflower.gizmo.server.GizmoConfiguration;
 import io.sunflower.gizmo.utils.LambdaRoute;
 import io.sunflower.gizmo.utils.MethodReference;
 
@@ -236,7 +235,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         /**
          * Builds the result as a <code>Result</code> redirect.
          *
-         * @return A Ninja redirect result
+         * @return A Gizmo redirect result
          */
         public Result redirect() {
             return Results.redirect(build());

@@ -26,7 +26,7 @@ import io.sunflower.gizmo.Result;
  *
  * Useful inside controllers or filters for instance.
  *
- * Ninja is supposed to pick it up and render an appropriate error page.
+ * Gizmo is supposed to pick it up and render an appropriate error page.
  *
  */
 public class BadRequestException extends GizmoException {

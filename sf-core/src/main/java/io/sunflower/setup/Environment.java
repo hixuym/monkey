@@ -2,7 +2,6 @@ package io.sunflower.setup;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
 import com.google.inject.name.Names;
 
 import com.codahale.metrics.MetricRegistry;
@@ -19,8 +18,6 @@ import javax.validation.Validator;
 
 import io.sunflower.inject.setup.GuicyEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
-import io.undertow.server.HttpHandler;
-import io.undertow.util.Headers;
 
 import static java.util.Objects.requireNonNull;
 
@@ -33,14 +30,11 @@ public class Environment {
     private final HealthCheckRegistry healthCheckRegistry;
 
     private final ObjectMapper objectMapper;
-    private Validator validator;
 
-    private HttpHandler applicationHandler;
+    private Validator validator;
 
     private final LifecycleEnvironment lifecycleEnvironment;
     private final GuicyEnvironment guicyEnvironment;
-
-    private final AdminEnvironment adminEnvironment;
 
     private final ExecutorService healthCheckExecutorService;
     private final ClassLoader classLoader;
@@ -80,8 +74,6 @@ public class Environment {
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 
-        this.adminEnvironment = new AdminEnvironment(lifecycleEnvironment, healthCheckRegistry, metricRegistry);
-
         this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
             .workQueue(new ArrayBlockingQueue<>(1))
             .minThreads(1)
@@ -118,13 +110,6 @@ public class Environment {
      */
     public ExecutorService getHealthCheckExecutorService() {
         return healthCheckExecutorService;
-    }
-
-    /**
-     * Returns the application's {@link AdminEnvironment}.
-     */
-    public AdminEnvironment admin() {
-        return adminEnvironment;
     }
 
     /**
@@ -174,7 +159,6 @@ public class Environment {
     }
 
     /**
-     *
      * @return application's {@link ClassLoader}.
      */
     public ClassLoader classLoader() {
@@ -188,24 +172,4 @@ public class Environment {
         return healthCheckRegistry;
     }
 
-    /**
-     * Internal Accessors
-     */
-    public HttpHandler getApplicationHandler() {
-
-        if (this.applicationHandler == null) {
-
-            this.applicationHandler = exchange -> {
-                exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                exchange.getResponseSender().send("It Works.");
-            };
-
-        }
-
-        return applicationHandler;
-    }
-
-    public void setApplicationHandler(HttpHandler applicationHandler) {
-        this.applicationHandler = applicationHandler;
-    }
 }

@@ -31,30 +31,13 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-multibindings</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-jackson</artifactId>
+            <artifactId>sf-undertow</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-inject</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.ocpsoft.prettytime</groupId>
             <artifactId>prettytime</artifactId>
@@ -63,22 +46,14 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
-
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>java-hamcrest</artifactId>

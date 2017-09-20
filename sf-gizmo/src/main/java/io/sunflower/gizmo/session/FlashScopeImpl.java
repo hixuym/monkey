@@ -27,7 +27,7 @@ import java.util.Map;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.CookieDataCodec;
 import io.sunflower.gizmo.utils.NinjaConstant;
 

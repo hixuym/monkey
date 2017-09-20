@@ -413,7 +413,7 @@ public class ControllerMethodInvoker {
                 return (Class<?>) type;
             } else {
                 throw new RuntimeException(
-                    "Oops. That's a strange internal Ninja error.\n"
+                    "Oops. That's a strange internal Gizmo error.\n"
                         + "Seems someone tried to convert a type into a class that is not a real class. ( " + type.getTypeName() + ")");
             }
         }

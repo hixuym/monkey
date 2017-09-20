@@ -211,7 +211,7 @@ public class RouteBuilderImpl implements RouteBuilder {
             log.error("Can not find Controller " + controllerClass.getName()
                 + " and method " + controllerMethod);
             log.error("Hint: make sure the controller returns a Result!");
-            log.error("Hint: Ninja does not allow more than one method with the same name!");
+            log.error("Hint: Gizmo does not allow more than one method with the same name!");
         }
         return null;
     }

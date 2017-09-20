@@ -29,7 +29,7 @@ public interface TemplateEngine {
      * @param result
      *            The result to render
      */
-    public void invoke(Context context, Result result);
+    void invoke(Context context, Result result);
 
     /**
      * For instance returns ".ftl.html" Or .ftl.json.
@@ -41,13 +41,13 @@ public interface TemplateEngine {
      *
      * @return name of suffix or null if engine is not using a template on disk.
      */
-    public String getSuffixOfTemplatingEngine();
+    String getSuffixOfTemplatingEngine();
 
     /**
      * Get the content type this template engine renders
      *
      * @return The content type this template engine renders
      */
-    public String getContentType();
+    String getContentType();
 
 }

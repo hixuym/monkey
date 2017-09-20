@@ -1,6 +1,20 @@
 package io.sunflower.cli;
 
+import com.google.common.base.Stopwatch;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.sourceforge.argparse4j.inf.Argument;
+import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.inf.Subparser;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import javax.validation.Validator;
+
 import io.sunflower.Configuration;
 import io.sunflower.configuration.ConfigurationException;
 import io.sunflower.configuration.ConfigurationFactory;
@@ -8,22 +22,18 @@ import io.sunflower.configuration.ConfigurationFactoryFactory;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.util.Generics;
-import net.sourceforge.argparse4j.inf.Argument;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-
-import javax.validation.Validator;
-import java.io.IOException;
 
 /**
- * A command whose first parameter is the location of a YAML configuration file. That file is parsed
- * into an instance of a {@link Configuration} subclass, which is then validated. If the
- * configuration is valid, the command is run.
+ * A command whose first parameter is the location of a YAML configuration file. That file is parsed into an instance of
+ * a {@link Configuration} subclass, which is then validated. If the configuration is valid, the command is run.
  *
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  * @see Configuration
  */
 public abstract class ConfiguredCommand<T extends Configuration> extends Command {
+
+    static Logger LOG = LoggerFactory.getLogger(ConfiguredCommand.class);
+
     private boolean asynchronous;
 
     private T configuration;
@@ -43,9 +53,9 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
     }
 
     /**
-     * Configure the command's {@link Subparser}. <p><strong> N.B.: if you override this method, you
-     * <em>must</em> call {@code super.override(subparser)} in order to preserve the configuration
-     * file parameter in the subparser. </strong></p>
+     * Configure the command's {@link Subparser}. <p><strong> N.B.: if you override this method, you <em>must</em> call
+     * {@code super.override(subparser)} in order to preserve the configuration file parameter in the subparser.
+     * </strong></p>
      *
      * @param subparser the {@link Subparser} specific to the command
      */
@@ -56,30 +66,39 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
 
     /**
      * Adds the configuration file argument for the configured command.
+     *
      * @param subparser The subparser to register the argument on
      * @return the register argument
      */
     protected Argument addFileArgument(Subparser subparser) {
         return subparser.addArgument("file")
-                        .nargs("?")
-                        .help("application configuration file");
+            .nargs("?")
+            .help("application configuration file");
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void run(Bootstrap<?> wildcardBootstrap, Namespace namespace) throws Exception {
         final Bootstrap<T> bootstrap = (Bootstrap<T>) wildcardBootstrap;
+        Stopwatch sw = Stopwatch.createStarted();
+
         configuration = parseConfiguration(bootstrap.getConfigurationFactoryFactory(),
-                                           bootstrap.getConfigurationSourceProvider(),
-                                           bootstrap.getValidatorFactory().getValidator(),
-                                           namespace.getString("file"),
-                                           getConfigurationClass(),
-                                           bootstrap.getObjectMapper());
+            bootstrap.getConfigurationSourceProvider(),
+            bootstrap.getValidatorFactory().getValidator(),
+            namespace.getString("file"),
+            getConfigurationClass(),
+            bootstrap.getObjectMapper());
 
         try {
             if (configuration != null) {
                 configuration.getLoggingFactory().configure(bootstrap.getMetricRegistry(),
-                                                            bootstrap.getApplication().getName());
+                    bootstrap.getApplication().getName());
+            }
+
+            sw.stop();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("配置解析耗时：{}", sw);
             }
 
             run(bootstrap, namespace, configuration);
@@ -119,7 +138,7 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
                                  Class<T> klass,
                                  ObjectMapper objectMapper) throws IOException, ConfigurationException {
         final ConfigurationFactory<T> configurationFactory = configurationFactoryFactory
-                .create(klass, validator, objectMapper, "sf");
+            .create(klass, validator, objectMapper, "sf");
         if (path != null) {
             return configurationFactory.build(provider, path);
         }

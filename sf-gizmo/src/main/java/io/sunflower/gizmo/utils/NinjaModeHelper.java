@@ -87,7 +87,7 @@ public class NinjaModeHelper {
             ninjaMode = ninjaModeOptional.get();
         }
 
-        logger.info("Ninja is running in mode {}", ninjaMode.toString());
+        logger.info("Gizmo is running in mode {}", ninjaMode.toString());
 
         return ninjaMode;
 

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import io.sunflower.gizmo.Cookie;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
 import io.sunflower.gizmo.params.ParamParsers;
@@ -332,7 +333,7 @@ public class UndertowContext extends AbstractContext {
         }
 
         // charset in use
-        final String charset = Optional.ofNullable(result.getCharset()).orElse(GizmoConfiguration.UTF_8);
+        final String charset = Optional.ofNullable(result.getCharset()).orElse("utf-8");
 
         // build content-type header (but only if it does not yet exist)
         if (result.getContentType() != null) {

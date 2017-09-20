@@ -40,7 +40,7 @@ public interface Lang {
 
 
     /**
-     * Force a language in Ninja framwork.
+     * Force a language in Gizmo framwork.
      * This is usually done by a cookie NINJA_LANG.
      *
      * This overrides any Accept-Language languages.

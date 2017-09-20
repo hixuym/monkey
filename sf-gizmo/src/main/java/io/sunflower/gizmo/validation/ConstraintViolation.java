@@ -66,7 +66,7 @@ public class ConstraintViolation {
     }
 
     /**
-     * This setter is only used by ValidationImpl to keep backward compatibility between Ninja 5.8.0 and 6.x.
+     * This setter is only used by ValidationImpl to keep backward compatibility between Gizmo 5.8.0 and 6.x.
      * @param fieldKey
      */
     @Deprecated

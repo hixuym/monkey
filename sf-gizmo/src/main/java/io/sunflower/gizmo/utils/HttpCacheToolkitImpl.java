@@ -26,10 +26,7 @@ import java.util.Optional;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.server.GizmoConfiguration;
-
-import static io.sunflower.gizmo.utils.NinjaConstant.HTTP_USE_ETAG;
-import static io.sunflower.gizmo.utils.NinjaConstant.HTTP_USE_ETAG_DEFAULT;
+import io.sunflower.gizmo.GizmoConfiguration;
 
 public class HttpCacheToolkitImpl implements HttpCacheToolkit {
 
@@ -92,7 +89,7 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
         // Use etag on demand:
         String etag = null;
 
-        if (configuration.useEtag()) {
+        if (configuration.isUseETag()) {
             // ETag right now is only lastModified long.
             // maybe we change that in the future.
             etag = "\""

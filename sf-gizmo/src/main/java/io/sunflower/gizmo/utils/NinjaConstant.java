@@ -48,7 +48,7 @@ public interface NinjaConstant {
     String LOCATION_VIEW_HTML_UNAUTHORIZED_KEY = "application.views.401unauthorized";
     String LOCATION_VIEW_HTML_FORBIDDEN_KEY = "application.views.403forbidden";
 
-    // i18n keys and default messages of Ninja
+    // i18n keys and default messages of Gizmo
     // create the keys in your own messages.properties file to customize the message
     String I18N_NINJA_SYSTEM_BAD_REQUEST_TEXT_KEY = "ninja.system.bad_request.text";
     String I18N_NINJA_SYSTEM_BAD_REQUEST_TEXT_DEFAULT = "Oops. That''s a bad request and all we know.";
@@ -67,7 +67,7 @@ public interface NinjaConstant {
 
     /**
      * If false it will allow null as argument in controller methods. 
-     * If true Ninja will not execute controller method when argument would be null
+     * If true Gizmo will not execute controller method when argument would be null
      * and redirect to Bad Request page.
      *
      * Note: Default is false, but will change to true in the future (breaking change).
@@ -87,7 +87,7 @@ public interface NinjaConstant {
     final String applicationLanguages = "application.languages";
 
     /**
-     * A cookie that helps Ninja to set a default language.
+     * A cookie that helps Gizmo to set a default language.
      * Usually resolves to a cookie called NINJA_LANG.
      * The cookie then looks like: "NINJA_LANG=en"
      */
@@ -97,7 +97,7 @@ public interface NinjaConstant {
     final String APPLICATION_MODULES_BASE_PACKAGE = "application.modules.package";
 
     /**
-     * Prefix used for all Ninja cookies.
+     * Prefix used for all Gizmo cookies.
      *
      * Make sure you set the prefix in your application.conf file.
      *
@@ -155,7 +155,7 @@ public interface NinjaConstant {
 
     // /////////////////////////////////////////////////
     // Diagnostic mode - extension to dev mode where
-    // Ninja is forced with ninja.diagnostics.NinjaDiagnostic
+    // Gizmo is forced with ninja.diagnostics.NinjaDiagnostic
     String DIAGNOSTICS_KEY_NAME = "application.diagnostics";
 
 
@@ -185,13 +185,13 @@ public interface NinjaConstant {
     public final String MEMCACHED_PASSWORD = "memcached.password";
 
     /**
-     * Suffix used for Ninja cookies. Usually results in cookies like
+     * Suffix used for Gizmo cookies. Usually results in cookies like
      * "NINJA_SESSION
      */
     final String SESSION_SUFFIX = "_SESSION";
 
     /**
-     * Suffix used for Ninja cookies. Usually results in cookies like
+     * Suffix used for Gizmo cookies. Usually results in cookies like
      * "NINJA_FLASH
      */
     final String FLASH_SUFFIX = "_FLASH";

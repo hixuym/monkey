@@ -4,3 +4,6 @@ defaultName: Stranger
 logging:
   loggers:
     "io.sunflower": DEBUG
+
+gizmo:
+  applicationSecret: 12345678

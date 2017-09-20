@@ -26,7 +26,6 @@ import javax.inject.Provider;
  */
 public class Injectors {
 
-
     public static Throwable getFirstErrorFailure(CreationException e) {
         if (e.getErrorMessages().isEmpty()) {
             return e;

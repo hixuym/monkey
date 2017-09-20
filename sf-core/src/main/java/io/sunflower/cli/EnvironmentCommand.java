@@ -1,5 +1,7 @@
 package io.sunflower.cli;
 
+import com.google.inject.AbstractModule;
+
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import io.sunflower.Application;
@@ -38,7 +40,6 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
             bootstrap.getHealthCheckRegistry());
 
         configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
-        configuration.getServerFactory().configure(environment);
 
         bootstrap.run(configuration, environment);
 

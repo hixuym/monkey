@@ -44,18 +44,18 @@ public interface FlashScope {
 
     /**
      * Intended for use by implementations only. Initializes the FlashScope from
-     * the context.  Ninja will call this when a new request is being handled.
+     * the context.  Gizmo will call this when a new request is being handled.
      *
-     * @param context The Ninja context
+     * @param context The Gizmo context
      */
     void init(Context context);
 
     /**
      * Intended for use by implementations only. Saves the FlashScope to the
-     * context.  Will write/delete cookies, etc. Ninja will call this when a
+     * context.  Will write/delete cookies, etc. Gizmo will call this when a
      * request will be completed.
      *
-     * @param context The Ninja context
+     * @param context The Gizmo context
      */
     void save(Context context);
 

@@ -28,11 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
+            <artifactId>sf-gizmo</artifactId>
         </dependency>
     </dependencies>
 

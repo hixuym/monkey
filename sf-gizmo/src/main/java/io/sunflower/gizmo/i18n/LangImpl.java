@@ -1,17 +1,14 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo.i18n;
@@ -23,14 +20,15 @@ import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.utils.NinjaConstant;
-import io.sunflower.gizmo.utils.NinjaProperties;
 
 @Singleton
 public class LangImpl implements Lang {
@@ -41,20 +39,19 @@ public class LangImpl implements Lang {
 
     private final int TEN_YEARS = 60 * 60 * 24 * 365 * 10;
 
-    private final NinjaProperties ninjaProperties;
+    private final GizmoConfiguration configuration;
 
     private final String DEFAULT_LANGUAGE;
 
 
     @Inject
-    public LangImpl(NinjaProperties ninjaProperties) {
+    public LangImpl(GizmoConfiguration configuration) {
 
-        this.ninjaProperties = ninjaProperties;
+        this.configuration = configuration;
 
-        this.applicationCookiePrefix = ninjaProperties
-            .getOrDie(NinjaConstant.applicationCookiePrefix);
+        this.applicationCookiePrefix = configuration.getCookiePrefix();
 
-        this.DEFAULT_LANGUAGE = getDefaultLanguage(this.ninjaProperties);
+        this.DEFAULT_LANGUAGE = getDefaultLanguage(this.configuration);
 
     }
 
@@ -170,10 +167,9 @@ public class LangImpl implements Lang {
     @Override
     public boolean isLanguageDirectlySupportedByThisApplication(String language) {
 
-        String applicationLanguages = ninjaProperties.get(NinjaConstant.applicationLanguages);
-        Iterable<String> languages = Splitter.on(",").trimResults().split(applicationLanguages);
+        List<String> applicationLanguages = configuration.getApplicationLangs();
 
-        for (String applicationLanguage : languages) {
+        for (String applicationLanguage : applicationLanguages) {
             if (applicationLanguage.equals(language)) {
                 return true;
             }
@@ -198,15 +194,15 @@ public class LangImpl implements Lang {
     }
 
 
-    String getDefaultLanguage(NinjaProperties ninjaProperties) {
+    String getDefaultLanguage(GizmoConfiguration configuration) {
 
-        String[] applicationLanguages
-            = ninjaProperties.getStringArray(NinjaConstant.applicationLanguages);
+        List<String> applicationLanguages
+            = configuration.getApplicationLangs();
 
-        if (applicationLanguages == null || applicationLanguages.length == 0) {
+        if (applicationLanguages == null || applicationLanguages.size() == 0) {
 
             String EXCEPTION_TEXT =
-                "Can not retrieve application languages from ninjaProperties."
+                "Can not retrieve application languages from configuration."
                     + " Did you forget to define at least one language in your application.conf file?"
                     + " For instance 'application.languages=en' makes 'en' your default language.";
 
@@ -215,9 +211,8 @@ public class LangImpl implements Lang {
         }
 
         // by convention the first language is the default language
-        String defaultLanguage = applicationLanguages[0];
 
-        return defaultLanguage;
+        return applicationLanguages.get(0);
 
     }
 

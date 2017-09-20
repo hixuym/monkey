@@ -110,7 +110,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(Object value, String field, Context context) {
@@ -179,7 +179,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -217,7 +217,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -252,7 +252,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -287,7 +287,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -324,7 +324,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {
@@ -359,7 +359,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(Number value, String field, Context context) {
@@ -399,7 +399,7 @@ public class Validators {
          *
          * @param value   The value, may be null
          * @param field   The name of the field being validated, if applicable
-         * @param context The Ninja request context
+         * @param context The Gizmo request context
          */
         @Override
         public void validate(String value, String field, Context context) {

@@ -31,7 +31,7 @@ import java.util.Optional;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 
 /**
  * This class encrypts/decrypts session cookie data. Resultant encrypted strings are encoded in base64, and decryption
@@ -64,7 +64,7 @@ public class CookieEncryption {
                 secretKeySpec = Optional.of(
                     new SecretKeySpec(secret.getBytes(), 0, maxKeyLengthBits / Byte.SIZE, ALGORITHM));
 
-                logger.info("Ninja session encryption is using {} / {} bit.", secretKeySpec.get().getAlgorithm(), maxKeyLengthBits);
+                logger.info("Gizmo session encryption is using {} / {} bit.", secretKeySpec.get().getAlgorithm(), maxKeyLengthBits);
 
             } catch (Exception exception) {
                 logger.error("Can not create class to encrypt cookie.", exception);
@@ -147,7 +147,7 @@ public class CookieEncryption {
         StringBuilder sb = new StringBuilder();
         sb.append("Invalid key provided. Check if application secret is properly set.").append(System.lineSeparator());
         sb.append("You can remove '").append(NinjaConstant.applicationSecret).append("' key in configuration file ");
-        sb.append("and restart application. Ninja will generate new key for you.");
+        sb.append("and restart application. Gizmo will generate new key for you.");
         return sb.toString();
     }
 }

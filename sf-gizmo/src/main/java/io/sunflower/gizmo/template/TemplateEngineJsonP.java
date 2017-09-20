@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.ResponseStreams;
 
 /**

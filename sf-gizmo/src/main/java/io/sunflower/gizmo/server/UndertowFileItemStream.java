@@ -65,12 +65,12 @@ public class UndertowFileItemStream implements FileItemStream {
 
     @Override
     public FileItemHeaders getHeaders() {
-        throw new UnsupportedOperationException("NinjaUndertow does not support this yet");
+        throw new UnsupportedOperationException("GizmoUndertow does not support this yet");
     }
 
     @Override
     public void setHeaders(FileItemHeaders fih) {
-        throw new UnsupportedOperationException("NinjaUndertow does not support this yet");
+        throw new UnsupportedOperationException("GizmoUndertow does not support this yet");
     }
     
 }

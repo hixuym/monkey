@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 
 @Singleton
 public class Crypto {

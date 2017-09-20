@@ -137,7 +137,7 @@ public interface Context {
     String getRemoteAddr();
 
     /**
-     * Returns the path that Ninja should act upon.
+     * Returns the path that Gizmo should act upon.
      *
      * For instance in servlets you could have soemthing like a context prefix.
      * /myContext/app
@@ -468,7 +468,7 @@ public interface Context {
 
     /**
      * Finalizing the headers copies all stuff into the headers. It
-     * of course also handles Ninja session and Flash information.
+     * of course also handles Gizmo session and Flash information.
      *
      * After finalizing the headers you can access the responseStreams.
      */
@@ -479,7 +479,7 @@ public interface Context {
      *
      * After finalizing the headers you can access the responseStreams.
      *
-     * This method does not set any Ninja session of flash information.
+     * This method does not set any Gizmo session of flash information.
      * Eg. When serving static assets this is the method you may want to
      * use. Otherwise you'd get a race condition with a lot of requests
      * setting scopes and deleting them immediately.
@@ -680,14 +680,14 @@ public interface Context {
     /**
      * Adds a cookie to the response
      *
-     * @param cookie Ninja cookie
+     * @param cookie Gizmo cookie
      */
     void addCookie(Cookie cookie);
 
     /**
      * Removes a cookie from the response
      *
-     * @param cookie Ninja Cookie
+     * @param cookie Gizmo Cookie
      */
     void unsetCookie(Cookie cookie);
 

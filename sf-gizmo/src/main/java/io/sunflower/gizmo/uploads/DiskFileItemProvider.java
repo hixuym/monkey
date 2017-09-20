@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 
 /**
  * {@link FileItemProvider} that save uploaded files on disk, in a temporary folder.

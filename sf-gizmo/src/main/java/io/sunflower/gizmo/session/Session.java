@@ -36,23 +36,23 @@ public interface Session {
      *
      * @param context The context of this session.
      */
-    public void init(Context context);
+    void init(Context context);
 
     /**
      * @return id of a session.
      */
-    public String getId();
+    String getId();
 
     /**
      * @return complete content of session as immutable copy.
      */
-    public Map<String, String> getData();
+    Map<String, String> getData();
 
     /**
      * @return a authenticity token (may generate a new one if the session
      *         currently does not contain the token). 
      */
-    public String getAuthenticityToken();
+    String getAuthenticityToken();
 
     /**
      * To finally send this session to the user this method has to be called.
@@ -60,7 +60,7 @@ public interface Session {
      *
      * @param context The context from where to deduct a potentially existing session.
      */
-    public void save(Context context);
+    void save(Context context);
 
     /**
      * Puts key / value into the session. 
@@ -69,7 +69,7 @@ public interface Session {
      * @param key Name of the key to store in the session.
      * @param value The value to store in the session
      */
-    public void put(String key, String value);
+    void put(String key, String value);
 
     /**
      * Returns the value of the key or null.
@@ -77,7 +77,7 @@ public interface Session {
      * @param key Name of the key to retrieve.
      * @return The value of the key or null.
      */
-    public String get(String key);
+    String get(String key);
 
     /**
      * Removes the value of the key and returns the value or null.
@@ -85,12 +85,12 @@ public interface Session {
      * @param key name of the key to remove
      * @return original value of the key we just removed
      */
-    public String remove(String key);
+    String remove(String key);
 
     /**
      * Removes all values from the session.
      */
-    public void clear();
+    void clear();
 
     /**
      * Returns true if the session is empty, e.g. does not contain anything else
@@ -99,7 +99,7 @@ public interface Session {
      * @return true if session does not contain any values / false if it contains
      *         values.
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * Use an alternative expiry time, this can be used to implement a longer
@@ -111,5 +111,5 @@ public interface Session {
      *                     the expiry time from the session and use the application
      *                     default.
      */
-    public void setExpiryTime(Long expiryTimeMs);
+    void setExpiryTime(Long expiryTimeMs);
 }

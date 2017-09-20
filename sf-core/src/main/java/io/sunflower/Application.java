@@ -3,7 +3,6 @@ package io.sunflower;
 import ch.qos.logback.classic.Level;
 import io.sunflower.cli.CheckCommand;
 import io.sunflower.cli.Cli;
-import io.sunflower.cli.ServerCommand;
 import io.sunflower.logging.BootstrapLogging;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -13,10 +12,8 @@ import io.sunflower.util.JarLocation;
 /**
  * The base class for Sunflower applications.
  *
- * Because the default constructor will be inherited by all
- * subclasses, {BootstrapLogging.bootstrap()} will always be
- * invoked. The log level used during the bootstrap process can be
- * configured by {Application} subclasses by overriding
+ * Because the default constructor will be inherited by all subclasses, {BootstrapLogging.bootstrap()} will always be
+ * invoked. The log level used during the bootstrap process can be configured by {Application} subclasses by overriding
  * {#bootstrapLogLevel}.
  *
  * @param <T> the type of configuration class for this application
@@ -66,8 +63,8 @@ public abstract class Application<T extends Configuration> {
     }
 
     /**
-     * When the application runs, this is called after the {@link Bundle}s are run. Override it to add
-     * providers, resources, etc. for your application.
+     * When the application runs, this is called after the {@link Bundle}s are run. Override it to add providers,
+     * resources, etc. for your application.
      *
      * @param configuration the parsed {@link Configuration} object
      * @param environment   the application's {@link Environment}
@@ -76,8 +73,8 @@ public abstract class Application<T extends Configuration> {
     public abstract void run(T configuration, Environment environment) throws Exception;
 
     /**
-     * Parses command-line arguments and runs the application. Call this method from a {@code public
-     * static void main} entry point in your application.
+     * Parses command-line arguments and runs the application. Call this method from a {@code public static void main}
+     * entry point in your application.
      *
      * @param arguments the command-line arguments
      * @throws Exception if something goes wrong
@@ -104,7 +101,6 @@ public abstract class Application<T extends Configuration> {
      * @param bootstrap the bootstrap instance
      */
     protected void addDefaultCommands(Bootstrap<T> bootstrap) {
-        bootstrap.addCommand(new ServerCommand<>(this));
         bootstrap.addCommand(new CheckCommand<>(this));
     }
 

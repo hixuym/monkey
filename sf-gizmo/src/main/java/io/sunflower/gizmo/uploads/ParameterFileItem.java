@@ -35,7 +35,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#getFileName()
+	 * @see io.sunflower.gizmo.uploads.FileItem#getFileName()
 	 */
 	@Override
 	public String getFileName() {
@@ -43,7 +43,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#getInputStream()
+	 * @see io.sunflower.gizmo.uploads.FileItem#getInputStream()
 	 */
 	@Override
 	public InputStream getInputStream() {
@@ -55,7 +55,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#getFile()
+	 * @see io.sunflower.gizmo.uploads.FileItem#getFile()
 	 */
 	@Override
 	public File getFile() {
@@ -63,7 +63,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#getContentType()
+	 * @see io.sunflower.gizmo.uploads.FileItem#getContentType()
 	 */
 	@Override
 	public String getContentType() {
@@ -71,7 +71,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#getHeaders()
+	 * @see io.sunflower.gizmo.uploads.FileItem#getHeaders()
 	 */
 	@Override
 	@JsonIgnore
@@ -80,7 +80,7 @@ public class ParameterFileItem implements FileItem {
 	}
 
 	/**
-	 * @see ninja.uploads.FileItem#cleanup()
+	 * @see io.sunflower.gizmo.uploads.FileItem#cleanup()
 	 */
 	@Override
 	public void cleanup() {

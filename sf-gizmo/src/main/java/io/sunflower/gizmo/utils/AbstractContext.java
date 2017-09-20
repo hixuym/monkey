@@ -34,7 +34,7 @@ import io.sunflower.gizmo.Route;
 import io.sunflower.gizmo.bodyparser.BodyParserEngine;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
 import io.sunflower.gizmo.params.ParamParsers;
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.validation.Validation;

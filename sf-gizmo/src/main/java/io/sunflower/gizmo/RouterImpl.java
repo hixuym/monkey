@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import io.sunflower.gizmo.server.GizmoConfiguration;
 import io.sunflower.gizmo.utils.MethodReference;
 
 public class RouterImpl implements Router {

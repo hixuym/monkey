@@ -29,7 +29,7 @@ import java.util.UUID;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.Clock;
 import io.sunflower.gizmo.utils.CookieDataCodec;
 import io.sunflower.gizmo.utils.CookieEncryption;
@@ -78,7 +78,7 @@ public class SessionImpl implements Session {
 
         this.sessionExpireTimeInMs = defaultSessionExpireTimeInMs;
 
-        this.sessionSendOnlyIfChanged = configuration.isSeesionSendOnlyIfChanged();
+        this.sessionSendOnlyIfChanged = configuration.isSessionSendOnlyIfChanged();
         this.sessionTransferredOverHttpsOnly = configuration
             .isSessionTransferredOverHttpsOnly();
         this.sessionHttpOnly = configuration.isSessionHttpOnly();

@@ -20,7 +20,7 @@ import com.google.inject.Singleton;
 
 import java.util.Optional;
 
-import io.sunflower.gizmo.server.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoConfiguration;
 
 @Singleton
 public class NinjaBaseDirectoryResolver {

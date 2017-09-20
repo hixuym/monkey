@@ -2,6 +2,10 @@ package io.sunflower.example;
 
 import ch.qos.logback.classic.Level;
 import io.sunflower.Application;
+import io.sunflower.Configuration;
+import io.sunflower.gizmo.GizmoBundle;
+import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.server.ServerCommand;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
@@ -26,7 +30,15 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-        super.initialize(bootstrap);
+        bootstrap.addCommand(new DumpConfigCommand());
+        bootstrap.addCommand(new ServerCommand<>(this));
+
+        bootstrap.addBundle(new GizmoBundle<ExampleConfiguration>() {
+            @Override
+            public GizmoConfiguration getGizmoConfiguration(ExampleConfiguration configuration) {
+                return configuration.getGizmoConfiguration();
+            }
+        });
     }
 
     @Override

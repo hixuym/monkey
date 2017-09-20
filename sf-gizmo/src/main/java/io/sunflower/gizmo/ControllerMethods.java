@@ -18,7 +18,7 @@ package io.sunflower.gizmo;
 import java.io.Serializable;
 
 /**
- * Functional interfaces for Ninja controller methods accepting up to X
+ * Functional interfaces for Gizmo controller methods accepting up to X
  * number of arguments with type inference.
  */
 public class ControllerMethods {
