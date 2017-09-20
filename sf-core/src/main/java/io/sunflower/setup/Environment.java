@@ -16,8 +16,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.validation.Validator;
 
-import io.sunflower.inject.setup.GuiceyEnvironment;
+import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
+import io.sunflower.metrics.MetricsModule;
 
 import static java.util.Objects.requireNonNull;
 
@@ -60,17 +61,7 @@ public class Environment {
 
         this.guiceyEnvironment = new GuiceyEnvironment();
 
-        this.guiceyEnvironment.addModule(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bindConstant().annotatedWith(Names.named("application.name")).to(getName());
-                bind(ObjectMapper.class).toInstance(objectMapper);
-                bind(MetricRegistry.class).toInstance(metricRegistry);
-                bind(HealthCheckRegistry.class).toInstance(healthCheckRegistry);
-                bind(Validator.class).toInstance(validator);
-                bind(Environment.class).toInstance(Environment.this);
-            }
-        });
+        this.guiceyEnvironment.addModule(new EnvironmentModule(this));
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 

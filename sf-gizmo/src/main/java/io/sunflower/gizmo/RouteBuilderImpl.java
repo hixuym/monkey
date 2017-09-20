@@ -34,7 +34,7 @@ import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.application.ApplicationFilters;
 import io.sunflower.gizmo.params.ControllerMethodInvoker;
 import io.sunflower.gizmo.utils.LambdaRoute;
-import io.sunflower.inject.Injectors;
+import io.sunflower.guicey.Injectors;
 
 public class RouteBuilderImpl implements RouteBuilder {
     private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);

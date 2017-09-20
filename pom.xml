@@ -50,7 +50,7 @@
         <module>sf-validation</module>
         <module>sf-metrics</module>
         <module>sf-core</module>
-        <module>sf-inject</module>
+        <module>sf-guicey</module>
         <module>sf-lifecycle</module>
         <module>sf-undertow</module>
         <module>sf-example</module>

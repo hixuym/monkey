@@ -29,7 +29,7 @@ public interface Session {
     String EXPIRY_TIME_KEY = "___EP";
 
     /**
-     * Has to be called initially. => maybe in the future as assisted inject.
+     * Has to be called initially. => maybe in the future as assisted guicey.
      *
      * @param context The context of this session.
      */

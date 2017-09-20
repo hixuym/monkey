@@ -28,7 +28,7 @@ import io.sunflower.gizmo.i18n.Messages;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.Message;
 import io.sunflower.gizmo.utils.ResultHandler;
-import io.sunflower.inject.lifecycle.LifecycleManager;
+import io.sunflower.guicey.lifecycle.LifecycleManager;
 
 public class GizmoDefault implements Gizmo {
     private static final Logger logger = LoggerFactory.getLogger(GizmoDefault.class);

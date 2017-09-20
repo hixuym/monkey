@@ -11,29 +11,6 @@
 
     <artifactId>sf-reflect</artifactId>
 
-    <name>Sunflower Easy Reflection Module</name>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-core</artifactId>
-        </dependency>
-    </dependencies>
+    <name>Sunflower Simple Reflection Module</name>
 
 </project>

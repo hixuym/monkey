@@ -98,7 +98,7 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
             sw.stop();
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("配置解析耗时：{}", sw);
+                LOG.debug("application configuration file parse time: {}", sw);
             }
 
             run(bootstrap, namespace, configuration);

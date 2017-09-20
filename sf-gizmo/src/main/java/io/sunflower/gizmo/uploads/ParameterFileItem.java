@@ -1,14 +1,14 @@
 package io.sunflower.gizmo.uploads;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Maps;
 
-import org.apache.commons.fileupload.FileItemHeaders;
-import org.apache.commons.fileupload.util.FileItemHeadersImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * This {@link FileItem} type wraps a file received via a form parameter.
@@ -19,15 +19,15 @@ public class ParameterFileItem implements FileItem {
 
     private String filename;
 
-    private FileItemHeaders headers;
+    private Map<String, String> headers;
 
     private File file;
 
     public ParameterFileItem() {
-        headers = new FileItemHeadersImpl();
+        headers = Maps.newHashMap();
     }
 
-    public ParameterFileItem(String filename, File file, FileItemHeaders headers) {
+    public ParameterFileItem(String filename, File file, Map<String, String> headers) {
         this.filename = filename;
         this.file = file;
         this.headers = headers;
@@ -66,7 +66,7 @@ public class ParameterFileItem implements FileItem {
      */
     @Override
     public String getContentType() {
-        return headers.getHeader("Content-Type");
+        return headers.get("Content-Type");
     }
 
     /**
@@ -74,7 +74,7 @@ public class ParameterFileItem implements FileItem {
      */
     @Override
     @JsonIgnore
-    public FileItemHeaders getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 

@@ -21,11 +21,6 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
     }
 
     @Override
-    protected Level bootstrapLogLevel() {
-        return Level.DEBUG;
-    }
-
-    @Override
     public String getName() {
         return "sf-example";
     }

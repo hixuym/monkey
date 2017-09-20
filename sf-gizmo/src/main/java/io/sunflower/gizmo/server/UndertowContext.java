@@ -42,8 +42,6 @@ import io.undertow.util.HeaderValues;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 
-import static org.apache.commons.fileupload.FileUploadBase.MULTIPART;
-
 /**
  * Created by michael on 17/9/13.
  */
@@ -370,7 +368,7 @@ public class UndertowContext extends AbstractContext {
 
         if (contentTypeHeader == null) {
             return false;
-        } else if (contentTypeHeader.toLowerCase().startsWith(MULTIPART)) {
+        } else if (contentTypeHeader.toLowerCase().startsWith("multipart/")) {
             return true;
         }
         return false;

@@ -13,14 +13,13 @@
 
 package io.sunflower.gizmo.uploads;
 
-import org.apache.commons.fileupload.FileItemHeaders;
-
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
- * This interface represents a file or form item that was received within a
- * <code>multipart/form-data</code> POST request.
+ * This interface represents a file or form item that was received within a <code>multipart/form-data</code> POST
+ * request.
  *
  * @author Christian Bourgeois
  */
@@ -28,16 +27,14 @@ import java.io.InputStream;
 public interface FileItem {
 
     /**
-     * Returns the original filename in the client's filesystem, as provided by
-     * the browser (or other client software). In most cases, this will be the
-     * base file name, without path information. However, some clients, such as
-     * the Opera browser, do include path information.
+     * Returns the original filename in the client's filesystem, as provided by the browser (or other client software).
+     * In most cases, this will be the base file name, without path information. However, some clients, such as the
+     * Opera browser, do include path information.
      */
     String getFileName();
 
     /**
-     * Returns an {@link java.io.InputStream InputStream} that can be
-     * used to retrieve the contents of the file.
+     * Returns an {@link java.io.InputStream InputStream} that can be used to retrieve the contents of the file.
      */
     InputStream getInputStream();
 
@@ -47,15 +44,14 @@ public interface FileItem {
     File getFile();
 
     /**
-     * Returns the content type passed by the browser or <code>null</code> if
-     * not defined.
+     * Returns the content type passed by the browser or <code>null</code> if not defined.
      */
     String getContentType();
 
     /**
      * Returns the file item headers.
      */
-    FileItemHeaders getHeaders();
+    Map<String, String> getHeaders();
 
     /**
      * Cleanup resources if needed.

@@ -84,7 +84,7 @@ public class ControllerMethodInvoker {
 
     /**
      * Builds an invoker for a functional method.  Understands what parameters
-     * to inject and extract based on type and annotations.
+     * to guicey and extract based on type and annotations.
      *
      * @param functionalMethod     The method to be invoked
      * @param implementationMethod The method to use for determining what actual parameters and annotations to use for

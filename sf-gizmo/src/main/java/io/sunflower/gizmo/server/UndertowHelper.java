@@ -15,10 +15,9 @@
  */
 package io.sunflower.gizmo.server;
 
-import org.apache.commons.fileupload.util.FileItemHeadersImpl;
-
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -126,14 +125,14 @@ public class UndertowHelper {
      * file upload).
      */
     private static ParameterFileItem getFileItemFromFormValue(FormValue formValue) {
-        FileItemHeadersImpl fileItemHeaders = new FileItemHeadersImpl();
+        Map<String, String> fileItemHeaders = new HashMap<>();
         for (Iterator<HeaderValues> headerIterator = formValue.getHeaders().iterator(); headerIterator.hasNext(); ) {
             HeaderValues hv = headerIterator.next();
             String headerName = hv.getHeaderName().toString();
 
             for (Iterator<String> headerValueIterator = hv.iterator(); headerValueIterator.hasNext(); ) {
                 String headerValue = headerValueIterator.next();
-                fileItemHeaders.addHeader(headerName, headerValue);
+                fileItemHeaders.put(headerName, headerValue);
             }
         }
         return new ParameterFileItem(formValue.getFileName(), formValue.getPath().toFile(), fileItemHeaders);

@@ -28,7 +28,7 @@ import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
-import io.sunflower.inject.Injectors;
+import io.sunflower.guicey.Injectors;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;

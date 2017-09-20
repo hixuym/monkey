@@ -1,5 +1,8 @@
 package io.sunflower;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ch.qos.logback.classic.Level;
 import io.sunflower.cli.CheckCommand;
 import io.sunflower.cli.Cli;
@@ -19,6 +22,18 @@ import io.sunflower.util.JarLocation;
  * @param <T> the type of configuration class for this application
  */
 public abstract class Application<T extends Configuration> {
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    private static final String LOGO = "\n"
+        + " _____              __ _                        \n"
+        + "/  ___|            / _| |                       \n"
+        + "\\ `--. _   _ _ __ | |_| | _____      _____ _ __ \n"
+        + " `--. \\ | | | '_ \\|  _| |/ _ \\ \\ /\\ / / _ \\ '__| \n"
+        + "/\\__/ / |_| | | | | | | | (_) \\ V  V /  __/ |    http://www.sunflower.io\n"
+        + "\\____/ \\__,_|_| |_|_| |_|\\___/ \\_/\\_/ \\___|_|    @sunflower({})\n"
+        + "       framework                                                 \n";
+
     protected Application() {
         bootstrapLogging();
     }
@@ -27,7 +42,7 @@ public abstract class Application<T extends Configuration> {
      * The log level at which to bootstrap logging on application startup.
      */
     protected Level bootstrapLogLevel() {
-        return Level.WARN;
+        return Level.INFO;
     }
 
     protected void bootstrapLogging() {
@@ -80,6 +95,8 @@ public abstract class Application<T extends Configuration> {
      * @throws Exception if something goes wrong
      */
     public void run(String... arguments) throws Exception {
+        showSplashScreenViaLogger();
+
         final Bootstrap<T> bootstrap = new Bootstrap<>(this);
         addDefaultCommands(bootstrap);
 
@@ -112,5 +129,14 @@ public abstract class Application<T extends Configuration> {
      */
     protected void onFatalError() {
         System.exit(1);
+    }
+
+    private void showSplashScreenViaLogger() {
+
+        String sunflowerVersion = Application.class.getPackage().getImplementationVersion();
+
+        // log Sunflower splash screen
+        logger.info(LOGO, sunflowerVersion);
+
     }
 }

@@ -13,8 +13,10 @@
 
 package io.sunflower.gizmo.diagnostics;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +37,8 @@ import io.sunflower.gizmo.exceptions.InternalServerErrorException;
 import io.sunflower.gizmo.utils.ResponseStreams;
 
 /**
- * Utility class for rendering <code>DiagnosticError</code> instances as
- * a Result.  Does not rely on any 3rd party rendering library to permit
- * rendering exceptions in the case where a template engine fails!
+ * Utility class for rendering <code>DiagnosticError</code> instances as a Result.  Does not rely on any 3rd party
+ * rendering library to permit rendering exceptions in the case where a template engine fails!
  *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)
@@ -477,7 +478,7 @@ public class DiagnosticErrorRenderer {
             throw new IOException("Unable to find diagnostic resource: " + resourceName);
         }
 
-        return IOUtils.toString(url);
+        return Resources.toString(url, Charsets.UTF_8);
     }
 
 }

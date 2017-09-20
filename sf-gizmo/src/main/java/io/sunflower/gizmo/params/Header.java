@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Just an idea to inject a header right into the methods...
+ * Just an idea to guicey a header right into the methods...
  *
  * This equals context.getHeader(...)
  *
