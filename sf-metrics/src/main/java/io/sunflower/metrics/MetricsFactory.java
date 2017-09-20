@@ -77,8 +77,6 @@ public class MetricsFactory {
      * <p />
      * The reporters are tied in to the given lifecycle, such that their {@link #getFrequency()
      * frequency} for reporting metrics begins when the lifecycle {@link
-     * io.sunflower.lifecycle.Managed#start() starts}, and stops when the lifecycle
-     * {@link io.sunflower.lifecycle.Managed#stop() stops}.
      *
      * @param environment the lifecycle to manage the reporters.
      * @param registry    the metric registry to report metrics from.
@@ -88,8 +86,8 @@ public class MetricsFactory {
         for (ReporterFactory reporter : reporters) {
             try {
                 final ScheduledReporterManager manager =
-                        new ScheduledReporterManager(reporter.build(registry),
-                                                     reporter.getFrequency().orElseGet(this::getFrequency));
+                    new ScheduledReporterManager(reporter.build(registry),
+                        reporter.getFrequency().orElseGet(this::getFrequency));
                 environment.manage(manager);
             } catch (Exception e) {
                 LOGGER.warn("Failed to create reporter, metrics may not be properly reported.", e);

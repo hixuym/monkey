@@ -3,7 +3,7 @@ Modules for Ninja
 
 Ninja can easily be extended by modules. This page contains popular modules
 available for Ninja. Usually the linked pages contain
-a short description how to setup stuff:
+a short description how to run stuff:
 
 
 Runtime Platforms

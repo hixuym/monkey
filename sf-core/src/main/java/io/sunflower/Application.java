@@ -11,7 +11,7 @@ import io.sunflower.util.Generics;
 import io.sunflower.util.JarLocation;
 
 /**
- * The base class for sunflower applications.
+ * The base class for Sunflower applications.
  *
  * Because the default constructor will be inherited by all
  * subclasses, {BootstrapLogging.bootstrap()} will always be
@@ -85,7 +85,9 @@ public abstract class Application<T extends Configuration> {
     public void run(String... arguments) throws Exception {
         final Bootstrap<T> bootstrap = new Bootstrap<>(this);
         addDefaultCommands(bootstrap);
+
         initialize(bootstrap);
+
         // Should be called after initialize to give an opportunity to set a custom metric registry
         bootstrap.registerMetrics();
 

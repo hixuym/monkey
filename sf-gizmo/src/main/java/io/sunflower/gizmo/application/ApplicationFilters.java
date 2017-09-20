@@ -22,7 +22,7 @@ import io.sunflower.gizmo.Filter;
 /**
  * Allows to define filters that are applied to every request of your application.
  *
- * Implement the class in conf.Filters and setup the filters.
+ * Implement the class in conf.Filters and run the filters.
  *
  */
 public interface ApplicationFilters {

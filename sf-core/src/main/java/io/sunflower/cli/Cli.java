@@ -23,7 +23,7 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.util.JarLocation;
 
 /**
- * The command-line runner for sunflower application.
+ * The command-line runner for Dropwizard application.
  */
 public class Cli {
     private static final String COMMAND_NAME_ATTR = "command";

@@ -217,11 +217,11 @@ public interface NinjaConstant {
     /**
      * Database stuff and JPA
      */
-    /** run migrations on startup of application */
+    /** createInjector migrations on startup of application */
     final String MIGRATION_ENGINE_IMPLEMENTATION = "migration.engine.implementation";
 
-    /** run migrations on startup of application */
-    final String NINJA_MIGRATION_RUN = "ninja.migration.run";
+    /** createInjector migrations on startup of application */
+    final String NINJA_MIGRATION_RUN = "ninja.migration.createInjector";
 
     /** boolean flag to determine if Flyway should drop the existing DB schema */
     final String NINJA_MIGRATION_DROP_SCHEMA = "ninja.migration.drop";

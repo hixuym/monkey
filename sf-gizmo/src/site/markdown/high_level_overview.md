@@ -2,7 +2,7 @@ High level overview - what does Ninja do for you?
 =================================================
 
 Ninja is an integrated software stack. The aim is that you don't have to 
-setup everything yourself. Ideally you just generate a new project from our 
+run everything yourself. Ideally you just generate a new project from our 
 maven archetype, import the project into your IDE and start hacking.
 
 Therefore Ninja is made up of libraries that deliver everything. From Html, Json and Xml rendering

@@ -20,7 +20,7 @@ Ninja's tests are just regular Unit tests. That means you can run all tests of y
 mvn test
 </pre>
 
-But sometimes you want to run only a single test from our IDE. And that is also really simple. You do not have to setup
+But sometimes you want to run only a single test from our IDE. And that is also really simple. You do not have to run
 anything special. Simply select your test class and run them as JUnit tests. That's all.
 
 All tests by default are as failsafe as possible. For example, tests that start a Ninja application select

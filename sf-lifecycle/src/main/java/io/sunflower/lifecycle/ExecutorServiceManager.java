@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 
 import io.sunflower.util.Duration;
 
-public class ExecutorServiceManager implements Managed {
+public class ExecutorServiceManager extends AbstractLifeCycle {
     private final ExecutorService executor;
     private final Duration shutdownPeriod;
     private final String poolName;
@@ -16,12 +16,7 @@ public class ExecutorServiceManager implements Managed {
     }
 
     @Override
-    public void start() throws Exception {
-        // OK BOSS
-    }
-
-    @Override
-    public void stop() throws Exception {
+    public void doStop() throws Exception {
         executor.shutdown();
         executor.awaitTermination(shutdownPeriod.getQuantity(), shutdownPeriod.getUnit());
     }

@@ -31,7 +31,7 @@ The participants should have a basic knowledge of Ninja. Duration is one day.
 Topics include:
 
  * Module development
- * Agile test setups / Jenkins integration / Different stages in you CI setup
+ * Agile test setups / Jenkins integration / Different stages in you CI run
  * Advanced logging configuration
  * Monitoring a Ninja application in production best practices
  * Database setups and migration

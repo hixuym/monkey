@@ -460,7 +460,7 @@ public class RouteBuilderImplTest {
     @Test
     public void testGlobalFilters() throws Exception {
         // given
-        // different setup that uses com.example packages and thus reads the Filters there
+        // different run that uses com.example packages and thus reads the Filters there
         Mockito.when(configuration.getApplicationModulesBasePackage())
             .thenReturn("com.example");
         this.ninjaBaseDirectoryResolver = new NinjaBaseDirectoryResolver(configuration);
@@ -497,7 +497,7 @@ public class RouteBuilderImplTest {
         // override that.
 
         // given
-        // different setup that uses com.example packages and thus reads the Filters there
+        // different run that uses com.example packages and thus reads the Filters there
         Mockito.when(configuration.getApplicationModulesBasePackage())
             .thenReturn("com.example");
         this.ninjaBaseDirectoryResolver = new NinjaBaseDirectoryResolver(configuration);

@@ -1,15 +1,6 @@
 package io.sunflower.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.sourceforge.argparse4j.inf.Argument;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-
-import java.io.IOException;
-
-import javax.validation.Validator;
-
 import io.sunflower.Configuration;
 import io.sunflower.configuration.ConfigurationException;
 import io.sunflower.configuration.ConfigurationFactory;
@@ -17,6 +8,12 @@ import io.sunflower.configuration.ConfigurationFactoryFactory;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.util.Generics;
+import net.sourceforge.argparse4j.inf.Argument;
+import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.inf.Subparser;
+
+import javax.validation.Validator;
+import java.io.IOException;
 
 /**
  * A command whose first parameter is the location of a YAML configuration file. That file is parsed
@@ -59,14 +56,13 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
 
     /**
      * Adds the configuration file argument for the configured command.
-     *
      * @param subparser The subparser to register the argument on
      * @return the register argument
      */
     protected Argument addFileArgument(Subparser subparser) {
         return subparser.addArgument("file")
-            .nargs("?")
-            .help("application configuration file");
+                        .nargs("?")
+                        .help("application configuration file");
     }
 
     @Override
@@ -74,16 +70,16 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
     public void run(Bootstrap<?> wildcardBootstrap, Namespace namespace) throws Exception {
         final Bootstrap<T> bootstrap = (Bootstrap<T>) wildcardBootstrap;
         configuration = parseConfiguration(bootstrap.getConfigurationFactoryFactory(),
-            bootstrap.getConfigurationSourceProvider(),
-            bootstrap.getValidatorFactory().getValidator(),
-            namespace.getString("file"),
-            getConfigurationClass(),
-            bootstrap.getObjectMapper());
+                                           bootstrap.getConfigurationSourceProvider(),
+                                           bootstrap.getValidatorFactory().getValidator(),
+                                           namespace.getString("file"),
+                                           getConfigurationClass(),
+                                           bootstrap.getObjectMapper());
 
         try {
             if (configuration != null) {
                 configuration.getLoggingFactory().configure(bootstrap.getMetricRegistry(),
-                    bootstrap.getApplication().getName());
+                                                            bootstrap.getApplication().getName());
             }
 
             run(bootstrap, namespace, configuration);
@@ -92,7 +88,6 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
                 cleanup();
             }
         }
-
     }
 
     protected void cleanupAsynchronously() {
@@ -124,7 +119,7 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
                                  Class<T> klass,
                                  ObjectMapper objectMapper) throws IOException, ConfigurationException {
         final ConfigurationFactory<T> configurationFactory = configurationFactoryFactory
-            .create(klass, validator, objectMapper, "sf");
+                .create(klass, validator, objectMapper, "sf");
         if (path != null) {
             return configurationFactory.build(provider, path);
         }

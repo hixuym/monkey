@@ -36,7 +36,7 @@ import io.sunflower.gizmo.server.GizmoConfiguration;
 import io.sunflower.gizmo.utils.Message;
 import io.sunflower.gizmo.utils.NinjaConstant;
 import io.sunflower.gizmo.utils.ResultHandler;
-import io.sunflower.inject.lifecycle.LifecycleManager;
+import io.sunflower.lifecycle.LifecycleManager;
 
 public class NinjaDefault implements Ninja {
     private static final Logger logger = LoggerFactory.getLogger(NinjaDefault.class);

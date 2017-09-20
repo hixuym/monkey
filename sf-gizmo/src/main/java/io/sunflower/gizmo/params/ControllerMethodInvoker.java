@@ -136,7 +136,7 @@ public class ControllerMethodInvoker {
             }
         }
 
-        // Now that every parameter has an argument extractor we can run validation on the annotated
+        // Now that every parameter has an argument extractor we can createInjector validation on the annotated
         // parameters
         for (int i = 0; i < argumentExtractors.length; i++) {
             argumentExtractors[i] =

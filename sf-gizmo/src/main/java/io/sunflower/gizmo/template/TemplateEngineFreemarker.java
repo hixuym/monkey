@@ -134,7 +134,7 @@ public class TemplateEngineFreemarker implements TemplateEngine {
         // 1) In dev we load templates from src/java/main first, then from the
         //    classpath.
         //    Therefore Freemarker can handle reloading of changed templates without
-        //    the need to restart the server (e.g automatic reload of jetty:run) 
+        //    the need to restart the server (e.g automatic reload of jetty:createInjector)
         // 2) In test and prod we never refresh templates and load them
         //    from the classpath
         ///////////////////////////////////////////////////////////////////////      

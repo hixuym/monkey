@@ -1,7 +1,6 @@
 package io.sunflower.example;
 
-//import com.google.inject.Injector;
-
+import ch.qos.logback.classic.Level;
 import io.sunflower.Application;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -11,9 +10,13 @@ import io.sunflower.setup.Environment;
  */
 public class ExampleApplication extends Application<ExampleConfiguration> {
 
-
     public static void main(String[] args) throws Exception {
         new ExampleApplication().run(args);
+    }
+
+    @Override
+    protected Level bootstrapLogLevel() {
+        return Level.DEBUG;
     }
 
     @Override
@@ -23,14 +26,11 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-
-//        bundle = new InjectBundle(this);
-//        bootstrap.addBundle(bundle);
+        super.initialize(bootstrap);
     }
 
     @Override
     public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
-        System.out.println(configuration.toString());
-        System.out.println(String.format(configuration.getTemplate(), configuration.getDefaultName()));
     }
+
 }

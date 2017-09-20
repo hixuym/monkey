@@ -47,6 +47,14 @@
             <artifactId>sf-lifecycle</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-undertow</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-inject</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>

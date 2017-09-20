@@ -286,7 +286,7 @@ arbitrary stuff into it (via Guice).
 A popular use case is to inject configuration. This allows us to activate / 
 deactivate certain routes based on the environment we are in.
 
-The following example shows that a setup route is not available when
+The following example shows that a run route is not available when
 running in production:
 
 <pre class="prettyprint">
@@ -306,7 +306,7 @@ public class Routes implements ApplicationRoutes {
 
         // only active when not in production mode:
         if (!configuration.isProd) {
-            router.GET().route("/setup").with(AppController::setup);
+            router.GET().route("/run").with(AppController::run);
         }
     }
 }

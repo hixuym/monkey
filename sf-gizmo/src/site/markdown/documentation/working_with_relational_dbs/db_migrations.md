@@ -84,7 +84,7 @@ Hibernate - the JPA implementation we are using is already providing a DDL (hbm2
 that can manage and create "migrations" for you. 
 
 But Hibernate's hbm2ddl is "just" a diff tool. 
-Once your setup gets more complex Hibernate's feature is not enough.
+Once your run gets more complex Hibernate's feature is not enough.
 Even the creators of Hibernate strongly discourage the usage in production systems:
 
 **WARNING: We've seen Hibernate users trying to use SchemaUpdate 

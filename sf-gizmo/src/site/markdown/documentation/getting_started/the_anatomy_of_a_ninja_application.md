@@ -67,7 +67,7 @@ and advanced features like filters and argument extractors.
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0; &#x2514;&#x2500;&#x2500; views                           // html views - always map to a controller and a method
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x251c;&#x2500;&#x2500; ApplicationController
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x2502;&#x00a0;&#x00a0; &#x251c;&#x2500;&#x2500; index.ftl.html          // Maps to controller "ApplicationController" and method "index"
-    &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x2502;&#x00a0;&#x00a0; &#x2514;&#x2500;&#x2500; setup.ftl.html
+    &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x2502;&#x00a0;&#x00a0; &#x2514;&#x2500;&#x2500; run.ftl.html
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x251c;&#x2500;&#x2500; ArticleController
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x2502;&#x00a0;&#x00a0; &#x251c;&#x2500;&#x2500; articleNew.ftl.html
     &#x2502;&#x00a0;&#x00a0; &#x2502;&#x00a0;&#x00a0;     &#x2502;&#x00a0;&#x00a0; &#x2514;&#x2500;&#x2500; articleShow.ftl.html

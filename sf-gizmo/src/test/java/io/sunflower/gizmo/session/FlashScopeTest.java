@@ -103,7 +103,7 @@ public class FlashScopeTest {
 
     @Test
     public void testThatFlashCookieWorksAndIsActiveOnlyOneTime() {
-        // setup this testmethod
+        // run this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
             "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
@@ -138,7 +138,7 @@ public class FlashScopeTest {
 
     @Test
     public void testThatFlashCookieClearWorks() {
-        // setup this testmethod
+        // run this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
             "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
@@ -164,7 +164,7 @@ public class FlashScopeTest {
 
     @Test
     public void testThatFlashCookieClearOfOutgoingWorks() {
-        // setup this testmethod
+        // run this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
             "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
@@ -190,7 +190,7 @@ public class FlashScopeTest {
 
     @Test
     public void testThatFlashCookieKeepWorks() {
-        // setup this testmethod
+        // run this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
             "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);

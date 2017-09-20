@@ -1,9 +1,8 @@
 package io.sunflower.cli;
 
+import io.sunflower.setup.Bootstrap;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-
-import io.sunflower.setup.Bootstrap;
 
 /**
  * A basic CLI command.
@@ -62,9 +61,9 @@ public abstract class Command {
      * environment, or running the command itself. The default is printing the stacktrace
      * to facilitate debugging, but can be customized per command.
      *
-     * @param cli       contains the streams for stdout and stderr
+     * @param cli contains the streams for stdout and stderr
      * @param namespace the parsed arguments from the commandline
-     * @param e         The exception that was thrown when setting up or running the command
+     * @param e The exception that was thrown when setting up or running the command
      */
     public void onError(Cli cli, Namespace namespace, Throwable e) {
         e.printStackTrace(cli.getStdErr());

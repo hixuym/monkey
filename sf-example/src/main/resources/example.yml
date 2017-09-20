@@ -1,2 +1,6 @@
 template: Hello, %s!
 defaultName: Stranger
+
+logging:
+  loggers:
+    "io.sunflower": DEBUG

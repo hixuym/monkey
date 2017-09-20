@@ -28,7 +28,7 @@
         <sunflower.version>${project.version}</sunflower.version>
         <guava.version>23.0</guava.version>
         <guice.version>4.1.0</guice.version>
-        <jackson.version>2.9.0</jackson.version>
+        <jackson.version>2.9.1</jackson.version>
         <metrics3.version>3.2.4</metrics3.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -36,7 +36,7 @@
         <mysql.version>6.0.6</mysql.version>
         <freemarker.version>2.3.26-incubating</freemarker.version>
         <mybatis.version>3.4.4</mybatis.version>
-        <undertow.version>1.4.19.Final</undertow.version>
+        <undertow.version>1.4.20.Final</undertow.version>
         <netty.version>4.1.15.Final</netty.version>
         <okhttp.version>3.8.1</okhttp.version>
         <retrofit.version>2.3.0</retrofit.version>
@@ -55,16 +55,6 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time.version}</version>
-            </dependency>
-
-            <!-- 配置文件 -->
-
-            <!-- Commons configuration makes handling of properties files really simple. -->
-            <!-- We use it to parse languages and the application properties. -->
-            <dependency>
-                <groupId>commons-configuration</groupId>
-                <artifactId>commons-configuration</artifactId>
-                <version>1.10</version>
             </dependency>
 
             <!-- excellent io lib -->

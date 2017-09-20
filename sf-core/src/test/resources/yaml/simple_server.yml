@@ -1,6 +1,6 @@
 type: simple
 connector:
-  type: server
+  type: http
   port: 0
 applicationContextPath: /service
 adminContextPath: /secret

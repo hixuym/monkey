@@ -1,5 +1,7 @@
 package io.sunflower.cli;
 
+import com.google.inject.Injector;
+
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import io.sunflower.Application;
@@ -33,18 +35,16 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
         final Environment environment = new Environment(bootstrap.getApplication().getName(),
             bootstrap.getObjectMapper(),
             bootstrap.getValidatorFactory().getValidator(),
+            bootstrap.getValidatorFactory(),
             bootstrap.getMetricRegistry(),
             bootstrap.getClassLoader(),
             bootstrap.getHealthCheckRegistry());
 
         configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
-        configuration.getServerFactory().configure(environment);
 
-        bootstrap.run(configuration, environment);
-
+        Injector injector = bootstrap.run(configuration, environment);
+        
         application.run(configuration, environment);
-
-        environment.guicy().commit();
 
         run(environment, namespace, configuration);
     }

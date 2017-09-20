@@ -29,7 +29,7 @@ public class AutoStandalone {
         Class<? extends Standalone> standaloneClass
             = StandaloneHelper.resolveStandaloneClass();
 
-        // instantiate and run it!
+        // instantiate and createInjector it!
         StandaloneHelper.create(standaloneClass).run();
     }
 

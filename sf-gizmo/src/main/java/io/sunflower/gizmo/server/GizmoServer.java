@@ -2,7 +2,7 @@ package io.sunflower.gizmo.server;
 
 import com.google.inject.Injector;
 
-import io.sunflower.inject.lifecycle.LifecycleManager;
+import io.sunflower.lifecycle.LifecycleManager;
 import io.sunflower.server.Server;
 
 /**

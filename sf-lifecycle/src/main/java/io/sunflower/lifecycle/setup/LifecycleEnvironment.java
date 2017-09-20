@@ -37,7 +37,6 @@ public class LifecycleEnvironment {
      * @param managed a managed object
      */
     public void manage(Managed managed) {
-
         managedObjects.add(new AbstractLifeCycle() {
             @Override
             protected void doStart() throws Exception {
@@ -54,7 +53,7 @@ public class LifecycleEnvironment {
     /**
      * Adds the given Jetty {@link LifeCycle} instances to the server's lifecycle.
      *
-     * @param managed a managed object
+     * @param managed a Jetty-managed object
      */
     public void manage(LifeCycle managed) {
         managedObjects.add(requireNonNull(managed));

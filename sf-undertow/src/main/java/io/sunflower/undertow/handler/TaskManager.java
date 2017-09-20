@@ -61,9 +61,7 @@ public class TaskManager implements HttpHandler {
         h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
 
         // then requests MUST be blocking for IO to function
-        h = new BlockingHandler(h);
-
-        return h;
+        return new BlockingHandler(h);
     }
 
     /**

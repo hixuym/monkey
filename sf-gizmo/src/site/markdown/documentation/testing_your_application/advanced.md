@@ -58,7 +58,7 @@ public class AbstractDaoTest extends NinjaDaoTestBase {
     private TestDao testDao;
 
     @Before
-    public void setup(){
+    public void run(){
         //Instanting DAO using super method
         testDao = getInstance(TestDao.class);
     }

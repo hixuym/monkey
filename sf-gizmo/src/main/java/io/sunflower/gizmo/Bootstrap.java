@@ -227,8 +227,7 @@ public class Bootstrap {
 
             Class<?> clazz = Class.forName(applicationRoutesClassName);
 
-            ApplicationRoutes applicationRoutes = (ApplicationRoutes) injector
-                .getInstance(clazz);
+            ApplicationRoutes applicationRoutes = (ApplicationRoutes) injector.getInstance(clazz);
 
             Router router = this.injector.getInstance(Router.class);
 

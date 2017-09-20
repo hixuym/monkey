@@ -41,6 +41,7 @@ public class GarbageCollectionTask extends Task {
         }
 
         output.println("Done!");
+        output.flush();
     }
 
     private static int parseRuns(ImmutableMultimap<String, String> parameters) {

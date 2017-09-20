@@ -296,7 +296,7 @@ Version 4.0.0
 * 2014-10-20 Added ninja-jaxy-routes module, a JAX-RS style routes builder (gitblit)
 * 2014-10-16 Bump to Freemarker 2.3.21 (ra).
 * 2014-10-18 Added a Metrics module with reporters for Graphite, Ganglia, InfluxDB, and Librato (gitblit & ra)
-* 2014-10-10 Stability improvement for Jpa blog archetype - setup works now in a predictable manner for testcases ra).
+* 2014-10-10 Stability improvement for Jpa blog archetype - run works now in a predictable manner for testcases ra).
 * 2014-10-09 Removed localized lookup in Freemarker templates. Not needed as Ninja does i18n already (ra).
 * 2014-10-07 Added support for multiple variable parts *with regex* in routes (bazi)
 * 2014-10-07 Added testcase for NinjaCache (ra)
@@ -592,7 +592,7 @@ Version 2.4.0
 Version 2.3.0
 =============
 
-* 2013-11-14 Tiny fix for sometimes flaky testcase. Added a flush to setup step. (ra)
+* 2013-11-14 Tiny fix for sometimes flaky testcase. Added a flush to run step. (ra)
 * 2013-11-21 Added support for DocTester based tests. (ra)
 * 2013-11-21 Working version of ninja-maven-plugin. Hot reload for Ninja without PermGen errors. (ra)
 * 2013-11-28 Changed naming convention for i18n files from messages.en.properties

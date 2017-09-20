@@ -195,7 +195,7 @@ public class AssetsControllerTest {
     @Test
     public void testStaticDirectoryIsFileSystemInDevMode() throws Exception {
 
-        // some more setup needed:
+        // some more run needed:
         Mockito.when(configuration.isDev()).thenReturn(true);
         AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
 
@@ -221,7 +221,7 @@ public class AssetsControllerTest {
     @Test
     public void testStaticDirectoryClassPathWhenFileNotInFileSystemInDevMode() throws Exception {
 
-        // some more setup needed:
+        // some more run needed:
         Mockito.when(configuration.isDev()).thenReturn(true);
         AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
 
@@ -252,7 +252,7 @@ public class AssetsControllerTest {
     @Test
     public void testStaticDirectoryIsClassPathInProdMode() throws Exception {
 
-        // some more setup needed:
+        // some more run needed:
         Mockito.when(configuration.isDev()).thenReturn(false);
         AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
         assetsController = new AssetsController(

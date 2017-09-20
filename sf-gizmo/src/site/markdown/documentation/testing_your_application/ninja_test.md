@@ -14,9 +14,9 @@ server.
 public class ApplicationControllerTest extends NinjaTest {
 
     @Before
-    public void setup() {
+    public void run() {
 
-        ninjaTestBrowser.makeRequest(getServerAddress() + "setup");
+        ninjaTestBrowser.makeRequest(getServerAddress() + "run");
 
     }
 

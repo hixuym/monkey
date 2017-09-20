@@ -38,7 +38,7 @@ import io.sunflower.gizmo.server.GizmoConfiguration;
 import io.sunflower.gizmo.utils.Message;
 import io.sunflower.gizmo.utils.NinjaConstant;
 import io.sunflower.gizmo.utils.ResultHandler;
-import io.sunflower.inject.lifecycle.LifecycleManager;
+import io.sunflower.lifecycle.LifecycleManager;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;

@@ -16,7 +16,7 @@ package io.sunflower.lifecycle;
  * }
  * </pre>
  */
-public class AutoCloseableManager implements Managed {
+public class AutoCloseableManager extends AbstractLifeCycle {
 
     private final AutoCloseable autoCloseable;
 
@@ -28,19 +28,12 @@ public class AutoCloseableManager implements Managed {
     }
 
     /**
-     * The start operation does nothing (i.e. it's a no-op).
-     */
-    @Override
-    public void start() throws Exception {
-    }
-
-    /**
      * Calls {@link AutoCloseable#close()} given in the {@link AutoCloseableManager(AutoCloseable)}
      *
      * @throws Exception propagates {@link AutoCloseable#close()} exception
      */
     @Override
-    public void stop() throws Exception {
+    public void doStop() throws Exception {
         this.autoCloseable.close();
     }
 }

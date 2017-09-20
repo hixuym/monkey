@@ -39,7 +39,7 @@ public class GizmoServerFactory implements ServerFactory, GizmoConfiguration {
     }
 
     @Override
-    public String getApplicationContenxtPath() {
+    public String getApplicationContextPath() {
         return null;
     }
 

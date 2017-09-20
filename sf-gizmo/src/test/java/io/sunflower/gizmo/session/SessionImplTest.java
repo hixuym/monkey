@@ -82,7 +82,7 @@ public class SessionImplTest {
 
     /**
      * This method provides parameters for {@code encrypted} field. The first set contains {@code false} so that
-     * {@link CookieEncryption} is not initialized and test class is run without session cookie encryption. Second set
+     * {@link CookieEncryption} is not initialized and test class is createInjector without session cookie encryption. Second set
      * contains {@code true} so that sessions cookies are encrypted.
      */
     @Parameters
@@ -199,7 +199,7 @@ public class SessionImplTest {
 
     @Test
     public void testNoHttpsOnlyWorks() throws Exception {
-        // setup this testmethod
+        // run this testmethod
         when(
             configuration.isSessionTransferredOverHttpsOnly())
             .thenReturn(false);
@@ -245,7 +245,7 @@ public class SessionImplTest {
 
     @Test
     public void testNoHttpOnlyWorks() throws Exception {
-        // setup this testmethod
+        // run this testmethod
         when(
             configuration.isSessionHttpOnly()).thenReturn(false);
 
