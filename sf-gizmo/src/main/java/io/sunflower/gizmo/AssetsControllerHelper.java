@@ -43,6 +43,10 @@ public class AssetsControllerHelper {
      * @return A normalized fileName.
      */
     public String normalizePathWithoutLeadingSlash(String fileName, boolean enforceUnixSeparator) {
+        if (StringUtils.isEmpty(fileName)) {
+            return fileName;
+        }
+
         Path p = Paths.get(fileName);
         String fileNameNormalized = p.normalize().toString().trim();
 

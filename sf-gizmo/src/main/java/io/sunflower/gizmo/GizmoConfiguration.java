@@ -32,7 +32,7 @@ public class GizmoConfiguration {
 
 
     private String cookieDomain = "sunflower.io";
-    private String cookiePrefix = "SF";
+    private String cookiePrefix = "SF_";
     private boolean cookieEncrypted = false;
 
     private Duration sessionExpireTime = Duration.hours(1);
