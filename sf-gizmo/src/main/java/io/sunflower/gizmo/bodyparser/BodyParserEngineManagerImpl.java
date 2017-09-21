@@ -48,8 +48,7 @@ public class BodyParserEngineManagerImpl implements BodyParserEngineManager {
 
         // Now lookup all explicit bindings, and find the ones that implement
         // BodyParserEngine
-        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings()
-            .entrySet()) {
+        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
             if (BodyParserEngine.class.isAssignableFrom(binding.getKey()
                 .getTypeLiteral().getRawType())) {
                 Provider<? extends BodyParserEngine> provider = (Provider) binding.getValue().getProvider();
@@ -81,7 +80,7 @@ public class BodyParserEngineManagerImpl implements BodyParserEngineManager {
 
     }
 
-    final protected void logBodyParserEngines() {
+    private final void logBodyParserEngines() {
         List<String> outputTypes = Lists.newArrayList(getContentTypes());
         Collections.sort(outputTypes);
 

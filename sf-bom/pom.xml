@@ -812,6 +812,12 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
+                <artifactId>sf-gizmo-freemarker</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
                 <artifactId>sf-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>

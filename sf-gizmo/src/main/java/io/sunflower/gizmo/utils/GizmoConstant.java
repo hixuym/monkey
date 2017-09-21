@@ -79,5 +79,5 @@ public interface GizmoConstant {
     String KEY_SUNFLOWER_STANDALONE_CLASS = "sunflower.standalone.class";
     String DEFAULT_STANDALONE_CLASS = "io.sunflower.ewf.netty.NettyStandalone";
 
-
+    String AUTHENTICITY_TOKEN = "authenticityToken";
 }

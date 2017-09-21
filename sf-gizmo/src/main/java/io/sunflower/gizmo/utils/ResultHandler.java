@@ -97,7 +97,8 @@ public class ResultHandler {
                 result.contentType(result.fallbackContentType().get());
             } else {
                 throw new BadRequestException(
-                    "No idea how to handle incoming request with Accept:" + context.getAcceptContentType()
+                    "No idea how to handle incoming request with Accept:"
+                        + context.getAcceptContentType()
                         + " at route " + context.getRequestPath());
             }
         }
@@ -108,14 +109,9 @@ public class ResultHandler {
             .getTemplateEngineForContentType(result.getContentType());
 
         if (templateEngine != null) {
-
             templateEngine.invoke(context, result);
-
         } else {
-            throw new GizmoException(
-                404,
-                "No template engine found for result content type "
-                    + result.getContentType());
+            throw new GizmoException(404, "No template engine found for result content type " + result.getContentType());
         }
     }
 

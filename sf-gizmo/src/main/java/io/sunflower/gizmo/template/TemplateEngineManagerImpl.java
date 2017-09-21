@@ -54,8 +54,7 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
             .entrySet()) {
             if (TemplateEngine.class.isAssignableFrom(binding.getKey()
                 .getTypeLiteral().getRawType())) {
-                Provider<? extends TemplateEngine> provider = (Provider) binding
-                    .getValue().getProvider();
+                Provider<? extends TemplateEngine> provider = (Provider) binding.getValue().getProvider();
                 map.put(provider.get().getContentType(), provider);
             }
         }
@@ -72,8 +71,7 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
 
     @Override
     public TemplateEngine getTemplateEngineForContentType(String contentType) {
-        Provider<? extends TemplateEngine> provider = contentTypeToTemplateEngineMap
-            .get(contentType);
+        Provider<? extends TemplateEngine> provider = contentTypeToTemplateEngineMap.get(contentType);
 
         if (provider != null) {
             return provider.get();
@@ -82,7 +80,7 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
         }
     }
 
-    final protected void logTemplateEngines() {
+    private final void logTemplateEngines() {
         List<String> outputTypes = Lists.newArrayList(getContentTypes());
         Collections.sort(outputTypes);
 

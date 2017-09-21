@@ -1,5 +1,6 @@
 package io.sunflower.gizmo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
@@ -345,14 +346,21 @@ public class GizmoConfiguration {
         this.applicationLangs = applicationLangs;
     }
 
+    @JsonIgnore
     public boolean isProd() {
         return true;
     }
+    @JsonIgnore
+    public boolean isDev() { return false; }
+    @JsonIgnore
+    public boolean isTest() { return false; }
 
+    @JsonIgnore
     public boolean isPortEnabled() {
         return this.port != null && this.port > 0;
     }
 
+    @JsonIgnore
     public boolean isSslPortEnabled() {
         return this.sslPort != null && this.sslPort > 0;
     }
@@ -388,6 +396,7 @@ public class GizmoConfiguration {
         this.traceEnabled = traceEnabled;
     }
 
+    @JsonIgnore
     public String getLoggableIdentifier() {
         // build list of ports
         StringBuilder ports = new StringBuilder();
