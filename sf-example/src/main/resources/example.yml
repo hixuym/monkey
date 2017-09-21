@@ -7,4 +7,4 @@ logging:
 
 gizmo:
   applicationSecret: 12345678
-  #accessLogFormat: combined
+  accessLogFormat: combined

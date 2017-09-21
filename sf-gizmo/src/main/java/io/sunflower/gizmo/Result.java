@@ -110,7 +110,7 @@ public class Result {
      * header of request this fallback will be used. If it is not set 
      * a bad request exception will be thrown.
      */
-    private Optional<String> fallbackContentType = Optional.empty();
+    private Optional<String> fallbackContentType = Optional.of(APPLICATION_JSON);
 
     /**
      * A list of content types this result will handle. If you got a general
@@ -125,7 +125,7 @@ public class Result {
      * the box.
      */
     private final static List<String> DEFAULT_SUPPORTED_CONTENT_TYPES
-        = ImmutableList.of(TEXT_HTML, APPLICATION_JSON, APPLICATION_XML);
+        = ImmutableList.of(APPLICATION_JSON, APPLICATION_XML);
 
     /**
      * Something like: "utf-8" => will be appended to the content-type. eg
@@ -319,7 +319,7 @@ public class Result {
      */
     public Result render(String key, Object value) {
 
-        render(new AbstractMap.SimpleEntry<String, Object>(key, value));
+        render(new AbstractMap.SimpleEntry<>(key, value));
 
         return this;
 
@@ -663,15 +663,11 @@ public class Result {
 
     }
 
-
     private void assertObjectNoRenderableOrThrowException(Object object) {
         if (object instanceof Renderable) {
             throw new IllegalArgumentException(
                 "You already want to render a Renderable class. " +
                     "Adding more items to render is not supported.");
-
         }
     }
-
-
 }

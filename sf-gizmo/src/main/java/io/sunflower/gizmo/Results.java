@@ -31,8 +31,7 @@ public class Results {
 
     public static Result status(int statusCode) {
 
-        Result result = new Result(statusCode);
-        return result;
+        return new Result(statusCode);
 
     }
 

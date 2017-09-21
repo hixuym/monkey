@@ -61,7 +61,9 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         Result result;
         // log the exception as debug
-        logger.debug("Unable to process request", exception);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Unable to process request", exception);
+        }
 
         if (exception instanceof BadRequestException) {
             result = getBadRequestResult(context, exception);
@@ -94,10 +96,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         return Results
             .notFound()
-            .supportedContentTypes(Result.TEXT_HTML, Result.APPLICATION_JSON, Result.APPLICATION_XML)
-            .fallbackContentType(Result.TEXT_HTML)
             .render(message);
-
     }
 
     @Override
@@ -127,8 +126,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         return Results
             .unauthorized()
             .addHeader(Result.WWW_AUTHENTICATE, "None")
-            .supportedContentTypes(Result.TEXT_HTML, Result.APPLICATION_JSON, Result.APPLICATION_XML)
-            .fallbackContentType(Result.TEXT_HTML)
             .render(message);
     }
 
@@ -154,11 +151,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         ErrorMessage message = new ErrorMessage(Result.SC_403_FORBIDDEN, messageI18n);
 
-        return Results
-            .forbidden()
-            .supportedContentTypes(Result.TEXT_HTML, Result.APPLICATION_JSON, Result.APPLICATION_XML)
-            .fallbackContentType(Result.TEXT_HTML)
-            .render(message);
+        return Results.forbidden().render(message);
 
     }
 
@@ -184,10 +177,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         return Results
             .badRequest()
-            .supportedContentTypes(Result.TEXT_HTML, Result.APPLICATION_JSON, Result.APPLICATION_XML)
-            .fallbackContentType(Result.TEXT_HTML)
             .render(message);
-
     }
 
     private Result getRenderingExceptionResult(Context context, RenderingException exception, Result underlyingResult) {
@@ -244,8 +234,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         return Results
             .internalServerError()
-            .supportedContentTypes(Result.TEXT_HTML, Result.APPLICATION_JSON, Result.APPLICATION_XML)
-            .fallbackContentType(Result.TEXT_HTML)
             .render(message);
     }
 

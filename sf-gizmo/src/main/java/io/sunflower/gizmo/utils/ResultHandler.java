@@ -32,11 +32,9 @@ import io.sunflower.gizmo.template.TemplateEngineManager;
 public class ResultHandler {
 
     private final TemplateEngineManager templateEngineManager;
-    private final Logger logger;
 
     @Inject
-    public ResultHandler(Logger logger, TemplateEngineManager templateEngineManager) {
-        this.logger = logger;
+    public ResultHandler(TemplateEngineManager templateEngineManager) {
         this.templateEngineManager = templateEngineManager;
     }
 
@@ -102,7 +100,6 @@ public class ResultHandler {
                         + " at route " + context.getRequestPath());
             }
         }
-
 
         // try to get a suitable rendering engine...
         TemplateEngine templateEngine = templateEngineManager
