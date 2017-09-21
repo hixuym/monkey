@@ -125,7 +125,7 @@ public class Result {
      * the box.
      */
     private final static List<String> DEFAULT_SUPPORTED_CONTENT_TYPES
-        = ImmutableList.of(APPLICATION_JSON, APPLICATION_XML);
+        = ImmutableList.of(APPLICATION_JSON, APPLICATION_XML, TEXT_HTML);
 
     /**
      * Something like: "utf-8" => will be appended to the content-type. eg

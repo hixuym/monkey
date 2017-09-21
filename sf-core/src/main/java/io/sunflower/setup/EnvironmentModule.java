@@ -29,7 +29,5 @@ public class EnvironmentModule extends AbstractModule {
         bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
         bind(Validator.class).toInstance(environment.getValidator());
         bind(Environment.class).toInstance(environment);
-
-        install(new MetricsModule());
     }
 }

@@ -13,14 +13,16 @@
 
 package io.sunflower.gizmo;
 
-import com.google.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.sunflower.gizmo.utils.ResultHandler;
 import io.sunflower.guicey.lifecycle.LifecycleManager;
 
+@Singleton
 public class GizmoDefault implements Gizmo {
     private static final Logger logger = LoggerFactory.getLogger(GizmoDefault.class);
 

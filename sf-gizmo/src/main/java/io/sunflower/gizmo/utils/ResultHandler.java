@@ -15,16 +15,12 @@ package io.sunflower.gizmo.utils;
 
 import com.google.inject.Inject;
 
-import org.slf4j.Logger;
-
 import javax.inject.Singleton;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Renderable;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.exceptions.BadRequestException;
-import io.sunflower.gizmo.exceptions.GizmoException;
-import io.sunflower.gizmo.template.TemplateEngine;
 import io.sunflower.gizmo.template.TemplateEngineManager;
 
 
@@ -51,7 +47,7 @@ public class ResultHandler {
             // if the object is a renderable it should do everything itself...:
             // make sure to call context.finalizeHeaders(result) with the
             // results you want to set...
-            handleRenderable((Renderable) objectToBeRendered, context, result);
+            ((Renderable) objectToBeRendered).render(context, result);
         } else {
 
             // If result does not contain a Cache-control: ... header
@@ -74,16 +70,7 @@ public class ResultHandler {
         }
     }
 
-    private void handleRenderable(Renderable renderable,
-                                  Context context,
-                                  Result result) {
-
-        renderable.render(context, result);
-
-    }
-
     private void renderWithTemplateEngineOrRaw(Context context, Result result) {
-
 
         // if content type is not yet set in result we copy it over from the
         // request accept header
@@ -102,14 +89,9 @@ public class ResultHandler {
         }
 
         // try to get a suitable rendering engine...
-        TemplateEngine templateEngine = templateEngineManager
-            .getTemplateEngineForContentType(result.getContentType());
-
-        if (templateEngine != null) {
-            templateEngine.invoke(context, result);
-        } else {
-            throw new GizmoException(404, "No template engine found for result content type " + result.getContentType());
-        }
+        templateEngineManager
+            .getTemplateEngineForContentType(result.getContentType())
+            .invoke(context, result);
     }
 
 }

@@ -50,7 +50,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
      *
      * @return True if diagnostics are enabled otherwise false.
      */
-    public boolean isDiagnosticsEnabled() {
+    private boolean isDiagnosticsEnabled() {
         // extra safety: only disable detailed diagnostic error pages
         // if both in DEV mode and diagnostics are enabled 0
         return configuration.isDev() && configuration.isDiagnosticsEnabled();
@@ -82,7 +82,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         if (isDiagnosticsEnabled()) {
             DiagnosticError diagnosticError =
                 DiagnosticErrorBuilder.build404NotFoundDiagnosticError(true);
-            return Results.notFound().render(diagnosticError);
+            return Results.notFound().html().render(diagnosticError);
         }
 
         String messageI18n

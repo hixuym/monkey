@@ -8,3 +8,9 @@ logging:
 gizmo:
   applicationSecret: 12345678
   accessLogFormat: combined
+
+metrics:
+  frequency: 30 seconds
+  reporters:
+    - type: log
+      logger: io.sunflower.metrics

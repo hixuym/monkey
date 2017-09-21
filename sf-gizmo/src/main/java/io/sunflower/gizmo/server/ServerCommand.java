@@ -38,6 +38,10 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
 
         GizmoServer undertow = environment.guicey().injector().getInstance(GizmoServer.class);
 
+        undertow.init();
+
+        environment.lifecycle().attach(undertow);
+
         try {
             undertow.addLifeCycleListener(new LifeCycleListener());
             cleanupAsynchronously();

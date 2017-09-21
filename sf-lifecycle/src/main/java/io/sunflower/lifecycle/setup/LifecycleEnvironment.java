@@ -46,6 +46,11 @@ public class LifecycleEnvironment {
             protected void doStop() throws Exception {
                 requireNonNull(managed).stop();
             }
+
+            @Override
+            public String toString() {
+                return requireNonNull(managed).toString();
+            }
         });
     }
 

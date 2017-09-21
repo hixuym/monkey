@@ -29,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
 
 import io.sunflower.gizmo.Gizmo;
@@ -59,6 +60,7 @@ import io.undertow.server.handlers.form.FormParserFactory;
 /**
  * sunflower standalone based on Undertow.
  */
+@Singleton
 public class GizmoServer extends ContainerLifeCycle {
 
     private Logger logger = LoggerFactory.getLogger(GizmoServer.class);
@@ -71,7 +73,7 @@ public class GizmoServer extends ContainerLifeCycle {
 
     protected SSLContext sslContext;
 
-    private final Gizmo gizmo;
+    private Gizmo gizmo;
 
     private final Injector injector;
 
@@ -80,19 +82,22 @@ public class GizmoServer extends ContainerLifeCycle {
         this.configuration = configuration;
         this.environment = environment;
         this.injector = environment.guicey().injector();
+    }
 
+    public void init() {
+        this.undertow = createUndertow();
         this.gizmo = injector.getInstance(Gizmo.class);
-        environment.lifecycle().attach(this);
     }
 
     @Override
     public void doStart() throws Exception {
 
+        super.doStart();
+
         this.initRoutes();
 
         this.gizmo.onFrameworkStart();
 
-        this.undertow = createUndertow();
         String version = undertow.getClass().getPackage().getImplementationVersion();
         logger.info("Trying to start undertow v{}", version);
         this.undertow.start();
@@ -113,7 +118,9 @@ public class GizmoServer extends ContainerLifeCycle {
     }
 
     @Override
-    public void doStop() {
+    public void doStop() throws Exception {
+        super.doStop();
+
         this.gizmo.onFrameworkShutdown();
 
         if (this.undertow != null && undertowStarted) {
