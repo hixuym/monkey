@@ -1,14 +1,13 @@
 package io.sunflower.setup;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.health.SharedHealthCheckRegistries;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +17,6 @@ import javax.validation.Validator;
 
 import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
-import io.sunflower.metrics.MetricsModule;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,6 +29,7 @@ public class Environment {
     private final HealthCheckRegistry healthCheckRegistry;
 
     private final ObjectMapper objectMapper;
+    private final XmlMapper xmlMapper;
 
     private Validator validator;
 
@@ -48,12 +47,15 @@ public class Environment {
      */
     public Environment(String name,
                        ObjectMapper objectMapper,
+                       XmlMapper xmlMapper,
                        Validator validator,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
                        HealthCheckRegistry healthCheckRegistry) {
         this.name = name;
         this.objectMapper = objectMapper;
+        this.xmlMapper = xmlMapper;
+
         this.metricRegistry = metricRegistry;
         this.healthCheckRegistry = healthCheckRegistry;
         this.validator = validator;
@@ -90,10 +92,11 @@ public class Environment {
      */
     public Environment(String name,
                        ObjectMapper objectMapper,
+                       XmlMapper xmlMapper,
                        Validator validator,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader) {
-        this(name, objectMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
+        this(name, objectMapper, xmlMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
     }
 
     /**
@@ -115,6 +118,10 @@ public class Environment {
      */
     public ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    public XmlMapper getXmlMapper() {
+        return xmlMapper;
     }
 
     /**
