@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
  * This equals context.getParameter(...)
  *
  * @author ra
- *
  */
 @WithArgumentExtractor(ArgumentExtractors.ParamExtractor.class)
 @WithArgumentExtractors({

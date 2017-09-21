@@ -25,11 +25,9 @@ import io.sunflower.gizmo.Result;
 public interface Lang {
 
     /**
-     * Retrieve the current language or null if not set.
-     * It will try to determine the language by:
-     * 1) Checking if result contains a forced language
-     * 2) Checking if context has a NINJA_LANG cookie with a forced language
-     * 3) Getting the first language from the Accept-Language header
+     * Retrieve the current language or null if not set. It will try to determine the language by: 1) Checking if result
+     * contains a forced language 2) Checking if context has a NINJA_LANG cookie with a forced language 3) Getting the
+     * first language from the Accept-Language header
      *
      * @return The current language (fr, ja, it ...) - may be absent
      */
@@ -37,8 +35,7 @@ public interface Lang {
 
 
     /**
-     * Force a language in Gizmo framwork.
-     * This is usually done by a cookie NINJA_LANG.
+     * Force a language in Gizmo framwork. This is usually done by a cookie NINJA_LANG.
      *
      * This overrides any Accept-Language languages.
      *
@@ -48,22 +45,18 @@ public interface Lang {
 
 
     /**
-     * Clears the current language.
-     * This will trigger resolving language from request (Accept lang) 
-     * if not manually set.
+     * Clears the current language. This will trigger resolving language from request (Accept lang) if not manually
+     * set.
      *
-     * Note: The language is set by a cookie. To delete a cookie
-     * the max-age is set to 0. It can therefore be the case that the lang cookie
-     * still exists in the thread. Make sure your module / app handles this properly.
+     * Note: The language is set by a cookie. To delete a cookie the max-age is set to 0. It can therefore be the case
+     * that the lang cookie still exists in the thread. Make sure your module / app handles this properly.
      *
      * @param result result clear language commands merged into result.
-     *
      */
     void clearLanguage(Result result);
 
     /**
-     * application.conf usually contains the following:
-     * application.languages=en,de
+     * application.conf usually contains the following: application.languages=en,de
      *
      * This little helper checks if the language is supported.
      *
@@ -73,25 +66,21 @@ public interface Lang {
     boolean isLanguageDirectlySupportedByThisApplication(String language);
 
     /**
-     * application.conf usually contains the following:
-     * application.languages=en,de
+     * application.conf usually contains the following: application.languages=en,de
      *
-     * This little helper converts a language code
-     * like (en, en-US etc) to a Java locale.
+     * This little helper converts a language code like (en, en-US etc) to a Java locale.
      *
      * It takes null as input and falls back to the default language.
      *
      * By convention this is the first language of application.languages.
      *
-     * In the case of 
-     * application.languages=en,de
+     * In the case of application.languages=en,de
      *
      * The default language is "en".
      *
-     *
      * @param language The language to check (en, en-US etc)
-     * @return The Java locale or a default locale based on the first language
-     *          in your application.languages configuration.
+     * @return The Java locale or a default locale based on the first language in your application.languages
+     * configuration.
      */
     Locale getLocaleFromStringOrDefault(Optional<String> language);
 

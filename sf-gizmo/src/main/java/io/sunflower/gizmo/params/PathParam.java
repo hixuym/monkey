@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
  * This equals context.getPathParameter(...)
  *
  * @author ra
- *
  */
 @WithArgumentExtractor(ArgumentExtractors.PathParamExtractor.class)
 @Retention(RetentionPolicy.RUNTIME)

@@ -18,12 +18,11 @@ import java.util.Optional;
 import io.sunflower.gizmo.Context;
 
 /**
- * Argument extractor that wraps an extractor so that it can handle Optional<...>
- * in controller methods.
+ * Argument extractor that wraps an extractor so that it can handle Optional<...> in controller methods.
  *
  * For example:
  *
- *     myControllerMethod(@Param("param1") Optional<String> myValue)
+ * myControllerMethod(@Param("param1") Optional<String> myValue)
  */
 class OptionalArgumentExtractor<T> implements ArgumentExtractor<Optional<T>> {
     private final ArgumentExtractor<T> wrapped;

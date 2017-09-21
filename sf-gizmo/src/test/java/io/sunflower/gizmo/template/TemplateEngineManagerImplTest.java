@@ -15,10 +15,13 @@
 
 package io.sunflower.gizmo.template;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import org.junit.Test;
+import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,56 +36,53 @@ import io.sunflower.gizmo.i18n.Lang;
 import io.sunflower.gizmo.i18n.LangImpl;
 import io.sunflower.guicey.LoggerProvider;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 public class TemplateEngineManagerImplTest {
 
     @Test
     public void testGetJson() {
         assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-                ContentTypes.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
+            ContentTypes.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
     }
 
     @Test
     public void testGetJsonP() {
         assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-                ContentTypes.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
+            ContentTypes.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
     }
 
     @Test
     public void testGetCustom() {
         assertThat(createTemplateEngineManager(CustomTemplateEngine.class).getTemplateEngineForContentType(
-                "custom"), instanceOf(CustomTemplateEngine.class));
+            "custom"), instanceOf(CustomTemplateEngine.class));
     }
 
     @Test
     public void testOverrideJson() {
         assertThat(createTemplateEngineManager(OverrideJsonTemplateEngine.class).getTemplateEngineForContentType(
-                ContentTypes.APPLICATION_JSON), instanceOf(OverrideJsonTemplateEngine.class));
+            ContentTypes.APPLICATION_JSON), instanceOf(OverrideJsonTemplateEngine.class));
     }
 
     @Test
     public void testOverrideHtml() {
         assertThat(createTemplateEngineManager(OverrideHtmlTemplateEngine.class).getTemplateEngineForContentType(
-                ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine.class));
+            ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine.class));
     }
-    
+
     @Test
     public void testOverrideHtmlOrderMatters() {
         TemplateEngineManager templateEngineManager
             = createTemplateEngineManager(
-                OverrideHtmlTemplateEngine.class,
-                OverrideHtmlTemplateEngine3.class,
-                OverrideHtmlTemplateEngine2.class);
-        
+            OverrideHtmlTemplateEngine.class,
+            OverrideHtmlTemplateEngine3.class,
+            OverrideHtmlTemplateEngine2.class);
+
         assertThat(templateEngineManager.getTemplateEngineForContentType(
-                ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
+            ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
     }
 
     @Test
@@ -90,14 +90,14 @@ public class TemplateEngineManagerImplTest {
         List<String> types = Lists.newArrayList(createTemplateEngineManager().getContentTypes());
         Collections.sort(types);
         assertThat(types.toString(),
-                equalTo("[application/javascript, application/json, application/xml, text/html, text/plain]"));
+            equalTo("[application/javascript, application/json, application/xml, text/html, text/plain]"));
     }
 
-	@Test
-	public void testGetNonExistingProducesNoNPE() {
-		TemplateEngineManager manager = createTemplateEngineManager(OverrideJsonTemplateEngine.class);
-		assertNull(manager.getTemplateEngineForContentType("non/existing"));
-	}
+    @Test
+    public void testGetNonExistingProducesNoNPE() {
+        TemplateEngineManager manager = createTemplateEngineManager(OverrideJsonTemplateEngine.class);
+        assertNull(manager.getTemplateEngineForContentType("non/existing"));
+    }
 
     public static abstract class MockTemplateEngine implements TemplateEngine {
         @Override
@@ -132,14 +132,14 @@ public class TemplateEngineManagerImplTest {
             return ContentTypes.TEXT_HTML;
         }
     }
-    
+
     public static class OverrideHtmlTemplateEngine2 extends MockTemplateEngine {
         @Override
         public String getContentType() {
             return ContentTypes.TEXT_HTML;
         }
     }
-    
+
     public static class OverrideHtmlTemplateEngine3 extends MockTemplateEngine {
         @Override
         public String getContentType() {
@@ -159,7 +159,7 @@ public class TemplateEngineManagerImplTest {
                 bind(Logger.class).toProvider(LoggerProvider.class);
                 bind(Lang.class).to(LangImpl.class);
                 bind(Router.class).to(RouterImpl.class);
-                
+
                 bind(TemplateEngineText.class);
                 bind(TemplateEngineJson.class);
                 bind(TemplateEngineJsonP.class);

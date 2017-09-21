@@ -23,8 +23,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Properties;
-
 import io.sunflower.gizmo.GizmoConfiguration;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +38,7 @@ public class MimeTypesTest {
     public void setup() {
 
         // mock some mime types
-        when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("mimetype.custom","application/custom"));
+        when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("mimetype.custom", "application/custom"));
     }
 
     @Test

@@ -17,8 +17,7 @@ public class HttpHeaderUtils {
 
 
     /**
-     * A http content type should contain a character set like
-     * "application/json; charset=utf-8".
+     * A http content type should contain a character set like "application/json; charset=utf-8".
      *
      * If you only want to get "application/json" you can use this method.
      *
@@ -39,8 +38,7 @@ public class HttpHeaderUtils {
 
 
     /**
-     * A http content type should contain a character set like
-     * "application/json; charset=utf-8".
+     * A http content type should contain a character set like "application/json; charset=utf-8".
      *
      * If you only want to get the character set you can use this method.
      *
@@ -62,8 +60,7 @@ public class HttpHeaderUtils {
     }
 
     /**
-     * A http content type should contain a character set like
-     * "application/json; charset=utf-8".
+     * A http content type should contain a character set like "application/json; charset=utf-8".
      *
      * If you only want to get the character set you can use this method.
      *

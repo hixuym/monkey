@@ -27,8 +27,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface WithValidator {
     /**
-     * Validator that should be used to validate parameters annotated with this
-     * annotation.
+     * Validator that should be used to validate parameters annotated with this annotation.
      *
      * @return The validator class
      */

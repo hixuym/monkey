@@ -15,14 +15,12 @@
 
 package io.sunflower.gizmo.utils;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.Logger;
 
 import java.io.OutputStream;
 import java.io.Writer;
@@ -33,12 +31,14 @@ import io.sunflower.gizmo.Results;
 import io.sunflower.gizmo.template.TemplateEngine;
 import io.sunflower.gizmo.template.TemplateEngineManager;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.slf4j.Logger;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResultHandlerTest {
@@ -87,7 +87,7 @@ public class ResultHandlerTest {
 
     /**
      * If Cache-Control is not set the no-cache strategy has to be applied.
-     * 
+     *
      * We expect Cache-Control: ... Date: ... Expires: ...
      */
     @Test
@@ -108,10 +108,10 @@ public class ResultHandlerTest {
 
         // make sure stuff is there:
         assertEquals(Result.CACHE_CONTROL_DEFAULT_NOCACHE_VALUE, result
-                .getHeaders().get(Result.CACHE_CONTROL));
+            .getHeaders().get(Result.CACHE_CONTROL));
         assertNotNull(result.getHeaders().get(Result.DATE));
         assertEquals(DateUtil.formatForHttpHeader(0L),
-                result.getHeaders().get(Result.EXPIRES));
+            result.getHeaders().get(Result.EXPIRES));
 
     }
 
@@ -128,7 +128,7 @@ public class ResultHandlerTest {
         resultHandler.handleResult(result, context);
 
         // make sure stuff is there:
-        assertEquals("must-revalidate", 
+        assertEquals("must-revalidate",
             result.getHeaders().get(Result.CACHE_CONTROL));
         assertNull(result.getHeaders().get(Result.DATE));
         assertNull(result.getHeaders().get(Result.EXPIRES));
@@ -165,7 +165,7 @@ public class ResultHandlerTest {
 
     @Test
     public void testRenderPictureFromBytes() {
-        final byte[] toRender = new byte[] { 1, 2, 3 };
+        final byte[] toRender = new byte[]{1, 2, 3};
         final String contentType = "image/png";
         Result result = Results.ok();
         result.contentType(contentType);
@@ -173,29 +173,29 @@ public class ResultHandlerTest {
         resultHandler.handleResult(result, context);
         assertEquals(contentType, result.getContentType());
     }
-    
+
     @Test
     public void testThatNoHttpBodyWorks() {
-        
+
         // make sure that NoHttpBody causes the resulthandler to finalize
         // the context and does not call a tempate render engine.
         Result result = new Result(200);
         result.render(new NoHttpBody());
-        
+
         resultHandler.handleResult(result, context);
         verify(context).finalizeHeaders(result);
-        
+
     }
-    
+
     @Test
     public void testThatFallbackContentTypeWorks() {
-        Result result 
+        Result result
             = new Result(200)
-                .fallbackContentType(Result.TEXT_HTML)
-                .contentType(null);
-        
+            .fallbackContentType(Result.TEXT_HTML)
+            .contentType(null);
+
         resultHandler.handleResult(result, context);
-        
+
         assertThat(result.getContentType(), equalTo(Result.TEXT_HTML));
     }
 }

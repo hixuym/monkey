@@ -16,7 +16,6 @@ package io.sunflower.gizmo.i18n;
 import com.google.inject.ImplementedBy;
 
 import java.text.MessageFormat;
-import java.util.Map;
 import java.util.Optional;
 
 import io.sunflower.gizmo.Context;
@@ -26,21 +25,18 @@ import io.sunflower.gizmo.Result;
 public interface Messages {
 
     /**
-     * Get a translated string. The language is determined by the provided
-     * locale or a suitable fallback.
+     * Get a translated string. The language is determined by the provided locale or a suitable fallback.
      *
      * values of keys can use the MessageFormat.
      *
-     * More here:
-     * http://docs.oracle.com/javase/6/docs/api/java/text/MessageFormat.html
+     * More here: http://docs.oracle.com/javase/6/docs/api/java/text/MessageFormat.html
      *
-     * But in short you can use something like mymessage=my message with a
-     * placeholder {0}
+     * But in short you can use something like mymessage=my message with a placeholder {0}
      *
      * parameter will then be used to fill {0} with the content.
      *
-     * Note: If you don't want to determine the language yourself please use
-     * {@link Messages#get(String, Context, Optional, Object...)}
+     * Note: If you don't want to determine the language yourself please use {@link Messages#get(String, Context,
+     * Optional, Object...)}
      *
      * @param key       The key used in your message file (conf/messages.properties)
      * @param language  The language to get. Can be null - then the default language is returned. It also looks for a
@@ -54,16 +50,13 @@ public interface Messages {
                          Object... parameter);
 
     /**
-     * Get a translated string. The language is determined by the provided
-     * locale or a suitable fallback.
+     * Get a translated string. The language is determined by the provided locale or a suitable fallback.
      *
      * values of keys can use the MessageFormat.
      *
-     * More here:
-     * http://docs.oracle.com/javase/6/docs/api/java/text/MessageFormat.html
+     * More here: http://docs.oracle.com/javase/6/docs/api/java/text/MessageFormat.html
      *
-     * But in short you can use something like mymessage=my message with a
-     * placeholder {0}
+     * But in short you can use something like mymessage=my message with a placeholder {0}
      *
      * @param key       The key used in your message file (conf/messages.properties)
      * @param context   The context used to determine the language.
@@ -79,8 +72,8 @@ public interface Messages {
     /**
      * Gets a message for a message key. Returns a defaultValue if not found.
      *
-     * Note: If you don't want to determine the language yourself please use
-     * {@link Messages#get(String, Context, Optional, Object...)}
+     * Note: If you don't want to determine the language yourself please use {@link Messages#get(String, Context,
+     * Optional, Object...)}
      *
      * @param key            The key used in your message file (conf/messages.properties)
      * @param defaultMessage A default message that will be used when no matching message can be retrieved.

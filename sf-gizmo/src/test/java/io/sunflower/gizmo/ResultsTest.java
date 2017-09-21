@@ -15,12 +15,12 @@
 
 package io.sunflower.gizmo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import io.sunflower.gizmo.utils.NoHttpBody;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ResultsTest {
 
@@ -78,7 +78,7 @@ public class ResultsTest {
 
         Result result = Results.internalServerError();
         assertEquals(Result.SC_500_INTERNAL_SERVER_ERROR,
-                result.getStatusCode());
+            result.getStatusCode());
 
     }
 
@@ -88,7 +88,7 @@ public class ResultsTest {
         Result result = Results.redirect("http://example.com");
         assertEquals(Result.SC_303_SEE_OTHER, result.getStatusCode());
         assertEquals("http://example.com",
-                result.getHeaders().get(Result.LOCATION));
+            result.getHeaders().get(Result.LOCATION));
         assertTrue(result.getRenderable() instanceof NoHttpBody);
 
     }
@@ -99,7 +99,7 @@ public class ResultsTest {
         Result result = Results.redirectTemporary("http://example.com");
         assertEquals(Result.SC_307_TEMPORARY_REDIRECT, result.getStatusCode());
         assertEquals("http://example.com",
-                result.getHeaders().get(Result.LOCATION));
+            result.getHeaders().get(Result.LOCATION));
         assertTrue(result.getRenderable() instanceof NoHttpBody);
     }
 
@@ -169,7 +169,6 @@ public class ResultsTest {
 
     /**
      * Simple helper to test if objects get copied to result.
-     * 
      */
     public class TestObject {
     }

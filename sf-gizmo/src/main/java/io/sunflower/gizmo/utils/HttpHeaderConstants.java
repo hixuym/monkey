@@ -14,8 +14,7 @@
 package io.sunflower.gizmo.utils;
 
 /**
- * Yet another Http Header Constants file.
- * http://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+ * Yet another Http Header Constants file. http://en.wikipedia.org/wiki/List_of_HTTP_header_fields
  */
 public interface HttpHeaderConstants {
 

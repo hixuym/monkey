@@ -15,34 +15,32 @@
 
 package io.sunflower.gizmo;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
+
 import java.util.Collections;
 import java.util.Map;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.aMapWithSize;
-import static org.junit.Assert.fail;
-import org.mockito.ArgumentCaptor;
 
 import io.sunflower.gizmo.params.Param;
 import io.sunflower.gizmo.params.ParamParsers;
-import io.sunflower.gizmo.utils.MethodReference;
 import io.sunflower.gizmo.validation.ValidationImpl;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * => Most tests are done via class RoutesTest in project
- * ninja-servlet-integration-test.
+ * => Most tests are done via class RoutesTest in project ninja-servlet-integration-test.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RouterImplTest {
@@ -51,13 +49,13 @@ public class RouterImplTest {
 
     @Mock
     GizmoConfiguration configuration;
-    
+
     @Mock
     Injector injector;
 
     @Mock
     Provider<TestController> testControllerProvider;
-    
+
     ArgumentCaptor<Route> webSocketsCompileRouteCaptor;
 
     @Before
@@ -69,18 +67,18 @@ public class RouterImplTest {
         when(injector.getInstance(ParamParsers.class)).thenReturn(new ParamParsers(Collections.emptySet()));
         Provider<RouteBuilderImpl> routeBuilderImplProvider = mock(Provider.class);
         when(routeBuilderImplProvider.get()).thenAnswer(
-                (invocation) -> new RouteBuilderImpl());
+            (invocation) -> new RouteBuilderImpl());
         router = new RouterImpl(injector, configuration, routeBuilderImplProvider);
 
         // add route:
         router.GET().route("/testroute").with(TestController.class, "index");
         router.GET().route("/user/{email}/{id: .*}").with(TestController.class, "user");
         router.GET().route("/u{userId: .*}/entries/{entryId: .*}").with(TestController.class, "entry");
-        
+
         // second route to index should not break reverse routing matching the first
         router.GET().route("/testroute/another_url_by_index").with(TestController.class, "index");
         router.GET().route("/ref").with(TestController.class, "ref");
-        
+
         // functional interface / lambda routing
         TestController testController1 = new TestController("Hi!");
         router.GET().route("/any_instance_method_ref").with(TestController::home);
@@ -107,13 +105,13 @@ public class RouterImplTest {
 
         router.compileRoutes();
     }
-    
+
     @Test
     public void getPathParametersEncodedWithNoPathParams() {
         Route route = router.getRouteFor("GET", "/testroute");
-        
-        Map<String,String> pathParameters = route.getPathParametersEncoded("/testroute");
-        
+
+        Map<String, String> pathParameters = route.getPathParametersEncoded("/testroute");
+
         assertThat(pathParameters, aMapWithSize(0));
     }
 
@@ -122,10 +120,10 @@ public class RouterImplTest {
         Route route = router.getRouteFor("GET", "/any_instance_method_ref");
 
         Result result = route.getFilterChain().next(null);
-        
+
         assertThat(result.getStatusCode(), is(201));
     }
-    
+
     @Test
     public void routeForAnyInstanceMethodReferenceThrowsException() {
         Route route = router.getRouteFor("GET", "/any_instance_method_ref_exception");
@@ -137,92 +135,92 @@ public class RouterImplTest {
             assertThat(e.getCause().getMessage(), is("test"));
         }
     }
-    
+
     @Test
     public void routeForAnyInstanceMethodReference2() {
         Route route = router.getRouteFor("GET", "/any_instance_method_ref2");
 
         Result result = route.getFilterChain().next(null);
-        
+
         assertThat(result.getStatusCode(), is(201));
     }
-    
+
     @Test
     public void routeForSpecificInstanceMethodReference() {
         Route route = router.getRouteFor("GET", "/specific_instance_method_ref");
 
         Result result = route.getFilterChain().next(null);
-        
+
         // message set on specific instance
         assertThat(result.getRenderable(), is("Hi!"));
     }
-    
+
     @Test
     public void routeForSpecificInstanceMethodReferenceWithAnnotations() {
         Context context = mock(Context.class);
         when(context.getParameter("status")).thenReturn("207");
         when(context.getValidation()).thenReturn(new ValidationImpl());
-        
+
         Route route = router.getRouteFor("GET", "/specific_instance_method_ref_annotations");
 
         Result result = route.getFilterChain().next(context);
-        
+
         // message set on specific instance
         assertThat(result.getStatusCode(), is(207));
         assertThat(result.getRenderable(), is("Hi!"));
     }
-    
+
     @Test
     public void routeForAnonymoumsMethodReference() {
         Route route = router.getRouteFor("GET", "/anonymous_method_ref");
 
         Result result = route.getFilterChain().next(null);
-        
+
         assertThat(result.getStatusCode(), is(202));
     }
-    
+
     @Test
     public void routeForAnonymoumsMethodReferenceWithCaptured() {
         Context context = mock(Context.class);
-        
+
         Route route = router.getRouteFor("GET", "/anonymous_method_ref_captured");
 
         Result result = route.getFilterChain().next(context);
-        
+
         assertThat(result.getStatusCode(), is(208));
     }
-    
+
     @Test
     public void routeForAnonymoumsMethodReferenceWithContext() {
         Context context = mock(Context.class);
         when(context.getParameterAsInteger("status")).thenReturn(206);
-        
+
         Route route = router.getRouteFor("GET", "/anonymous_method_ref_context");
 
         Result result = route.getFilterChain().next(context);
-        
+
         assertThat(result.getStatusCode(), is(206));
     }
-    
+
     @Test
     public void routeForAnonymoumsClassInstance() {
         Route route = router.getRouteFor("GET", "/anonymous_class");
 
         Result result = route.getFilterChain().next(null);
-        
+
         assertThat(result.getStatusCode(), is(203));
     }
-    
+
     @Test
     public void routeForAnonymoumsClassInstanceWithAnnotations() {
         Context context = mock(Context.class);
         when(context.getParameter("status")).thenReturn("205");
         when(context.getValidation()).thenReturn(new ValidationImpl());
-        
+
         Route route = router.getRouteFor("GET", "/anonymous_class_annotations");
 
         Result result = route.getFilterChain().next(context);
-        
+
         assertThat(result.getStatusCode(), is(205));
     }
 
@@ -230,17 +228,17 @@ public class RouterImplTest {
      * A dummy TestController for mocking.
      */
     public static class TestController {
-        
+
         private final String message;
-        
+
         public TestController() {
             this("not set");
         }
-        
+
         public TestController(String message) {
             this.message = message;
         }
-        
+
         public Result index() {
             return Results.ok();
         }
@@ -260,22 +258,22 @@ public class RouterImplTest {
         public Result home() {
             return Results.status(201);
         }
-        
+
         public Result message() {
             return Results.ok().render(message);
         }
-        
+
         public Result status(@Param("status") Integer status) {
             return Results.status(status).render(message);
         }
-        
+
         public Result exception() throws Exception {
             throw new Exception("test");
         }
-        
+
 //        public Result websocket() {
 //            return Results.webSocketContinue();
 //        }
     }
-    
+
 }

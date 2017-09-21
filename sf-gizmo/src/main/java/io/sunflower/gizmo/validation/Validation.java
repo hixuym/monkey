@@ -19,13 +19,11 @@ import java.util.List;
 
 /**
  * This interface means the validation context (implemented by {@link ValidationImpl}) and can be injected in your
- * controller method.
- * There are several types of violations that can occur: field violations (on controller method fields), bean violations
- * (on an injected beans field) or general violations (deprecated). A controller using this validation can have
- * violations on his
- * parameters or, if you use a injected data container like a DTO or bean, you may have violations inside this object.
- * possible to validate all controller parameters at once. If an error appears while validating the controller
- * method parameters, it results in a violation which you can get using getFieldViolations().
+ * controller method. There are several types of violations that can occur: field violations (on controller method
+ * fields), bean violations (on an injected beans field) or general violations (deprecated). A controller using this
+ * validation can have violations on his parameters or, if you use a injected data container like a DTO or bean, you may
+ * have violations inside this object. possible to validate all controller parameters at once. If an error appears while
+ * validating the controller method parameters, it results in a violation which you can get using getFieldViolations().
  * If your injected bean contains violations, you should use getBeanViolations().
  *
  * @author James Roper, Philip Sommer
@@ -63,8 +61,7 @@ public interface Validation {
     /**
      * Add a violation
      *
-     * @param constraintViolation
-     *            The constraint violation
+     * @param constraintViolation The constraint violation
      */
     void addViolation(ConstraintViolation constraintViolation);
 }

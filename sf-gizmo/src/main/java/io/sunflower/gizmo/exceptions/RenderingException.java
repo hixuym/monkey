@@ -18,15 +18,13 @@ import io.sunflower.gizmo.Result;
 /**
  * A convenience unchecked exception for "rendering" exceptions.
  *
- * Allows you to wrap any exception (checked or unchecked) and throw it along
- * with info about what...
+ * Allows you to wrap any exception (checked or unchecked) and throw it along with info about what...
  *
  * Should signal a html error 400 - bad request (the client sent something strange).
  *
  * Useful inside controllers or filters for instance.
  *
  * Gizmo is supposed to pick it up and render an appropriate error page.
- *
  */
 public class RenderingException extends GizmoException {
 

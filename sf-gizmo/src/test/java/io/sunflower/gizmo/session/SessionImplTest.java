@@ -15,8 +15,19 @@
 
 package io.sunflower.gizmo.session;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.hamcrest.CoreMatchers;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,22 +43,17 @@ import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.SecretGenerator;
 import io.sunflower.util.Duration;
 
-import org.hamcrest.CoreMatchers;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Matchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
 public class SessionImplTest {
@@ -74,15 +80,13 @@ public class SessionImplTest {
     public boolean encrypted;
 
     /**
-     * This method provides parameters for {@code encrypted} field. The first set contains {@code false} so that
-     * {@link CookieEncryption} is not initialized and test class is run without session cookie encryption. Second set
-     * contains {@code true} so that sessions cookies are encrypted.
-     *
-     * @return
+     * This method provides parameters for {@code encrypted} field. The first set contains {@code false} so that {@link
+     * CookieEncryption} is not initialized and test class is run without session cookie encryption. Second set contains
+     * {@code true} so that sessions cookies are encrypted.
      */
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { false }, { true } });
+        return Arrays.asList(new Object[][]{{false}, {true}});
     }
 
     @Before
@@ -91,23 +95,23 @@ public class SessionImplTest {
         MockitoAnnotations.initMocks(this);
 
         when(
-                configuration
+            configuration
                 .getSessionExpireTime())
-                .thenReturn(Duration.seconds(10000));
+            .thenReturn(Duration.seconds(10000));
         when(
-                configuration.isSessionSendOnlyIfChanged())
-                .thenReturn(true);
+            configuration.isSessionSendOnlyIfChanged())
+            .thenReturn(true);
         when(
-                configuration.isSessionTransferredOverHttpsOnly())
-                .thenReturn(true);
+            configuration.isSessionTransferredOverHttpsOnly())
+            .thenReturn(true);
         when(
-                configuration.isSessionHttpOnly()).thenReturn(true);
+            configuration.isSessionHttpOnly()).thenReturn(true);
 
         when(configuration.getApplicationSecret())
-                .thenReturn(SecretGenerator.generateSecret());
+            .thenReturn(SecretGenerator.generateSecret());
 
         when(configuration.getCookiePrefix())
-                .thenReturn("NINJA");
+            .thenReturn("NINJA");
 
         when(clock.currentTimeMillis())
             .thenReturn(System.currentTimeMillis());
@@ -196,8 +200,8 @@ public class SessionImplTest {
     public void testNoHttpsOnlyWorks() throws Exception {
         // setup this testmethod
         when(
-                configuration.isSessionTransferredOverHttpsOnly())
-                .thenReturn(false);
+            configuration.isSessionTransferredOverHttpsOnly())
+            .thenReturn(false);
 
         Session sessionCookie = createNewSession();
 
@@ -242,7 +246,7 @@ public class SessionImplTest {
     public void testNoHttpOnlyWorks() throws Exception {
         // setup this testmethod
         when(
-                configuration.isSessionHttpOnly()).thenReturn(false);
+            configuration.isSessionHttpOnly()).thenReturn(false);
 
         Session sessionCookie = createNewSession();
 
@@ -283,12 +287,12 @@ public class SessionImplTest {
         // now we simulate a new request => the session storage will generate a
         // new cookie:
         Cookie newSessionCookie = Cookie.builder(
-                cookieCaptor.getValue().getName(),
-                cookieCaptor.getValue().getValue()).build();
+            cookieCaptor.getValue().getName(),
+            cookieCaptor.getValue().getValue()).build();
 
         // that will be returned by the httprequest...
         when(context.getCookie(cookieCaptor.getValue().getName())).thenReturn(
-                newSessionCookie);
+            newSessionCookie);
 
         // init new session from that cookie:
         Session sessionCookie2 = createNewSession();
@@ -306,7 +310,7 @@ public class SessionImplTest {
 
         // we did not set the cookie prefix
         when(configuration.getCookiePrefix())
-                .thenReturn(null);
+            .thenReturn(null);
 
         // stuff must break => ...
         Session sessionCookie = createNewSession();
@@ -439,7 +443,7 @@ public class SessionImplTest {
 
         assertNull(sessionCookie3.get(Session.EXPIRY_TIME_KEY));
     }
-    
+
     @Test
     public void testThatCookieDoesNotUseApplicationDomainWhenNotSet() {
         when(configuration.getCookieDomain()).thenReturn(null);
@@ -453,7 +457,7 @@ public class SessionImplTest {
         Cookie cookie = cookieCaptor.getValue();
         assertThat(cookie.getDomain(), CoreMatchers.equalTo(null));
     }
-    
+
     @Test
     public void testThatCookieUseApplicationDomain() {
         when(configuration.getCookieDomain()).thenReturn("domain.com");
@@ -467,55 +471,55 @@ public class SessionImplTest {
         Cookie cookie = cookieCaptor.getValue();
         assertThat(cookie.getDomain(), CoreMatchers.equalTo("domain.com"));
     }
-    
+
     @Test
     public void testThatCookieClearWorks() {
         String applicationCookieName = configuration.getCookiePrefix()
-                + GizmoConstant.SESSION_SUFFIX;
-        
+            + GizmoConstant.SESSION_SUFFIX;
+
         // First roundtrip
         Session sessionCookie = createNewSession();
         sessionCookie.init(context);
         sessionCookie.put("anykey", "anyvalue");
 
         Session sessionCookieWithValues = roundTrip(sessionCookie);
-        
+
         // Second roundtrip with cleared session
         sessionCookieWithValues.clear();
         when(context.hasCookie(applicationCookieName)).thenReturn(true);
-        
+
         // Third roundtrip
         String cookieValue = captureFinalCookie(sessionCookieWithValues);
         assertThat(cookieValue, not(containsString("anykey")));
-        
+
         assertThat(cookieCaptor.getValue().getDomain(), CoreMatchers.equalTo(null));
         assertThat(cookieCaptor.getValue().getMaxAge(), CoreMatchers.equalTo(0));
     }
-    
+
     @Test
     public void testThatCookieClearWorksWithApplicationDomain() {
-       String applicationCookieName = configuration.getCookiePrefix()
-                + GizmoConstant.SESSION_SUFFIX;
-       when(configuration.getCookieDomain()).thenReturn("domain.com");
-        
+        String applicationCookieName = configuration.getCookiePrefix()
+            + GizmoConstant.SESSION_SUFFIX;
+        when(configuration.getCookieDomain()).thenReturn("domain.com");
+
         // First roundtrip
         Session sessionCookie = createNewSession();
         sessionCookie.init(context);
         sessionCookie.put("anykey", "anyvalue");
 
         Session sessionCookieWithValues = roundTrip(sessionCookie);
-        
+
         // Second roundtrip with cleared session
         sessionCookieWithValues.clear();
         when(context.hasCookie(applicationCookieName)).thenReturn(true);
-        
+
         // Third roundtrip
         String cookieValue = captureFinalCookie(sessionCookieWithValues);
         assertThat(cookieValue, not(containsString("anykey")));
-        
+
         assertThat(cookieCaptor.getValue().getDomain(), CoreMatchers.equalTo("domain.com"));
         assertThat(cookieCaptor.getValue().getMaxAge(), CoreMatchers.equalTo(0));
-    }    
+    }
 
     @Test
     public void testSessionEncryptionKeysMismatch() {
@@ -547,7 +551,7 @@ public class SessionImplTest {
 
         // (4) now we change our application secret and thus our encryption key is modified
         when(configuration.getApplicationSecret())
-                .thenReturn(SecretGenerator.generateSecret());
+            .thenReturn(SecretGenerator.generateSecret());
         encryption = new CookieEncryption(configuration);
 
         // (5) creating new session with the same cookie above would result in clean session

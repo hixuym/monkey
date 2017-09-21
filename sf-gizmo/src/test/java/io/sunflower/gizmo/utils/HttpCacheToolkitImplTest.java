@@ -15,6 +15,17 @@
 
 package io.sunflower.gizmo.utils;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Optional;
+
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.Result;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -23,17 +34,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.Result;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpCacheToolkitImplTest {
@@ -55,47 +55,47 @@ public class HttpCacheToolkitImplTest {
 
         // test etag support:
         when(context.getHeader(HttpHeaderConstants.IF_NONE_MATCH)).thenReturn(
-                "etag_xyz");
+            "etag_xyz");
 
         // same etag => not modified
         assertFalse(httpCacheToolkit.isModified(Optional.of("etag_xyz"), Optional.of(0L), context));
         // new etag => modified
         assertTrue(httpCacheToolkit
-                .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
+            .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
 
         // remove etag to test modified timestamp caching:
         when(context.getHeader(HttpHeaderConstants.IF_NONE_MATCH)).thenReturn(
-                null);
+            null);
 
         // => no if modified since request => null
         when(context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE))
-                .thenReturn(null);
+            .thenReturn(null);
         assertTrue(httpCacheToolkit
-                .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
+            .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
 
         // => older timestamp => modified
         when(context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE))
-                .thenReturn("Thu, 01 Jan 1970 00:00:00 GMT");
+            .thenReturn("Thu, 01 Jan 1970 00:00:00 GMT");
         assertTrue(httpCacheToolkit.isModified(Optional.of("etag_xyz_modified"), Optional.of(1000L),
-                context));
+            context));
 
         // => same timestamp => not modified
         when(context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE))
-                .thenReturn("Thu, 01 Jan 1970 00:00:00 GMT");
+            .thenReturn("Thu, 01 Jan 1970 00:00:00 GMT");
         assertFalse(httpCacheToolkit.isModified(Optional.of("etag_xyz_modified"), Optional.of(0L),
-                context));
+            context));
 
         // => newer timestamp => not modified
         when(context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE))
-                .thenReturn("Thu, 01 Jan 1971 00:00:00 GMT");
+            .thenReturn("Thu, 01 Jan 1971 00:00:00 GMT");
         assertFalse(httpCacheToolkit.isModified(Optional.of("etag_xyz_modified"), Optional.of(0L),
-                context));
+            context));
 
         // => strange timestamp => modified
         when(context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE))
-                .thenReturn("STRANGE_TIMESTAMP");
+            .thenReturn("STRANGE_TIMESTAMP");
         assertTrue(httpCacheToolkit
-                .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
+            .isModified(Optional.of("etag_xyz_modified"), Optional.of(0L), context));
 
     }
 
@@ -120,33 +120,33 @@ public class HttpCacheToolkitImplTest {
         reset(result);
 
         when(
-                configuration.getHttpCacheMaxAge()).thenReturn(
-                "1234");
+            configuration.getHttpCacheMaxAge()).thenReturn(
+            "1234");
 
         httpCacheToolkit.addEtag(context, result, 0L);
         verify(result).addHeader(HttpHeaderConstants.CACHE_CONTROL,
-                "max-age=1234");
+            "max-age=1234");
 
         // if cache time = 0 => set to no-cache:
         reset(result);
 
         when(
-                configuration.getHttpCacheMaxAge()).thenReturn(
-                "0");
+            configuration.getHttpCacheMaxAge()).thenReturn(
+            "0");
 
         httpCacheToolkit.addEtag(context, result, 0L);
         verify(result).addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
 
-        
+
         ////////////////////////////////////////////////
         // Test Add etag header
         ////////////////////////////////////////////////
-        
+
         // do not add etag when not configured:
         reset(result);
 
         when(configuration.isEtagEnable()).thenReturn(
-                false);
+            false);
 
         httpCacheToolkit.addEtag(context, result, 0L);
         // not in prod => no-cache
@@ -154,45 +154,45 @@ public class HttpCacheToolkitImplTest {
         // IMPORTANT: etag not added
         verify(result, never()).addHeader(HttpHeaderConstants.ETAG, eq(anyString()));
 
-        
+
         // add etag when configured:
         reset(result);
 
         when(configuration.isEtagEnable()).thenReturn(
-                true);
+            true);
 
         httpCacheToolkit.addEtag(context, result, 1234L);
         // not in prod => no-cache
         verify(result).addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
         // IMPORTANT: etag added
         verify(result).addHeader(HttpHeaderConstants.ETAG, "\"1234\"");
-      
-        
+
+
         ////////////////////////////////////////////////
         // Test isModified 304 setting in result
         ////////////////////////////////////////////////
         // test lastmodified is added when etags match:
         when(context.getMethod()).thenReturn("GET");
         when(context.getHeader(HttpHeaderConstants.IF_NONE_MATCH)).thenReturn("\"1234\"");
-        
+
         reset(result);
         httpCacheToolkit.addEtag(context, result, 1234L);
-        
+
         verify(result).status(Result.SC_304_NOT_MODIFIED);
-    
-    
+
+
         // test lastmodified not added when stuff does not match
         // => but Last-Modified header is added
         when(context.getMethod()).thenReturn("GET");
         when(context.getHeader(HttpHeaderConstants.IF_NONE_MATCH)).thenReturn("\"12___34\"");
-        
+
         reset(result);
         httpCacheToolkit.addEtag(context, result, 1234L);
-        
+
         verify(result, never()).status(Result.SC_304_NOT_MODIFIED);
         verify(result).addHeader(HttpHeaderConstants.LAST_MODIFIED,
-                    DateUtil.formatForHttpHeader(1234L));
-    
+            DateUtil.formatForHttpHeader(1234L));
+
     }
 
 }

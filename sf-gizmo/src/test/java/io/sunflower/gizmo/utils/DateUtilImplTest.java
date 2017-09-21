@@ -15,11 +15,11 @@
 
 package io.sunflower.gizmo.utils;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.Date;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class DateUtilImplTest {
 
@@ -37,7 +37,7 @@ public class DateUtilImplTest {
         assertEquals("Wed, 05 Sep 2012 09:57:57 GMT", DateUtil.formatForHttpHeader(1346839077523L));
 
     }
-    
+
     @Test
     public void testParseHttpDateFormat() throws Exception {
         //some simple tests:
@@ -45,8 +45,8 @@ public class DateUtilImplTest {
         assertEquals(new Date(1346839077523L).toString(), DateUtil.parseHttpDateFormat("Wed, 05 Sep 2012 09:57:57 GMT").toString());
 
     }
-    
-    
+
+
     @Test
     public void testParseHttpDateFormatToDateTime() throws Exception {
         //some simple tests:
@@ -54,6 +54,6 @@ public class DateUtilImplTest {
 //        assertEquals(new DateTime(1346839077523L).toDate().toString(), DateUtil.parseHttpDateFormatToDateTime("Wed, 05 Sep 2012 09:57:57 GMT").toDate().toString());
 
     }
-    
-    
+
+
 }

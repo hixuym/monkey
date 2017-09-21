@@ -217,12 +217,13 @@ public class DiagnosticErrorBuilder {
     }
 
     /**
-     * Calculates the relative path of the source code file of a StackTrace
-     * element if its available. Uses the packageName of the class to create a relative path
-     * and appends the "filename" included with the stack trace element.
+     * Calculates the relative path of the source code file of a StackTrace element if its available. Uses the
+     * packageName of the class to create a relative path and appends the "filename" included with the stack trace
+     * element.
+     *
      * @param ste The stack trace element
-     * @return The relative path of the source code file or null if the information
-     *      wasn't available in the stack trace element.
+     * @return The relative path of the source code file or null if the information wasn't available in the stack trace
+     * element.
      */
     static public String getSourceCodeRelativePathForStackTraceElement(StackTraceElement ste) {
         String packageName = ste.getClassName();

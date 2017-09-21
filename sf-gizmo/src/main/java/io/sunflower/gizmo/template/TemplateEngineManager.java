@@ -18,9 +18,8 @@ import com.google.inject.ImplementedBy;
 import java.util.Set;
 
 /**
- * Template engine manager. Has a number of built in template engines, and
- * allows registering custom template engines by registering explicit bindings
- * of things that implement TemplateEngine.
+ * Template engine manager. Has a number of built in template engines, and allows registering custom template engines by
+ * registering explicit bindings of things that implement TemplateEngine.
  */
 @ImplementedBy(TemplateEngineManagerImpl.class)
 public interface TemplateEngineManager {
@@ -35,8 +34,7 @@ public interface TemplateEngineManager {
     /**
      * Find the template engine for the given content type
      *
-     * @param contentType
-     *            The content type
+     * @param contentType The content type
      * @return The template engine, if found
      */
     TemplateEngine getTemplateEngineForContentType(String contentType);

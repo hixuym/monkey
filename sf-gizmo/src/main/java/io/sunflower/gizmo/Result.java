@@ -106,30 +106,25 @@ public class Result {
     private String contentType;
 
     /**
-     * If content type is not set AND supported type does not match accept
-     * header of request this fallback will be used. If it is not set 
-     * a bad request exception will be thrown.
+     * If content type is not set AND supported type does not match accept header of request this fallback will be used.
+     * If it is not set a bad request exception will be thrown.
      */
     private Optional<String> fallbackContentType = Optional.of(APPLICATION_JSON);
 
     /**
-     * A list of content types this result will handle. If you got a general
-     * person object you can render it via application/json and application/xml
-     * without changing anything inside your controller for instance.
-     *
+     * A list of content types this result will handle. If you got a general person object you can render it via
+     * application/json and application/xml without changing anything inside your controller for instance.
      */
     private final List<String> supportedContentTypes = Lists.newArrayList();
 
     /**
-     * A newly created Result will handle those three result types out of 
-     * the box.
+     * A newly created Result will handle those three result types out of the box.
      */
     private final static List<String> DEFAULT_SUPPORTED_CONTENT_TYPES
         = ImmutableList.of(APPLICATION_JSON, APPLICATION_XML, TEXT_HTML);
 
     /**
-     * Something like: "utf-8" => will be appended to the content-type. eg
-     * "text/html; charset=utf-8"
+     * Something like: "utf-8" => will be appended to the content-type. eg "text/html; charset=utf-8"
      */
     private String charset;
 
@@ -140,12 +135,10 @@ public class Result {
     private String template;
 
     /**
-     * A result. Sets utf-8 as charset and status code by default. 
-     * Refer to {@link Result#SC_200_OK}, {@link Result#SC_204_NO_CONTENT} and so on
-     * for some short cuts to predefined results. 
+     * A result. Sets utf-8 as charset and status code by default. Refer to {@link Result#SC_200_OK}, {@link
+     * Result#SC_204_NO_CONTENT} and so on for some short cuts to predefined results.
      *
-     * @param statusCode The status code to set for the result. 
-     *                    Shortcuts to the code at: {@link Result#SC_200_OK}
+     * @param statusCode The status code to set for the result. Shortcuts to the code at: {@link Result#SC_200_OK}
      */
     public Result(int statusCode) {
 
@@ -162,19 +155,16 @@ public class Result {
     }
 
     /**
-     * This method handles two principal cases:
-     * 1) If the this.renderable of this result is null, the object passed is simply set as renderable 
-     *    for this Result
-     * 2) If the this.renderable of this result is not null an new map is generated as
-     *    object to render and both the former renderable and the new object added to the map. 
-     *    The former object is gets the class name in camelCase as key.
+     * This method handles two principal cases: 1) If the this.renderable of this result is null, the object passed is
+     * simply set as renderable for this Result 2) If the this.renderable of this result is not null an new map is
+     * generated as object to render and both the former renderable and the new object added to the map. The former
+     * object is gets the class name in camelCase as key.
      *
-     * If the converted camelCase key of this object already exists an {@link IllegalArgumentException}
-     * is being thrown.
+     * If the converted camelCase key of this object already exists an {@link IllegalArgumentException} is being
+     * thrown.
      *
      * @param object The object to add (either an arbitrary class or Renderable).
      * @return Result this result for chaining.
-     *
      */
     public Result render(Object object) {
 
@@ -223,8 +213,8 @@ public class Result {
     }
 
     /**
-     * Replaces the object being passed by this result to the rendering engine
-     * with this map. It will overwrite any previously set render(...) calls.
+     * Replaces the object being passed by this result to the rendering engine with this map. It will overwrite any
+     * previously set render(...) calls.
      *
      * @param mapToRender The map being passed to the templating engine.
      * @return This Result for chaining.
@@ -235,16 +225,12 @@ public class Result {
     }
 
     /**
-     * Handles following cases:
-     * 1) If this.renderable is null: a new HashMap is generated and this entry being added
-     *    to the map.
-     * 2) If this.renderable is a Map: the entry is added
-     * 3) If this.renderable is an object (not a renderable): a Map is generated and both
-     *    the former object and the new entry are being added.
-     * 4) If this.renderable is a Renderable: an {@link IllegalArgumentException} is thrown.
+     * Handles following cases: 1) If this.renderable is null: a new HashMap is generated and this entry being added to
+     * the map. 2) If this.renderable is a Map: the entry is added 3) If this.renderable is an object (not a
+     * renderable): a Map is generated and both the former object and the new entry are being added. 4) If
+     * this.renderable is a Renderable: an {@link IllegalArgumentException} is thrown.
      *
-     * If the entry key already exists in the map of this.renderable an {@link IllegalArgumentException}
-     * is thrown.
+     * If the entry key already exists in the map of this.renderable an {@link IllegalArgumentException} is thrown.
      *
      * @param entry The entry to add.
      * @return The result for further chaining.
@@ -297,8 +283,8 @@ public class Result {
     }
 
     /**
-     * Sets this renderable as object to render. Usually this renderable
-     * does rendering itself and will not call any templating engine. 
+     * Sets this renderable as object to render. Usually this renderable does rendering itself and will not call any
+     * templating engine.
      *
      * @param renderable The renderable that will handle everything after returing the result.
      * @return This result for chaining.
@@ -309,11 +295,10 @@ public class Result {
     }
 
     /**
-     * Implicitly generates a hashmap as object being rendered and adds
-     * this key, value pair. If the object being rendered is already a hashmap
-     * it simply adds this key value pair to it.
+     * Implicitly generates a hashmap as object being rendered and adds this key, value pair. If the object being
+     * rendered is already a hashmap it simply adds this key value pair to it.
      *
-     * @param key The key to use.
+     * @param key   The key to use.
      * @param value The value to use.
      * @return The Result for chaining.
      */
@@ -326,16 +311,13 @@ public class Result {
     }
 
     /**
-     * This method directly renders the byte array to the output. It
-     * completely bypasses any rendering engine.
+     * This method directly renders the byte array to the output. It completely bypasses any rendering engine.
      *
      * Thus you can render anything you want.
      *
-     * Chaining of resultRaw().resultRaw()... is NOT supported. Mixing with render()
-     * is NOT supported.
+     * Chaining of resultRaw().resultRaw()... is NOT supported. Mixing with render() is NOT supported.
      *
-     * It is always recommended to implement your own RenderingEngine OR
-     * use existing rendering engines.
+     * It is always recommended to implement your own RenderingEngine OR use existing rendering engines.
      *
      * @param bytes The bytes to render.
      * @return A result that will render the string directly to the output stream.
@@ -373,8 +355,7 @@ public class Result {
     }
 
     /**
-     * @return Charset of the current result that will be used. Will be "utf-8"
-     *         by default.
+     * @return Charset of the current result that will be used. Will be "utf-8" by default.
      */
     public String getCharset() {
         return charset;
@@ -390,14 +371,11 @@ public class Result {
     }
 
     /**
-     * Sets the content type. Must not contain any charset WRONG:
-     * "text/html; charset=utf8".
+     * Sets the content type. Must not contain any charset WRONG: "text/html; charset=utf8".
      *
      * If you want to set the charset use method {@link Result#charset(String)};
      *
-     * @param contentType
-     *            (without encoding) something like "text/html" or
-     *            "application/json"
+     * @param contentType (without encoding) something like "text/html" or "application/json"
      * @return The result for chaining.
      */
     public Result contentType(String contentType) {
@@ -406,9 +384,8 @@ public class Result {
     }
 
     /**
-     * Will add a content type to the list of supported content types.
-     * Calling that method two times with different content types will add both
-     * content types.
+     * Will add a content type to the list of supported content types. Calling that method two times with different
+     * content types will add both content types.
      *
      * @param contentTypeSupportedByThisResult The content type to add. Eg. "application/xml"
      * @return The result for chaining.
@@ -421,8 +398,7 @@ public class Result {
     /**
      * Will add the content types to the list of supported content types.
      *
-     * @param contentTypesSupportedByThisResult The content type to add. Eg. 
-     *        "application/xml", "applcation/json"
+     * @param contentTypesSupportedByThisResult The content type to add. Eg. "application/xml", "applcation/json"
      * @return The result for chaining.
      */
     public Result supportedContentTypes(String... contentTypesSupportedByThisResult) {
@@ -433,9 +409,8 @@ public class Result {
     /**
      * Returns immutable list of supported content types by this request.
      *
-     * @return immutable list of supported content types. Either the default
-    content types if no one has been set (html, json, xml) or the
-    content types set by the user and supportedContentType(...).
+     * @return immutable list of supported content types. Either the default content types if no one has been set (html,
+     * json, xml) or the content types set by the user and supportedContentType(...).
      */
     public List<String> supportedContentTypes() {
         if (supportedContentTypes.isEmpty()) {
@@ -446,20 +421,16 @@ public class Result {
     }
 
     /**
-     *
-     * @return The fallback content type. This will be the content type used
-     * when none of the supported content types matches the accept content
-     * type of the request.
+     * @return The fallback content type. This will be the content type used when none of the supported content types
+     * matches the accept content type of the request.
      */
     public Optional<String> fallbackContentType() {
         return fallbackContentType;
     }
 
     /**
-     *
-     * @param fallbackContentType The content type to use as fallback when
-     *                            neither contentType set and supportedContentTypes
-     *                            do not match request.
+     * @param fallbackContentType The content type to use as fallback when neither contentType set and
+     *                            supportedContentTypes do not match request.
      * @return This result for chaining.
      */
     public Result fallbackContentType(String fallbackContentType) {
@@ -513,9 +484,8 @@ public class Result {
     }
 
     /**
-     * Set the status of this result.
-     * Refer to {@link Result#SC_200_OK}, {@link Result#SC_204_NO_CONTENT} and so on
-     * for some short cuts to predefined results. 
+     * Set the status of this result. Refer to {@link Result#SC_200_OK}, {@link Result#SC_204_NO_CONTENT} and so on for
+     * some short cuts to predefined results.
      *
      * @param statusCode The status code. Result ({@link Result#SC_200_OK}) provides some helpers.
      * @return The result you executed the method on for method chaining.
@@ -530,8 +500,7 @@ public class Result {
     }
 
     /**
-     * Set the template to render. For instance 
-     * template("views/AnotherController/anotherview.ftl.html");
+     * Set the template to render. For instance template("views/AnotherController/anotherview.ftl.html");
      *
      * @param template The view to render. Eg. views/AnotherController/anotherview.ftl.html
      * @return The result that you executed the method on for chaining.
@@ -546,8 +515,7 @@ public class Result {
     }
 
     /**
-     * Set the Jackson JSON View.
-     * See <a href="http://wiki.fasterxml.com/JacksonJsonViews">http://wiki.fasterxml.com/JacksonJsonViews</a>
+     * Set the Jackson JSON View. See <a href="http://wiki.fasterxml.com/JacksonJsonViews">http://wiki.fasterxml.com/JacksonJsonViews</a>
      *
      * @param jsonView JSON serialization view class to use when rendering
      * @return The result that you executed the method on for chaining, with JSON view set
@@ -560,10 +528,8 @@ public class Result {
     /**
      * A redirect that uses 303 see other.
      *
-     * @param url
-     *            The url used as redirect target.
-     * @return A nicely configured result with status code 303 and the url set
-     *         as Location header.
+     * @param url The url used as redirect target.
+     * @return A nicely configured result with status code 303 and the url set as Location header.
      */
     public Result redirect(String url) {
 
@@ -576,10 +542,8 @@ public class Result {
     /**
      * A redirect that uses 307 see other.
      *
-     * @param url
-     *            The url used as redirect target.
-     * @return A nicely configured result with status code 307 and the url set
-     *         as Location header.
+     * @param url The url used as redirect target.
+     * @return A nicely configured result with status code 307 and the url set as Location header.
      */
     public Result redirectTemporary(String url) {
 
@@ -602,7 +566,8 @@ public class Result {
     /**
      * Set the content type of this result to {@link Result#APPLICATION_JSON}.
      *
-     * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATION_JSON}.
+     * @return the same result where you executed this method on. But the content type is now {@link
+     * Result#APPLICATION_JSON}.
      */
     public Result json() {
         contentType = APPLICATION_JSON;
@@ -612,7 +577,8 @@ public class Result {
     /**
      * Set the content type of this result to {@link Result#APPLICATION_JSONP}.
      *
-     * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATION_JSONP}.
+     * @return the same result where you executed this method on. But the content type is now {@link
+     * Result#APPLICATION_JSONP}.
      */
     public Result jsonp() {
         contentType = APPLICATION_JSONP;
@@ -632,7 +598,8 @@ public class Result {
     /**
      * Set the content type of this result to {@link Result#APPLICATION_XML}.
      *
-     * @return the same result where you executed this method on. But the content type is now {@link Result#APPLICATION_XML}.
+     * @return the same result where you executed this method on. But the content type is now {@link
+     * Result#APPLICATION_XML}.
      */
     public Result xml() {
         contentType = APPLICATION_XML;
@@ -642,12 +609,9 @@ public class Result {
     /**
      * This function sets
      *
-     * Cache-Control: no-cache, no-store
-     * Date: (current date)
-     * Expires: 1970
+     * Cache-Control: no-cache, no-store Date: (current date) Expires: 1970
      *
-     * => it therefore effectively forces the browser and every proxy in between
-     * not to cache content.
+     * => it therefore effectively forces the browser and every proxy in between not to cache content.
      *
      * See also https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers
      *

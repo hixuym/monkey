@@ -19,8 +19,7 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.validation.Validator;
 
 /**
- * Argument extractor that wraps another argument extractor and validates
- * its argument
+ * Argument extractor that wraps another argument extractor and validates its argument
  *
  * @author James Roper
  */

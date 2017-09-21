@@ -26,8 +26,7 @@ import io.sunflower.gizmo.utils.ResponseStreams;
 import io.sunflower.gizmo.validation.Validation;
 
 /**
- * A wrapped context. Useful if filters want to modify the context before
- * sending it on.
+ * A wrapped context. Useful if filters want to modify the context before sending it on.
  *
  * @author James Roper
  */

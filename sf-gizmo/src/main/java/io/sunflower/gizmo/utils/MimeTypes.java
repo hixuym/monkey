@@ -86,10 +86,8 @@ public class MimeTypes {
     }
 
     /**
-     * return the content-type from a file name. If none is found returning
-     * application/octet-stream<br/>
-     * For a text-based content-type, also return the encoding suffix eg.
-     * <em>"text/plain; charset=utf-8"</em>
+     * return the content-type from a file name. If none is found returning application/octet-stream<br/> For a
+     * text-based content-type, also return the encoding suffix eg. <em>"text/plain; charset=utf-8"</em>
      *
      * @param filename the file name
      * @return the content-type deduced from the file extension.
@@ -99,8 +97,7 @@ public class MimeTypes {
     }
 
     /**
-     * return the content-type from a file name.<br/>
-     * For a text-based content-type, also return the encoding suffix eg.
+     * return the content-type from a file name.<br/> For a text-based content-type, also return the encoding suffix eg.
      * <em>"text/plain; charset=utf-8"</em>
      *
      * @param filename           the file name

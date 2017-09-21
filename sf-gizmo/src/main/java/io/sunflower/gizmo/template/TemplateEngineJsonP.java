@@ -32,13 +32,10 @@ import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.utils.ResponseStreams;
 
 /**
- * JSONP engine. Outputs the given result as JSONP output: Javascript callback
- * with data as a parameter. Contains JSONP validation regular expression to
- * test the validness of the JSONP callback. The valid callbacks are simple
- * functions like myJsFunction or simple object path looking like:
- * something1.something2.something3 .
- * This is a subset of rules from the
- * following article:
+ * JSONP engine. Outputs the given result as JSONP output: Javascript callback with data as a parameter. Contains JSONP
+ * validation regular expression to test the validness of the JSONP callback. The valid callbacks are simple functions
+ * like myJsFunction or simple object path looking like: something1.something2.something3 . This is a subset of rules
+ * from the following article:
  *
  * @see <a href="http://tav.espians.com/sanitising-jsonp-callback-identifiers-for-security.html">Sanitizing JSONP
  * callbacks</a>
@@ -92,8 +89,7 @@ public class TemplateEngineJsonP implements TemplateEngine {
     }
 
     /**
-     * Tests whether the given function name is a valid JSONP function
-     * name/path.
+     * Tests whether the given function name is a valid JSONP function name/path.
      *
      * @param callback Callback value to test.
      * @return Whether the given function name is a valid JSONP function name/path.

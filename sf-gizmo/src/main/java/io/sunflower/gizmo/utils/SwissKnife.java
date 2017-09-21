@@ -19,8 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A helper class that contains a lot of random stuff that helps to get things
- * done.
+ * A helper class that contains a lot of random stuff that helps to get things done.
  *
  * @author ra
  */
@@ -29,8 +28,7 @@ public class SwissKnife {
     private static final Logger logger = LoggerFactory.getLogger(SwissKnife.class);
 
     /**
-     * Returns the lower class name. Eg. A class named MyObject will become
-     * "myObject".
+     * Returns the lower class name. Eg. A class named MyObject will become "myObject".
      *
      * @param object Object for which to return the lowerCamelCaseName
      * @return the lowerCamelCaseName of the Object

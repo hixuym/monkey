@@ -17,24 +17,16 @@ package io.sunflower.gizmo.utils;
 
 import com.google.common.collect.Maps;
 
-import java.util.HashSet;
-import java.util.Map;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.HashSet;
+import java.util.Map;
 
 import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
@@ -45,11 +37,23 @@ import io.sunflower.gizmo.Results;
 import io.sunflower.gizmo.Route;
 import io.sunflower.gizmo.bodyparser.BodyParserEngine;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
-import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.gizmo.params.ParamParsers;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.validation.Validation;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractContextTest {
@@ -71,7 +75,7 @@ public class AbstractContextTest {
 
     @Mock
     private BodyParserEngine bodyParserEngine;
-    
+
     @Mock
     private GizmoConfiguration configuration;
 
@@ -80,48 +84,48 @@ public class AbstractContextTest {
     @Before
     public void setUp() {
         abstractContext = new AbstractContextImpl(
-                bodyParserEngineManager, 
-                flashCookie,
+            bodyParserEngineManager,
+            flashCookie,
             configuration,
-                sessionCookie,
-                validation,
-                null,
-                new ParamParsers(new HashSet<>()));
-        
+            sessionCookie,
+            validation,
+            null,
+            new ParamParsers(new HashSet<>()));
+
         abstractContext.init("", "/");
     }
 
     @Test
     public void getRemoteAddr() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn("1.1.1.1").when(context).getRealRemoteAddr();
 
         assertThat(context.getRemoteAddr(), is("1.1.1.1"));
     }
-    
+
     @Test
     public void getRemoteAddrIgnoresXForwardHeader() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.FALSE);
         doReturn("1.1.1.1").when(context).getRealRemoteAddr();
         doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
 
         assertThat(context.getRemoteAddr(), is("1.1.1.1"));
     }
-    
+
     @Test
     public void getRemoteAddrUsesXForwardHeader() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
         doReturn("1.1.1.1").when(context).getRealRemoteAddr();
         doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
 
         assertThat(context.getRemoteAddr(), is("2.2.2.2"));
     }
-    
+
     @Test
     public void getRemoteAddrParsesXForwardedForIfMoreThanOneHostPresent() {
         AbstractContextImpl context = spy(abstractContext);
@@ -133,7 +137,7 @@ public class AbstractContextTest {
         //make sure this is correct
         assertThat(context.getRemoteAddr(), is("192.168.1.1"));
     }
-    
+
     @Test
     public void getRemoteAddrUsesFallbackIfXForwardedForIsNotValidInetAddr() {
         AbstractContextImpl context = spy(abstractContext);
@@ -148,10 +152,10 @@ public class AbstractContextTest {
     @Test
     public void addCookieViaResult() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         Cookie cookie0 = Cookie.builder("cookie0", "yum0").setDomain("domain").build();
         Cookie cookie1 = Cookie.builder("cookie1", "yum1").setDomain("domain").build();
-        
+
         // adding a cookie in the result will eventually trigger addCookie()...
         Result result = Results.html();
         result.addCookie(cookie0);
@@ -159,7 +163,7 @@ public class AbstractContextTest {
 
         doNothing().when(context).addCookie(cookie0);
         doNothing().when(context).addCookie(cookie1);
-        
+
         // finalize the headers => the cookies must be copied over to the servletcookies
         context.finalizeHeaders(result);
 
@@ -170,15 +174,15 @@ public class AbstractContextTest {
     @Test
     public void unsetCookieAddsCookieWithMaxAgeZero() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         Cookie cookie = Cookie.builder("cookie", "yummy").setDomain("domain").build();
-        
+
         ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass(Cookie.class);
-        
+
         doNothing().when(context).addCookie(argument.capture());
-        
+
         context.unsetCookie(cookie);
-        
+
         assertThat(argument.getValue().getMaxAge(), is(0));
     }
 
@@ -200,7 +204,7 @@ public class AbstractContextTest {
 
         assertEquals("parameter", context.getPathParameter("parameter"));
     }
-    
+
     @Test
     public void getPathParameterDecodingWorks() {
         AbstractContextImpl context = spy(abstractContext);
@@ -220,7 +224,7 @@ public class AbstractContextTest {
 
     @Test
     public void getPathParameterAsInteger() {
-    	  AbstractContextImpl context = spy(abstractContext);
+        AbstractContextImpl context = spy(abstractContext);
 
         //mock a parametermap:
         Map<String, String> parameterMap = Maps.newHashMap();
@@ -281,17 +285,17 @@ public class AbstractContextTest {
     @Test
     public void finalizeInAbstractContextSavesFlashSessionCookies() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         Result result = Results.json();
-        
+
         Cookie cookie = Cookie.builder("TEST", "value").build();
-        
+
         result.addCookie(cookie);
-        
+
         doNothing().when(context).addCookie(cookie);
-        
+
         ResponseStreams streams = context.finalizeHeaders(result);
-        
+
         // abstract finalizeHeaders does not return anything
         assertThat(streams, is(nullValue()));
 
@@ -303,7 +307,7 @@ public class AbstractContextTest {
     @Test
     public void getAcceptContentType() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(null).when(context).getHeader("accept");
         assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
 
@@ -332,7 +336,7 @@ public class AbstractContextTest {
     @Test
     public void getAcceptEncoding() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         String encoding = "compress, gzip";
         doReturn(encoding).when(context).getHeader("accept-encoding");
         assertEquals(encoding, context.getAcceptEncoding());
@@ -349,7 +353,7 @@ public class AbstractContextTest {
     @Test
     public void getAcceptLanguage() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         String language = "de";
         doReturn(language).when(context).getHeader("accept-language");
         assertEquals(language, context.getAcceptLanguage());
@@ -362,11 +366,11 @@ public class AbstractContextTest {
         doReturn(language).when(context).getHeader("accept-language");
         assertEquals(language, context.getAcceptLanguage());
     }
-    
+
     @Test
     public void getAcceptCharset() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         String charset = "UTF-8";
         doReturn(charset).when(context).getHeader("accept-charset");
         assertEquals(charset, context.getAcceptCharset());
@@ -379,16 +383,16 @@ public class AbstractContextTest {
         doReturn(charset).when(context).getHeader("accept-charset");
         assertEquals(charset, context.getAcceptCharset());
     }
-    
-    static public class Dummy { 
+
+    static public class Dummy {
         String name;
         Long count;
     }
-    
+
     @Test
     public void testParseBodyJsonWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn("application/json; charset=utf-8").when(context).getRequestContentType();
 
         when(bodyParserEngineManager.getBodyParserEngineForContentType("application/json")).thenReturn(bodyParserEngine);
@@ -399,11 +403,11 @@ public class AbstractContextTest {
         verify(bodyParserEngineManager).getBodyParserEngineForContentType("application/json");
         assertTrue(o instanceof Dummy);
     }
-    
+
     @Test
     public void testParseBodyPostWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(ContentTypes.APPLICATION_POST_FORM).when(context).getRequestContentType();
 
         when(bodyParserEngineManager.getBodyParserEngineForContentType(ContentTypes.APPLICATION_POST_FORM)).thenReturn(bodyParserEngine);
@@ -423,7 +427,7 @@ public class AbstractContextTest {
     @Test
     public void testIsJsonWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(ContentTypes.APPLICATION_JSON).when(context).getRequestContentType();
 
         assertTrue(context.isRequestJson());
@@ -432,7 +436,7 @@ public class AbstractContextTest {
     @Test
     public void testIsXmlWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(ContentTypes.APPLICATION_XML).when(context).getRequestContentType();
 
         assertTrue(context.isRequestXml());
@@ -441,7 +445,7 @@ public class AbstractContextTest {
     @Test
     public void testParseBodyXmlWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(ContentTypes.APPLICATION_XML).when(context).getRequestContentType();
 
         when(bodyParserEngineManager.getBodyParserEngineForContentType("application/xml")).thenReturn(bodyParserEngine);
@@ -456,7 +460,7 @@ public class AbstractContextTest {
     @Test
     public void testParseBodyWithUnkownContentTypeWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn(null).when(context).getRequestContentType();
 
         Object o = context.parseBody(Dummy.class);
@@ -467,7 +471,7 @@ public class AbstractContextTest {
     @Test
     public void testParseBodyWithUnknownRequestContentTypeWorks() {
         AbstractContextImpl context = spy(abstractContext);
-        
+
         doReturn("application/UNKNOWN").when(context).getRequestContentType();
 
         Object o = context.parseBody(Dummy.class);

@@ -92,7 +92,6 @@ public class Route {
      * Matches /index to /index or /me/1 to /person/{id}
      *
      * @return True if the actual route matches a raw rout. False if not.
-     *
      */
     public boolean matches(String httpMethod, String uri) {
         if (this.httpMethod.equalsIgnoreCase(httpMethod)) {
@@ -108,8 +107,7 @@ public class Route {
      *
      * If you want to decode you have to do it yourself.
      *
-     * Most likely with:
-     * http://docs.oracle.com/javase/6/docs/api/java/net/URI.html
+     * Most likely with: http://docs.oracle.com/javase/6/docs/api/java/net/URI.html
      *
      * @param uri The whole encoded uri.
      * @return A map with all parameters of that uri. Encoded in => encoded out.
@@ -133,12 +131,10 @@ public class Route {
     /**
      * Gets a raw uri like "/{name}/id/*" and returns "/([^/]*)/id/*."
      *
-     * Also handles regular expressions if defined inside routes:
-     * For instance "/users/{username: [a-zA-Z][a-zA-Z_0-9]}" becomes
-     * "/users/([a-zA-Z][a-zA-Z_0-9])"
+     * Also handles regular expressions if defined inside routes: For instance "/users/{username: [a-zA-Z][a-zA-Z_0-9]}"
+     * becomes "/users/([a-zA-Z][a-zA-Z_0-9])"
      *
-     * @return The converted regex with default matching regex - or the regex
-     *          specified by the user.
+     * @return The converted regex with default matching regex - or the regex specified by the user.
      */
     protected static String convertRawUriToRegex(String rawUri) {
 

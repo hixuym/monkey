@@ -14,8 +14,6 @@
  */
 package io.sunflower.gizmo.params;
 
-import static org.junit.Assert.assertThat;
-
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import io.sunflower.gizmo.validation.Validation;
+
+import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParamParsersTest {
@@ -145,7 +145,7 @@ public class ParamParsersTest {
         assertThat(shortParamParser.parseParameter("param1", "123", validation), Matchers.is((short) 123));
         assertThat(shortParamParser.parseParameter("param1", "-123", validation), Matchers.is((short) -123));
     }
-    
+
     @Test
     public void testLongParamParser() {
         ParamParsers.LongParamParser longParamParser = new ParamParsers.LongParamParser();

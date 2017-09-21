@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
  * This equals context.getHeader(...)
  *
  * @author James Moger
- *
  */
 @WithArgumentExtractor(ArgumentExtractors.HeaderExtractor.class)
 @Retention(RetentionPolicy.RUNTIME)

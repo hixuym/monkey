@@ -83,8 +83,8 @@ public class ControllerMethodInvoker {
     }
 
     /**
-     * Builds an invoker for a functional method.  Understands what parameters
-     * to guicey and extract based on type and annotations.
+     * Builds an invoker for a functional method.  Understands what parameters to guicey and extract based on type and
+     * annotations.
      *
      * @param functionalMethod     The method to be invoked
      * @param implementationMethod The method to use for determining what actual parameters and annotations to use for
@@ -360,12 +360,12 @@ public class ControllerMethodInvoker {
     }
 
     /**
-     * Just a little helper that makes it possible to handle things like
-     * myControllerMethod(@Param("param1") Optional<String> myValue)
+     * Just a little helper that makes it possible to handle things like myControllerMethod(@Param("param1")
+     * Optional<String> myValue)
      *
-     * It investigates the type parameter and allows to remember whether a type
-     * was wrapped in an Optional or not. It stores the "real" type of the parameter
-     * that the extractor should extract (String and not Optional in example above).
+     * It investigates the type parameter and allows to remember whether a type was wrapped in an Optional or not. It
+     * stores the "real" type of the parameter that the extractor should extract (String and not Optional in example
+     * above).
      */
     private static class MethodParameter {
         public boolean isOptional;

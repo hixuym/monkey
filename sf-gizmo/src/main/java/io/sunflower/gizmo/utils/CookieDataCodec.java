@@ -21,13 +21,10 @@ import java.util.Map;
 /**
  * CookieDataCodec and CookieDataCodecTest are imported from Play Framework.
  *
- * Enables us to use the same sessions as Play Framework if
- * the secret is the same.
+ * Enables us to use the same sessions as Play Framework if the secret is the same.
  *
- * Also really important because we want to make sure that our client
- * side session mechanism is widely used and stable.
- * We don't want to reinvent 
- * the wheel of securely encoding / decoding and signing cookie data.
+ * Also really important because we want to make sure that our client side session mechanism is widely used and stable.
+ * We don't want to reinvent the wheel of securely encoding / decoding and signing cookie data.
  *
  * All praise goes to Play Framework and their awesome work.
  */
@@ -35,7 +32,6 @@ public class CookieDataCodec {
     /**
      * @param map  the map to decode data into.
      * @param data the data to decode.
-     * @throws UnsupportedEncodingException
      */
     public static void decode(Map<String, String> map, String data) throws UnsupportedEncodingException {
         String[] keyValues = data.split("&");
@@ -50,7 +46,6 @@ public class CookieDataCodec {
     /**
      * @param map the data to encode.
      * @return the encoded data.
-     * @throws UnsupportedEncodingException
      */
     public static String encode(Map<String, String> map) throws UnsupportedEncodingException {
         StringBuilder data = new StringBuilder();

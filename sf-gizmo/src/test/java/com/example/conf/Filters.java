@@ -21,9 +21,9 @@ import io.sunflower.gizmo.application.ApplicationFilters;
 
 // Used in some testcases...
 public class Filters implements ApplicationFilters {
-    
-    Class<? extends Filter>  filterToAdd;
-    
+
+    Class<? extends Filter> filterToAdd;
+
     public Filters(Class<? extends Filter> filterToAdd) {
         this.filterToAdd = filterToAdd;
     }

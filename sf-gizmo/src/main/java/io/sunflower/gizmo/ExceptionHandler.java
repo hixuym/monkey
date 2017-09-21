@@ -29,8 +29,7 @@ public interface ExceptionHandler {
     /**
      * Should handle cases where no route can be found for a given request.
      *
-     * Should lead to a html error 404 - not found
-     * (and be used with the same mindset).
+     * Should lead to a html error 404 - not found (and be used with the same mindset).
      *
      * Usually used by onRouteRequest(...).
      */
@@ -39,8 +38,7 @@ public interface ExceptionHandler {
     /**
      * Should handle cases where access is unauthorized
      *
-     * Should lead to a html error 401 - unauthorized
-     * (and be used with the same mindset).
+     * Should lead to a html error 401 - unauthorized (and be used with the same mindset).
      *
      * By default, WWW-Authenticate is set to None.
      *
@@ -51,8 +49,7 @@ public interface ExceptionHandler {
     /**
      * Should handle cases where access is forbidden
      *
-     * Should lead to a html error 403 - forbidden
-     * (and be used with the same mindset).
+     * Should lead to a html error 403 - forbidden (and be used with the same mindset).
      *
      * Usually used by SecureFilter for instance(...).
      */

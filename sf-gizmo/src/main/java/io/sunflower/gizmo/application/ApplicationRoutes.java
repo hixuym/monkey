@@ -19,7 +19,6 @@ import io.sunflower.gizmo.Router;
  * Implement this file in directory conf/Routes.java to set up your routes...
  *
  * @author rbauer
- *
  */
 public interface ApplicationRoutes {
 

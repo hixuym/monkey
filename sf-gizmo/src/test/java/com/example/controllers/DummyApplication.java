@@ -20,9 +20,9 @@ import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 
 public class DummyApplication {
-    
+
     public Result dummyMethod() {
         return Results.ok();
     }
-    
+
 }

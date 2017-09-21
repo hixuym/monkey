@@ -15,12 +15,11 @@
 
 package io.sunflower.gizmo.template;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,11 +31,12 @@ import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 import io.sunflower.gizmo.utils.ResponseStreams;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for JSONP render.
@@ -98,14 +98,14 @@ public class TemplateEngineJsonPTest {
         assertEquals(TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE + "([123])", jsonp);
         verify(context).finalizeHeaders(result);
     }
-    
+
     @Test
     public void testIsThisASecureCallbackName() {
         assertTrue("simple function", TemplateEngineJsonP.isThisASecureCallbackName("onResponse"));
         assertTrue("object function", TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path"));
         assertTrue("object function", TemplateEngineJsonP.isThisASecureCallbackName("MyApp.Path.myCallback123"));
-        assertTrue("object function, path with numbers", 
-                TemplateEngineJsonP.isThisASecureCallbackName("MyApp123.Path789.myCallback123"));
+        assertTrue("object function, path with numbers",
+            TemplateEngineJsonP.isThisASecureCallbackName("MyApp123.Path789.myCallback123"));
         assertTrue("complex path", TemplateEngineJsonP.isThisASecureCallbackName("Ext.data.JsonP.callback4"));
         assertTrue("complex path, $ in identity.", TemplateEngineJsonP.isThisASecureCallbackName("$42.ajaxHandler"));
 
@@ -116,7 +116,7 @@ public class TemplateEngineJsonPTest {
         assertFalse("period in the end, complex path", TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path.path2."));
         assertFalse("two subsequent periods", TemplateEngineJsonP.isThisASecureCallbackName("MyPath..path.path2"));
         assertFalse("function call", TemplateEngineJsonP.isThisASecureCallbackName("alert(document.cookie)"));
-        
+
         // Cases not supported by the validator.
         assertFalse("simple array", TemplateEngineJsonP.isThisASecureCallbackName("somearray[12345]"));
         assertFalse("unicode characters", TemplateEngineJsonP.isThisASecureCallbackName("\\u0062oo"));

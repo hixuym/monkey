@@ -33,28 +33,29 @@ public interface GizmoConstant {
     String I18N_SYSTEM_FORBIDDEN_REQUEST_TEXT_DEFAULT = "Oops. That''s forbidden and all we know.";
 
     /**
-     * A cookie that helps Gizmo to set a default language.
-     * Usually resolves to a cookie called NINJA_LANG.
-     * The cookie then looks like: "NINJA_LANG=en"
+     * A cookie that helps Gizmo to set a default language. Usually resolves to a cookie called NINJA_LANG. The cookie
+     * then looks like: "NINJA_LANG=en"
      */
     String LANG_COOKIE_SUFFIX = "_LANG";
 
     /**
-     * Suffix used for Gizmo cookies. Usually results in cookies like
-     * "NINJA_SESSION
+     * Suffix used for Gizmo cookies. Usually results in cookies like "NINJA_SESSION
      */
     String SESSION_SUFFIX = "_SESSION";
 
     /**
-     * Suffix used for Gizmo cookies. Usually results in cookies like
-     * "NINJA_FLASH
+     * Suffix used for Gizmo cookies. Usually results in cookies like "NINJA_FLASH
      */
     String FLASH_SUFFIX = "_FLASH";
 
-    /** Used as spacer for instance in session cookie */
+    /**
+     * Used as spacer for instance in session cookie
+     */
     String UNI_CODE_NULL_ENTITY = "\u0000";
 
-    /** yea. utf-8 */
+    /**
+     * yea. utf-8
+     */
     String UTF_8 = "utf-8";
 
     // for validations.

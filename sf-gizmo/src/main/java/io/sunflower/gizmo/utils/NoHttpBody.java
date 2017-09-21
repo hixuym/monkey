@@ -16,13 +16,12 @@ package io.sunflower.gizmo.utils;
 /**
  * This is a marker class used to handle Results in {@link ResultHandler}.
  *
- * It causes the ResultHandler to render no body, just the header. Useful
- * when issuing a redirect and no corresponding content should be shown.
+ * It causes the ResultHandler to render no body, just the header. Useful when issuing a redirect and no corresponding
+ * content should be shown.
  *
  * You might want to use Result.NO_HTTP_BODY as static shortcut.
  *
  * @author ra
- *
  */
 public class NoHttpBody {
     // intentionally left empty. Just a marker class.

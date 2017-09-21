@@ -17,6 +17,7 @@ package io.sunflower.gizmo.bodyparser;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,10 +61,10 @@ public class BodyParserEngineJsonTest {
     @Test
     public void testValidJsonBody() {
         final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"}",
-                BodyParserEngineJsonTest.DATA_FIRSTNAME,
-                BodyParserEngineJsonTest.DATA_LASTNAME,
-                BodyParserEngineJsonTest.DATA_BIRTHYEAR,
-                BodyParserEngineJsonTest.DATA_LASTSEEN);
+            BodyParserEngineJsonTest.DATA_FIRSTNAME,
+            BodyParserEngineJsonTest.DATA_LASTNAME,
+            BodyParserEngineJsonTest.DATA_BIRTHYEAR,
+            BodyParserEngineJsonTest.DATA_LASTSEEN);
         final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
         final ObjectMapper jsonObjMapper = new ObjectMapper();
         final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
@@ -129,10 +130,10 @@ public class BodyParserEngineJsonTest {
     @Test
     public void testInvalidJsonBody() {
         final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"",
-                BodyParserEngineJsonTest.DATA_FIRSTNAME,
-                BodyParserEngineJsonTest.DATA_LASTNAME,
-                BodyParserEngineJsonTest.DATA_BIRTHYEAR,
-                BodyParserEngineJsonTest.DATA_LASTSEEN);
+            BodyParserEngineJsonTest.DATA_FIRSTNAME,
+            BodyParserEngineJsonTest.DATA_LASTNAME,
+            BodyParserEngineJsonTest.DATA_BIRTHYEAR,
+            BodyParserEngineJsonTest.DATA_LASTSEEN);
         final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
         final ObjectMapper jsonObjMapper = new ObjectMapper();
         final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
@@ -159,10 +160,10 @@ public class BodyParserEngineJsonTest {
     @Test
     public void testJsonBodyWithFullSpacesAndEndOfLines() {
         final String jsonDocument = String.format("  \n\n\n    {  \n    \"firstName\"  \n  :   \"%s\", \"lastName\"\n : \"%s\", \"birthYear\":%d,\n \"lastSeen\":\"%s\"}   ",
-                BodyParserEngineJsonTest.DATA_FIRSTNAME,
-                BodyParserEngineJsonTest.DATA_LASTNAME,
-                BodyParserEngineJsonTest.DATA_BIRTHYEAR,
-                BodyParserEngineJsonTest.DATA_LASTSEEN);
+            BodyParserEngineJsonTest.DATA_FIRSTNAME,
+            BodyParserEngineJsonTest.DATA_LASTNAME,
+            BodyParserEngineJsonTest.DATA_BIRTHYEAR,
+            BodyParserEngineJsonTest.DATA_LASTSEEN);
         final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
         final ObjectMapper jsonObjMapper = new ObjectMapper();
         final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
@@ -202,8 +203,8 @@ public class BodyParserEngineJsonTest {
     @Test
     public void testJsonBodyWithMissingVariables() {
         final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\"}",
-                BodyParserEngineJsonTest.DATA_FIRSTNAME,
-                BodyParserEngineJsonTest.DATA_LASTNAME);
+            BodyParserEngineJsonTest.DATA_FIRSTNAME,
+            BodyParserEngineJsonTest.DATA_LASTNAME);
         final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
         final ObjectMapper jsonObjMapper = new ObjectMapper();
         final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);

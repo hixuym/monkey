@@ -20,8 +20,8 @@ import java.util.Random;
 public class SecretGenerator {
 
     /**
-     * Generates a random String of length 64. This string is suitable
-     * as secret for your application (key "application.secret" in conf/application.conf).
+     * Generates a random String of length 64. This string is suitable as secret for your application (key
+     * "application.secret" in conf/application.conf).
      *
      * @return A string that can be used as "application.secret".
      */
@@ -36,8 +36,7 @@ public class SecretGenerator {
      *
      * Usually you want to use {@link SecretGenerator#generateSecret()}
      *
-     * @param random the random generator to use. Usually new Random(), but for testing you can
-     *          use a predefined seed.
+     * @param random the random generator to use. Usually new Random(), but for testing you can use a predefined seed.
      * @return A String suitable as random secret for eg signing a session.
      */
     protected static String generateSecret(Random random) {

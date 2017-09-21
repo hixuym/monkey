@@ -16,28 +16,25 @@
 package io.sunflower.gizmo;
 
 import com.google.common.collect.Lists;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
 
-import java.util.Map;
-
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.inject.Injector;
-import com.google.inject.Provider;
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
-import org.hamcrest.Matchers;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import org.junit.Before;
-import org.mockito.Mockito;
-
-import io.sunflower.gizmo.utils.MethodReference;
-
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,12 +42,12 @@ public class RouteBuilderImplTest {
 
     @Mock
     Injector injector;
-    
+
     @Mock
     GizmoConfiguration configuration;
-    
+
     RouteBuilderImpl routeBuilder;
-    
+
     @Before
     public void before() {
         this.routeBuilder = new RouteBuilderImpl();
@@ -83,14 +80,14 @@ public class RouteBuilderImplTest {
 
         assertTrue(buildRoute(routeBuilder).matches("OPTIONS", "/index"));
     }
-    
+
     @Test
     public void basisHEAD() {
         routeBuilder.HEAD().route("/index");
 
         assertTrue(buildRoute(routeBuilder).matches("HEAD", "/index"));
     }
-    
+
     @Test
     public void basicAnyHttpMethod() {
         routeBuilder.METHOD("PROPFIND").route("/index");
@@ -104,13 +101,13 @@ public class RouteBuilderImplTest {
 //
 //        assertTrue(buildRoute(routeBuilder).matches("WS", "/index"));
 //    }
-    
+
     @Test
     public void basicRoutesWithRegex() {
         routeBuilder.GET().route("/.*");
 
         Route route = buildRoute(routeBuilder);
-        
+
         // make sure the route catches everything
         assertTrue(route.matches("GET", "/index"));
         assertTrue(route.matches("GET", "/stylesheet.css"));
@@ -132,7 +129,7 @@ public class RouteBuilderImplTest {
         assertTrue(route.matches("GET", "/John/dashboard"));
 
         Map<String, String> map = route
-                .getPathParametersEncoded("/John/dashboard");
+            .getPathParametersEncoded("/John/dashboard");
 
         assertEquals(1, map.entrySet().size());
         assertEquals("John", map.get("name"));
@@ -163,7 +160,7 @@ public class RouteBuilderImplTest {
         Route route = buildRoute(routeBuilder);
         assertTrue(route.matches("GET", "/John/20/dashboard"));
         Map<String, String> map = route
-                .getPathParametersEncoded("/John/20/dashboard");
+            .getPathParametersEncoded("/John/20/dashboard");
         assertEquals(1, map.entrySet().size());
         assertEquals("20", map.get("id"));
 
@@ -224,7 +221,7 @@ public class RouteBuilderImplTest {
         Route route = buildRoute(routeBuilder);
         // this must match
         assertTrue(route
-                .matches("GET", "/blah/id/id2/id3/morestuff/at/the/end"));
+            .matches("GET", "/blah/id/id2/id3/morestuff/at/the/end"));
         // this should not match as the last "end" is missing
         assertFalse(route.matches("GET", "/blah/id/id2/id3/morestuff/at/the"));
     }
@@ -239,15 +236,15 @@ public class RouteBuilderImplTest {
 
         assertTrue(route.matches("GET", routeFromServer));
         assertEquals(1, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
         assertEquals("my.id", route.getPathParametersEncoded(routeFromServer)
-                .get("id"));
+            .get("id"));
 
         // and another slightly different route
         routeFromServer = "/blah/my.id/myname/should_not_match";
         assertFalse(route.matches("GET", routeFromServer));
         assertEquals(0, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
     }
 
     @Test
@@ -259,9 +256,9 @@ public class RouteBuilderImplTest {
         String routeFromServer = "/blah/my.id";
         assertTrue(route.matches("GET", "/blah/my.id"));
         assertEquals(1, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
         assertEquals("my.id", route.getPathParametersEncoded(routeFromServer)
-                .get("id"));
+            .get("id"));
     }
 
     @Test
@@ -294,17 +291,17 @@ public class RouteBuilderImplTest {
 
         assertTrue(route.matches("GET", routeFromServer));
         assertEquals(1, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
         assertEquals("my.id", route.getPathParametersEncoded(routeFromServer)
-                .get("id"));
+            .get("id"));
 
         // another slightly different route.
         routeFromServer = "/blah/my.id/";
         assertTrue(route.matches("GET", "/blah/my.id/"));
         assertEquals(1, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
         assertEquals("my.id", route.getPathParametersEncoded(routeFromServer)
-                .get("id"));
+            .get("id"));
 
         assertFalse(route.matches("GET", "/blah/my.id"));
 
@@ -322,16 +319,16 @@ public class RouteBuilderImplTest {
 
         assertTrue(route.matches("GET", routeFromServer));
         assertEquals(1, route.getPathParametersEncoded(routeFromServer)
-                .entrySet().size());
+            .entrySet().size());
         assertEquals("my%2fid", route.getPathParametersEncoded(routeFromServer)
-                .get("id"));
+            .get("id"));
 
     }
 
     @Test
     public void routeWithResult() {
         Context context = mock(Context.class);
-        
+
         String template = "/directly_result/stuff";
         routeBuilder.GET().route("/directly_result/route").with(() -> Results.html().template(template));
 
@@ -346,7 +343,7 @@ public class RouteBuilderImplTest {
     public void failedControllerRegistration() {
         routeBuilder.GET().route("/failure").with(MockController.class, "DoesNotExist");
 
-        try {	
+        try {
             Route route = routeBuilder.buildRoute(injector);
             assertTrue(route == null);
         } catch (Exception e) {
@@ -363,151 +360,155 @@ public class RouteBuilderImplTest {
         public Result execute() {
             return null;
         }
+
         public Result execute2(Context context) {
             return null;
         }
+
         static public Result execute3(Context context) {
             return null;
         }
     }
-    
+
     @Test
     public void routeToAnyInstanceMethodReference() throws Exception {
         routeBuilder.GET().route("/execute").with(MockController::execute);
         Route route = routeBuilder.buildRoute(injector);
-        
+
         assertTrue(route.matches("GET", "/execute"));
         assertThat(route.getControllerClass(), is(MockController.class));
         assertThat(route.getControllerMethod().getName(), is("execute"));
     }
-    
+
     @Test
     public void routeToSpecificInstanceMethodReference() throws Exception {
         MockController controller = new MockController();
-        
+
         routeBuilder.GET().route("/execute").with(controller::execute);
         Route route = routeBuilder.buildRoute(injector);
-        
+
         assertTrue(route.matches("GET", "/execute"));
         assertThat(route.getControllerClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
         assertThat(route.getControllerMethod().getName(), is("apply"));
     }
-    
+
     @Test
     public void routeToStaticMethodReference() throws Exception {
         routeBuilder.GET().route("/execute").with(MockController::execute3);
         Route route = routeBuilder.buildRoute(injector);
-        
+
         assertTrue(route.matches("GET", "/execute"));
         assertThat(route.getControllerClass(), is(MockController.class));
         assertThat(route.getControllerMethod().getName(), is("execute3"));
     }
-    
+
     @Test
     @SuppressWarnings("Convert2Lambda")
     public void routeToAnonymousClassReference() throws Exception {
-        
+
         routeBuilder.GET().route("/execute").with(new ControllerMethods.ControllerMethod0() {
             @Override
             public Result apply() {
                 return Results.redirect("/");
             }
         });
-        
+
         Route route = routeBuilder.buildRoute(injector);
-        
+
         assertTrue(route.matches("GET", "/execute"));
         assertThat(route.getControllerClass().isAnonymousClass(), is(true));
         assertThat(route.getControllerMethod().getName(), is("apply"));
     }
-    
+
     @Test
     public void routeToAnonymousMethodReference() throws Exception {
         routeBuilder.GET().route("/execute").with(() -> Results.redirect("/"));
         Route route = routeBuilder.buildRoute(injector);
-        
+
         assertTrue(route.matches("GET", "/execute"));
         // should be a class within this test class as a real lambda
         assertThat(route.getControllerClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
         assertThat(route.getControllerMethod().getName(), is("apply"));
     }
-    
-    
+
+
     private class DummyFilter implements Filter {
         int executed = 0;
+
         @Override
         public Result filter(FilterChain filterChain, Context context) {
             executed++;
             return filterChain.next(context);
         }
     }
-    
-    private class DummyFilter2 extends DummyFilter {}
-    
-    
+
+    private class DummyFilter2 extends DummyFilter {
+    }
+
+
     @Test
     public void testGlobalFilters() throws Exception {
         // given
         // different setup that uses com.example packages and thus reads the Filters there
         this.routeBuilder = new RouteBuilderImpl();
-                       
+
         DummyFilter dummyFilter = new DummyFilter();
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
         com.example.conf.Filters filters = new com.example.conf.Filters(DummyFilter.class);
-        
+
         Mockito.when(injector.getInstance(com.example.conf.Filters.class)).thenReturn(filters);
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
-        
+
         routeBuilder.GET().route("/").with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         Mockito.verify(injector).getInstance(com.example.conf.Filters.class);
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }
-    
-        
+
+
     @Test
     public void testThatGlobalFiltersInRouteReplaceGlobalFiltersInConfFilters() throws Exception {
         // DummyFilter is defined in conf.Filters, but .globalFilters(DummyFilter2.class) should
         // override that.
-        
+
         // given
         // different setup that uses com.example packages and thus reads the Filters there
         this.routeBuilder = new RouteBuilderImpl();
-                       
+
         DummyFilter2 dummyFilter2 = new DummyFilter2();
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
-        
+
         Mockito.when(injector.getProvider(DummyFilter2.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter2);
-        
+
         routeBuilder.GET().route("/").globalFilters(DummyFilter2.class).with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         Mockito.verify(injector, Mockito.never()).getProvider(DummyFilter.class);
         Mockito.verify(injector).getProvider(DummyFilter2.class);
         assertThat(dummyFilter2.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }
-    
+
     @Test
     public void testWithFiltersClass() throws Exception {
         // given        
@@ -515,23 +516,23 @@ public class RouteBuilderImplTest {
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
-        
+
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
-        
+
         routeBuilder.GET().route("/").filters(DummyFilter.class).with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }
-    
+
     @Test
     public void testWithFiltersList() throws Exception {
         // given        
@@ -539,23 +540,23 @@ public class RouteBuilderImplTest {
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
-        
+
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
-        
+
         routeBuilder.GET().route("/").filters(Lists.newArrayList(DummyFilter.class)).with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }
-    
+
     @Test
     public void testWithGlobalFiltersClass() throws Exception {
         // given        
@@ -563,23 +564,23 @@ public class RouteBuilderImplTest {
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
-        
+
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
-        
+
         routeBuilder.GET().route("/").globalFilters(DummyFilter.class).with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }
-    
+
     @Test
     public void testWithGlobalFiltersList() throws Exception {
         // given        
@@ -587,18 +588,18 @@ public class RouteBuilderImplTest {
         Result expectedResult = Mockito.mock(Result.class);
         Context context = Mockito.mock(Context.class);
         Provider filterProvider = Mockito.mock(Provider.class);
-        
+
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
-        
+
         routeBuilder.GET().route("/").globalFilters(Lists.newArrayList(DummyFilter.class)).with(() -> expectedResult);
         Route route = routeBuilder.buildRoute(injector);
 
         FilterChain filterChain = route.getFilterChain();
-        
+
         // when
         Result result = filterChain.next(context);
- 
+
         // then
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));

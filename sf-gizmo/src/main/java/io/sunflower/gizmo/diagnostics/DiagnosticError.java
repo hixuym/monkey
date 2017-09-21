@@ -21,9 +21,8 @@ import io.sunflower.gizmo.Renderable;
 import io.sunflower.gizmo.Result;
 
 /**
- * Represents an application error/exception that includes extra
- * information in order to diagnose it. Knows how to render itself as the
- * renderable inside a <code>Result</code>.
+ * Represents an application error/exception that includes extra information in order to diagnose it. Knows how to
+ * render itself as the renderable inside a <code>Result</code>.
  *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)
@@ -32,7 +31,9 @@ public class DiagnosticError implements Renderable {
 
     private final String title;
     private final Throwable throwable;
-    /** can either be from jar, classpath, or file */
+    /**
+     * can either be from jar, classpath, or file
+     */
     private final URI sourceLocation;
     private final List<String> sourceLines;
     private final int lineNumberOfSourceLines;

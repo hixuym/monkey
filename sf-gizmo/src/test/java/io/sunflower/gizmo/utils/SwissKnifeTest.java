@@ -15,12 +15,12 @@
 
 package io.sunflower.gizmo.utils;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class SwissKnifeTest {
-    
+
     // just for testing that camel case conversion stuff works
     public class MySuperTestObject {
     }
@@ -31,7 +31,7 @@ public class SwissKnifeTest {
         MySuperTestObject mySuperTestObject = new MySuperTestObject();
 
         assertEquals("mySuperTestObject",
-                SwissKnife.getRealClassNameLowerCamelCase(mySuperTestObject));
+            SwissKnife.getRealClassNameLowerCamelCase(mySuperTestObject));
 
     }
 

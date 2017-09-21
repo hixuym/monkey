@@ -21,7 +21,6 @@ import java.io.Writer;
  * Make sure to only write to either the OutputStream OR the Writer...
  *
  * @author rbauer
- *
  */
 public interface ResponseStreams {
 

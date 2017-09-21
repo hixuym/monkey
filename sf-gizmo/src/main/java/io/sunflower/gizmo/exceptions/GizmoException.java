@@ -14,15 +14,13 @@
 package io.sunflower.gizmo.exceptions;
 
 /**
- * A convenience unchecked exception. 
- * Allows you to wrap any exception (checked or unchecked) and throw it.
+ * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and throw it.
  *
  * Should signal a html error 400 - bad request (the client sent something strange).
  *
  * Useful inside controllers or filters for instance.
  *
  * Gizmo is supposed to pick it up and render an appropriate error page.
- *
  */
 public class GizmoException extends RuntimeException {
 

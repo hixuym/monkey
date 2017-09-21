@@ -1,20 +1,24 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo;
+
+import com.google.common.io.ByteStreams;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +27,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.io.ByteStreams;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import io.sunflower.gizmo.utils.HttpCacheToolkit;
 import io.sunflower.gizmo.utils.MimeTypes;
@@ -44,10 +41,10 @@ import io.sunflower.gizmo.utils.ResponseStreams;
 public class AssetsController {
 
     private final static Logger logger = LoggerFactory
-            .getLogger(AssetsController.class);
-    
+        .getLogger(AssetsController.class);
+
     public final static String ASSETS_DIR = "assets";
-    
+
     public final static String FILENAME_PATH_PARAM = "fileName";
 
     private final MimeTypes mimeTypes;
@@ -55,7 +52,7 @@ public class AssetsController {
     private final HttpCacheToolkit httpCacheToolkit;
 
     private final GizmoConfiguration configuration;
-    
+
     private final AssetsControllerHelper assetsControllerHelper;
 
     @Inject
@@ -71,19 +68,19 @@ public class AssetsController {
 
     /**
      * Serves resources from the assets directory of your application.
-     * 
+     *
      * For instance:
      * route: /robots.txt
      * A request to /robots.txt will be served from /assets/robots.txt.
-     * 
+     *
      * You can also use a path like the following to serve files:
      * route: /assets/{fileName: .*}
-     * 
+     *
      * matches
      * /assets/app/app.css 
      * and will return
      * /assets/app/app.css (from your jar).
-     * 
+     *
      */
     public Result serveStatic() {
         Object renderable = (Renderable) (context, result) -> {
@@ -93,15 +90,15 @@ public class AssetsController {
         };
         return Results.ok().render(renderable);
     }
-    
-    
+
+
     /**
      * Serves resources from the assets directory of your application.
-     * 
+     *
      * For instance:
      * A request to /robots.txt will be served from /assets/robots.txt.
      * Request to /public/css/app.css will be served from /assets/css/app.css.
-     * 
+     *
      */
     public Result serveWebJars() {
         Object renderable = new Renderable() {
@@ -114,7 +111,7 @@ public class AssetsController {
         };
         return Results.ok().render(renderable);
     }
-    
+
     private void streamOutUrlEntity(URL url, Context context, Result result) {
         // check if stream exists. if not print a notfound exception
         if (url == null) {
@@ -136,17 +133,17 @@ public class AssetsController {
 
                     // Try to set the mimetype:
                     String mimeType = mimeTypes.getContentType(context,
-                            url.getFile());
+                        url.getFile());
 
                     if (mimeType != null && !mimeType.isEmpty()) {
                         result.contentType(mimeType);
                     }
 
                     ResponseStreams responseStreams = context
-                            .finalizeHeadersWithoutFlashAndSessionCookie(result);
+                        .finalizeHeadersWithoutFlashAndSessionCookie(result);
 
                     try (InputStream inputStream = urlConnection.getInputStream();
-                        OutputStream outputStream = responseStreams.getOutputStream()) {
+                         OutputStream outputStream = responseStreams.getOutputStream()) {
                         ByteStreams.copy(inputStream, outputStream);
                     }
 
@@ -169,21 +166,21 @@ public class AssetsController {
         URL url;
 
         if (configuration.isDev()
-                // Testing that the file exists is important because
-                // on some dev environments we do not get the correct asset dir
-                // via System.getPropery("user.dir").
-                // In that case we fall back to trying to load from classpath
-                && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
+            // Testing that the file exists is important because
+            // on some dev environments we do not get the correct asset dir
+            // via System.getPropery("user.dir").
+            // In that case we fall back to trying to load from classpath
+            && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
             String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, false);
             File possibleFile = new File(
-                    assetsDirInDevModeWithoutTrailingSlash() 
-                            + File.separator 
-                            + finalNameWithoutLeadingSlash);
+                assetsDirInDevModeWithoutTrailingSlash()
+                    + File.separator
+                    + finalNameWithoutLeadingSlash);
             url = getUrlForFile(possibleFile);
         } else {
             String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
             url = this.getClass().getClassLoader()
-                    .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
+                .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
         }
 
         return url;
@@ -191,11 +188,11 @@ public class AssetsController {
 
     private URL getUrlForFile(File possibleFileInSrc) {
         if (possibleFileInSrc.exists() && !possibleFileInSrc.isDirectory()) {
-          try {
-            return possibleFileInSrc.toURI().toURL();
-          } catch(MalformedURLException malformedURLException) {
-            logger.error("Error in dev mode while streaming files from src dir. ", malformedURLException);
-          }
+            try {
+                return possibleFileInSrc.toURI().toURL();
+            } catch (MalformedURLException malformedURLException) {
+                logger.error("Error in dev mode while streaming files from src dir. ", malformedURLException);
+            }
         }
         return null;
     }
@@ -204,12 +201,12 @@ public class AssetsController {
      * Loads files from META-INF/resources directory.
      * This is compatible with Servlet 3.0 specification and allows
      * to use e.g. webjars project.
-     * 
+     *
      */
     private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
-        String finalNameWithoutLeadingSlash 
-                = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
-        URL url = null; 
+        String finalNameWithoutLeadingSlash
+            = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
+        URL url = null;
         url = this.getClass().getClassLoader().getResource("META-INF/resources/webjars/" + finalNameWithoutLeadingSlash);
         return url;
     }
@@ -229,14 +226,14 @@ public class AssetsController {
      * Used in dev mode: Streaming directly from src dir without jetty reload.
      */
     private String assetsDirInDevModeWithoutTrailingSlash() {
-        String srcDir  = System.
-                getProperty("user.dir")
-                + File.separator
-                + "src"
-                + File.separator
-                + "main"
-                + File.separator
-                + "java";
+        String srcDir = System.
+            getProperty("user.dir")
+            + File.separator
+            + "src"
+            + File.separator
+            + "main"
+            + File.separator
+            + "java";
         return srcDir + File.separator + ASSETS_DIR;
     }
 }

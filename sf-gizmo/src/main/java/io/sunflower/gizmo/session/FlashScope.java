@@ -20,37 +20,33 @@ import java.util.Map;
 import io.sunflower.gizmo.Context;
 
 /**
- * Flash Scope consists of two kinds of data: "current" and "outgoing". Current
- * data will only exist for the current request.  Outgoing data will exist for
- * the current and next request.  Neither should be considered secure or encrypted.
- * Its useful for communicating error messages or form submission results.
+ * Flash Scope consists of two kinds of data: "current" and "outgoing". Current data will only exist for the current
+ * request.  Outgoing data will exist for the current and next request.  Neither should be considered secure or
+ * encrypted. Its useful for communicating error messages or form submission results.
  *
- * A FlashScope is i18n aware and the values will be looked up for i18n translations
- * by template engines that support it.
+ * A FlashScope is i18n aware and the values will be looked up for i18n translations by template engines that support
+ * it.
  *
- * If the Flash Scope has outgoing data then a cookie will be sent to the client
- * and will be valid on the next request. Stuff in a flash cookie gets deleted
- * after the next request.
+ * If the Flash Scope has outgoing data then a cookie will be sent to the client and will be valid on the next request.
+ * Stuff in a flash cookie gets deleted after the next request.
  *
- * If an incoming request has a flash cookie then the data from it will be 
- * loaded as "current" flash data.  Unless you keep() those keys that data will
- * only be valid for the current request.
+ * If an incoming request has a flash cookie then the data from it will be loaded as "current" flash data.  Unless you
+ * keep() those keys that data will only be valid for the current request.
  */
 @ImplementedBy(FlashScopeImpl.class)
 public interface FlashScope {
 
     /**
-     * Intended for use by implementations only. Initializes the FlashScope from
-     * the context.  Gizmo will call this when a new request is being handled.
+     * Intended for use by implementations only. Initializes the FlashScope from the context.  Gizmo will call this when
+     * a new request is being handled.
      *
      * @param context The Gizmo context
      */
     void init(Context context);
 
     /**
-     * Intended for use by implementations only. Saves the FlashScope to the
-     * context.  Will write/delete cookies, etc. Gizmo will call this when a
-     * request will be completed.
+     * Intended for use by implementations only. Saves the FlashScope to the context.  Will write/delete cookies, etc.
+     * Gizmo will call this when a request will be completed.
      *
      * @param context The Gizmo context
      */
@@ -66,6 +62,7 @@ public interface FlashScope {
 
     /**
      * Removes a value completely from both "current" and "outgoing" flash data.
+     *
      * @param key The flash key
      * @return True if removed or false if it didn't exist
      */
@@ -73,60 +70,53 @@ public interface FlashScope {
 
     /**
      * Checks if the key exists in the "current" flash data.
+     *
      * @param key The flash key
      * @return True if the key exists or false if it doesn't
      */
     boolean contains(String key);
 
     /**
-     * Puts the key and value into only the "current" flash data.  Will NOT
-     * be written as a cookie and will only exist for the current request.
-     * Accessible via ${flash.key} in your html templating engine.
+     * Puts the key and value into only the "current" flash data.  Will NOT be written as a cookie and will only exist
+     * for the current request. Accessible via ${flash.key} in your html templating engine.
      *
-     * @param key The flash key
-     * @param value The i18n key used to retrieve value of that message
-     *      OR an already translated message (if your template engine supports it)
-     * @see #put(java.lang.String, java.lang.String) If you need the value for
-     *      both the current and next request
+     * @param key   The flash key
+     * @param value The i18n key used to retrieve value of that message OR an already translated message (if your
+     *              template engine supports it)
+     * @see #put(java.lang.String, java.lang.String) If you need the value for both the current and next request
      */
     void now(String key, String value);
 
     /**
-     * Puts the key and value into both "current" and "outgoing" flash data.
-     * Will be written as a cookie and available in the current and next request.
-     * If you only need the value in your current request its a good idea to
-     * use the <code>now()</code> method instead so you can eliminate the possibility
-     * of showing unexpected flash messages on the next request :-).
+     * Puts the key and value into both "current" and "outgoing" flash data. Will be written as a cookie and available
+     * in the current and next request. If you only need the value in your current request its a good idea to use the
+     * <code>now()</code> method instead so you can eliminate the possibility of showing unexpected flash messages on
+     * the next request :-).
      *
-     * @param key The flash key
-     * @param value The i18n key used to retrieve value of that message
-     *      OR an already translated message (if your template engine supports it)
-     * @see #now(java.lang.String, java.lang.String) If you only need the value
-     *      in your current request.
+     * @param key   The flash key
+     * @param value The i18n key used to retrieve value of that message OR an already translated message (if your
+     *              template engine supports it)
+     * @see #now(java.lang.String, java.lang.String) If you only need the value in your current request.
      */
     void put(String key, String value);
 
     /**
-     * Discards the key from the "outgoing" flash data but retains it in the
-     * "current" flash data.
+     * Discards the key from the "outgoing" flash data but retains it in the "current" flash data.
      *
      * @param key The flash key
-     * @see #keep(java.lang.String) To reverse this operation and keep the key
-     *      as part of the "outgoing" flash data.
+     * @see #keep(java.lang.String) To reverse this operation and keep the key as part of the "outgoing" flash data.
      */
     void discard(String key);
 
     /**
      * Discards all "outgoing" flash data but retains all "current" flash data.
      *
-     * @see #keep() To reverse this operation and keep all keys as part of the
-     *      "outgoing" flash data.
+     * @see #keep() To reverse this operation and keep all keys as part of the "outgoing" flash data.
      */
     void discard();
 
     /**
-     * Will copy the "current" flash data specified by the key into the "outgoing"
-     * flash data.
+     * Will copy the "current" flash data specified by the key into the "outgoing" flash data.
      *
      * @param key The flash key
      */
@@ -138,26 +128,26 @@ public interface FlashScope {
     void keep();
 
     /**
-     * Same as calling <code>flash.put("error", "your value");</code>.  The value
-     * will be added to both "current" and "outgoing" flash data.
+     * Same as calling <code>flash.put("error", "your value");</code>.  The value will be added to both "current" and
+     * "outgoing" flash data.
      *
-     * @param value The i18n key used to retrieve value of that message
-     *      OR an already translated message (if your template engine supports it)
+     * @param value The i18n key used to retrieve value of that message OR an already translated message (if your
+     *              template engine supports it)
      */
     void error(String value);
 
     /**
-     * Same as calling <code>flash.put("success", "your value");</code>.  The value
-     * will be added to both "current" and "outgoing" flash data.
+     * Same as calling <code>flash.put("success", "your value");</code>.  The value will be added to both "current" and
+     * "outgoing" flash data.
      *
-     * @param value The i18n key used to retrieve value of that message
-     *      OR an already translated message (if your template engine supports it)
+     * @param value The i18n key used to retrieve value of that message OR an already translated message (if your
+     *              template engine supports it)
      */
     void success(String value);
 
     /**
-     * Clears all "current" flash data.  If you need to ensure all "current"
-     * and "outgoing" flash data is deleted then call this as well as discard().
+     * Clears all "current" flash data.  If you need to ensure all "current" and "outgoing" flash data is deleted then
+     * call this as well as discard().
      */
     void clearCurrentFlashCookieData();
 

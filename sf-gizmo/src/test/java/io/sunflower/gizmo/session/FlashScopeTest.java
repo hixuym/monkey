@@ -15,16 +15,8 @@
 
 package io.sunflower.gizmo.session;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.Cookie;
-import io.sunflower.gizmo.GizmoConfiguration;
 import org.hamcrest.CoreMatchers;
-import static org.hamcrest.CoreMatchers.is;
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +25,17 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Cookie;
+import io.sunflower.gizmo.GizmoConfiguration;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import org.mockito.runners.MockitoJUnitRunner;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashScopeTest {
@@ -52,7 +52,7 @@ public class FlashScopeTest {
     @Before
     public void setUp() {
         when(configuration.getCookiePrefix())
-                .thenReturn("NINJA");
+            .thenReturn("NINJA");
     }
 
     @Test
@@ -89,13 +89,13 @@ public class FlashScopeTest {
         // verify some stuff on the set cookie
         assertEquals("NINJA_FLASH", cookieCaptor.getValue().getName());
         assertEquals("hello=flashScope", cookieCaptor.getValue()
-                .getValue());
+            .getValue());
         assertEquals(-1, cookieCaptor.getValue().getMaxAge());
 
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
 
     }
 
@@ -103,7 +103,7 @@ public class FlashScopeTest {
     public void testThatFlashCookieWorksAndIsActiveOnlyOneTime() {
         // setup this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
-                "hello=flashScope").build();
+            "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
 
         FlashScope flashCookie = new FlashScopeImpl(configuration);
@@ -126,19 +126,19 @@ public class FlashScopeTest {
         // the new flash messages must be there..
         // but the old has disappeared (flashScope):
         assertEquals(
-                "another+message=is+there...&yet+another+message=is+there...",
-                cookieCaptor.getValue().getValue());
+            "another+message=is+there...&yet+another+message=is+there...",
+            cookieCaptor.getValue().getValue());
         assertEquals(3, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(2, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
     }
 
     @Test
     public void testThatFlashCookieClearWorks() {
         // setup this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
-                "hello=flashScope").build();
+            "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
 
         FlashScope flashCookie = new FlashScopeImpl(configuration);
@@ -154,9 +154,9 @@ public class FlashScopeTest {
         flashCookie.clearCurrentFlashCookieData();
 
         assertEquals(0, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
 
     }
 
@@ -164,7 +164,7 @@ public class FlashScopeTest {
     public void testThatFlashCookieClearOfOutgoingWorks() {
         // setup this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
-                "hello=flashScope").build();
+            "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
 
         FlashScope flashCookie = new FlashScopeImpl(configuration);
@@ -180,9 +180,9 @@ public class FlashScopeTest {
         flashCookie.discard();
 
         assertEquals(2, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(0, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
 
     }
 
@@ -190,7 +190,7 @@ public class FlashScopeTest {
     public void testThatFlashCookieKeepWorks() {
         // setup this testmethod
         Cookie cookie = Cookie.builder("NINJA_FLASH",
-                "hello=flashScope").build();
+            "hello=flashScope").build();
         when(context.getCookie("NINJA_FLASH")).thenReturn(cookie);
 
         FlashScope flashCookie = new FlashScopeImpl(configuration);
@@ -202,17 +202,17 @@ public class FlashScopeTest {
 
         // make sure outgoing is 0
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(0, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
 
         // now call keep.
         flashCookie.keep();
         // => now both queues must be 1
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getCurrentFlashCookieData().size());
+            .getCurrentFlashCookieData().size());
         assertEquals(1, ((FlashScopeImpl) flashCookie)
-                .getOutgoingFlashCookieData().size());
+            .getOutgoingFlashCookieData().size());
 
     }
 
@@ -225,7 +225,7 @@ public class FlashScopeTest {
         // a cookie prefix:
         verify(configuration).getCookiePrefix();
     }
-    
+
     @Test
     public void testThatCookieUsesContextPath() {
         Mockito.when(context.getContextPath()).thenReturn("/my_context");
@@ -238,7 +238,7 @@ public class FlashScopeTest {
         Cookie cookie = cookieCaptor.getValue();
         Assert.assertThat(cookie.getPath(), CoreMatchers.equalTo("/my_context/"));
     }
-    
+
     @Test
     public void removeClearsBothCurrentAndOutgoing() {
         FlashScope flashScope = new FlashScopeImpl(configuration);

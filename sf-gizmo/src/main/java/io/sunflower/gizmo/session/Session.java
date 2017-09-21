@@ -46,24 +46,22 @@ public interface Session {
     Map<String, String> getData();
 
     /**
-     * @return a authenticity token (may generate a new one if the session
-     *         currently does not contain the token). 
+     * @return a authenticity token (may generate a new one if the session currently does not contain the token).
      */
     String getAuthenticityToken();
 
     /**
-     * To finally send this session to the user this method has to be called.
-     * It basically serializes the session into the header of the response.
+     * To finally send this session to the user this method has to be called. It basically serializes the session into
+     * the header of the response.
      *
      * @param context The context from where to deduct a potentially existing session.
      */
     void save(Context context);
 
     /**
-     * Puts key / value into the session. 
-     * PLEASE NOTICE: If value == null the key will be removed!
+     * Puts key / value into the session. PLEASE NOTICE: If value == null the key will be removed!
      *
-     * @param key Name of the key to store in the session.
+     * @param key   Name of the key to store in the session.
      * @param value The value to store in the session
      */
     void put(String key, String value);
@@ -90,23 +88,20 @@ public interface Session {
     void clear();
 
     /**
-     * Returns true if the session is empty, e.g. does not contain anything else
-     * than the timestamp key.
+     * Returns true if the session is empty, e.g. does not contain anything else than the timestamp key.
      *
-     * @return true if session does not contain any values / false if it contains
-     *         values.
+     * @return true if session does not contain any values / false if it contains values.
      */
     boolean isEmpty();
 
     /**
-     * Use an alternative expiry time, this can be used to implement a longer
-     * expiry time for 'remember me' style functionality.
+     * Use an alternative expiry time, this can be used to implement a longer expiry time for 'remember me' style
+     * functionality.
      *
      * The expiry time is persisted in the session.
      *
-     * @param expiryTimeMs the expiry time in milliseconds, set to null to remove
-     *                     the expiry time from the session and use the application
-     *                     default.
+     * @param expiryTimeMs the expiry time in milliseconds, set to null to remove the expiry time from the session and
+     *                     use the application default.
      */
     void setExpiryTime(Long expiryTimeMs);
 }

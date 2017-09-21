@@ -18,12 +18,11 @@ import io.sunflower.gizmo.Context;
 public interface BodyParserEngine {
 
     /**
-     * Invoke the parser and get back a Java object populated
-     * with the content of this request.
+     * Invoke the parser and get back a Java object populated with the content of this request.
      *
      * MUST BE THREAD SAFE TO CALL!
      *
-     * @param context The context
+     * @param context  The context
      * @param classOfT The class we expect
      * @return The object instance populated with all values from raw request
      */

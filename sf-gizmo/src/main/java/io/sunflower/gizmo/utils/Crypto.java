@@ -30,9 +30,7 @@ public class Crypto {
     private final String applicationSecret;
 
     /**
-     * Secret is a secret key. Usually something like:
-     * "Fxu6U5BTGIJZ06c8bD1xkhHc3Ct5JZXlst8tJ1K5uJJPaLdceDo6CUz0iWpjjQUY".
-     *
+     * Secret is a secret key. Usually something like: "Fxu6U5BTGIJZ06c8bD1xkhHc3Ct5JZXlst8tJ1K5uJJPaLdceDo6CUz0iWpjjQUY".
      */
     @Inject
     public Crypto(GizmoConfiguration configuration) {

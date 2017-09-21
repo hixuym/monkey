@@ -30,8 +30,7 @@ public interface BodyParserEngineManager {
     /**
      * Find the body parser engine for the given content type
      *
-     * @param contentType
-     *            The content type
+     * @param contentType The content type
      * @return The body parser engine, if found
      */
     BodyParserEngine getBodyParserEngineForContentType(String contentType);
