@@ -71,7 +71,7 @@ public class CommandTest {
                     "positional arguments:%n" +
                     "  {a,b,c}                Type to use%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n"
             ));
 
