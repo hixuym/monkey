@@ -51,6 +51,9 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
                 OptionalBinder.newOptionalBinder(binder(), Gizmo.class)
                     .setDefault().to(GizmoDefault.class).in(Singleton.class);
 
+                OptionalBinder.newOptionalBinder(binder(), ExceptionHandler.class)
+                    .setDefault().to(DefaultExceptionHandler.class).in(Singleton.class);
+
                 TaskManager taskManager = new TaskManager(environment.metrics());
 
                 taskManager.add(new GarbageCollectionTask());

@@ -21,3 +21,4 @@ build/
 .project
 .classpath
 *.swp
+logs

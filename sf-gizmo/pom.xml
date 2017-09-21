@@ -11,7 +11,7 @@
 
     <artifactId>sf-gizmo</artifactId>
 
-    <name>Sunflower Gizmo Restfull Module</name>
+    <name>Sunflower Gizmo Core Module</name>
 
     <dependencyManagement>
         <dependencies>

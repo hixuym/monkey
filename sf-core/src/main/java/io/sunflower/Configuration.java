@@ -60,6 +60,7 @@ import io.sunflower.metrics.MetricsFactory;
  * @see <a href="http://www.yaml.org/YAML_for_ruby.html">YAML Cookbook</a>
  */
 public class Configuration {
+
     @Valid
     private LoggingFactory logging;
 

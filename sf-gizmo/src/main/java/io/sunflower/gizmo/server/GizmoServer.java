@@ -14,13 +14,20 @@
 package io.sunflower.gizmo.server;
 
 import com.google.common.base.Strings;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.net.ssl.SSLContext;
 
@@ -43,11 +50,14 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.BlockingHandler;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.RequestDumpingHandler;
+import io.undertow.server.handlers.accesslog.AccessLogHandler;
+import io.undertow.server.handlers.accesslog.AccessLogReceiver;
+import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
 import io.undertow.server.handlers.form.EagerFormParsingHandler;
 import io.undertow.server.handlers.form.FormParserFactory;
 
 /**
- * Ninja standalone based on Undertow.
+ * sunflower standalone based on Undertow.
  */
 public class GizmoServer extends ContainerLifeCycle {
 
@@ -56,13 +66,9 @@ public class GizmoServer extends ContainerLifeCycle {
     private final GizmoConfiguration configuration;
     private final Environment environment;
 
-    protected Undertow undertow;
-    protected boolean undertowStarted;                      // undertow fails on stop() if start() never called
+    private Undertow undertow;
+    private boolean undertowStarted;                      // undertow fails on stop() if start() never called
 
-    protected HttpHandler applicationHandler;
-    private HttpHandler adminHandler;
-
-    protected GizmoHttpHandler gizmoHttpHandler;
     protected SSLContext sslContext;
 
     private final Gizmo gizmo;
@@ -88,10 +94,10 @@ public class GizmoServer extends ContainerLifeCycle {
 
         this.undertow = createUndertow();
         String version = undertow.getClass().getPackage().getImplementationVersion();
-        logger.info("Trying to start undertow v{} {}", version, configuration.getLoggableIdentifier());
+        logger.info("Trying to start undertow v{}", version);
         this.undertow.start();
         undertowStarted = true;
-        logger.info("Started undertow v{} {}", version, configuration.getLoggableIdentifier());
+        logger.info("Started undertow v{}", version);
     }
 
     private void initRoutes() {
@@ -111,9 +117,9 @@ public class GizmoServer extends ContainerLifeCycle {
         this.gizmo.onFrameworkShutdown();
 
         if (this.undertow != null && undertowStarted) {
-            logger.info("Trying to stop undertow {}", configuration.getLoggableIdentifier());
+            logger.info("Trying to stop undertow.");
             this.undertow.stop();
-            logger.info("Stopped undertow {}", configuration.getLoggableIdentifier());
+            logger.info("Stopped undertow.");
             this.undertow = null;
         }
     }
@@ -128,22 +134,22 @@ public class GizmoServer extends ContainerLifeCycle {
 
         undertowBuilder.setServerOption(UndertowOptions.ENABLE_HTTP2, configuration.isHttp2Enabled());
 
-        this.applicationHandler = createApplicationHandler();
+        HttpHandler applicationHandler = createApplicationHandler();
 
         for (ConnectorFactory connectorFactory : configuration.getApplicationConnectors()) {
             Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
 
-            listenerBuilder.setRootHandler(applicationHandler);
+            listenerBuilder.setRootHandler(addAccessLogWrapper(applicationHandler));
 
             undertowBuilder.addListener(listenerBuilder);
         }
 
-        this.adminHandler = createAdminHandler(environment);
+        HttpHandler adminHandler = createAdminHandler(environment);
 
         for (ConnectorFactory connectorFactory : configuration.getAdminConnectors()) {
             Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
 
-            listenerBuilder.setRootHandler(adminHandler);
+            listenerBuilder.setRootHandler(addAccessLogWrapper(adminHandler));
 
             undertowBuilder.addListener(listenerBuilder);
         }
@@ -151,8 +157,7 @@ public class GizmoServer extends ContainerLifeCycle {
         return undertowBuilder.build();
     }
 
-    // sub-classes may be interested in these
-    protected HttpHandler createAdminHandler(Environment environment) {
+    private HttpHandler createAdminHandler(Environment environment) {
 
         TaskManager manager = injector.getInstance(TaskManager.class);
 
@@ -173,14 +178,14 @@ public class GizmoServer extends ContainerLifeCycle {
         return h;
     }
 
-    protected HttpHandler createApplicationHandler() {
+    private HttpHandler createApplicationHandler() {
         // root handler for ninja app
-        this.gizmoHttpHandler = new GizmoHttpHandler();
+        GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
 
         // slipstream injector into undertow handler BEFORE server starts
-        this.gizmoHttpHandler.init(injector, configuration.getApplicationContextPath());
+        gizmoHttpHandler.init(injector, configuration.getApplicationContextPath());
 
-        HttpHandler h = this.gizmoHttpHandler;
+        HttpHandler h = gizmoHttpHandler;
 
         // wireshark enabled?
         if (configuration.isTraceEnabled()) {
@@ -204,5 +209,36 @@ public class GizmoServer extends ContainerLifeCycle {
         }
 
         return h;
+    }
+
+    private HttpHandler addAccessLogWrapper(HttpHandler httpHandler) {
+        String format = configuration.getAccessLogFormat();
+
+        if (StringUtils.isNotEmpty(format)) {
+
+            ExecutorService executorService = environment.lifecycle().executorService("AccessLog-pool-%d")
+                .maxThreads(1)
+                .minThreads(1)
+                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+                .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
+                .build();
+
+            Path log = Paths.get(configuration.getAccessLogPath());
+
+            if (!log.toFile().exists()) {
+                log.toFile().mkdirs();
+            }
+
+            AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
+                .setLogBaseName("access")
+                .setLogWriteExecutor(executorService)
+                .setOutputDirectory(log)
+                .setRotate(configuration.isAccessLogRotate())
+                .build();
+
+            return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
+        }
+
+        return httpHandler;
     }
 }

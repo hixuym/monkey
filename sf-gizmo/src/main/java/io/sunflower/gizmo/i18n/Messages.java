@@ -111,17 +111,4 @@ public interface Messages {
                           Context context,
                           Optional<Result> result,
                           Object... params);
-
-    /**
-     * Returns all messages for the default language in that context / result.
-     *
-     * Does NOT format any MessageFormat values. You have to do that yourself in
-     * the controller logic most likely.
-     *
-     * @param context The context
-     * @param result  The result - bay be absent
-     * @return A map with all messages as <String, String>
-     */
-    Map<Object, Object> getAll(Context context, Optional<Result> result);
-
 }

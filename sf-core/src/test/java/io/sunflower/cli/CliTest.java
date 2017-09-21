@@ -167,7 +167,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n" +
                     "  -v, --version          show the application version and exit%n"
             ));
@@ -188,7 +188,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n" +
                     "  -v, --version          show the application version and exit%n"
             ));
@@ -209,7 +209,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n" +
                     "  -v, --version          show the application version and exit%n"
             ));
@@ -233,7 +233,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  file                   application configuration file%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n"
             ));
 
@@ -258,7 +258,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  file                   application configuration file%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n"
             ));
 
@@ -284,7 +284,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n" +
                     "  -v, --version          show the application version and exit%n"
             ));
@@ -308,7 +308,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  file                   application configuration file%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n"
             ));
     }
@@ -329,7 +329,7 @@ public class CliTest {
                     "positional arguments:%n" +
                     "  {check,custom}         available commands%n" +
                     "%n" +
-                    "optional arguments:%n" +
+                    "named arguments:%n" +
                     "  -h, --help             show this help message and exit%n" +
                     "  -v, --version          show the application version and exit%n"
             ));

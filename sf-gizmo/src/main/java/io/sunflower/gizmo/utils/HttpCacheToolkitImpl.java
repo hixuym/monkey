@@ -86,7 +86,7 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
         // Use etag on demand:
         String etag = null;
 
-        if (configuration.isUseETag()) {
+        if (configuration.isEtagEnable()) {
             // ETag right now is only lastModified long.
             // maybe we change that in the future.
             etag = "\""

@@ -13,6 +13,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import io.sunflower.gizmo.utils.Mode;
+import io.sunflower.gizmo.utils.SecretGenerator;
 import io.sunflower.undertow.ConnectorFactory;
 import io.sunflower.undertow.HttpConnectorFactory;
 import io.sunflower.util.Duration;
@@ -22,48 +24,41 @@ import io.sunflower.util.Duration;
  */
 public class GizmoConfiguration {
 
-    private String cookieSuffix = "SF_LANG";
+    private String applicationContextPath;
+    private String adminContextPath;
+
+    private String applicationSecret = SecretGenerator.generateSecret();
+    private List<String> applicationLangs = Arrays.asList("zh", "en");
+
+
     private String cookieDomain = "sunflower.io";
     private String cookiePrefix = "SF";
     private boolean cookieEncrypted = false;
 
-    private String httpCacheMaxAge = "3600";
-
-    @NotNull
-    private String applicationSecret;
-    private String applicationModulesBasePackage;
-    private String applicationContextPath;
-    private String adminContextPath;
-
-    private List<String> applicationLangs = Arrays.asList("zh", "en");
-
     private Duration sessionExpireTime = Duration.hours(1);
-
     private boolean sessionSendOnlyIfChanged = true;
     private boolean sessionTransferredOverHttpsOnly = false;
     private boolean sessionHttpOnly = true;
 
-    private boolean useETag = true;
+    private String httpCacheMaxAge = "3600";
+    private boolean etagEnable = true;
 
-    private String host = "127.0.0.1";
-
-    private Integer port = 8080;
-    private Integer sslPort = -1;
-
-    private String sslKeystoreUri;
-    private String sslKeystorePass;
-    private String sslTruststoreUri;
-    private String sslTruststorePass;
     private Map<String, String> mimetypes = new HashMap<>();
-    private Duration idleTimeout;
-
-    private boolean http2Enabled = false;
-    private boolean traceEnabled = false;
 
     private String uploadTempFolder;
     private String jsonpCallbackParam = "callback";
     private boolean diagnosticsEnabled = true;
     private boolean usageOfXForwardedHeaderEnabled = false;
+
+    private Mode mode = Mode.prod;
+
+    // undertow conf
+    private boolean http2Enabled = false;
+    private boolean traceEnabled = false;
+
+    private String accessLogFormat;
+    private boolean accessLogRotate = true;
+    private String accessLogPath = "./logs";
 
     @Valid
     @NotNull
@@ -72,16 +67,6 @@ public class GizmoConfiguration {
     @Valid
     @NotNull
     private List<ConnectorFactory> adminConnectors = Collections.singletonList(HttpConnectorFactory.admin());
-
-    @JsonProperty
-    public String getCookieSuffix() {
-        return cookieSuffix;
-    }
-
-    @JsonProperty
-    public void setCookieSuffix(String cookieSuffix) {
-        this.cookieSuffix = cookieSuffix;
-    }
 
     @JsonProperty
     public String getCookieDomain() {
@@ -164,83 +149,13 @@ public class GizmoConfiguration {
     }
 
     @JsonProperty
-    public boolean isUseETag() {
-        return useETag;
+    public boolean isEtagEnable() {
+        return etagEnable;
     }
 
     @JsonProperty
-    public void setUseETag(boolean useETag) {
-        this.useETag = useETag;
-    }
-
-    @JsonProperty
-    public String getHost() {
-        return host;
-    }
-
-    @JsonProperty
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    @JsonProperty
-    public Integer getPort() {
-        return port;
-    }
-
-    @JsonProperty
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    @JsonProperty
-    public Integer getSslPort() {
-        return sslPort;
-    }
-
-    @JsonProperty
-    public void setSslPort(Integer sslPort) {
-        this.sslPort = sslPort;
-    }
-
-    @JsonProperty
-    public String getSslKeystoreUri() {
-        return sslKeystoreUri;
-    }
-
-    @JsonProperty
-    public void setSslKeystoreUri(String sslKeystoreUri) {
-        this.sslKeystoreUri = sslKeystoreUri;
-    }
-
-    @JsonProperty
-    public String getSslKeystorePass() {
-        return sslKeystorePass;
-    }
-
-    @JsonProperty
-    public void setSslKeystorePass(String sslKeystorePass) {
-        this.sslKeystorePass = sslKeystorePass;
-    }
-
-    @JsonProperty
-    public String getSslTruststoreUri() {
-        return sslTruststoreUri;
-    }
-
-    @JsonProperty
-    public void setSslTruststoreUri(String sslTruststoreUri) {
-        this.sslTruststoreUri = sslTruststoreUri;
-    }
-
-    @JsonProperty
-    public String getSslTruststorePass() {
-        return sslTruststorePass;
-    }
-
-    @JsonProperty
-    public void setSslTruststorePass(String sslTruststorePass) {
-        this.sslTruststorePass = sslTruststorePass;
+    public void setEtagEnable(boolean etagEnable) {
+        this.etagEnable = etagEnable;
     }
 
     @JsonProperty
@@ -251,16 +166,6 @@ public class GizmoConfiguration {
     @JsonProperty
     public void setMimetypes(Map<String, String> mimetypes) {
         this.mimetypes = mimetypes;
-    }
-
-    @JsonProperty
-    public Duration getIdleTimeout() {
-        return idleTimeout;
-    }
-
-    @JsonProperty
-    public void setIdleTimeout(Duration idleTimeout) {
-        this.idleTimeout = idleTimeout;
     }
 
     @JsonProperty
@@ -298,71 +203,75 @@ public class GizmoConfiguration {
         return applicationConnectors;
     }
 
+    @JsonProperty
     public String getCookiePrefix() {
         return cookiePrefix;
     }
 
+    @JsonProperty
     public void setCookiePrefix(String cookiePrefix) {
         this.cookiePrefix = cookiePrefix;
     }
 
+    @JsonProperty
     public List<String> getApplicationLangs() {
         return applicationLangs;
     }
 
+    @JsonProperty
     public String getApplicationContextPath() {
         return applicationContextPath;
     }
 
+    @JsonProperty
     public void setApplicationContextPath(String applicationContextPath) {
         this.applicationContextPath = applicationContextPath;
     }
 
+    @JsonProperty
     public String getAdminContextPath() {
         return adminContextPath;
     }
 
+    @JsonProperty
     public void setAdminContextPath(String adminContextPath) {
         this.adminContextPath = adminContextPath;
     }
 
+    @JsonProperty
     public boolean isUsageOfXForwardedHeaderEnabled() {
         return usageOfXForwardedHeaderEnabled;
     }
 
+    @JsonProperty
     public void setUsageOfXForwardedHeaderEnabled(boolean usageOfXForwardedHeaderEnabled) {
         this.usageOfXForwardedHeaderEnabled = usageOfXForwardedHeaderEnabled;
     }
 
-    public String getApplicationModulesBasePackage() {
-        return applicationModulesBasePackage;
-    }
-
-    public void setApplicationModulesBasePackage(String applicationModulesBasePackage) {
-        this.applicationModulesBasePackage = applicationModulesBasePackage;
-    }
-
+    @JsonProperty
     public void setApplicationLangs(List<String> applicationLangs) {
         this.applicationLangs = applicationLangs;
     }
 
     @JsonIgnore
     public boolean isProd() {
-        return true;
-    }
-    @JsonIgnore
-    public boolean isDev() { return false; }
-    @JsonIgnore
-    public boolean isTest() { return false; }
-
-    @JsonIgnore
-    public boolean isPortEnabled() {
-        return this.port != null && this.port > 0;
+        return Mode.prod == this.mode;
     }
 
     @JsonIgnore
-    public boolean isSslPortEnabled() {
-        return this.sslPort != null && this.sslPort > 0;
+    public boolean isDev() { return this.mode == Mode.dev; }
+
+    @JsonIgnore
+    public boolean isTest() { return this.mode == Mode.test; }
+
+    @JsonProperty
+    public Mode getMode() {
+        return mode;
+    }
+
+    @JsonProperty
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 
     @JsonProperty
@@ -380,47 +289,51 @@ public class GizmoConfiguration {
         this.adminConnectors = adminConnectors;
     }
 
+    @JsonProperty
     public boolean isHttp2Enabled() {
         return http2Enabled;
     }
 
+    @JsonProperty
     public void setHttp2Enabled(boolean http2Enabled) {
         this.http2Enabled = http2Enabled;
     }
 
+    @JsonProperty
     public boolean isTraceEnabled() {
         return traceEnabled;
     }
 
+    @JsonProperty
     public void setTraceEnabled(boolean traceEnabled) {
         this.traceEnabled = traceEnabled;
     }
 
-    @JsonIgnore
-    public String getLoggableIdentifier() {
-        // build list of ports
-        StringBuilder ports = new StringBuilder();
+    @JsonProperty
+    public String getAccessLogFormat() {
+        return accessLogFormat;
+    }
 
-        if (isPortEnabled()) {
-            ports.append(getPort());
-        }
+    @JsonProperty
+    public void setAccessLogFormat(String accessLogFormat) {
+        this.accessLogFormat = accessLogFormat;
+    }
 
-        if (isSslPortEnabled()) {
-            if (ports.length() > 0) {
-                ports.append(", ");
-            }
-            ports.append(getSslPort());
-            ports.append("/ssl");
-        }
+    @JsonProperty
+    public String getAccessLogPath() {
+        return accessLogPath;
+    }
 
-        StringBuilder s = new StringBuilder();
+    @JsonProperty
+    public void setAccessLogPath(String accessLogPath) {
+        this.accessLogPath = accessLogPath;
+    }
 
-        s.append("on ");
+    public boolean isAccessLogRotate() {
+        return accessLogRotate;
+    }
 
-        s.append(Optional.ofNullable(getHost()).orElse("<all>"));
-        s.append(":");
-        s.append(ports);
-
-        return s.toString();
+    public void setAccessLogRotate(boolean accessLogRotate) {
+        this.accessLogRotate = accessLogRotate;
     }
 }
