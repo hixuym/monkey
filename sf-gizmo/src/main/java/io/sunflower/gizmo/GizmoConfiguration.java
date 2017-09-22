@@ -1,34 +1,61 @@
 package io.sunflower.gizmo;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.Injector;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import io.sunflower.gizmo.server.GizmoHttpHandler;
+import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.Mode;
 import io.sunflower.gizmo.utils.SecretGenerator;
+import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;
 import io.sunflower.undertow.HttpConnectorFactory;
+import io.sunflower.undertow.handler.Task;
+import io.sunflower.undertow.handler.TaskManager;
 import io.sunflower.util.Duration;
+import io.undertow.Handlers;
+import io.undertow.predicate.Predicate;
+import io.undertow.predicate.Predicates;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.BlockingHandler;
+import io.undertow.server.handlers.PathHandler;
+import io.undertow.server.handlers.RequestDumpingHandler;
+import io.undertow.server.handlers.accesslog.AccessLogHandler;
+import io.undertow.server.handlers.accesslog.AccessLogReceiver;
+import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
+import io.undertow.server.handlers.form.EagerFormParsingHandler;
+import io.undertow.server.handlers.form.FormParserFactory;
 
 /**
  *
  */
 public class GizmoConfiguration {
 
-    private String applicationContextPath;
-    private String adminContextPath;
+    @JsonIgnore
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private String applicationSecret = SecretGenerator.generateSecret();
     private List<String> applicationLangs = Arrays.asList("zh", "en");
-
 
     private String cookieDomain = "sunflower.io";
     private String cookiePrefix = "SF_";
@@ -59,13 +86,30 @@ public class GizmoConfiguration {
     private boolean accessLogRotate = true;
     private String accessLogPath = "./logs";
 
-    @Valid
-    @NotNull
-    private List<ConnectorFactory> applicationConnectors = Collections.singletonList(HttpConnectorFactory.application());
+    private final TaskManager taskManager = new TaskManager();
 
-    @Valid
-    @NotNull
-    private List<ConnectorFactory> adminConnectors = Collections.singletonList(HttpConnectorFactory.admin());
+    private String applicationContextPath;
+    private String adminContextPath;
+
+    @JsonProperty
+    public String getApplicationContextPath() {
+        return applicationContextPath;
+    }
+
+    @JsonProperty
+    public void setApplicationContextPath(String applicationContextPath) {
+        this.applicationContextPath = applicationContextPath;
+    }
+
+    @JsonProperty
+    public String getAdminContextPath() {
+        return adminContextPath;
+    }
+
+    @JsonProperty
+    public void setAdminContextPath(String adminContextPath) {
+        this.adminContextPath = adminContextPath;
+    }
 
     @JsonProperty
     public String getCookieDomain() {
@@ -198,11 +242,6 @@ public class GizmoConfiguration {
     }
 
     @JsonProperty
-    public List<ConnectorFactory> getApplicationConnectors() {
-        return applicationConnectors;
-    }
-
-    @JsonProperty
     public String getCookiePrefix() {
         return cookiePrefix;
     }
@@ -215,26 +254,6 @@ public class GizmoConfiguration {
     @JsonProperty
     public List<String> getApplicationLangs() {
         return applicationLangs;
-    }
-
-    @JsonProperty
-    public String getApplicationContextPath() {
-        return applicationContextPath;
-    }
-
-    @JsonProperty
-    public void setApplicationContextPath(String applicationContextPath) {
-        this.applicationContextPath = applicationContextPath;
-    }
-
-    @JsonProperty
-    public String getAdminContextPath() {
-        return adminContextPath;
-    }
-
-    @JsonProperty
-    public void setAdminContextPath(String adminContextPath) {
-        this.adminContextPath = adminContextPath;
     }
 
     @JsonProperty
@@ -278,21 +297,6 @@ public class GizmoConfiguration {
     }
 
     @JsonProperty
-    public void setApplicationConnectors(List<ConnectorFactory> applicationConnectors) {
-        this.applicationConnectors = applicationConnectors;
-    }
-
-    @JsonProperty
-    public List<ConnectorFactory> getAdminConnectors() {
-        return adminConnectors;
-    }
-
-    @JsonProperty
-    public void setAdminConnectors(List<ConnectorFactory> adminConnectors) {
-        this.adminConnectors = adminConnectors;
-    }
-
-    @JsonProperty
     public boolean isHttp2Enabled() {
         return http2Enabled;
     }
@@ -332,11 +336,87 @@ public class GizmoConfiguration {
         this.accessLogPath = accessLogPath;
     }
 
+    @JsonProperty
     public boolean isAccessLogRotate() {
         return accessLogRotate;
     }
 
+    @JsonProperty
     public void setAccessLogRotate(boolean accessLogRotate) {
         this.accessLogRotate = accessLogRotate;
+    }
+
+    @JsonIgnore
+    public void addTask(Task task) {
+        this.taskManager.add(task);
+    }
+
+    @JsonIgnore
+    protected HttpHandler createAdminHandler() {
+
+        return new PathHandler()
+            .addPrefixPath("tasks", TaskManager.createHandler(this.taskManager));
+
+    }
+
+    @JsonIgnore
+    protected HttpHandler createApplicationHandler(Injector injector) {
+        // root handler for ninja app
+        GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
+
+        // slipstream injector into undertow handler BEFORE server starts
+        gizmoHttpHandler.init(injector, getApplicationContextPath());
+
+        HttpHandler h = gizmoHttpHandler;
+
+        // wireshark enabled?
+        if (isTraceEnabled()) {
+            logger.info("Undertow tracing of requests and responses activated (undertow.tracing = true)");
+            // only activate request dumping on non-assets
+            Predicate isAssets = Predicates.prefix("/assets");
+            h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
+        }
+
+        // then eagerly parse form data (which is then included as an attachment)
+        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
+        formParserFactoryBuilder.setDefaultCharset(GizmoConstant.UTF_8);
+        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
+
+        // then requests MUST be blocking for IO to function
+        h = new BlockingHandler(h);
+
+        return h;
+    }
+
+    @JsonIgnore
+    protected HttpHandler addAccessLogWrapper(Environment environment, HttpHandler httpHandler) {
+        String format = getAccessLogFormat();
+
+        if (StringUtils.isNotEmpty(format)) {
+
+            ExecutorService executorService = environment.lifecycle().executorService("AccessLog-pool-%d")
+                .maxThreads(1)
+                .minThreads(1)
+                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+                .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
+                .build();
+
+            Path log = Paths.get(getAccessLogPath());
+
+            if (!log.toFile().exists()) {
+                log.toFile().mkdirs();
+            }
+
+            AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
+                .setLogBaseName("access")
+                .setLogWriteExecutor(executorService)
+                .setOutputDirectory(log)
+                .setRotate(isAccessLogRotate())
+                .build();
+
+            return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
+        }
+
+        return httpHandler;
     }
 }

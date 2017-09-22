@@ -463,9 +463,8 @@ public class RouteBuilderImplTest {
         Provider filterProvider = Mockito.mock(Provider.class);
         com.example.conf.Filters filters = new com.example.conf.Filters(DummyFilter.class);
 
-        TypeLiteral<Optional<ApplicationFilters>> filtersType = new TypeLiteral<Optional<ApplicationFilters>>() {};
+        this.routeBuilder.setApplicationFilters(filters);
 
-        Mockito.when(injector.getInstance(Key.get(filtersType))).thenReturn(Optional.of(filters));
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
 
         Mockito.when(filterProvider.get()).thenReturn(dummyFilter);
@@ -479,7 +478,6 @@ public class RouteBuilderImplTest {
         Result result = filterChain.next(context);
 
         // then
-//        Mockito.verify(injector).getInstance(com.example.conf.Filters.class);
         assertThat(dummyFilter.executed, Matchers.equalTo(1));
         assertThat(result, Matchers.equalTo(expectedResult));
     }

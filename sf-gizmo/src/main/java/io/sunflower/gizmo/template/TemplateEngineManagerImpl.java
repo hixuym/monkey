@@ -54,10 +54,8 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
 
         // Now lookup all explicit bindings, and find the ones that implement
         // TemplateEngine
-        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings()
-            .entrySet()) {
-            if (TemplateEngine.class.isAssignableFrom(binding.getKey()
-                .getTypeLiteral().getRawType())) {
+        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
+            if (TemplateEngine.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType())) {
                 Provider<? extends TemplateEngine> provider = (Provider) binding.getValue().getProvider();
                 map.put(provider.get().getContentType(), provider);
             }

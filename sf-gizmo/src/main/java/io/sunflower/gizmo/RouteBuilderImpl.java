@@ -50,6 +50,13 @@ public class RouteBuilderImpl implements RouteBuilder {
     private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
     private final List<Class<? extends Filter>> localFilters;
 
+    private ApplicationFilters globalFilters;
+
+    @Inject(optional = true)
+    public void setApplicationFilters(ApplicationFilters filters) {
+        this.globalFilters = filters;
+    }
+
     @Inject
     public RouteBuilderImpl() {
         this.implementationMethod = Optional.empty();
@@ -237,13 +244,8 @@ public class RouteBuilderImpl implements RouteBuilder {
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-
-            TypeLiteral<Optional<ApplicationFilters>> filtersType = new TypeLiteral<Optional<ApplicationFilters>>() {};
-
-            Optional<ApplicationFilters> filters = injector.getInstance(Key.get(filtersType));
-
-            if (filters != null) {
-                filters.ifPresent(it -> it.addFilters(allFilters));
+            if (this.globalFilters != null) {
+                this.globalFilters.addFilters(allFilters);
             }
         }
 

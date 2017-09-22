@@ -13,61 +13,27 @@
 
 package io.sunflower.gizmo.server;
 
-import com.google.common.base.Strings;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.Binding;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
 
 import io.sunflower.gizmo.Gizmo;
-import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.ConnectorFactory;
-import io.sunflower.undertow.handler.Task;
-import io.sunflower.undertow.handler.TaskManager;
-import io.undertow.Handlers;
 import io.undertow.Undertow;
-import io.undertow.UndertowOptions;
-import io.undertow.predicate.Predicate;
-import io.undertow.predicate.Predicates;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.handlers.BlockingHandler;
-import io.undertow.server.handlers.PathHandler;
-import io.undertow.server.handlers.RequestDumpingHandler;
-import io.undertow.server.handlers.accesslog.AccessLogHandler;
-import io.undertow.server.handlers.accesslog.AccessLogReceiver;
-import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
-import io.undertow.server.handlers.form.EagerFormParsingHandler;
-import io.undertow.server.handlers.form.FormParserFactory;
 
 /**
  * sunflower standalone based on Undertow.
  */
-@Singleton
 public class GizmoServer extends ContainerLifeCycle {
 
     private Logger logger = LoggerFactory.getLogger(GizmoServer.class);
 
-    private final GizmoConfiguration configuration;
     private final Environment environment;
 
     private Undertow undertow;
@@ -79,15 +45,10 @@ public class GizmoServer extends ContainerLifeCycle {
 
     private final Injector injector;
 
-    @Inject
-    public GizmoServer(Environment environment, GizmoConfiguration configuration) {
-        this.configuration = configuration;
+    public GizmoServer(Environment environment, Undertow undertow) {
+        this.undertow = undertow;
         this.environment = environment;
         this.injector = environment.guicey().injector();
-    }
-
-    public void init() {
-        this.undertow = createUndertow();
         this.gizmo = injector.getInstance(Gizmo.class);
     }
 
@@ -109,13 +70,9 @@ public class GizmoServer extends ContainerLifeCycle {
 
     private void initRoutes() {
 
-        List<Binding<ApplicationRoutes>> bindings = injector.findBindingsByType(TypeLiteral.get(ApplicationRoutes.class));
-
         Router router = injector.getInstance(Router.class);
 
-        for (Binding<ApplicationRoutes> binding : bindings) {
-            binding.getProvider().get().init(router);
-        }
+        injector.getInstance(ApplicationRoutes.class).init(router);
 
         router.compileRoutes();
     }
@@ -134,123 +91,4 @@ public class GizmoServer extends ContainerLifeCycle {
         }
     }
 
-    private Undertow createUndertow() {
-
-        Undertow.Builder undertowBuilder = Undertow.builder()
-            // NOTE: should ninja not use equals chars within its cookie values?
-            .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
-
-        logger.info("Undertow h2 protocol (undertow.http2 = {})", configuration.isHttp2Enabled());
-
-        undertowBuilder.setServerOption(UndertowOptions.ENABLE_HTTP2, configuration.isHttp2Enabled());
-
-        HttpHandler applicationHandler = createApplicationHandler();
-
-        for (ConnectorFactory connectorFactory : configuration.getApplicationConnectors()) {
-            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
-
-            listenerBuilder.setRootHandler(addAccessLogWrapper(applicationHandler));
-
-            undertowBuilder.addListener(listenerBuilder);
-        }
-
-        HttpHandler adminHandler = createAdminHandler(environment);
-
-        for (ConnectorFactory connectorFactory : configuration.getAdminConnectors()) {
-            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
-
-            listenerBuilder.setRootHandler(addAccessLogWrapper(adminHandler));
-
-            undertowBuilder.addListener(listenerBuilder);
-        }
-
-        return undertowBuilder.build();
-    }
-
-    private HttpHandler createAdminHandler(Environment environment) {
-
-        TaskManager manager = injector.getInstance(TaskManager.class);
-
-        TypeLiteral<Set<Task>> tasksType = new TypeLiteral<Set<Task>>() {};
-
-        Set<Task> taskSet = injector.getInstance(Key.get(tasksType));
-
-        for (Task task : taskSet) {
-            manager.add(task);
-        }
-
-        PathHandler h = new PathHandler();
-
-        h.addPrefixPath("tasks", TaskManager.createHandler(manager));
-
-        if (!Strings.isNullOrEmpty(configuration.getAdminContextPath())) {
-            h = new PathHandler().addPrefixPath(configuration.getAdminContextPath(), h);
-        }
-
-        return h;
-    }
-
-    private HttpHandler createApplicationHandler() {
-        // root handler for ninja app
-        GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
-
-        // slipstream injector into undertow handler BEFORE server starts
-        gizmoHttpHandler.init(injector, configuration.getApplicationContextPath());
-
-        HttpHandler h = gizmoHttpHandler;
-
-        // wireshark enabled?
-        if (configuration.isTraceEnabled()) {
-            logger.info("Undertow tracing of requests and responses activated (undertow.tracing = true)");
-            // only activate request dumping on non-assets
-            Predicate isAssets = Predicates.prefix("/assets");
-            h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
-        }
-
-        // then eagerly parse form data (which is then included as an attachment)
-        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-        formParserFactoryBuilder.setDefaultCharset("utf-8");
-        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
-
-        // then requests MUST be blocking for IO to function
-        h = new BlockingHandler(h);
-
-        // then a context if one exists
-        if (!Strings.isNullOrEmpty(configuration.getApplicationContextPath())) {
-            h = new PathHandler().addPrefixPath(configuration.getApplicationContextPath(), h);
-        }
-
-        return h;
-    }
-
-    private HttpHandler addAccessLogWrapper(HttpHandler httpHandler) {
-        String format = configuration.getAccessLogFormat();
-
-        if (StringUtils.isNotEmpty(format)) {
-
-            ExecutorService executorService = environment.lifecycle().executorService("AccessLog-pool-%d")
-                .maxThreads(1)
-                .minThreads(1)
-                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-                .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
-                .build();
-
-            Path log = Paths.get(configuration.getAccessLogPath());
-
-            if (!log.toFile().exists()) {
-                log.toFile().mkdirs();
-            }
-
-            AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
-                .setLogBaseName("access")
-                .setLogWriteExecutor(executorService)
-                .setOutputDirectory(log)
-                .setRotate(configuration.isAccessLogRotate())
-                .build();
-
-            return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
-        }
-
-        return httpHandler;
-    }
 }

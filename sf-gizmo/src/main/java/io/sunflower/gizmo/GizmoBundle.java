@@ -12,6 +12,9 @@ import io.sunflower.gizmo.bodyparser.BodyParserEngineJson;
 import io.sunflower.gizmo.bodyparser.BodyParserEnginePost;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineXml;
 import io.sunflower.gizmo.params.ParamParser;
+import io.sunflower.gizmo.server.GizmoServerConfigurable;
+import io.sunflower.gizmo.server.GizmoServerFactory;
+import io.sunflower.gizmo.server.ServerCommand;
 import io.sunflower.gizmo.server.UndertowContext;
 import io.sunflower.gizmo.template.TemplateEngineJson;
 import io.sunflower.gizmo.template.TemplateEngineJsonP;
@@ -23,14 +26,19 @@ import io.sunflower.undertow.handler.GarbageCollectionTask;
 import io.sunflower.undertow.handler.LogConfigurationTask;
 import io.sunflower.undertow.handler.TaskManager;
 
-public abstract class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>, GizmoConfigurationFactory<T> {
+public abstract class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>, GizmoServerConfigurable<T> {
+
+    private volatile GizmoServerFactory serverFactory;
 
     @Override
     public void run(T configuration, Environment environment) throws Exception {
+
+        this.serverFactory = getGizmoServerFacotory(configuration);
+
         environment.guicey().addModule(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(GizmoConfiguration.class).toInstance(getGizmoConfiguration(configuration));
+                bind(GizmoConfiguration.class).toInstance(serverFactory.gizmoConfig());
 
                 // Routing
                 Multibinder.newSetBinder(binder(), ParamParser.class);
@@ -54,7 +62,7 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
                 OptionalBinder.newOptionalBinder(binder(), ExceptionHandler.class)
                     .setDefault().to(DefaultExceptionHandler.class).in(Singleton.class);
 
-                TaskManager taskManager = new TaskManager(environment.metrics());
+                TaskManager taskManager = new TaskManager();
 
                 taskManager.add(new GarbageCollectionTask());
                 taskManager.add(new LogConfigurationTask());
@@ -66,5 +74,10 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
+        bootstrap.addCommand(new ServerCommand<>(bootstrap.getApplication(), this));
+    }
+
+    public GizmoServerFactory getServerFactory() {
+        return serverFactory;
     }
 }

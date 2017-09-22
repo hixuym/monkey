@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.cli.EnvironmentCommand;
+import io.sunflower.gizmo.GizmoBundle;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.setup.Environment;
@@ -18,14 +19,17 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
 
     private final Class<T> configurationClass;
 
+    private final GizmoBundle bundle;
+
     /**
      * Creates a new environment command.
      *
      * @param application the application providing this command
      */
-    public ServerCommand(Application<T> application) {
+    public ServerCommand(Application<T> application, GizmoBundle bundle) {
         super(application, "gizmo", "gizmo web server.");
         configurationClass = application.getConfigurationClass();
+        this.bundle = bundle;
     }
 
     @Override
@@ -36,9 +40,7 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
 
-        GizmoServer undertow = environment.guicey().injector().getInstance(GizmoServer.class);
-
-        undertow.init();
+        GizmoServer undertow = bundle.getServerFactory().build(environment);
 
         environment.lifecycle().attach(undertow);
 

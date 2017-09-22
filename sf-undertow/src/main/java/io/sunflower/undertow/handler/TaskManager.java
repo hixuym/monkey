@@ -6,8 +6,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.io.CharStreams;
 import com.google.common.net.MediaType;
 
-import com.codahale.metrics.MetricRegistry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +39,6 @@ public class TaskManager implements HttpHandler {
     private final ConcurrentMap<String, Task> tasks;
     private final ConcurrentMap<Task, TaskExecutor> taskExecutors;
 
-    private final MetricRegistry metricRegistry;
-
     public final static String MAPPING = "tasks";
 
     public static HttpHandler createHandler(TaskManager manager) {
@@ -61,10 +57,12 @@ public class TaskManager implements HttpHandler {
     /**
      * Creates a new TaskManager.
      */
-    public TaskManager(MetricRegistry metricRegistry) {
-        this.metricRegistry = metricRegistry;
+    public TaskManager() {
         this.tasks = new ConcurrentHashMap<>();
         this.taskExecutors = new ConcurrentHashMap<>();
+
+        add(new GarbageCollectionTask());
+        add(new LogConfigurationTask());
     }
 
     private void doGet(HttpServerExchange exchange) {

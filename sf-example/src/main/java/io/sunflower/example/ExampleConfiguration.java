@@ -7,7 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.Valid;
 
 import io.sunflower.Configuration;
-import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.server.DefaultGizmoServerFactory;
+import io.sunflower.gizmo.server.GizmoServerFactory;
 
 /**
  * Created by michael on 17/9/2.
@@ -15,7 +16,7 @@ import io.sunflower.gizmo.GizmoConfiguration;
 public class ExampleConfiguration extends Configuration {
 
     @Valid
-    private GizmoConfiguration gizmoConfiguration = new GizmoConfiguration();
+    private GizmoServerFactory serverFactory = new DefaultGizmoServerFactory();
 
     @NotEmpty
     private String template;
@@ -41,12 +42,12 @@ public class ExampleConfiguration extends Configuration {
     }
 
     @JsonProperty("gizmo")
-    public GizmoConfiguration getGizmoConfiguration() {
-        return gizmoConfiguration;
+    public GizmoServerFactory getServerFactory() {
+        return serverFactory;
     }
 
     @JsonProperty("gizmo")
-    public void setGizmoConfiguration(GizmoConfiguration gizmoConfiguration) {
-        this.gizmoConfiguration = gizmoConfiguration;
+    public void setServerFactory(GizmoServerFactory serverFactory) {
+        this.serverFactory = serverFactory;
     }
 }

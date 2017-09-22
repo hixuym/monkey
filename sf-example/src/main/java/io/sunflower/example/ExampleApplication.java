@@ -10,6 +10,7 @@ import io.sunflower.gizmo.GizmoBundle;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.InstrumentedGizmo;
 import io.sunflower.gizmo.application.ApplicationRoutes;
+import io.sunflower.gizmo.server.GizmoServerFactory;
 import io.sunflower.gizmo.server.ServerCommand;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -31,12 +32,11 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
     @Override
     public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
         bootstrap.addCommand(new DumpConfigCommand());
-        bootstrap.addCommand(new ServerCommand<>(this));
 
         bootstrap.addBundle(new GizmoBundle<ExampleConfiguration>() {
             @Override
-            public GizmoConfiguration getGizmoConfiguration(ExampleConfiguration configuration) {
-                return configuration.getGizmoConfiguration();
+            public GizmoServerFactory getGizmoServerFacotory(ExampleConfiguration configuration) {
+                return configuration.getServerFactory();
             }
         });
     }

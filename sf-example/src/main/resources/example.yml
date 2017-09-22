@@ -6,11 +6,12 @@ logging:
     "io.sunflower": DEBUG
 
 gizmo:
+  type: simple
   applicationSecret: 12345678
   accessLogFormat: combined
 
 metrics:
-  frequency: 30 seconds
+  frequency: 1 minutes
   reporters:
     - type: log
       logger: io.sunflower.metrics
