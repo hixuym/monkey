@@ -26,6 +26,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-db</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

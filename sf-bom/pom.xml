@@ -665,7 +665,7 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- sunflogenericsules -->
+            <!-- project modules -->
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-core</artifactId>
@@ -716,12 +716,6 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-threadpool</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -739,11 +733,6 @@
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-telnet</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -35,9 +35,6 @@ import io.sunflower.gizmo.GizmoConfiguration;
 public class MimeTypes {
     private final Logger logger = LoggerFactory.getLogger(MimeTypes.class);
 
-    private final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
-    private final String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/gizmo/utils/mime-types.properties";
-
     private final Properties mimetypes;
     private final Pattern extPattern;
 
@@ -136,6 +133,7 @@ public class MimeTypes {
     private void initMimetypes() {
 
         // Load default mimetypes from the framework
+        String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/gizmo/utils/mime-types.properties";
         try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_MIMET_TYPE_LOCATIONS)) {
             mimetypes.load(is);
         } catch (Exception e) {

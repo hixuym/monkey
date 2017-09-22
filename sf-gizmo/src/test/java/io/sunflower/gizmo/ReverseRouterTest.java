@@ -189,7 +189,7 @@ public class ReverseRouterTest {
     @Test
     public void absolute() {
         String route = reverseRouter.with(TestController::user)
-//            .absolute("https", "www.greenback.com")
+            .absolute("https", "www.greenback.com")
             .pathParam("email", "test@example.com")
             .pathParam("id", 1000000L)
             .build();

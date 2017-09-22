@@ -110,7 +110,7 @@ public class AbstractContextTest {
 
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.FALSE);
         doReturn("1.1.1.1").when(context).getRealRemoteAddr();
-        doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
+//        doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
 
         assertThat(context.getRemoteAddr(), is("1.1.1.1"));
     }
@@ -120,7 +120,7 @@ public class AbstractContextTest {
         AbstractContextImpl context = spy(abstractContext);
 
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
-        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
+//        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
         doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
 
         assertThat(context.getRemoteAddr(), is("2.2.2.2"));
@@ -131,7 +131,7 @@ public class AbstractContextTest {
         AbstractContextImpl context = spy(abstractContext);
 
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
-        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
+//        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
         doReturn("192.168.1.1, 192.168.1.2, 192.168.1.3").when(context).getHeader(Context.X_FORWARD_HEADER);
 
         //make sure this is correct

@@ -38,7 +38,7 @@ public class MimeTypesTest {
     public void setup() {
 
         // mock some mime types
-        when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("mimetype.custom", "application/custom"));
+        when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("custom", "application/custom"));
     }
 
     @Test

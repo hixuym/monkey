@@ -124,7 +124,7 @@ public class CookieEncryption {
         }
 
         // convert base64 encoded string to bytes
-        byte[] decoded = Base64.getDecoder().decode(data);
+        byte[] decoded = Base64.getUrlDecoder().decode(data);
         try {
             // decrypt bytes
             Cipher cipher = Cipher.getInstance(ALGORITHM);

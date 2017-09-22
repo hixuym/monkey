@@ -16,7 +16,9 @@ package io.sunflower.gizmo;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.google.inject.util.Providers;
 
 import org.slf4j.Logger;
@@ -34,7 +36,6 @@ import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.application.ApplicationFilters;
 import io.sunflower.gizmo.params.ControllerMethodInvoker;
 import io.sunflower.gizmo.utils.LambdaRoute;
-import io.sunflower.guicey.Injectors;
 
 public class RouteBuilderImpl implements RouteBuilder {
     private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
@@ -113,8 +114,9 @@ public class RouteBuilderImpl implements RouteBuilder {
         return this;
     }
 
+    @SafeVarargs
     @Override
-    public RouteBuilder globalFilters(Class<? extends Filter>... filtersToAdd) {
+    public final RouteBuilder globalFilters(Class<? extends Filter>... filtersToAdd) {
         List<Class<? extends Filter>> globalFiltersTemp = Lists.newArrayList(filtersToAdd);
         globalFilters(globalFiltersTemp);
         return this;
@@ -126,8 +128,9 @@ public class RouteBuilderImpl implements RouteBuilder {
         return this;
     }
 
+    @SafeVarargs
     @Override
-    public RouteBuilder filters(Class<? extends Filter>... filtersToAdd) {
+    public final RouteBuilder filters(Class<? extends Filter>... filtersToAdd) {
         List<Class<? extends Filter>> filtersTemp = Lists.newArrayList(filtersToAdd);
         filters(filtersTemp);
         return this;
@@ -234,10 +237,13 @@ public class RouteBuilderImpl implements RouteBuilder {
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-            Set<ApplicationFilters> filters = Injectors.getInstancesOf(injector, ApplicationFilters.class);
 
-            if (!filters.isEmpty()) {
-                filters.iterator().next().addFilters(allFilters);
+            TypeLiteral<Optional<ApplicationFilters>> filtersType = new TypeLiteral<Optional<ApplicationFilters>>() {};
+
+            Optional<ApplicationFilters> filters = injector.getInstance(Key.get(filtersType));
+
+            if (filters != null) {
+                filters.ifPresent(it -> it.addFilters(allFilters));
             }
         }
 

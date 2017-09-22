@@ -23,9 +23,9 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ninja.Context;
-import ninja.Result;
-import ninja.utils.ResponseStreams;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.utils.ResponseStreams;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

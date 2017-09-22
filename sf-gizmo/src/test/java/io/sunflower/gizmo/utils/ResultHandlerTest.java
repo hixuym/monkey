@@ -74,7 +74,7 @@ public class ResultHandlerTest {
 
         resultHandler = new ResultHandler(templateEngineManager);
         when(responseStreams.getOutputStream()).thenReturn(outputStream);
-        when(responseStreams.getWriter()).thenReturn(writer);
+//        when(responseStreams.getWriter()).thenReturn(writer);
         when(context.finalizeHeaders(any(Result.class)))
             .thenReturn(responseStreams);
         when(templateEngineManager
@@ -140,7 +140,7 @@ public class ResultHandlerTest {
         Result result = Results.ok();
         result.renderRaw(toRender.getBytes());
         resultHandler.handleResult(result, context);
-        assertEquals(Result.TEXT_PLAIN, result.getContentType());
+        assertEquals(Result.APPLICATION_OCTET_STREAM, result.getContentType());
     }
 
     @Test

@@ -15,8 +15,11 @@ package io.sunflower.gizmo.server;
 
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.Binding;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -35,7 +39,6 @@ import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
-import io.sunflower.guicey.Injectors;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;
@@ -105,12 +108,13 @@ public class GizmoServer extends ContainerLifeCycle {
     }
 
     private void initRoutes() {
-        Set<ApplicationRoutes> routes = Injectors.getInstancesOf(injector, ApplicationRoutes.class);
+
+        List<Binding<ApplicationRoutes>> bindings = injector.findBindingsByType(TypeLiteral.get(ApplicationRoutes.class));
 
         Router router = injector.getInstance(Router.class);
 
-        for (ApplicationRoutes route : routes) {
-            route.init(router);
+        for (Binding<ApplicationRoutes> binding : bindings) {
+            binding.getProvider().get().init(router);
         }
 
         router.compileRoutes();
@@ -167,7 +171,9 @@ public class GizmoServer extends ContainerLifeCycle {
 
         TaskManager manager = injector.getInstance(TaskManager.class);
 
-        Set<Task> taskSet = Injectors.getInstancesOf(injector, Task.class);
+        TypeLiteral<Set<Task>> tasksType = new TypeLiteral<Set<Task>>() {};
+
+        Set<Task> taskSet = injector.getInstance(Key.get(tasksType));
 
         for (Task task : taskSet) {
             manager.add(task);
