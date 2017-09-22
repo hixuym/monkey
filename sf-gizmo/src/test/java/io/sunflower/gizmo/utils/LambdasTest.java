@@ -125,7 +125,7 @@ public class LambdasTest {
         assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
         assertThat(serializedLambda.getImplClass().replace('/', '.'), is(LambdasTest.class.getCanonicalName()));
         assertThat(serializedLambda.getImplMethodName(), is("home"));
-        assertThat(serializedLambda.getImplMethodSignature(), is("()Lninja/Result;"));
+        assertThat(serializedLambda.getImplMethodSignature(), is("()Lio/sunflower/gizmo/Result;"));
         assertThat(serializedLambda.getCapturedArgCount(), is(0));
     }
 
@@ -160,9 +160,9 @@ public class LambdasTest {
         assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
         assertThat(serializedLambda.getImplClass().replace('/', '.'), is(LambdasTest.class.getCanonicalName()));
         assertThat(serializedLambda.getImplMethodName(), startsWith("lambda$"));
-        assertThat(serializedLambda.getInstantiatedMethodType(), is("(Lninja/Context;)Lninja/Result;"));
+        assertThat(serializedLambda.getInstantiatedMethodType(), is("(Lio/sunflower/gizmo/Context;)Lio/sunflower/gizmo/Result;"));
         // includes captured args btw...
-        assertThat(serializedLambda.getImplMethodSignature(), is("(Lninja/Context;)Lninja/Result;"));
+        assertThat(serializedLambda.getImplMethodSignature(), is("(Lio/sunflower/gizmo/Context;)Lio/sunflower/gizmo/Result;"));
         assertThat(serializedLambda.getImplMethodKind(), is(6));    // 6 = REF_invokeStatic
         assertThat(serializedLambda.getCapturedArgCount(), is(0));
     }
