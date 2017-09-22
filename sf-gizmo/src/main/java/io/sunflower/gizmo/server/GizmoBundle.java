@@ -1,4 +1,19 @@
-package io.sunflower.gizmo;
+/*
+ * Copyright (C) 2017. the original author or authors.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.sunflower.gizmo.server;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
@@ -8,14 +23,20 @@ import javax.inject.Singleton;
 
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.DefaultExceptionHandler;
+import io.sunflower.gizmo.ExceptionHandler;
+import io.sunflower.gizmo.Gizmo;
+import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.GizmoDefault;
+import io.sunflower.gizmo.RouteBuilder;
+import io.sunflower.gizmo.RouteBuilderImpl;
+import io.sunflower.gizmo.Router;
+import io.sunflower.gizmo.RouterImpl;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineJson;
 import io.sunflower.gizmo.bodyparser.BodyParserEnginePost;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineXml;
 import io.sunflower.gizmo.params.ParamParser;
-import io.sunflower.gizmo.server.GizmoServerConfigurable;
-import io.sunflower.gizmo.server.GizmoServerFactory;
-import io.sunflower.gizmo.server.ServerCommand;
-import io.sunflower.gizmo.server.UndertowContext;
 import io.sunflower.gizmo.template.TemplateEngineJson;
 import io.sunflower.gizmo.template.TemplateEngineJsonP;
 import io.sunflower.gizmo.template.TemplateEngineText;

@@ -3,15 +3,12 @@ package io.sunflower.example;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.OptionalBinder;
 
-import ch.qos.logback.classic.Level;
 import io.sunflower.Application;
 import io.sunflower.gizmo.Gizmo;
-import io.sunflower.gizmo.GizmoBundle;
-import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.server.GizmoBundle;
 import io.sunflower.gizmo.InstrumentedGizmo;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.gizmo.server.GizmoServerFactory;
-import io.sunflower.gizmo.server.ServerCommand;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 

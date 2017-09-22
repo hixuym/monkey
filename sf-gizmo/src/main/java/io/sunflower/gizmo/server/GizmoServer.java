@@ -18,6 +18,8 @@ import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import javax.net.ssl.SSLContext;
 
 import io.sunflower.gizmo.Gizmo;
@@ -89,6 +91,10 @@ public class GizmoServer extends ContainerLifeCycle {
             logger.info("Stopped undertow.");
             this.undertow = null;
         }
+    }
+
+    public List<Undertow.ListenerInfo> listenerInfos() {
+        return this.undertow.getListenerInfo();
     }
 
 }

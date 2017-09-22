@@ -8,14 +8,13 @@ import org.slf4j.LoggerFactory;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.cli.EnvironmentCommand;
-import io.sunflower.gizmo.GizmoBundle;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.setup.Environment;
 
-public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T> {
+class ServerCommand<T extends Configuration> extends EnvironmentCommand<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerCommand.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GizmoServer.class);
 
     private final Class<T> configurationClass;
 
@@ -40,18 +39,18 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
 
-        GizmoServer undertow = bundle.getServerFactory().build(environment);
+        GizmoServer server = bundle.getServerFactory().build(environment);
 
-        environment.lifecycle().attach(undertow);
+        environment.lifecycle().attach(server);
 
         try {
-            undertow.addLifeCycleListener(new LifeCycleListener());
+            server.addLifeCycleListener(new LifeCycleListener());
             cleanupAsynchronously();
-            undertow.start();
+            server.start();
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    undertow.stop();
+                    server.stop();
                 } catch (Exception e) {
                     LOGGER.warn("Failure during stop server", e);
                 }
@@ -59,7 +58,7 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
         } catch (Exception e) {
             LOGGER.error("Unable to start server, shutting down", e);
             try {
-                undertow.stop();
+                server.stop();
             } catch (Exception e1) {
                 LOGGER.warn("Failure during stop server", e1);
             }
@@ -77,6 +76,14 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
         @Override
         public void lifeCycleStopped(LifeCycle event) {
             cleanup();
+        }
+
+        @Override
+        public void lifeCycleStarted(LifeCycle event) {
+            if (event instanceof GizmoServer) {
+                GizmoServer server = (GizmoServer) event;
+                server.listenerInfos().forEach(it -> LOGGER.info(it.toString()));
+            }
         }
     }
 }
