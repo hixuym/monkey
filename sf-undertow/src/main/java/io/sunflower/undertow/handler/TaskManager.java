@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.io.CharStreams;
 import com.google.common.net.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,6 @@ import io.undertow.server.handlers.form.FormParserFactory;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 /**
  * Created by michael on 17/9/1.
@@ -66,7 +65,7 @@ public class TaskManager implements HttpHandler {
     }
 
     private void doGet(HttpServerExchange exchange) {
-        if (Strings.isNullOrEmpty(exchange.getRelativePath())) {
+        if (Strings.isNullOrEmpty(StringUtils.removeEnd(exchange.getRelativePath(), "/"))) {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
 
@@ -89,7 +88,7 @@ public class TaskManager implements HttpHandler {
     }
 
     private void doPost(HttpServerExchange exchange) {
-        final Task task = tasks.get(exchange.getRelativePath());
+        final Task task = tasks.get(StringUtils.removeEnd(exchange.getRelativePath(), "/"));
         if (task != null) {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8.toString());
             final PrintWriter output = new PrintWriter(exchange.getOutputStream());
@@ -150,17 +149,6 @@ public class TaskManager implements HttpHandler {
 
     public Collection<Task> getTasks() {
         return tasks.values();
-    }
-
-    private String chooseName(String explicitName, boolean absolute, Task task, String... suffixes) {
-        if (explicitName != null && !explicitName.isEmpty()) {
-            if (absolute) {
-                return explicitName;
-            }
-            return name(task.getClass(), explicitName);
-        }
-
-        return name(task.getClass(), suffixes);
     }
 
     private static class TaskExecutor {

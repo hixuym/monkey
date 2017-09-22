@@ -27,10 +27,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
@@ -52,15 +48,11 @@
         </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sunflower</groupId>
             <artifactId>sf-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-lifecycle</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 

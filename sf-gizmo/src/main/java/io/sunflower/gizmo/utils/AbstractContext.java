@@ -83,7 +83,8 @@ abstract public class AbstractContext implements Context.Impl {
 
     protected void init(String contextPath, String requestPath) {
         this.contextPath = contextPath;
-        this.requestPath = requestPath;
+
+        this.requestPath = StringUtils.appendIfMissing(requestPath, "/");
 
         // init flash scope:
         flashScope.init(this);
@@ -167,8 +168,7 @@ abstract public class AbstractContext implements Context.Impl {
 
     @Override
     public String getPathParameter(String key) {
-        String encodedParameter = route.getPathParametersEncoded(
-            getRequestPath()).get(key);
+        String encodedParameter = route.getPathParametersEncoded(getRequestPath()).get(key);
 
         if (encodedParameter == null) {
             return null;

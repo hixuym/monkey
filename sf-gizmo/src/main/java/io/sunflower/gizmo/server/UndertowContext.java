@@ -84,21 +84,7 @@ public class UndertowContext extends AbstractContext {
         // any form data should have been eagerly parsed
         this.formData = exchange.getAttachment(FormDataParser.FORM_DATA);
 
-        super.init(contextPath, exchange.getRequestPath());
-    }
-
-    @Override
-    public String getRequestPath() {
-        String contextPath = this.getContextPath();
-        String requestPath = exchange.getRequestPath();
-
-        // account for contextPath not being removed while in undertow
-        if (StringUtils.isNotEmpty(contextPath)
-            && requestPath.startsWith(contextPath)) {
-            return requestPath.substring(contextPath.length());
-        }
-
-        return requestPath;
+        super.init(contextPath, exchange.getRelativePath());
     }
 
     @Override
