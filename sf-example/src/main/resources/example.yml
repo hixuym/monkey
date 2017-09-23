@@ -6,9 +6,9 @@ logging:
     "io.sunflower": INFO
 
 gizmo:
-  type: simple
-  applicationContextPath: /app
-  adminContextPath: /admin
+#  type: simple
+#  applicationContextPath: /app
+#  adminContextPath: /admin
   applicationSecret: 12345678
   accessLogFormat: combined
 

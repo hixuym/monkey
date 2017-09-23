@@ -26,6 +26,19 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

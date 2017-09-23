@@ -38,7 +38,7 @@ import io.sunflower.guicey.LoggerProvider;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class TemplateEngineManagerImplTest {
@@ -97,7 +97,7 @@ public class TemplateEngineManagerImplTest {
     public void testGetNonExistingProducesNoNPE() {
         TemplateEngineManager manager = createTemplateEngineManager(OverrideJsonTemplateEngine.class);
         // return default json engine.
-        assertNotNull(manager.getTemplateEngineForContentType("non/existing"));
+        assertNull(manager.getTemplateEngineForContentType("non/existing"));
     }
 
     public static abstract class MockTemplateEngine implements TemplateEngine {

@@ -304,7 +304,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     /**
      * Retrieves a the reverse route for this controllerClass and method.
      *
-     * @param controllerClass The controllerClass e.g. ApplicationController.class
+     * @param controllerClass The controllerClass e.g. MainController.class
      * @param methodName      the methodName of the class e.g. "index"
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
@@ -325,7 +325,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     /**
      * Retrieves a the reverse route for a method referenced with Java-8 lambdas (functional method references).
      *
-     * @param controllerMethod The Java-8 style method reference such as <code>ApplicationController::index</code>.
+     * @param controllerMethod The Java-8 style method reference such as <code>MainController::index</code>.
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
     @Override

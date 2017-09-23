@@ -12,6 +12,7 @@
  */
 package io.sunflower.gizmo.utils;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
@@ -82,7 +83,12 @@ abstract public class AbstractContext implements Context.Impl {
     }
 
     protected void init(String contextPath, String requestPath) {
-        this.contextPath = contextPath;
+        // contextPath "" or "/" prefix string.
+        if (Strings.isNullOrEmpty(contextPath)) {
+            this.contextPath = "";
+        } else {
+            this.contextPath = StringUtils.prependIfMissing(contextPath, "/");
+        }
 
         this.requestPath = requestPath;
 

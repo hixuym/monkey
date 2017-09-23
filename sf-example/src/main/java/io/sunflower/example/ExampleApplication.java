@@ -9,6 +9,7 @@ import io.sunflower.gizmo.server.GizmoBundle;
 import io.sunflower.gizmo.InstrumentedGizmo;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.gizmo.server.GizmoServerFactory;
+import io.sunflower.gizmo.template.TemplateEngineFreemarker;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
@@ -45,6 +46,7 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
             @Override
             protected void configure() {
                 bind(ApplicationRoutes.class).to(Routes.class);
+                bind(TemplateEngineFreemarker.class);
                 OptionalBinder.newOptionalBinder(binder(), Gizmo.class)
                     .setBinding().to(InstrumentedGizmo.class);
             }

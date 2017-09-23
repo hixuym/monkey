@@ -22,8 +22,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import io.sunflower.gizmo.diagnostics.DiagnosticError;
-import io.sunflower.gizmo.diagnostics.DiagnosticErrorBuilder;
 import io.sunflower.gizmo.exceptions.BadRequestException;
 import io.sunflower.gizmo.exceptions.RenderingException;
 import io.sunflower.gizmo.i18n.Messages;
@@ -50,7 +48,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
      *
      * @return True if diagnostics are enabled otherwise false.
      */
-    private boolean isDiagnosticsEnabled() {
+    protected boolean isDiagnosticsEnabled() {
         // extra safety: only disable detailed diagnostic error pages
         // if both in DEV mode and diagnostics are enabled 0
         return configuration.isDev() && configuration.isDiagnosticsEnabled();
@@ -79,12 +77,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
     @Override
     public Result getNotFoundResult(Context context) {
 
-        if (isDiagnosticsEnabled()) {
-            DiagnosticError diagnosticError =
-                DiagnosticErrorBuilder.build404NotFoundDiagnosticError(true);
-            return Results.notFound().html().render(diagnosticError);
-        }
-
         String messageI18n
             = messages.getWithDefault(
             GizmoConstant.I18N_SYSTEM_NOT_FOUND_TEXT_KEY,
@@ -95,21 +87,12 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         ErrorMessage message = new ErrorMessage(Result.SC_404_NOT_FOUND, messageI18n);
 
         return Results
-            .notFound()
+            .notFound().json()
             .render(message);
     }
 
     @Override
     public Result getUnauthorizedResult(Context context) {
-
-        if (isDiagnosticsEnabled()) {
-
-            DiagnosticError diagnosticError =
-                DiagnosticErrorBuilder.build401UnauthorizedDiagnosticError();
-
-            return Results.unauthorized().render(diagnosticError);
-
-        }
 
         String messageI18n
             = messages.getWithDefault(
@@ -124,23 +107,13 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         // http://www.ietf.org/rfc/rfc2617.txt 3.2.1 The WWW-Authenticate Response Header
 
         return Results
-            .unauthorized()
+            .unauthorized().json()
             .addHeader(Result.WWW_AUTHENTICATE, "None")
             .render(message);
     }
 
     @Override
     public Result getForbiddenResult(Context context) {
-
-        // diagnostic mode
-        if (isDiagnosticsEnabled()) {
-
-            DiagnosticError diagnosticError =
-                DiagnosticErrorBuilder.build403ForbiddenDiagnosticError();
-
-            return Results.forbidden().render(diagnosticError);
-
-        }
 
         String messageI18n
             = messages.getWithDefault(
@@ -151,20 +124,11 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         ErrorMessage message = new ErrorMessage(Result.SC_403_FORBIDDEN, messageI18n);
 
-        return Results.forbidden().render(message);
+        return Results.forbidden().json().render(message);
 
     }
 
     private Result getBadRequestResult(Context context, Exception exception) {
-
-        if (isDiagnosticsEnabled()) {
-
-            DiagnosticError diagnosticError =
-                DiagnosticErrorBuilder.build400BadRequestDiagnosticError(exception, true);
-
-            return Results.badRequest().render(diagnosticError);
-
-        }
 
         String messageI18n
             = messages.getWithDefault(
@@ -176,26 +140,11 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         ErrorMessage message = new ErrorMessage(Result.SC_400_BAD_REQUEST, messageI18n, exception.getMessage());
 
         return Results
-            .badRequest()
+            .badRequest().json()
             .render(message);
     }
 
     private Result getRenderingExceptionResult(Context context, RenderingException exception, Result underlyingResult) {
-
-        if (isDiagnosticsEnabled()) {
-
-            // prefer provided title and underlying cause
-            DiagnosticError diagnosticError = DiagnosticErrorBuilder
-                .buildDiagnosticError(
-                    (exception.getTitle() == null ? "Rendering exception" : exception.getTitle()),
-                    (exception.getCause() == null ? exception : exception.getCause()),
-                    exception.getSourcePath(),
-                    exception.getLineNumber(),
-                    underlyingResult);
-
-            return Results.internalServerError().render(diagnosticError);
-
-        }
 
         return getInternalServerErrorResult(context, exception);
 
@@ -206,15 +155,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
     }
 
     private Result getInternalServerErrorResult(Context context, Exception exception, Result underlyingResult) {
-
-        if (isDiagnosticsEnabled()) {
-
-            DiagnosticError diagnosticError =
-                DiagnosticErrorBuilder.build500InternalServerErrorDiagnosticError(exception, true, underlyingResult);
-
-            return Results.internalServerError().render(diagnosticError);
-
-        }
 
         logger.error(
             "Emitting bad request 500. Something really wrong when calling route: {} (class: {} method: {})",
@@ -234,6 +174,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
         return Results
             .internalServerError()
+            .json()
             .render(message);
     }
 

@@ -43,12 +43,8 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
     // to be singleton if they don't want
     private final Map<String, Provider<? extends TemplateEngine>> contentTypeToTemplateEngineMap;
 
-    private final TemplateEngine defaultTemplateEngine;
-
     @Inject
     public TemplateEngineManagerImpl(Injector injector) {
-
-        defaultTemplateEngine = injector.getInstance(TemplateEngineJson.class);
 
         Map<String, Provider<? extends TemplateEngine>> map = new HashMap<>();
 
@@ -78,7 +74,7 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
         if (provider != null) {
             return provider.get();
         } else {
-            return defaultTemplateEngine;
+            return null;
         }
     }
 

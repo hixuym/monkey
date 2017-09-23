@@ -21,6 +21,8 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Renderable;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.exceptions.BadRequestException;
+import io.sunflower.gizmo.exceptions.GizmoException;
+import io.sunflower.gizmo.template.TemplateEngine;
 import io.sunflower.gizmo.template.TemplateEngineManager;
 
 
@@ -89,9 +91,17 @@ public class ResultHandler {
         }
 
         // try to get a suitable rendering engine...
-        templateEngineManager
-            .getTemplateEngineForContentType(result.getContentType())
-            .invoke(context, result);
+        TemplateEngine templateEngine = templateEngineManager
+            .getTemplateEngineForContentType(result.getContentType());
+
+        if (templateEngine != null) {
+
+            templateEngine.invoke(context, result);
+
+        } else {
+            throw new GizmoException(
+                500, "No template engine found for result content type " + result.getContentType());
+        }
     }
 
 }

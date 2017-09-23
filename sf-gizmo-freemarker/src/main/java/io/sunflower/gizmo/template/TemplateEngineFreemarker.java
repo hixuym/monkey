@@ -278,8 +278,7 @@ public class TemplateEngineFreemarker implements TemplateEngine {
 
         // Specify the data source where the template files come from.
         // Here I set a file directory for it:
-        String templateName = templateEngineHelper.getTemplateForResult(
-            context.getRoute(), result, FILE_SUFFIX);
+        String templateName = templateEngineHelper.getTemplateForResult(context.getRoute(), result, FILE_SUFFIX);
 
         Template freemarkerTemplate;
 
