@@ -8,5 +8,7 @@ public class Routes implements ApplicationRoutes {
     @Override
     public void init(Router router) {
         router.GET().route("/").with(MainController::index);
+
+        router.GET().route("/*").with(MainController::index);
     }
 }

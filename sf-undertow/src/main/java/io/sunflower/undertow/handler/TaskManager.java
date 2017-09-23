@@ -65,7 +65,7 @@ public class TaskManager implements HttpHandler {
     }
 
     private void doGet(HttpServerExchange exchange) {
-        if (Strings.isNullOrEmpty(StringUtils.removeEnd(exchange.getRelativePath(), "/"))) {
+        if (Strings.isNullOrEmpty(exchange.getRelativePath())) {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
 
@@ -88,7 +88,7 @@ public class TaskManager implements HttpHandler {
     }
 
     private void doPost(HttpServerExchange exchange) {
-        final Task task = tasks.get(StringUtils.removeEnd(exchange.getRelativePath(), "/"));
+        final Task task = tasks.get(exchange.getRelativePath());
         if (task != null) {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8.toString());
             final PrintWriter output = new PrintWriter(exchange.getOutputStream());

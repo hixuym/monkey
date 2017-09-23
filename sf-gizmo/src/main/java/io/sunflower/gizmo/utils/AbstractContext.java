@@ -84,7 +84,7 @@ abstract public class AbstractContext implements Context.Impl {
     protected void init(String contextPath, String requestPath) {
         this.contextPath = contextPath;
 
-        this.requestPath = StringUtils.appendIfMissing(requestPath, "/");
+        this.requestPath = requestPath;
 
         // init flash scope:
         flashScope.init(this);
