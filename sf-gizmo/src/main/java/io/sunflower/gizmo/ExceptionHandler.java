@@ -15,6 +15,9 @@
 
 package io.sunflower.gizmo;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(DefaultExceptionHandler.class)
 public interface ExceptionHandler {
 
     /**

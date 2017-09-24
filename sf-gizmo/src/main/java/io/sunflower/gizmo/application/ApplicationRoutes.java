@@ -13,6 +13,8 @@
 
 package io.sunflower.gizmo.application;
 
+import com.google.inject.ImplementedBy;
+
 import io.sunflower.gizmo.Router;
 
 /**
@@ -20,6 +22,7 @@ import io.sunflower.gizmo.Router;
  *
  * @author rbauer
  */
+@ImplementedBy(DefaultApplicationRoutes.class)
 public interface ApplicationRoutes {
 
     void init(Router router);

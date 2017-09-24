@@ -12,6 +12,8 @@
  */
 package io.sunflower.gizmo.application;
 
+import com.google.inject.ImplementedBy;
+
 import java.util.List;
 
 import io.sunflower.gizmo.Filter;
@@ -21,6 +23,7 @@ import io.sunflower.gizmo.Filter;
  *
  * Implement the class in conf.Filters and run the filters.
  */
+@ImplementedBy(DefaultApplicationFilters.class)
 public interface ApplicationFilters {
     void addFilters(List<Class<? extends Filter>> filters);
 }

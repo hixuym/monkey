@@ -13,6 +13,9 @@
 
 package io.sunflower.gizmo;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(GizmoDefault.class)
 public interface Gizmo {
 
     /**

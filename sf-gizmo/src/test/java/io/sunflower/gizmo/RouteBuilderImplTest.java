@@ -463,7 +463,7 @@ public class RouteBuilderImplTest {
         Provider filterProvider = Mockito.mock(Provider.class);
         com.example.conf.Filters filters = new com.example.conf.Filters(DummyFilter.class);
 
-        this.routeBuilder.setApplicationFilters(filters);
+        this.routeBuilder.setGlobalFilters(filters);
 
         Mockito.when(injector.getProvider(DummyFilter.class)).thenReturn(filterProvider);
 

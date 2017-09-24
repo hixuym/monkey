@@ -14,11 +14,8 @@
 package io.sunflower.gizmo;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
 import com.google.inject.util.Providers;
 
 import org.slf4j.Logger;
@@ -31,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.application.ApplicationFilters;
@@ -52,9 +51,9 @@ public class RouteBuilderImpl implements RouteBuilder {
 
     private ApplicationFilters globalFilters;
 
-    @Inject(optional = true)
-    public void setApplicationFilters(ApplicationFilters filters) {
-        this.globalFilters = filters;
+    @Inject
+    public void setGlobalFilters(ApplicationFilters globalFilters) {
+        this.globalFilters = globalFilters;
     }
 
     @Inject
@@ -244,9 +243,7 @@ public class RouteBuilderImpl implements RouteBuilder {
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-            if (this.globalFilters != null) {
-                this.globalFilters.addFilters(allFilters);
-            }
+            this.globalFilters.addFilters(allFilters);
         }
 
         return allFilters;
