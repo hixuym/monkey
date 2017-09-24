@@ -58,6 +58,7 @@
         <module>sf-gizmo</module>
         <module>sf-gizmo-freemarker</module>
         <module>sf-db</module>
+        <module>sf-ebean</module>
         <module>sf-migrations</module>
         <module>sf-mybatis</module>
         <module>sf-sec</module>
