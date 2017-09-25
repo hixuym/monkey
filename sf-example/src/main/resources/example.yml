@@ -17,3 +17,12 @@ metrics:
   reporters:
     - type: log
       logger: io.sunflower.metrics
+
+database:
+  driverClass: org.h2.Driver
+  user: sa
+  password: ""
+  url: jdbc:h2:mem:test_db
+  initialSize: 0
+  minSize: 0
+  properties:

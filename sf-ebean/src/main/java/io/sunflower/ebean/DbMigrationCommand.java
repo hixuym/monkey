@@ -18,7 +18,6 @@ package io.sunflower.ebean;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import io.ebean.EbeanServer;
@@ -26,6 +25,8 @@ import io.ebean.EbeanServerFactory;
 import io.ebean.Platform;
 import io.ebean.config.DbMigrationConfig;
 import io.ebean.config.ServerConfig;
+import io.ebean.dbmigration.DbMigration;
+import io.ebean.dbmigration.DbOffline;
 import io.sunflower.cli.Command;
 import io.sunflower.setup.Bootstrap;
 
@@ -61,25 +62,32 @@ public class DbMigrationCommand extends Command {
     @Override
     public void run(Bootstrap<?> bootstrap, Namespace namespace) throws Exception {
 
-        String platform = namespace.getString("platform");
+        try {
+            String platform = namespace.getString("platform");
 
-        ServerConfig serverConfig = new ServerConfig();
+            DbOffline.setPlatform(platform);
+            DbOffline.setGenerateMigration();
 
-        serverConfig.setPackages(namespace.getList("pkgs"));
+            ServerConfig serverConfig = new ServerConfig();
 
-        DbMigrationConfig dbMigrationConfig = new DbMigrationConfig();
+            serverConfig.setPackages(namespace.getList("pkgs"));
 
-        dbMigrationConfig.setPlatform(Platform.valueOf(namespace.getString("platform")));
+            DbMigrationConfig dbMigrationConfig = new DbMigrationConfig();
 
-        dbMigrationConfig.setMigrationPath(namespace.getString("output"));
+            dbMigrationConfig.setPlatform(Platform.valueOf(namespace.getString("platform")));
 
-        serverConfig.setMigrationConfig(dbMigrationConfig);
+            dbMigrationConfig.setMigrationPath(namespace.getString("output"));
 
-        EbeanServer server = EbeanServerFactory.create(serverConfig);
+            serverConfig.setMigrationConfig(dbMigrationConfig);
 
-        DbMigrationGenerator dbMigrationGenerator = new DbMigrationGenerator(server);
+            EbeanServer server = EbeanServerFactory.create(serverConfig);
 
-        dbMigrationGenerator.generateMigration();
+            DbMigration dbMigration = new DbMigration(server);
+
+            dbMigration.generateMigration();
+        } finally {
+            DbOffline.reset();
+        }
     }
 
 }

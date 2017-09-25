@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.OptionalBinder;
 
 import io.sunflower.Application;
+import io.sunflower.Configuration;
+import io.sunflower.db.PooledDataSourceFactory;
+import io.sunflower.ebean.EbeanBundle;
 import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.server.GizmoBundle;
 import io.sunflower.gizmo.InstrumentedGizmo;
@@ -37,6 +40,17 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
                 return configuration.getServerFactory();
             }
         });
+
+        EbeanBundle ebeanBundle = new EbeanBundle<ExampleConfiguration>() {
+            @Override
+            public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        };
+
+        ebeanBundle.scan("io.sunflower.example.models");
+
+        bootstrap.addBundle(ebeanBundle);
     }
 
     @Override

@@ -243,7 +243,8 @@ public class RouteBuilderImpl implements RouteBuilder {
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {
-            this.globalFilters.addFilters(allFilters);
+            if (this.globalFilters != null)
+                this.globalFilters.addFilters(allFilters);
         }
 
         return allFilters;
