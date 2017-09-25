@@ -15,24 +15,29 @@
 
 package io.sunflower.ebean;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
 import io.ebean.EbeanServer;
-import io.ebean.EbeanServerFactory;
-import io.ebean.config.ServerConfig;
+import io.ebean.dbmigration.DbMigration;
 
-@Singleton
-public class EbeanServerProvider implements Provider<EbeanServer> {
+public class DbMigrationGenerator extends DbMigration {
 
-    private final ServerConfig serverConfig;
+    private EbeanServer ebeanServer;
 
-    public EbeanServerProvider(ServerConfig serverConfig) {
-        this.serverConfig = serverConfig;
+    public DbMigrationGenerator(EbeanServer server) {
+        this.ebeanServer = server;
     }
 
     @Override
-    public EbeanServer get() {
-        return EbeanServerFactory.create(serverConfig);
+    protected void setDefaults() {
+        if (server == null) {
+            setServer(ebeanServer);
+        }
+
+        if (databasePlatform == null && platforms.isEmpty()) {
+            // not explicitly set not set a list of platforms so
+            // default to the platform of the default server
+            databasePlatform = server.getDatabasePlatform();
+            logger.debug("set platform to {}", databasePlatform.getName());
+        }
     }
+
 }

@@ -15,8 +15,26 @@
 
 package io.sunflower.ebean;
 
-import io.sunflower.Configuration;
+import io.ebeaninternal.server.lib.ShutdownManager;
+import io.sunflower.db.ManagedDataSource;
+import io.sunflower.lifecycle.Managed;
 
-public interface EbeanConfigurable<T extends Configuration> {
-    ServerConfigFactory getServerConfigFactory(T configuration);
+public class EbeanServerManager implements Managed {
+
+    private final ManagedDataSource dataSource;
+
+    public EbeanServerManager(ManagedDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Override
+    public void start() throws Exception {
+        this.dataSource.start();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        this.dataSource.stop();
+        ShutdownManager.shutdown();
+    }
 }
