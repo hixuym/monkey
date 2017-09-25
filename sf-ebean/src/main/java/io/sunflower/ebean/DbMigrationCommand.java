@@ -57,6 +57,12 @@ public class DbMigrationCommand extends Command {
             .dest("output")
             .setDefault("migrations")
             .help("database migration file output dir.");
+
+        subparser.addArgument("--name")
+            .dest("name")
+            .nargs("?")
+            .setDefault("db_schame")
+            .help("database migration name.");
     }
 
     @Override
@@ -76,13 +82,15 @@ public class DbMigrationCommand extends Command {
 
             dbMigrationConfig.setPlatform(Platform.valueOf(namespace.getString("platform")));
 
-            dbMigrationConfig.setMigrationPath(namespace.getString("output"));
+            dbMigrationConfig.setName(namespace.getString("name"));
 
             serverConfig.setMigrationConfig(dbMigrationConfig);
 
             EbeanServer server = EbeanServerFactory.create(serverConfig);
 
             DbMigration dbMigration = new DbMigration(server);
+
+            dbMigration.setPathToResources(namespace.getString("output"));
 
             dbMigration.generateMigration();
         } finally {
