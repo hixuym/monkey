@@ -40,10 +40,6 @@
             <exclusions>
                 <exclusion>
                     <groupId>io.ebean</groupId>
-                    <artifactId>ebean-migration</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.ebean</groupId>
                     <artifactId>ebean-datasource</artifactId>
                 </exclusion>
             </exclusions>

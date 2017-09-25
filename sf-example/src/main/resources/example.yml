@@ -4,6 +4,13 @@ defaultName: Stranger
 logging:
   loggers:
     "io.sunflower": INFO
+    "io.ebean.SQL": TRACE
+    "io.ebean.TXN": TRACE
+    "io.ebean.SUM": TRACE
+    "io.ebean.cache.QUERY": TRACE
+    "io.ebean.cache.BEAN": TRACE
+    "io.ebean.cache.COLL": TRACE
+    "io.ebean.cache.NATKEY": TRACE
 
 gizmo:
 #  type: simple
@@ -21,8 +28,12 @@ metrics:
 database:
   driverClass: org.h2.Driver
   user: sa
+  autoCommitByDefault: false
   password: ""
   url: jdbc:h2:mem:test_db
   initialSize: 0
   minSize: 0
   properties:
+    search.packages: io.sunflower.example.models
+    ddl.generate: true
+    ddl.run: true

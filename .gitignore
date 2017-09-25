@@ -22,3 +22,4 @@ build/
 .classpath
 *.swp
 logs
+*all.sql

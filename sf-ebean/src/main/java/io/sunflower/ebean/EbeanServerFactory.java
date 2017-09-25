@@ -34,27 +34,24 @@ public class EbeanServerFactory {
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
-                             List<Class<?>> entities,
                              List<String> scanPkgs) {
-        return build(bundle, environment, dbConfig, entities, scanPkgs, EbeanBundle.DEFAULT_NAME);
+        return build(bundle, environment, dbConfig, scanPkgs, EbeanBundle.DEFAULT_NAME);
     }
 
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
-                             List<Class<?>> entities,
-                             List<String> scannPkgs,
+                             List<String> scanPkgs,
                              String name) {
         final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), name);
-        return build(bundle, environment, dbConfig, dataSource, entities, scannPkgs, name);
+        return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
     }
 
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
                              ManagedDataSource dataSource,
-                             List<Class<?>> entities,
-                             List<String> scannPkgs,
+                             List<String> scanPkgs,
                              String name) {
 
         ServerConfig serverConfig = new ServerConfig();
@@ -69,14 +66,10 @@ public class EbeanServerFactory {
 
         serverConfig.setName(name);
         serverConfig.setDataSource(dataSource);
-        serverConfig.setPackages(scannPkgs);
         serverConfig.setDefaultServer(bundle.isDefault());
         serverConfig.setRegister(true);
 
-
-        if (!entities.isEmpty()) {
-            entities.forEach(serverConfig::addClass);
-        }
+        serverConfig.setPackages(scanPkgs);
 
         bundle.configure(serverConfig);
 

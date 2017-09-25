@@ -15,11 +15,10 @@
 
 package io.sunflower.ebean;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.name.Names;
 
 import java.util.Arrays;
-import java.util.List;
 
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
@@ -35,27 +34,23 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
     public static final String DEFAULT_NAME = "ebean";
 
     private EbeanServer ebeanServer;
-    private final List<Class<?>> models = Lists.newArrayList();
     private final EbeanServerFactory ebeanServerFactory;
-    private final List<String> scanPkgs = Lists.newArrayList();
 
-    protected EbeanBundle() {
-        this(new EbeanServerFactory());
+    private final ImmutableList<String> scanPkgs;
+
+    protected EbeanBundle(String... scanPkgs) {
+        this(new EbeanServerFactory(), scanPkgs);
     }
 
-    protected EbeanBundle(EbeanServerFactory ebeanServerFactory) {
-        this.scanPkgs.add("io.sunflower.ebean");
+    protected EbeanBundle(EbeanServerFactory ebeanServerFactory, String... scanPkgs) {
+
+        ImmutableList.Builder<String> builder = ImmutableList.builder();
+
+        builder.addAll(Arrays.asList(scanPkgs));
+
+        this.scanPkgs = builder.build();
+
         this.ebeanServerFactory = ebeanServerFactory;
-    }
-
-    public EbeanBundle<T> addModels(Class<?>... modelClz) {
-        models.addAll(Arrays.asList(modelClz));
-        return this;
-    }
-
-    public EbeanBundle<T> scan(String... pkgs) {
-        scanPkgs.addAll(Arrays.asList(pkgs));
-        return this;
     }
 
     public boolean isDefault() {
@@ -66,7 +61,7 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
     public void run(T configuration, Environment environment) throws Exception {
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, models, scanPkgs, name());
+        this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
 
         environment.guicey().addModule((binder) -> {
             if (isDefault()) {
