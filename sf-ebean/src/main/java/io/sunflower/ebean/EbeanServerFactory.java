@@ -62,14 +62,14 @@ public class EbeanServerFactory {
             properties.setProperty(e.getKey(), e.getValue());
         }
 
+        serverConfig.setPackages(scanPkgs);
+
         serverConfig.loadFromProperties(properties);
 
         serverConfig.setName(name);
         serverConfig.setDataSource(dataSource);
         serverConfig.setDefaultServer(bundle.isDefault());
         serverConfig.setRegister(true);
-
-        serverConfig.setPackages(scanPkgs);
 
         bundle.configure(serverConfig);
 

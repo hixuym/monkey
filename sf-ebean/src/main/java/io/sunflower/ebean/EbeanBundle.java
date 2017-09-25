@@ -31,7 +31,7 @@ import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
 
 public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
-    public static final String DEFAULT_NAME = "ebean";
+    public static final String DEFAULT_NAME = "default";
 
     private EbeanServer ebeanServer;
     private final EbeanServerFactory ebeanServerFactory;
