@@ -57,6 +57,7 @@
         <module>sf-undertow</module>
         <module>sf-example</module>
         <module>sf-extension</module>
+        <module>sf-client</module>
         <module>sf-gizmo</module>
         <module>sf-gizmo-freemarker</module>
         <module>sf-db</module>
