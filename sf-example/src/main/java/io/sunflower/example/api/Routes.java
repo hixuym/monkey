@@ -15,7 +15,7 @@
 
 package io.sunflower.example.api;
 
-import io.sunflower.example.resources.ApplicationResources;
+import io.sunflower.example.resources.ApplicationResource;
 import io.sunflower.gizmo.AssetsResource;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
@@ -24,8 +24,8 @@ public class Routes implements ApplicationRoutes {
     @Override
     public void init(Router router) {
 
-        router.GET().route("/").with(ApplicationResources::index);
-        router.GET().route("/hello_world.json").with(ApplicationResources::helloWorldJson);
+        router.GET().route("/").with(ApplicationResource::index);
+        router.GET().route("/hello_world.json").with(ApplicationResource::helloWorldJson);
 
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)
@@ -36,6 +36,6 @@ public class Routes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page
         ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/.*").with(ApplicationResources::index);
+        router.GET().route("/.*").with(ApplicationResource::index);
     }
 }

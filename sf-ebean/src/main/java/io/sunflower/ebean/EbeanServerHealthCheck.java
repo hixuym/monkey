@@ -50,8 +50,8 @@ public class EbeanServerHealthCheck extends HealthCheck {
     protected Result check() throws Exception {
         return timeBoundHealthCheck.check(() -> {
 
+            ebeanServer.beginTransaction();
             try {
-                ebeanServer.beginTransaction();
 
                 SqlQuery sqlQuery = ebeanServer.createSqlQuery(validationQuery);
 
@@ -62,8 +62,10 @@ public class EbeanServerHealthCheck extends HealthCheck {
                 ebeanServer.rollbackTransaction();
 
                 throw e;
+            } finally {
+                ebeanServer.endTransaction();
             }
-            
+
             return Result.healthy();
         });
     }

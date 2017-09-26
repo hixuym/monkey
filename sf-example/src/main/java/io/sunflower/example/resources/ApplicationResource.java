@@ -8,7 +8,7 @@ import io.sunflower.example.core.User;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 
-public class ApplicationResources {
+public class ApplicationResource {
     @Inject
     private EbeanServer ebeanServer;
 

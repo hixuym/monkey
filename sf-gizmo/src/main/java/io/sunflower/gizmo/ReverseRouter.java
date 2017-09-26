@@ -324,7 +324,7 @@ public class ReverseRouter implements WithResourceMethod<Builder> {
     /**
      * Retrieves a the reverse route for a method referenced with Java-8 lambdas (functional method references).
      *
-     * @param resourceMethod The Java-8 style method reference such as <code>MainController::index</code>.
+     * @param resourceMethod The Java-8 style method reference such as <code>ApplicationResource::index</code>.
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
     @Override

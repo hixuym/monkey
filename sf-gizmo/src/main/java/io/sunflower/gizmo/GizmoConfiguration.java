@@ -13,23 +13,19 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import io.sunflower.gizmo.server.GizmoHttpHandler;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.Mode;
 import io.sunflower.gizmo.utils.SecretGenerator;
+import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.ConnectorFactory;
-import io.sunflower.undertow.HttpConnectorFactory;
 import io.sunflower.undertow.handler.Task;
 import io.sunflower.undertow.handler.TaskManager;
 import io.sunflower.util.Duration;
@@ -45,6 +41,8 @@ import io.undertow.server.handlers.accesslog.AccessLogReceiver;
 import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
 import io.undertow.server.handlers.form.EagerFormParsingHandler;
 import io.undertow.server.handlers.form.FormParserFactory;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 /**
  *
@@ -352,7 +350,14 @@ public class GizmoConfiguration {
     }
 
     @JsonIgnore
-    protected HttpHandler createAdminHandler() {
+    protected HttpHandler createAdminHandler(Environment environment) {
+
+        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                logTasks();
+            }
+        });
 
         return new PathHandler()
             .addPrefixPath("tasks", TaskManager.createHandler(this.taskManager));
@@ -418,5 +423,21 @@ public class GizmoConfiguration {
         }
 
         return httpHandler;
+    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Gizmo.class);
+
+    private void logTasks() {
+        final StringBuilder stringBuilder = new StringBuilder(1024).append(String.format("%n%n"));
+
+        for (Task task : this.taskManager.getTasks()) {
+            final String taskClassName = firstNonNull(task.getClass().getCanonicalName(), task.getClass().getName());
+            stringBuilder.append(String.format("    %-7s /tasks/%s (%s)%n",
+                "POST",
+                task.getName(),
+                taskClassName));
+        }
+
+        LOGGER.info("tasks = {}", stringBuilder.toString());
     }
 }

@@ -69,6 +69,8 @@ public class DefaultGizmoServerFactory extends GizmoConfiguration implements Giz
     @Override
     public GizmoServer build(Environment environment) {
 
+        addTask(new HealthCheckTask(environment));
+
         Undertow.Builder undertowBuilder = Undertow.builder()
             // NOTE: should ninja not use equals chars within its cookie values?
             .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
@@ -77,7 +79,7 @@ public class DefaultGizmoServerFactory extends GizmoConfiguration implements Giz
 
         HttpHandler applicationHandler = addAccessLogWrapper(environment, createApplicationHandler(environment.guicey().injector()));
 
-        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler());
+        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler(environment));
 
         for (ConnectorFactory connectorFactory : getApplicationConnectors()) {
 

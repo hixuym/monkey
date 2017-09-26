@@ -18,7 +18,6 @@ package io.sunflower.client;
 import io.sunflower.client.ssl.TlsConfiguration;
 
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.ssl.PrivateKeyStrategy;
@@ -33,22 +32,22 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.List;
 
-public class DropwizardSSLConnectionSocketFactory {
+public class SSLConnectionSocketFactory {
 
     private final TlsConfiguration configuration;
     private final HostnameVerifier verifier;
 
-    public DropwizardSSLConnectionSocketFactory(TlsConfiguration configuration) {
+    public SSLConnectionSocketFactory(TlsConfiguration configuration) {
         this(configuration, null);
     }
 
-    public DropwizardSSLConnectionSocketFactory(TlsConfiguration configuration, HostnameVerifier verifier) {
+    public SSLConnectionSocketFactory(TlsConfiguration configuration, HostnameVerifier verifier) {
         this.configuration = configuration;
         this.verifier = verifier;
     }
 
-    public SSLConnectionSocketFactory getSocketFactory() throws SSLInitializationException {
-        return new SSLConnectionSocketFactory(buildSslContext(), getSupportedProtocols(), getSupportedCiphers(),
+    public org.apache.http.conn.ssl.SSLConnectionSocketFactory getSocketFactory() throws SSLInitializationException {
+        return new org.apache.http.conn.ssl.SSLConnectionSocketFactory(buildSslContext(), getSupportedProtocols(), getSupportedCiphers(),
                 chooseHostnameVerifier());
     }
 
@@ -70,7 +69,7 @@ public class DropwizardSSLConnectionSocketFactory {
 
     private HostnameVerifier chooseHostnameVerifier() {
         if (configuration.isVerifyHostname()) {
-            return verifier != null ? verifier : SSLConnectionSocketFactory.getDefaultHostnameVerifier();
+            return verifier != null ? verifier : org.apache.http.conn.ssl.SSLConnectionSocketFactory.getDefaultHostnameVerifier();
         } else {
             return new NoopHostnameVerifier();
         }

@@ -44,7 +44,6 @@ import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -440,11 +439,11 @@ public class HttpClientBuilder {
             tlsConfiguration = new TlsConfiguration();
         }
 
-        final SSLConnectionSocketFactory sslConnectionSocketFactory;
+        final org.apache.http.conn.ssl.SSLConnectionSocketFactory sslConnectionSocketFactory;
         if (tlsConfiguration == null) {
-            sslConnectionSocketFactory = SSLConnectionSocketFactory.getSocketFactory();
+            sslConnectionSocketFactory = org.apache.http.conn.ssl.SSLConnectionSocketFactory.getSocketFactory();
         } else {
-            sslConnectionSocketFactory = new DropwizardSSLConnectionSocketFactory(tlsConfiguration,
+            sslConnectionSocketFactory = new SSLConnectionSocketFactory(tlsConfiguration,
                 verifier).getSocketFactory();
         }
 

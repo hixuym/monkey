@@ -1,13 +1,19 @@
 package io.sunflower.setup;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.health.SharedHealthCheckRegistries;
+import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -16,6 +22,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import javax.validation.Validator;
 
 import io.sunflower.guicey.setup.GuiceyEnvironment;
+import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.metrics.MetricsModule;
 
@@ -59,14 +67,35 @@ public class Environment {
 
         this.metricRegistry = metricRegistry;
         this.healthCheckRegistry = healthCheckRegistry;
+
+        this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
+
         this.validator = validator;
         this.classLoader = classLoader;
 
         this.guiceyEnvironment = new GuiceyEnvironment();
 
-        this.guiceyEnvironment.addModule(new EnvironmentModule(this), new MetricsModule());
+        this.guiceyEnvironment.addModule(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bindConstant().annotatedWith(Names.named("application.name")).to(getName());
+                bind(ObjectMapper.class).toInstance(getObjectMapper());
+                bind(XmlMapper.class).toInstance(getXmlMapper());
+                bind(MetricRegistry.class).toInstance(metrics());
+                bind(HealthCheckRegistry.class).toInstance(healthChecks());
+                bind(Validator.class).toInstance(getValidator());
+                bind(Environment.class).toInstance(Environment.this);
+            }
+        }, new MetricsModule());
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
+
+        lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                logHealthChecks();
+            }
+        });
 
         this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
             .workQueue(new ArrayBlockingQueue<>(1))
@@ -171,4 +200,22 @@ public class Environment {
         return healthCheckRegistry;
     }
 
+    private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
+
+    private void logHealthChecks() {
+        if (healthChecks().getNames().size() <= 1) {
+            LOGGER.warn(String.format(
+                "%n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+                    "!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !%n" +
+                    "!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !%n" +
+                    "!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !%n" +
+                    "!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !%n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            ));
+        }
+        LOGGER.info("health checks = {}", healthChecks().getNames());
+    }
 }
