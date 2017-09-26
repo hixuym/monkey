@@ -37,7 +37,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AssetsControllerTest {
+public class AssetsResourceTest {
 
     @Mock
     MimeTypes mimeTypes;
@@ -57,12 +57,12 @@ public class AssetsControllerTest {
     @Mock
     GizmoConfiguration configuration;
 
-    AssetsController assetsController;
+    AssetsResource assetsResource;
 
     @Before
     public void before() {
-        assetsController = new AssetsController(
-            new AssetsControllerHelper(),
+        assetsResource = new AssetsResource(
+            new AssetsResourceHelper(),
             httpCacheToolkit,
             mimeTypes,
             configuration);
@@ -72,7 +72,7 @@ public class AssetsControllerTest {
     @Test
     public void testServeStatic404() throws Exception {
         when(contextRenderable.getRequestPath()).thenReturn("notAvailable");
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -88,7 +88,7 @@ public class AssetsControllerTest {
     @Test
     public void testServeStaticSecurityClassesWithoutSlash() throws Exception {
         when(contextRenderable.getRequestPath()).thenReturn("ninja/Ninja.class");
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -105,7 +105,7 @@ public class AssetsControllerTest {
     public void testServeStaticSecurityClassesAbsolute() throws Exception {
 
         when(contextRenderable.getRequestPath()).thenReturn("/ninja/Ninja.class");
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -124,7 +124,7 @@ public class AssetsControllerTest {
         // But it should
         when(contextRenderable.getRequestPath()).thenReturn("/assets/../../conf/heroku.conf");
 
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -138,16 +138,16 @@ public class AssetsControllerTest {
 
     @Test
     public void testServeStaticDirectory() throws Exception {
-        AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
+        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsController = new AssetsController(
-            assetsControllerHelper,
+        assetsResource = new AssetsResource(
+            assetsResourceHelper,
             httpCacheToolkit,
             mimeTypes,
             configuration);
 
         when(contextRenderable.getRequestPath()).thenReturn("/");
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -155,7 +155,7 @@ public class AssetsControllerTest {
 
         renderable.render(contextRenderable, result);
 
-        verify(assetsControllerHelper).isDirectoryURL(this.getClass().getResource("/assets/"));
+        verify(assetsResourceHelper).isDirectoryURL(this.getClass().getResource("/assets/"));
         verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
         assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
     }
@@ -166,7 +166,7 @@ public class AssetsControllerTest {
         when(contextRenderable.getRequestPath()).thenReturn(
             "/assets/testasset.txt");
 
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -195,10 +195,10 @@ public class AssetsControllerTest {
 
         // some more setup needed:
         Mockito.when(configuration.isDev()).thenReturn(true);
-        AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
+        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsController = new AssetsController(
-            assetsControllerHelper,
+        assetsResource = new AssetsResource(
+            assetsResourceHelper,
             httpCacheToolkit,
             mimeTypes,
             configuration);
@@ -206,11 +206,11 @@ public class AssetsControllerTest {
         when(contextRenderable.getRequestPath()).thenReturn(
             "/assets/testasset-not-existent.txt");
 
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
         renderable.render(contextRenderable, Results.ok());
-        verify(assetsControllerHelper).normalizePathWithoutLeadingSlash("/assets/testasset-not-existent.txt", true);
+        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset-not-existent.txt", true);
         verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
         assertEquals(404, resultCaptor.getValue().getStatusCode());
 
@@ -221,10 +221,10 @@ public class AssetsControllerTest {
 
         // some more setup needed:
         Mockito.when(configuration.isDev()).thenReturn(true);
-        AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
+        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsController = new AssetsController(
-            assetsControllerHelper,
+        assetsResource = new AssetsResource(
+            assetsResourceHelper,
             httpCacheToolkit,
             mimeTypes,
             configuration);
@@ -237,11 +237,11 @@ public class AssetsControllerTest {
         when(responseStreams.getOutputStream()).thenReturn(
             byteArrayOutputStream);
 
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
         renderable.render(contextRenderable, Results.ok());
-        verify(assetsControllerHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
+        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
         verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
         assertEquals(200, resultCaptor.getValue().getStatusCode());
 
@@ -252,9 +252,9 @@ public class AssetsControllerTest {
 
         // some more setup needed:
         Mockito.when(configuration.isDev()).thenReturn(false);
-        AssetsControllerHelper assetsControllerHelper = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
-        assetsController = new AssetsController(
-            assetsControllerHelper,
+        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+        assetsResource = new AssetsResource(
+            assetsResourceHelper,
             httpCacheToolkit,
             mimeTypes,
             configuration);
@@ -266,11 +266,11 @@ public class AssetsControllerTest {
         when(responseStreams.getOutputStream()).thenReturn(
             byteArrayOutputStream);
 
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
         renderable.render(contextRenderable, Results.ok());
-        verify(assetsControllerHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
+        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
 
     }
 
@@ -292,7 +292,7 @@ public class AssetsControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         when(responseStreams.getOutputStream()).thenReturn(
             byteArrayOutputStream);
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -333,7 +333,7 @@ public class AssetsControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         when(responseStreams.getOutputStream()).thenReturn(
             byteArrayOutputStream);
-        Result result2 = assetsController.serveStatic();
+        Result result2 = assetsResource.serveStatic();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -358,10 +358,10 @@ public class AssetsControllerTest {
 
     @Test
     public void testServeWebJars() throws Exception {
-        AssetsControllerHelper assetsControllerHelper
-            = Mockito.mock(AssetsControllerHelper.class, Mockito.CALLS_REAL_METHODS);
-        assetsController = new AssetsController(
-            assetsControllerHelper,
+        AssetsResourceHelper assetsResourceHelper
+            = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+        assetsResource = new AssetsResource(
+            assetsResourceHelper,
             httpCacheToolkit,
             mimeTypes,
             configuration);
@@ -376,7 +376,7 @@ public class AssetsControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         when(responseStreams.getOutputStream()).thenReturn(
             byteArrayOutputStream);
-        Result result2 = assetsController.serveWebJars();
+        Result result2 = assetsResource.serveWebJars();
 
         Renderable renderable = (Renderable) result2.getRenderable();
 
@@ -388,7 +388,7 @@ public class AssetsControllerTest {
         assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
 
         assertEquals("webjar_asset", byteArrayOutputStream.toString());
-        verify(assetsControllerHelper).normalizePathWithoutLeadingSlash("/webjar_asset.txt", true);
+        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/webjar_asset.txt", true);
 
     }
 }

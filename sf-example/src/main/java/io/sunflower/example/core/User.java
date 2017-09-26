@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.example.models;
+package io.sunflower.example.core;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

@@ -1,14 +1,14 @@
-package io.sunflower.example.controllers;
+package io.sunflower.example.resources;
 
 import javax.inject.Inject;
 
 import io.ebean.EbeanServer;
 import io.sunflower.ebean.Transactional;
-import io.sunflower.example.models.User;
+import io.sunflower.example.core.User;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 
-public class MainController {
+public class ApplicationResources {
     @Inject
     private EbeanServer ebeanServer;
 

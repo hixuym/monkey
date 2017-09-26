@@ -22,7 +22,7 @@ import java.lang.invoke.SerializedLambda;
 import java.nio.charset.StandardCharsets;
 
 import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.ControllerMethods;
+import io.sunflower.gizmo.ResourceMethods;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 
@@ -114,7 +114,7 @@ public class LambdasTest {
 
     @Test
     public void anyInstanceMethodReference() throws Exception {
-        ControllerMethods.ControllerMethod1<LambdasTest> lambda = LambdasTest::home;
+        ResourceMethods.ResourceMethod1<LambdasTest> lambda = LambdasTest::home;
 
         Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
 
@@ -132,7 +132,7 @@ public class LambdasTest {
     @Test
     public void anonymousClassReference() throws Exception {
         @SuppressWarnings("Convert2Lambda")
-        ControllerMethods.ControllerMethod1<Context> lambda = new ControllerMethods.ControllerMethod1<Context>() {
+        ResourceMethods.ResourceMethod1<Context> lambda = new ResourceMethods.ResourceMethod1<Context>() {
             @Override
             public Result apply(Context a) {
                 return Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
@@ -149,7 +149,7 @@ public class LambdasTest {
 
     @Test
     public void anonymousMethodReference() throws Exception {
-        ControllerMethods.ControllerMethod1<Context> lambda = (Context context) -> Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
+        ResourceMethods.ResourceMethod1<Context> lambda = (Context context) -> Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
 
         Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
 

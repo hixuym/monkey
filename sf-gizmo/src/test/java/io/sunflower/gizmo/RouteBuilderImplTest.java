@@ -17,9 +17,7 @@ package io.sunflower.gizmo;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -30,9 +28,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
-import java.util.Optional;
-
-import io.sunflower.gizmo.application.ApplicationFilters;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -381,8 +376,8 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getControllerClass(), is(MockController.class));
-        assertThat(route.getControllerMethod().getName(), is("execute"));
+        assertThat(route.getResourceClass(), is(MockController.class));
+        assertThat(route.getResourceMethod().getName(), is("execute"));
     }
 
     @Test
@@ -393,8 +388,8 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getControllerClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
-        assertThat(route.getControllerMethod().getName(), is("apply"));
+        assertThat(route.getResourceClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
+        assertThat(route.getResourceMethod().getName(), is("apply"));
     }
 
     @Test
@@ -403,15 +398,15 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getControllerClass(), is(MockController.class));
-        assertThat(route.getControllerMethod().getName(), is("execute3"));
+        assertThat(route.getResourceClass(), is(MockController.class));
+        assertThat(route.getResourceMethod().getName(), is("execute3"));
     }
 
     @Test
     @SuppressWarnings("Convert2Lambda")
     public void routeToAnonymousClassReference() throws Exception {
 
-        routeBuilder.GET().route("/execute").with(new ControllerMethods.ControllerMethod0() {
+        routeBuilder.GET().route("/execute").with(new ResourceMethods.ResourceMethod0() {
             @Override
             public Result apply() {
                 return Results.redirect("/");
@@ -421,8 +416,8 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getControllerClass().isAnonymousClass(), is(true));
-        assertThat(route.getControllerMethod().getName(), is("apply"));
+        assertThat(route.getResourceClass().isAnonymousClass(), is(true));
+        assertThat(route.getResourceMethod().getName(), is("apply"));
     }
 
     @Test
@@ -432,8 +427,8 @@ public class RouteBuilderImplTest {
 
         assertTrue(route.matches("GET", "/execute"));
         // should be a class within this test class as a real lambda
-        assertThat(route.getControllerClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
-        assertThat(route.getControllerMethod().getName(), is("apply"));
+        assertThat(route.getResourceClass().getCanonicalName(), startsWith(this.getClass().getCanonicalName()));
+        assertThat(route.getResourceMethod().getName(), is("apply"));
     }
 
 

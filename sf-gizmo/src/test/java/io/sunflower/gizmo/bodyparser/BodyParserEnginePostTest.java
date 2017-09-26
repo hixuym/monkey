@@ -40,7 +40,7 @@ import javax.validation.constraints.NotNull;
 
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.params.ControllerMethodInvokerTest;
+import io.sunflower.gizmo.params.ResourceMethodInvokerTest;
 import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.validation.ConstraintViolation;
@@ -76,7 +76,7 @@ public class BodyParserEnginePostTest {
                 bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
 
                 Multibinder<ParamParser> parsersBinder = Multibinder.newSetBinder(binder(), ParamParser.class);
-                parsersBinder.addBinding().to(ControllerMethodInvokerTest.NeedingInjectionParamParser.class);
+                parsersBinder.addBinding().to(ResourceMethodInvokerTest.NeedingInjectionParamParser.class);
             }
         });
 
@@ -274,17 +274,17 @@ public class BodyParserEnginePostTest {
         TestObjectWithCustomType testObject = bodyParserEnginePost.invoke(context, TestObjectWithCustomType.class);
 
         // and test:
-        assertThat(testObject.dep, equalTo(new ControllerMethodInvokerTest.Dep("SF__dep1")));
+        assertThat(testObject.dep, equalTo(new ResourceMethodInvokerTest.Dep("SF__dep1")));
 
         assertNotNull(testObject.depArray);
         assertThat(testObject.depArray.length, equalTo(2));
-        assertThat(testObject.depArray[0], equalTo(new ControllerMethodInvokerTest.Dep("SF__depArray1")));
-        assertThat(testObject.depArray[1], equalTo(new ControllerMethodInvokerTest.Dep("SF__depArray2")));
+        assertThat(testObject.depArray[0], equalTo(new ResourceMethodInvokerTest.Dep("SF__depArray1")));
+        assertThat(testObject.depArray[1], equalTo(new ResourceMethodInvokerTest.Dep("SF__depArray2")));
 
         assertNotNull(testObject.depList);
         assertThat(testObject.depList.size(), equalTo(2));
-        assertThat(testObject.depList.get(0), equalTo(new ControllerMethodInvokerTest.Dep("SF__depList1")));
-        assertThat(testObject.depList.get(1), equalTo(new ControllerMethodInvokerTest.Dep("SF__depList2")));
+        assertThat(testObject.depList.get(0), equalTo(new ResourceMethodInvokerTest.Dep("SF__depList1")));
+        assertThat(testObject.depList.get(1), equalTo(new ResourceMethodInvokerTest.Dep("SF__depList2")));
 
         assertFalse(validation.hasViolations());
     }
@@ -407,9 +407,9 @@ public class BodyParserEnginePostTest {
 
     public static class TestObjectWithCustomType {
 
-        public ControllerMethodInvokerTest.Dep dep;
-        public ControllerMethodInvokerTest.Dep[] depArray;
-        public List<ControllerMethodInvokerTest.Dep> depList;
+        public ResourceMethodInvokerTest.Dep dep;
+        public ResourceMethodInvokerTest.Dep[] depArray;
+        public List<ResourceMethodInvokerTest.Dep> depList;
 
     }
 

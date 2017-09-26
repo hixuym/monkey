@@ -22,7 +22,7 @@ import io.sunflower.gizmo.Result;
  *
  * Should signal a html error 400 - bad request (the client sent something strange).
  *
- * Useful inside controllers or filters for instance.
+ * Useful inside resources or filters for instance.
  *
  * Gizmo is supposed to pick it up and render an appropriate error page.
  */

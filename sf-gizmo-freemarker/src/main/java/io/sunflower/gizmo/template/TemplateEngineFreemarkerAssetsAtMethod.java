@@ -26,7 +26,7 @@ import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
-import io.sunflower.gizmo.AssetsController;
+import io.sunflower.gizmo.AssetsResource;
 import io.sunflower.gizmo.Router;
 
 @Singleton
@@ -47,13 +47,13 @@ public class TemplateEngineFreemarkerAssetsAtMethod implements
 
     public TemplateModel exec(List args) throws TemplateModelException {
 
-       List argsWithControllerAndMethod = new ArrayList(args.size() + 2);
-       argsWithControllerAndMethod.add(AssetsController.class.getName());
-       argsWithControllerAndMethod.add("serveStatic");
-       argsWithControllerAndMethod.add("fileName");
-       argsWithControllerAndMethod.addAll(args);
+       List argsWithResourceAndMethod = new ArrayList(args.size() + 2);
+       argsWithResourceAndMethod.add(AssetsResource.class.getName());
+       argsWithResourceAndMethod.add("serveStatic");
+       argsWithResourceAndMethod.add("fileName");
+       argsWithResourceAndMethod.addAll(args);
        
-       return templateEngineFreemarkerReverseRouteHelper.computeReverseRoute(argsWithControllerAndMethod);
+       return templateEngineFreemarkerReverseRouteHelper.computeReverseRoute(argsWithResourceAndMethod);
 
     }
 }

@@ -20,7 +20,7 @@ import io.sunflower.gizmo.Result;
  *
  * Should signal a html error 500 (something went wrong on the server).
  *
- * Useful inside controllers or filters for instance.
+ * Useful inside resources or filters for instance.
  *
  * Gizmo is supposed to pick it up and render an appropriate error page.
  */

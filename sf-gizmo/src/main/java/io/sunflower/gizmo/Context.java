@@ -480,7 +480,7 @@ public interface Context {
 
     /**
      * Gets an attribute value previously set by {@link #setAttribute}. <p> Attributes are shared state for the duration
-     * of the request; useful to pass values between {@link Filter filters} and controllers.
+     * of the request; useful to pass values between {@link Filter filters} and resources.
      *
      * @return the attribute value, or {@code null} if the attribute does not exist
      */
@@ -493,7 +493,7 @@ public interface Context {
      *     return clazz.cast(getAttribute(name));
      * </code></pre>
      * <p> Attributes are shared state for the duration of the request; useful to pass values between {@link Filter
-     * filters} and controllers.
+     * filters} and resources.
      *
      * @return the attribute value, or {@code null} if the attribute does not exist
      */
@@ -501,7 +501,7 @@ public interface Context {
 
     /**
      * Sets an attribute value. <p> Attributes are shared state for the duration of the request; useful to pass values
-     * between {@link Filter filters} and controllers.
+     * between {@link Filter filters} and resources.
      *
      * @see #getAttribute(String)
      * @see #getAttribute(String, Class)

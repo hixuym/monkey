@@ -500,9 +500,9 @@ public class Result {
     }
 
     /**
-     * Set the template to render. For instance template("views/AnotherController/anotherview.ftl.html");
+     * Set the template to render. For instance template("views/AnotherResource/anotherview.ftl.html");
      *
-     * @param template The view to render. Eg. views/AnotherController/anotherview.ftl.html
+     * @param template The view to render. Eg. views/AnotherResource/anotherview.ftl.html
      * @return The result that you executed the method on for chaining.
      */
     public Result template(String template) {

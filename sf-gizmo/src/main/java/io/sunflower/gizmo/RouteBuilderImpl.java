@@ -31,9 +31,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
 import io.sunflower.gizmo.application.ApplicationFilters;
-import io.sunflower.gizmo.params.ControllerMethodInvoker;
+import io.sunflower.gizmo.params.ResourceMethodInvoker;
 import io.sunflower.gizmo.utils.LambdaRoute;
 
 public class RouteBuilderImpl implements RouteBuilder {
@@ -100,14 +100,14 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     @Override
-    public void with(Class controllerClass, String controllerMethod) {
+    public void with(Class resourceClass, String resourceMethod) {
         this.functionalMethod
-            = verifyControllerMethod(controllerClass, controllerMethod);
+            = verifyControllerMethod(resourceClass, resourceMethod);
     }
 
     @Override
-    public Void with(ControllerMethod controllerMethod) {
-        LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
+    public Void with(ResourceMethod resourceMethod) {
+        LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
         this.functionalMethod = lambdaRoute.getFunctionalMethod();
         this.implementationMethod = lambdaRoute.getImplementationMethod();
         this.targetObject = lambdaRoute.getTargetObject();
@@ -263,8 +263,8 @@ public class RouteBuilderImpl implements RouteBuilder {
                 : injector.getProvider(functionalMethod.getDeclaringClass()));
 
             // invoke functional method with optionally using impl for argument extraction
-            ControllerMethodInvoker methodInvoker
-                = ControllerMethodInvoker.build(
+            ResourceMethodInvoker methodInvoker
+                = ResourceMethodInvoker.build(
                 functionalMethod, implementationMethod.orElse(functionalMethod), injector);
 
             return new FilterChainEnd(targetProvider, methodInvoker);

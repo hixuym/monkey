@@ -38,14 +38,14 @@ import io.sunflower.gizmo.validation.WithValidator;
 /**
  * Invokes methods on the controller, extracting arguments out
  */
-public class ControllerMethodInvoker {
+public class ResourceMethodInvoker {
 
-    private final static Logger logger = LoggerFactory.getLogger(ControllerMethodInvoker.class);
+    private final static Logger logger = LoggerFactory.getLogger(ResourceMethodInvoker.class);
 
     private final Method method;
     private final ArgumentExtractor<?>[] argumentExtractors;
 
-    ControllerMethodInvoker(
+    ResourceMethodInvoker(
         Method method,
         ArgumentExtractor<?>[] argumentExtractors) {
         this.method = method;
@@ -93,7 +93,7 @@ public class ControllerMethodInvoker {
      * @param injector             The guice injector
      * @return An invoker
      */
-    public static ControllerMethodInvoker build(
+    public static ResourceMethodInvoker build(
         Method functionalMethod,
         Method implementationMethod,
         Injector injector) {
@@ -144,7 +144,7 @@ public class ControllerMethodInvoker {
                     argumentExtractors[i]);
         }
 
-        return new ControllerMethodInvoker(functionalMethod, argumentExtractors);
+        return new ResourceMethodInvoker(functionalMethod, argumentExtractors);
     }
 
     private static ArgumentExtractor<?> getArgumentExtractor(

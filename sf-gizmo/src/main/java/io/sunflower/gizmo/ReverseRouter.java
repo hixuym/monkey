@@ -28,7 +28,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
 import io.sunflower.gizmo.ReverseRouter.Builder;
 import io.sunflower.gizmo.utils.LambdaRoute;
 import io.sunflower.gizmo.utils.MethodReference;
@@ -38,7 +37,7 @@ import io.sunflower.gizmo.utils.MethodReference;
  *
  * @author Joe Lauer (jjlauer)
  */
-public class ReverseRouter implements WithControllerMethod<Builder> {
+public class ReverseRouter implements WithResourceMethod<Builder> {
     static private final Logger log = LoggerFactory.getLogger(ReverseRouter.class);
 
     static public class Builder {
@@ -302,14 +301,14 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     }
 
     /**
-     * Retrieves a the reverse route for this controllerClass and method.
+     * Retrieves a the reverse route for this resourceClass and method.
      *
-     * @param controllerClass The controllerClass e.g. MainController.class
+     * @param resourceClass The resourceClass e.g. MainResource.class
      * @param methodName      the methodName of the class e.g. "index"
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
-    public Builder with(Class<?> controllerClass, String methodName) {
-        return builder(controllerClass, methodName);
+    public Builder with(Class<?> resourceClass, String methodName) {
+        return builder(resourceClass, methodName);
     }
 
     /**
@@ -325,12 +324,12 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     /**
      * Retrieves a the reverse route for a method referenced with Java-8 lambdas (functional method references).
      *
-     * @param controllerMethod The Java-8 style method reference such as <code>MainController::index</code>.
+     * @param resourceMethod The Java-8 style method reference such as <code>MainController::index</code>.
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string parameters.
      */
     @Override
-    public Builder with(ControllerMethod controllerMethod) {
-        LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
+    public Builder with(ResourceMethods.ResourceMethod resourceMethod) {
+        LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
 
         // only need the functional method for the reverse lookup
         Method method = lambdaRoute.getFunctionalMethod();
@@ -339,7 +338,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     }
 
     private Builder builder(Class<?> controllerClass, String methodName) {
-        Optional<Route> route = this.router.getRouteForControllerClassAndMethod(
+        Optional<Route> route = this.router.getRouteForResourceClassAndMethod(
             controllerClass, methodName);
 
         if (route.isPresent()) {

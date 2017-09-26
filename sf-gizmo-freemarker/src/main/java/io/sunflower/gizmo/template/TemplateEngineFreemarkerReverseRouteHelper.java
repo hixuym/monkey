@@ -47,7 +47,7 @@ public class TemplateEngineFreemarkerReverseRouteHelper {
         if (args.size() < 2) {
 
             throw new TemplateModelException(
-                "Please specify at least classname and controller (2 parameters).");
+                "Please specify at least classname and resource (2 parameters).");
 
         } else {
 

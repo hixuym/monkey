@@ -38,7 +38,7 @@ public interface Router {
      */
     List<Route> getRoutes();
 
-    Optional<Route> getRouteForControllerClassAndMethod(
+    Optional<Route> getRouteForResourceClassAndMethod(
         Class<?> controllerClass, String controllerMethodName);
 
     // /////////////////////////////////////////////////////////////////////////

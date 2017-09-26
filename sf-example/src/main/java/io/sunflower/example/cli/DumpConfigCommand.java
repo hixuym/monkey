@@ -13,16 +13,22 @@
  * limitations under the License.
  */
 
-package com.example.controllers;
+package io.sunflower.example.cli;
 
+import net.sourceforge.argparse4j.inf.Namespace;
 
-import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.Results;
+import io.sunflower.cli.ConfiguredCommand;
+import io.sunflower.example.ExampleConfiguration;
+import io.sunflower.setup.Bootstrap;
 
-public class DummyApplication {
+public class DumpConfigCommand extends ConfiguredCommand<ExampleConfiguration> {
 
-    public Result dummyMethod() {
-        return Results.ok();
+    public DumpConfigCommand() {
+        super("dump", "dump configuration.");
     }
 
+    @Override
+    protected void run(Bootstrap bootstrap, Namespace namespace, ExampleConfiguration configuration) throws Exception {
+        System.out.println(String.format(configuration.getTemplate(), configuration.getDefaultName()));
+    }
 }

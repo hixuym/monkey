@@ -54,7 +54,7 @@ public class RouterImplTest {
     Injector injector;
 
     @Mock
-    Provider<TestController> testControllerProvider;
+    Provider<TestResource> testResourceProvider;
 
     ArgumentCaptor<Route> webSocketsCompileRouteCaptor;
 
@@ -62,8 +62,8 @@ public class RouterImplTest {
     @SuppressWarnings("Convert2Lambda")
     public void before() {
         webSocketsCompileRouteCaptor = ArgumentCaptor.forClass(Route.class);
-        when(testControllerProvider.get()).thenReturn(new TestController());
-        when(injector.getProvider(TestController.class)).thenReturn(testControllerProvider);
+        when(testResourceProvider.get()).thenReturn(new TestResource());
+        when(injector.getProvider(TestResource.class)).thenReturn(testResourceProvider);
         when(injector.getInstance(ParamParsers.class)).thenReturn(new ParamParsers(Collections.emptySet()));
         Provider<RouteBuilderImpl> routeBuilderImplProvider = mock(Provider.class);
         when(routeBuilderImplProvider.get()).thenAnswer(
@@ -71,32 +71,32 @@ public class RouterImplTest {
         router = new RouterImpl(injector, configuration, routeBuilderImplProvider);
 
         // add route:
-        router.GET().route("/testroute").with(TestController.class, "index");
-        router.GET().route("/user/{email}/{id: .*}").with(TestController.class, "user");
-        router.GET().route("/u{userId: .*}/entries/{entryId: .*}").with(TestController.class, "entry");
+        router.GET().route("/testroute").with(TestResource.class, "index");
+        router.GET().route("/user/{email}/{id: .*}").with(TestResource.class, "user");
+        router.GET().route("/u{userId: .*}/entries/{entryId: .*}").with(TestResource.class, "entry");
 
         // second route to index should not break reverse routing matching the first
-        router.GET().route("/testroute/another_url_by_index").with(TestController.class, "index");
-        router.GET().route("/ref").with(TestController.class, "ref");
+        router.GET().route("/testroute/another_url_by_index").with(TestResource.class, "index");
+        router.GET().route("/ref").with(TestResource.class, "ref");
 
         // functional interface / lambda routing
-        TestController testController1 = new TestController("Hi!");
-        router.GET().route("/any_instance_method_ref").with(TestController::home);
-        router.GET().route("/any_instance_method_ref_exception").with(TestController::exception);
-        router.GET().route("/any_instance_method_ref2").with(ControllerMethods.of(TestController::home));
-        router.GET().route("/specific_instance_method_ref").with(testController1::message);
-        router.GET().route("/specific_instance_method_ref_annotations").with(testController1::status);
+        TestResource testResource1 = new TestResource("Hi!");
+        router.GET().route("/any_instance_method_ref").with(TestResource::home);
+        router.GET().route("/any_instance_method_ref_exception").with(TestResource::exception);
+        router.GET().route("/any_instance_method_ref2").with(ResourceMethods.of(TestResource::home));
+        router.GET().route("/specific_instance_method_ref").with(testResource1::message);
+        router.GET().route("/specific_instance_method_ref_annotations").with(testResource1::status);
         router.GET().route("/anonymous_method_ref").with(() -> Results.status(202));
         Result staticResult = Results.status(208);
         router.GET().route("/anonymous_method_ref_captured").with(() -> staticResult);
         router.GET().route("/anonymous_method_ref_context").with((Context context) -> Results.status(context.getParameterAsInteger("status")));
-        router.GET().route("/anonymous_class").with(new ControllerMethods.ControllerMethod0() {
+        router.GET().route("/anonymous_class").with(new ResourceMethods.ResourceMethod0() {
             @Override
             public Result apply() {
                 return Results.status(203);
             }
         });
-        router.GET().route("/anonymous_class_annotations").with(new ControllerMethods.ControllerMethod1<Integer>() {
+        router.GET().route("/anonymous_class_annotations").with(new ResourceMethods.ResourceMethod1<Integer>() {
             @Override
             public Result apply(@Param("status") Integer status) {
                 return Results.status(status);
@@ -225,17 +225,17 @@ public class RouterImplTest {
     }
 
     /**
-     * A dummy TestController for mocking.
+     * A dummy TestResource for mocking.
      */
-    public static class TestController {
+    public static class TestResource {
 
         private final String message;
 
-        public TestController() {
+        public TestResource() {
             this("not set");
         }
 
-        public TestController(String message) {
+        public TestResource(String message) {
             this.message = message;
         }
 

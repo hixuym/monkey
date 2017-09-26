@@ -13,24 +13,16 @@
  * limitations under the License.
  */
 
-package com.example.conf;
-
-import com.example.resources.DummyApplication;
-
-import io.sunflower.gizmo.Router;
-import io.sunflower.gizmo.application.ApplicationRoutes;
+package com.example.resources;
 
 
-// Just a dummy for testing.
-// Allows to check that custom Ninja configuration in user's conf directory
-// works properly.
-public class Routes implements ApplicationRoutes {
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.Results;
 
-    @Override
-    public void init(Router router) {
+public class DummyApplication {
 
-        router.GET().route("/").with(DummyApplication.class, "dummyMethod");
-
+    public Result dummyMethod() {
+        return Results.ok();
     }
 
 }

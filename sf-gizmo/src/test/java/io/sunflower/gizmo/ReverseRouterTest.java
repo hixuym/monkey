@@ -62,7 +62,7 @@ public class ReverseRouterTest {
         router.GET().route("/u{userId: .*}/entries/{entryId: .*}").with(TestController::entry);
         // second route to index should not break reverse routing matching the first
         router.GET().route("/home/index").with(TestController::index);
-//        router.WS().route("/websocket").with(TestController::websocket);
+//        router.WS().route("/websocket").with(TestResource::websocket);
 
         router.compileRoutes();
     }
@@ -203,7 +203,7 @@ public class ReverseRouterTest {
 //        when(context.getScheme()).thenReturn("http");
 //        when(context.getHostname()).thenReturn("www.example.com:8080");
 //
-////        String route = reverseRouter.with(TestController::websocket)
+////        String route = reverseRouter.with(TestResource::websocket)
 ////            .absolute(context)
 ////            .queryParam("a", 1)
 ////            .build();
@@ -217,7 +217,7 @@ public class ReverseRouterTest {
 //        when(context.getScheme()).thenReturn("https");
 //        when(context.getHostname()).thenReturn("www.example.com:8080");
 //
-//        String route = reverseRouter.with(TestController::websocket)
+//        String route = reverseRouter.with(TestResource::websocket)
 ////            .absolute(context)
 //            .build();
 //
@@ -225,7 +225,7 @@ public class ReverseRouterTest {
 //    }
 
     /**
-     * A dummy TestController for mocking.
+     * A dummy TestResource for mocking.
      */
     public static class TestController {
 

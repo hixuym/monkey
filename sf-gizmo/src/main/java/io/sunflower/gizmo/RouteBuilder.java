@@ -15,7 +15,7 @@ package io.sunflower.gizmo;
 
 import java.util.List;
 
-public interface RouteBuilder extends WithControllerMethod<Void> {
+public interface RouteBuilder extends WithResourceMethod<Void> {
 
     RouteBuilder route(String uri);
 
@@ -27,5 +27,5 @@ public interface RouteBuilder extends WithControllerMethod<Void> {
 
     RouteBuilder filters(List<Class<? extends Filter>> filters);
 
-    void with(Class<?> controllerClass, String controllerMethod);
+    void with(Class<?> resourceClass, String resourceMethod);
 }

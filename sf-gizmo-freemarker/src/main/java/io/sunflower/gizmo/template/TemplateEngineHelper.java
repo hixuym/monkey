@@ -22,44 +22,44 @@ import io.sunflower.gizmo.Route;
  * @author James Roper
  */
 public class TemplateEngineHelper {
-    static String VIEWS_DIR = "views";
-    static String CONTROLLERS_DIR = "controllers";
+
+    private static String VIEWS_DIR = "views";
+    private static String RESOURCES_DIR = "resources";
 
     public String getTemplateForResult(Route route, Result result, String suffix) {
         if (result.getTemplate() == null) {
-            Class controller = route.getControllerClass();
+            Class resourceClass = route.getResourceClass();
 
             // Calculate the correct path of the template.
             // We always assume the template in the subdir "views"
 
             // 1) If we are in the main project =>
-            // /controllers/ControllerName
+            // /resources/ResourceName
             // to
-            // /views/ControllerName/templateName.ftl.html
+            // /views/ResourceName/templateName.ftl.html
             // 2) If we are in a plugin / subproject
             // =>
-            // /controllers/some/packages/submoduleName/ControllerName
+            // /resources/some/packages/submoduleName/ResourceName
             // to
-            // views/some/packages/submoduleName/ControllerName/templateName.ftl.html
+            // views/some/packages/submoduleName/ResourceName/templateName.ftl.html
 
-            // So let's calculate the parent package of the controller:
-            String controllerPackageName = controller.getPackage().getName();
-            // This results in something like controllers or
-            // some.package.controllers
+            // So let's calculate the parent package of the resource:
+            String resourcePackageName = resourceClass.getPackage().getName();
+            // This results in something like resources or
+            // some.package.resources
 
-            // Replace controller prefix with views prefix
-            String parentPackageOfController = controllerPackageName
-                .replaceFirst(CONTROLLERS_DIR, VIEWS_DIR);
+            // Replace resource prefix with views prefix
+            String parentPackageOfResource = resourcePackageName
+                .replaceFirst(RESOURCES_DIR, VIEWS_DIR);
 
             // And now we rewrite everything from "." notation to directories /
-            String parentControllerPackageAsPath = parentPackageOfController
+            String parentResourcePackageAsPath = parentPackageOfResource
                 .replaceAll("\\.", "/");
 
             // and the final path of the controller will be something like:
-            // views/some/package/submoduleName/ControllerName/templateName.ftl.html
-            return String.format("/%s/%s/%s%s", parentControllerPackageAsPath,
-                controller.getSimpleName(), route.getControllerMethod()
-                    .getName(), suffix);
+            // views/some/package/submoduleName/ResourceName/templateName.ftl.html
+            return String.format("/%s/%s/%s%s", parentResourcePackageAsPath,
+                resourceClass.getSimpleName(), route.getResourceMethod().getName(), suffix);
         } else {
             return result.getTemplate();
         }

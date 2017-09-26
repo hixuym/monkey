@@ -72,10 +72,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * ControllerMethodInvokerTest.
+ * ResourceMethodInvokerTest.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerMethodInvokerTest {
+public class ResourceMethodInvokerTest {
 
     @Mock
     private MockController mockController;
@@ -1233,7 +1233,7 @@ public class ControllerMethodInvokerTest {
         return dto;
     }
 
-    private ControllerMethodInvoker create(String methodName, final Object... toBind) {
+    private ResourceMethodInvoker create(String methodName, final Object... toBind) {
         Method method = null;
         for (Method m : MockController.class.getMethods()) {
             if (m.getName().equals(methodName)) {
@@ -1241,7 +1241,7 @@ public class ControllerMethodInvokerTest {
                 break;
             }
         }
-        return ControllerMethodInvoker.build(method, method, Guice.createInjector(new AbstractModule() {
+        return ResourceMethodInvoker.build(method, method, Guice.createInjector(new AbstractModule() {
             @SuppressWarnings({
                 "rawtypes", "unchecked"
             })

@@ -38,10 +38,10 @@ import io.sunflower.gizmo.utils.ResponseStreams;
  * different directory on the server.
  */
 @Singleton
-public class AssetsController {
+public class AssetsResource {
 
     private final static Logger logger = LoggerFactory
-        .getLogger(AssetsController.class);
+        .getLogger(AssetsResource.class);
 
     public final static String ASSETS_DIR = "assets";
 
@@ -53,14 +53,14 @@ public class AssetsController {
 
     private final GizmoConfiguration configuration;
 
-    private final AssetsControllerHelper assetsControllerHelper;
+    private final AssetsResourceHelper assetsResourceHelper;
 
     @Inject
-    public AssetsController(AssetsControllerHelper assetsControllerHelper,
-                            HttpCacheToolkit httpCacheToolkit,
-                            MimeTypes mimeTypes,
-                            GizmoConfiguration configuration) {
-        this.assetsControllerHelper = assetsControllerHelper;
+    public AssetsResource(AssetsResourceHelper assetsResourceHelper,
+                          HttpCacheToolkit httpCacheToolkit,
+                          MimeTypes mimeTypes,
+                          GizmoConfiguration configuration) {
+        this.assetsResourceHelper = assetsResourceHelper;
         this.httpCacheToolkit = httpCacheToolkit;
         this.mimeTypes = mimeTypes;
         this.configuration = configuration;
@@ -116,7 +116,7 @@ public class AssetsController {
         // check if stream exists. if not print a notfound exception
         if (url == null) {
             context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
-        } else if (assetsControllerHelper.isDirectoryURL(url)) {
+        } else if (assetsResourceHelper.isDirectoryURL(url)) {
             // Disable listing of directory contents
             context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
         } else {
@@ -171,14 +171,14 @@ public class AssetsController {
             // via System.getPropery("user.dir").
             // In that case we fall back to trying to load from classpath
             && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
-            String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, false);
+            String finalNameWithoutLeadingSlash = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, false);
             File possibleFile = new File(
                 assetsDirInDevModeWithoutTrailingSlash()
                     + File.separator
                     + finalNameWithoutLeadingSlash);
             url = getUrlForFile(possibleFile);
         } else {
-            String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
+            String finalNameWithoutLeadingSlash = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, true);
             url = this.getClass().getClassLoader()
                 .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
         }
@@ -205,7 +205,7 @@ public class AssetsController {
      */
     private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
         String finalNameWithoutLeadingSlash
-            = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
+            = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, true);
         URL url = null;
         url = this.getClass().getClassLoader().getResource("META-INF/resources/webjars/" + finalNameWithoutLeadingSlash);
         return url;

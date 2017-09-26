@@ -86,17 +86,17 @@ public class RouterImpl implements Router {
         this.reverseRoutes = new HashMap<>(this.routes.size());
 
         for (Route route : this.routes) {
-            // its possible this route is a Result instead of a controller method
-            if (route.getControllerClass() != null) {
-                MethodReference controllerMethodRef
+            // its possible this route is a Result instead of a resource method
+            if (route.getResourceClass() != null) {
+                MethodReference resourceMethodRef
                     = new MethodReference(
-                    route.getControllerClass(),
-                    route.getControllerMethod().getName());
+                    route.getResourceClass(),
+                    route.getResourceMethod().getName());
 
-                if (this.reverseRoutes.containsKey(controllerMethodRef)) {
+                if (this.reverseRoutes.containsKey(resourceMethodRef)) {
                     // the first one wins with reverse routing so we ignore this route
                 } else {
-                    this.reverseRoutes.put(controllerMethodRef, route);
+                    this.reverseRoutes.put(resourceMethodRef, route);
                 }
             }
         }
@@ -175,14 +175,14 @@ public class RouterImpl implements Router {
     }
 
     @Override
-    public Optional<Route> getRouteForControllerClassAndMethod(
-        Class<?> controllerClass,
-        String controllerMethodName) {
+    public Optional<Route> getRouteForResourceClassAndMethod(
+        Class<?> resourceClass,
+        String resourceMethodName) {
 
         verifyRoutesCompiled();
 
         MethodReference reverseRouteKey
-            = new MethodReference(controllerClass, controllerMethodName);
+            = new MethodReference(resourceClass, resourceMethodName);
 
         Route route = this.reverseRoutes.get(reverseRouteKey);
 
@@ -193,25 +193,25 @@ public class RouterImpl implements Router {
         // determine the width of the columns
         int maxMethodLen = 0;
         int maxPathLen = 0;
-        int maxControllerLen = 0;
+        int maxResourceLen = 0;
 
         for (Route route : getRoutes()) {
 
             maxMethodLen = Math.max(maxMethodLen, route.getHttpMethod().length());
             maxPathLen = Math.max(maxPathLen, route.getUri().length());
 
-            if (route.getControllerClass() != null) {
+            if (route.getResourceClass() != null) {
 
-                int controllerLen = route.getControllerClass().getName().length()
-                    + route.getControllerMethod().getName().length();
-                maxControllerLen = Math.max(maxControllerLen, controllerLen);
+                int resourceLen = route.getResourceClass().getName().length()
+                    + route.getResourceMethod().getName().length();
+                maxResourceLen = Math.max(maxResourceLen, resourceLen);
 
             }
 
         }
 
         // log the routing table
-        int borderLen = 10 + maxMethodLen + maxPathLen + maxControllerLen;
+        int borderLen = 10 + maxMethodLen + maxPathLen + maxResourceLen;
         String border = Strings.padEnd("", borderLen, '-');
 
         logger.info(border);
@@ -220,13 +220,13 @@ public class RouterImpl implements Router {
 
         for (Route route : getRoutes()) {
 
-            if (route.getControllerClass() != null) {
+            if (route.getResourceClass() != null) {
 
                 logger.info("{} {}  =>  {}.{}()",
                     Strings.padEnd(route.getHttpMethod(), maxMethodLen, ' '),
                     Strings.padEnd(route.getUri(), maxPathLen, ' '),
-                    route.getControllerClass().getName(),
-                    route.getControllerMethod().getName());
+                    route.getResourceClass().getName(),
+                    route.getResourceMethod().getName());
 
             } else {
 

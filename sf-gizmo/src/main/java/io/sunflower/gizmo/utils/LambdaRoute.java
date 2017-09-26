@@ -18,7 +18,7 @@ package io.sunflower.gizmo.utils;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import io.sunflower.gizmo.ControllerMethods.ControllerMethod;
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
 
 public class LambdaRoute {
 
@@ -44,9 +44,9 @@ public class LambdaRoute {
         return targetObject;
     }
 
-    static public LambdaRoute resolve(ControllerMethod controllerMethod) {
+    static public LambdaRoute resolve(ResourceMethod resourceMethod) {
         try {
-            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(controllerMethod);
+            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(resourceMethod);
 
             switch (lambdaInfo.getKind()) {
                 case ANY_INSTANCE_METHOD_REFERENCE:
@@ -61,7 +61,7 @@ public class LambdaRoute {
                         return new LambdaRoute(
                             lambdaInfo.getFunctionalMethod(),
                             lambdaInfo.getImplementationMethod(),
-                            controllerMethod);
+                            resourceMethod);
                     }
             }
         } catch (IllegalArgumentException e) {
@@ -70,9 +70,9 @@ public class LambdaRoute {
 
         // fallback to simple call the "apply" method on the supplied method instance
         try {
-            Method functionalMethod = Lambdas.getMethod(controllerMethod.getClass(), "apply");
+            Method functionalMethod = Lambdas.getMethod(resourceMethod.getClass(), "apply");
             functionalMethod.setAccessible(true);
-            return new LambdaRoute(functionalMethod, null, controllerMethod);
+            return new LambdaRoute(functionalMethod, null, resourceMethod);
         } catch (NoSuchMethodException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
