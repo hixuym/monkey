@@ -32,7 +32,7 @@
         <metrics3.version>3.2.5</metrics3.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <h2.version>1.4.194</h2.version>
+        <h2.version>1.4.196</h2.version>
         <mysql.version>6.0.6</mysql.version>
         <freemarker.version>2.3.26-incubating</freemarker.version>
         <mybatis.version>3.4.5</mybatis.version>
@@ -747,12 +747,6 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-metrics</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
                 <artifactId>sf-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -766,6 +760,13 @@
                 <artifactId>sf-telnet</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-metrics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics-ganglia</artifactId>

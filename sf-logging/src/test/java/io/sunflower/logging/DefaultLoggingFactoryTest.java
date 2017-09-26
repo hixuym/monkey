@@ -21,8 +21,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
+import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.ConsoleAppender;
+import ch.qos.logback.core.spi.LifeCycle;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
 import io.sunflower.configuration.SubstitutingSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
@@ -132,6 +137,23 @@ public class DefaultLoggingFactoryTest {
         assertThat(Files.readLines(newAppNotAdditiveLog, StandardCharsets.UTF_8)).containsOnly(
             "DEBUG com.example.notAdditive: Not additive application debug log",
             "INFO  com.example.notAdditive: Not additive application info log");
+    }
+
+    @Test
+    public void testResetAppenders() throws Exception {
+        final String configPath = Resources.getResource("yaml/logging.yml").getFile();
+        final DefaultLoggingFactory config = factory.build(new FileConfigurationSourceProvider(), configPath);
+        config.configure(new MetricRegistry(), "test-logger");
+
+        config.reset();
+
+        // There should be exactly one appender configured, a ConsoleAppender
+        final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        final List<Appender<ILoggingEvent>> appenders = ImmutableList.copyOf(logger.iteratorForAppenders());
+        assertThat(appenders).hasAtLeastOneElementOfType(ConsoleAppender.class);
+        assertThat(appenders).as("context").allMatch((Appender<?> a) -> a.getContext() != null);
+        assertThat(appenders).as("started").allMatch(LifeCycle::isStarted);
+        assertThat(appenders).hasSize(1);
     }
 
 }

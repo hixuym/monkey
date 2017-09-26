@@ -55,7 +55,7 @@ public class DbMigrationCommand extends Command {
         subparser.addArgument("-o", "--output")
             .nargs("?")
             .dest("output")
-            .setDefault("migrations")
+            .setDefault("src/main/resources")
             .help("database migration file output dir.");
 
         subparser.addArgument("--name")

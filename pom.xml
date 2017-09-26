@@ -49,6 +49,8 @@
         <module>sf-reflect</module>
         <module>sf-validation</module>
         <module>sf-metrics</module>
+        <module>sf-metrics-ganglia</module>
+        <module>sf-metrics-graphite</module>
         <module>sf-core</module>
         <module>sf-guicey</module>
         <module>sf-lifecycle</module>

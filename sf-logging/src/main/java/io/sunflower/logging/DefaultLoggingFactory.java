@@ -19,6 +19,7 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nullable;
@@ -40,6 +41,7 @@ import ch.qos.logback.classic.jul.LevelChangePropagator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
+import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.util.StatusPrinter;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.async.AsyncAppenderFactory;
@@ -206,8 +208,15 @@ public class DefaultLoggingFactory implements LoggingFactory {
             loggerContext.stop();
             final Logger logger = loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
             logger.detachAndStopAllAppenders();
+            final SunflowerLayout formatter = new SunflowerLayout(loggerContext, TimeZone.getDefault());
+            formatter.start();
+            final LayoutWrappingEncoder<ILoggingEvent> layoutEncoder = new LayoutWrappingEncoder<>();
+            layoutEncoder.setLayout(formatter);
             final ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<>();
+            consoleAppender.addFilter(new ThresholdLevelFilterFactory().build(Level.INFO));
+            consoleAppender.setEncoder(layoutEncoder);
             consoleAppender.setContext(loggerContext);
+            consoleAppender.start();
             logger.addAppender(consoleAppender);
             loggerContext.start();
         } finally {
