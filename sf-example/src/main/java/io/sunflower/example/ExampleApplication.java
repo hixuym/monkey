@@ -6,6 +6,7 @@ import com.google.inject.multibindings.OptionalBinder;
 import io.sunflower.Application;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.ebean.EbeanBundle;
+import io.sunflower.example.controllers.MainController;
 import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.InstrumentedGizmo;
 import io.sunflower.gizmo.application.ApplicationRoutes;

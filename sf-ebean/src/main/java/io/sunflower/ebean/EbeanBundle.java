@@ -16,8 +16,10 @@
 package io.sunflower.ebean;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.name.Names;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import io.ebean.EbeanServer;
@@ -30,8 +32,27 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
 
+import static com.google.inject.matcher.Matchers.annotatedWith;
+import static com.google.inject.matcher.Matchers.any;
+import static com.google.inject.matcher.Matchers.not;
+
 public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
     public static final String DEFAULT_NAME = "default";
+
+
+    private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
+        @Override
+        public boolean matches(Method method) {
+            return method.getDeclaringClass() == Object.class;
+        }
+    };
+
+    private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
+        @Override
+        public boolean matches(Method method) {
+            return method.isSynthetic();
+        }
+    };
 
     private EbeanServer ebeanServer;
     private final EbeanServerFactory ebeanServerFactory;
@@ -69,6 +90,15 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
             } else {
                 binder.bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
             }
+
+            // class-level @Txn
+            EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
+
+            binder.bindInterceptor(any(), not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)), txnInterceptor);
+            // Intercept classes annotated with Transactional, but avoid "double"
+            // interception when a mathod is also annotated inside an annotated
+            // class.
+            binder.bindInterceptor(annotatedWith(Transactional.class), not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
         });
 
         environment.healthChecks().register(name(),
