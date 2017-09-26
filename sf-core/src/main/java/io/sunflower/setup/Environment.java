@@ -1,20 +1,25 @@
 package io.sunflower.setup;
 
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
+import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.health.SharedHealthCheckRegistries;
 import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
+import com.codahale.metrics.json.HealthCheckModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.SortedMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -198,6 +203,15 @@ public class Environment {
      */
     public HealthCheckRegistry healthChecks() {
         return healthCheckRegistry;
+    }
+
+    public SortedMap<String, HealthCheck.Result> runHealthChecks() {
+        return healthCheckRegistry.runHealthChecks(MoreExecutors.newDirectExecutorService());
+    }
+
+    public ObjectWriter healthCheckWriter() {
+        return objectMapper.registerModule(new HealthCheckModule())
+            .writerWithDefaultPrettyPrinter();
     }
 
     private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);

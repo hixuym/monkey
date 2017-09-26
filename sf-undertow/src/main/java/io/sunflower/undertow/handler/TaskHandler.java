@@ -6,7 +6,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.io.CharStreams;
 import com.google.common.net.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
+import com.codahale.metrics.MetricRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,16 +32,18 @@ import io.undertow.util.StatusCodes;
 /**
  * Created by michael on 17/9/1.
  */
-public class TaskManager implements HttpHandler {
+public class TaskHandler implements HttpHandler {
 
     private static final long serialVersionUID = 7404713218661358124L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskHandler.class);
     private final ConcurrentMap<String, Task> tasks;
     private final ConcurrentMap<Task, TaskExecutor> taskExecutors;
 
+    private MetricRegistry metricRegistry;
+
     public final static String MAPPING = "tasks";
 
-    public static HttpHandler createHandler(TaskManager manager) {
+    public static HttpHandler blockingWrapper(TaskHandler manager) {
 
         HttpHandler h = manager;
 
@@ -54,14 +57,11 @@ public class TaskManager implements HttpHandler {
     }
 
     /**
-     * Creates a new TaskManager.
+     * Creates a new TaskHandler.
      */
-    public TaskManager() {
+    public TaskHandler() {
         this.tasks = new ConcurrentHashMap<>();
         this.taskExecutors = new ConcurrentHashMap<>();
-
-        add(new GarbageCollectionTask());
-        add(new LogConfigurationTask());
     }
 
     private void doGet(HttpServerExchange exchange) {
@@ -144,7 +144,8 @@ public class TaskManager implements HttpHandler {
     public void add(Task task) {
         tasks.put('/' + task.getName(), task);
 
-        taskExecutors.put(task, new TaskExecutor(task));
+        TaskExecutor taskExecutor = new TaskExecutor(task);
+        taskExecutors.put(task, taskExecutor);
     }
 
     public Collection<Task> getTasks() {

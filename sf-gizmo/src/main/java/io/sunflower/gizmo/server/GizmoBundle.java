@@ -17,18 +17,13 @@ package io.sunflower.gizmo.server;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import com.google.inject.multibindings.OptionalBinder;
 
 import javax.inject.Singleton;
 
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.DefaultExceptionHandler;
-import io.sunflower.gizmo.ExceptionHandler;
-import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.GizmoDefault;
 import io.sunflower.gizmo.RouteBuilder;
 import io.sunflower.gizmo.RouteBuilderImpl;
 import io.sunflower.gizmo.Router;
@@ -45,7 +40,7 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.GarbageCollectionTask;
 import io.sunflower.undertow.handler.LogConfigurationTask;
-import io.sunflower.undertow.handler.TaskManager;
+import io.sunflower.undertow.handler.TaskHandler;
 
 public abstract class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>, GizmoServerConfigurable<T> {
 
@@ -77,12 +72,12 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
 
                 bind(Context.class).to(UndertowContext.class);
 
-                TaskManager taskManager = new TaskManager();
+                TaskHandler taskHandler = new TaskHandler();
 
-                taskManager.add(new GarbageCollectionTask());
-                taskManager.add(new LogConfigurationTask());
+                taskHandler.add(new GarbageCollectionTask());
+                taskHandler.add(new LogConfigurationTask());
 
-                bind(TaskManager.class).toInstance(taskManager);
+                bind(TaskHandler.class).toInstance(taskHandler);
             }
         });
     }

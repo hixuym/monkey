@@ -37,7 +37,7 @@ import static com.google.inject.matcher.Matchers.any;
 import static com.google.inject.matcher.Matchers.not;
 
 public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
-    public static final String DEFAULT_NAME = "default_db";
+    public static final String DEFAULT_NAME = "database";
 
     private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
         @Override

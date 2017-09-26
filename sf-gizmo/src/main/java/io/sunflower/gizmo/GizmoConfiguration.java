@@ -1,48 +1,19 @@
 package io.sunflower.gizmo;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.Injector;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
-import io.sunflower.gizmo.server.GizmoHttpHandler;
-import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.Mode;
 import io.sunflower.gizmo.utils.SecretGenerator;
-import io.sunflower.lifecycle.AbstractLifeCycle;
-import io.sunflower.lifecycle.LifeCycle;
-import io.sunflower.setup.Environment;
-import io.sunflower.undertow.handler.Task;
-import io.sunflower.undertow.handler.TaskManager;
 import io.sunflower.util.Duration;
-import io.undertow.Handlers;
-import io.undertow.predicate.Predicate;
-import io.undertow.predicate.Predicates;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.handlers.BlockingHandler;
-import io.undertow.server.handlers.PathHandler;
-import io.undertow.server.handlers.RequestDumpingHandler;
-import io.undertow.server.handlers.accesslog.AccessLogHandler;
-import io.undertow.server.handlers.accesslog.AccessLogReceiver;
-import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
-import io.undertow.server.handlers.form.EagerFormParsingHandler;
-import io.undertow.server.handlers.form.FormParserFactory;
-
-import static com.google.common.base.MoreObjects.firstNonNull;
 
 /**
  *
@@ -83,8 +54,6 @@ public class GizmoConfiguration {
     private String accessLogFormat;
     private boolean accessLogRotate = true;
     private String accessLogPath = "./logs";
-
-    private final TaskManager taskManager = new TaskManager();
 
     private String applicationContextPath;
     private String adminContextPath;
@@ -342,102 +311,5 @@ public class GizmoConfiguration {
     @JsonProperty
     public void setAccessLogRotate(boolean accessLogRotate) {
         this.accessLogRotate = accessLogRotate;
-    }
-
-    @JsonIgnore
-    public void addTask(Task task) {
-        this.taskManager.add(task);
-    }
-
-    @JsonIgnore
-    protected HttpHandler createAdminHandler(Environment environment) {
-
-        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
-            @Override
-            public void lifeCycleStarting(LifeCycle event) {
-                logTasks();
-            }
-        });
-
-        return new PathHandler()
-            .addPrefixPath("tasks", TaskManager.createHandler(this.taskManager));
-
-    }
-
-    @JsonIgnore
-    protected HttpHandler createApplicationHandler(Injector injector) {
-        // root handler for ninja app
-        GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
-
-        // slipstream injector into undertow handler BEFORE server starts
-        gizmoHttpHandler.init(injector, getApplicationContextPath());
-
-        HttpHandler h = gizmoHttpHandler;
-
-        // wireshark enabled?
-        if (isTraceEnabled()) {
-            logger.info("Undertow tracing of requests and responses activated (undertow.tracing = true)");
-            // only activate request dumping on non-assets
-            Predicate isAssets = Predicates.prefix("/assets");
-            h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
-        }
-
-        // then eagerly parse form data (which is then included as an attachment)
-        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-        formParserFactoryBuilder.setDefaultCharset(GizmoConstant.UTF_8);
-        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
-
-        // then requests MUST be blocking for IO to function
-        h = new BlockingHandler(h);
-
-        return h;
-    }
-
-    @JsonIgnore
-    protected HttpHandler addAccessLogWrapper(Environment environment, HttpHandler httpHandler) {
-        String format = getAccessLogFormat();
-
-        if (StringUtils.isNotEmpty(format)) {
-
-            ExecutorService executorService = environment.lifecycle().executorService("AccessLog-pool-%d")
-                .maxThreads(1)
-                .minThreads(1)
-                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-                .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
-                .build();
-
-            Path log = Paths.get(getAccessLogPath());
-
-            if (!log.toFile().exists()) {
-                log.toFile().mkdirs();
-            }
-
-            AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
-                .setLogBaseName("access")
-                .setLogWriteExecutor(executorService)
-                .setOutputDirectory(log)
-                .setRotate(isAccessLogRotate())
-                .build();
-
-            return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
-        }
-
-        return httpHandler;
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Gizmo.class);
-
-    private void logTasks() {
-        final StringBuilder stringBuilder = new StringBuilder(1024).append(String.format("%n%n"));
-
-        for (Task task : this.taskManager.getTasks()) {
-            final String taskClassName = firstNonNull(task.getClass().getCanonicalName(), task.getClass().getName());
-            stringBuilder.append(String.format("    %-7s /tasks/%s (%s)%n",
-                "POST",
-                task.getName(),
-                taskClassName));
-        }
-
-        LOGGER.info("tasks = {}", stringBuilder.toString());
     }
 }

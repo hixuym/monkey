@@ -8,7 +8,7 @@ import java.io.PrintWriter;
  * A task which can be performed via the admin interface and provides the post body of the request.
  *
  * @see Task
- * @see TaskManager
+ * @see TaskHandler
  */
 public abstract class PostBodyTask extends Task {
 

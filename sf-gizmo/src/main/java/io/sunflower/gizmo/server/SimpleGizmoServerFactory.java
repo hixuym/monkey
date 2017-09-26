@@ -28,7 +28,7 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
 
 @JsonTypeName("simple")
-public class SimpleGizmoServerFactory extends GizmoConfiguration implements GizmoServerFactory {
+public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
 
     private ConnectorFactory connector = HttpConnectorFactory.application();
 
@@ -43,9 +43,7 @@ public class SimpleGizmoServerFactory extends GizmoConfiguration implements Gizm
     }
 
     @Override
-    public GizmoServer build(Environment environment) {
-        addTask(new HealthCheckTask(environment));
-
+    public GizmoServer buildServer(Environment environment) {
         Undertow.Builder undertowBuilder = Undertow.builder()
             // NOTE: should ninja not use equals chars within its cookie values?
             .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
@@ -54,7 +52,7 @@ public class SimpleGizmoServerFactory extends GizmoConfiguration implements Gizm
 
         HttpHandler applicationHandler = addAccessLogWrapper(environment, createApplicationHandler(environment.guicey().injector()));
 
-        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler(environment));
+        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler());
 
         Undertow.ListenerBuilder listenerBuilder = getConnector().build();
 

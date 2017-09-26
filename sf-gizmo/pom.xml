@@ -27,10 +27,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.sunflower</groupId>
             <artifactId>sf-core</artifactId>
         </dependency>
