@@ -64,7 +64,7 @@
         <module>sf-migrations</module>
         <module>sf-mybatis</module>
         <module>sf-sec</module>
-        <module>sf-mail</module>
+        <module>sf-postoffice</module>
     </modules>
 
     <licenses>

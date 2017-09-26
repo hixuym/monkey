@@ -780,7 +780,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-mail</artifactId>
+                <artifactId>sf-postoffice</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
