@@ -50,9 +50,9 @@ public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
 
         logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
 
-        HttpHandler applicationHandler = addAccessLogWrapper(environment, createApplicationHandler(environment.guicey().injector()));
+        HttpHandler applicationHandler = createApplicationHandler(environment.guicey().injector());
 
-        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler());
+        HttpHandler adminHandler = createAdminHandler();
 
         Undertow.ListenerBuilder listenerBuilder = getConnector().build();
 
@@ -61,7 +61,7 @@ public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
         rootHandler.addPrefixPath(getApplicationContextPath(), applicationHandler);
         rootHandler.addPrefixPath(getAdminContextPath(), adminHandler);
 
-        listenerBuilder.setRootHandler(rootHandler);
+        listenerBuilder.setRootHandler(addAccessLogWrapper("access", environment, rootHandler));
 
         undertowBuilder.addListener(listenerBuilder);
 

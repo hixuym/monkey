@@ -75,9 +75,9 @@ public class DefaultGizmoServerFactory extends AbstractGizmoServerFactory {
 
         logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
 
-        HttpHandler applicationHandler = addAccessLogWrapper(environment, createApplicationHandler(environment.guicey().injector()));
+        HttpHandler applicationHandler = addAccessLogWrapper("app", environment, createApplicationHandler(environment.guicey().injector()));
 
-        HttpHandler adminHandler = addAccessLogWrapper(environment, createAdminHandler());
+        HttpHandler adminHandler = addAccessLogWrapper("admin", environment, createAdminHandler());
 
         for (ConnectorFactory connectorFactory : getApplicationConnectors()) {
 

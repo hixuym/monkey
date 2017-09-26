@@ -94,7 +94,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
 
         Injectors.instanceOf(injector, Task.class).forEach(taskHandler::add);
 
-        adminHandlers.addPrefixPath("tasks", taskHandler);
+        adminHandlers.addPrefixPath("tasks", TaskHandler.blockingWrapper(taskHandler));
         adminHandlers.addPrefixPath("healthcheck", new HealthChecksHandler(environment));
 
         return buildServer(environment);
@@ -136,18 +136,22 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
         return h;
     }
 
+    private ExecutorService accessLogExecutor = null;
+
     @JsonIgnore
-    protected HttpHandler addAccessLogWrapper(Environment environment, HttpHandler httpHandler) {
+    protected HttpHandler addAccessLogWrapper(String baseName, Environment environment, HttpHandler httpHandler) {
         String format = getAccessLogFormat();
 
         if (StringUtils.isNotEmpty(format)) {
 
-            ExecutorService executorService = environment.lifecycle().executorService("AccessLog-pool-%d")
-                .maxThreads(1)
-                .minThreads(1)
-                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-                .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
-                .build();
+            if (accessLogExecutor == null) {
+                accessLogExecutor = environment.lifecycle().executorService("AccessLog-pool-%d-" + baseName)
+                    .maxThreads(2)
+                    .minThreads(1)
+                    .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+                    .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
+                    .build();
+            }
 
             Path log = Paths.get(getAccessLogPath());
 
@@ -156,8 +160,8 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
             }
 
             AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
-                .setLogBaseName("access")
-                .setLogWriteExecutor(executorService)
+                .setLogBaseName(baseName)
+                .setLogWriteExecutor(accessLogExecutor)
                 .setOutputDirectory(log)
                 .setRotate(isAccessLogRotate())
                 .build();
