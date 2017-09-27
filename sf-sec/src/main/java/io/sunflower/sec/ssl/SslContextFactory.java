@@ -143,7 +143,7 @@ public class SslContextFactory {
     private URI _crlPath;
     private boolean _enableCRLDP = false;
     private boolean _enableOCSP = false;
-    private URI _ocspResponderURL;
+    private String _ocspResponderURL;
     private KeyStore _setKeyStore;
     private KeyStore _setTrustStore;
     private boolean _sessionCachingEnabled = true;
@@ -243,7 +243,7 @@ public class SslContextFactory {
                                 validator.setMaxCertPathLength(getMaxCertPathLength());
                                 validator.setEnableCRLDP(isEnableCRLDP());
                                 validator.setEnableOCSP(isEnableOCSP());
-                                validator.setOcspResponderURL(getOcspResponderURL().toString());
+                                validator.setOcspResponderURL(getOcspResponderURL());
                                 validator.validate(keyStore, x509C); // TODO what about truststore?
                             }
 
@@ -1039,7 +1039,7 @@ public class SslContextFactory {
     /**
      * @return Location of the OCSP Responder
      */
-    public URI getOcspResponderURL() {
+    public String getOcspResponderURL() {
         return _ocspResponderURL;
     }
 
@@ -1048,7 +1048,7 @@ public class SslContextFactory {
      *
      * @param ocspResponderURL location of the OCSP Responder
      */
-    public void setOcspResponderURL(URI ocspResponderURL) {
+    public void setOcspResponderURL(String ocspResponderURL) {
         _ocspResponderURL = ocspResponderURL;
     }
 

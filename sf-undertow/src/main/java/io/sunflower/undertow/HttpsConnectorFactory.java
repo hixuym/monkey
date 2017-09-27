@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.net.URI;
 import java.security.KeyStore;
 import java.util.Arrays;
@@ -32,6 +31,7 @@ import io.undertow.Undertow;
 
 /**
  * Builds HTTPS connectors (HTTP over TLS/SSL).
+ *
  * @see HttpConnectorFactory
  */
 @JsonTypeName("https")
@@ -39,18 +39,18 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpsConnectorFactory.class);
     private static final AtomicBoolean LOGGED = new AtomicBoolean(false);
 
-    private URI keyStorePath;
+    private URI keyStorePath = URI.create("classpath:/io/sunflower/undertow/sf-dev.keystore");
 
-    private String keyStorePassword;
+    private String keyStorePassword = "password";
 
     @NotEmpty
     private String keyStoreType = "JKS";
 
     private String keyStoreProvider;
 
-    private URI trustStorePath;
+    private URI trustStorePath = URI.create("classpath:/io/sunflower/undertow/sf-dev.truststore");
 
-    private String trustStorePassword;
+    private String trustStorePassword = "password";
 
     @NotEmpty
     private String trustStoreType = "JKS";
@@ -66,7 +66,7 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
     private Boolean enableCRLDP;
     private Boolean enableOCSP;
     private Integer maxCertPathLength;
-    private URI ocspResponderUrl;
+    private String ocspResponderUrl;
     private String jceProvider;
     private boolean validateCerts = false;
     private boolean validatePeers = false;
@@ -258,12 +258,12 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
     }
 
     @JsonProperty
-    public URI getOcspResponderUrl() {
+    public String getOcspResponderUrl() {
         return ocspResponderUrl;
     }
 
     @JsonProperty
-    public void setOcspResponderUrl(URI ocspResponderUrl) {
+    public void setOcspResponderUrl(String ocspResponderUrl) {
         this.ocspResponderUrl = ocspResponderUrl;
     }
 
@@ -388,8 +388,9 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
         return builder;
     }
 
-    /** Register a listener that waits until the ssl context factory has started. Once it has
-     *  started we can grab the fully initialized context so we can log the parameters.
+    /**
+     * Register a listener that waits until the ssl context factory has started. Once it has started we can grab the
+     * fully initialized context so we can log the parameters.
      */
     protected AbstractLifeCycle.AbstractLifeCycleListener logSslInfoOnStart(final SslContextFactory sslContextFactory) {
         return new AbstractLifeCycle.AbstractLifeCycleListener() {
