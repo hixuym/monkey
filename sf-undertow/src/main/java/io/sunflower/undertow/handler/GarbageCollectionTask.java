@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMultimap;
 
 import java.io.PrintWriter;
 
+import io.sunflower.metrics.Timed;
+
 /**
  * Performs a full JVM garbage collection (probably).
  */
@@ -32,6 +34,7 @@ public class GarbageCollectionTask extends Task {
 
     @Override
     @SuppressWarnings("CallToSystemGC")
+    @Timed
     public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) {
         final int count = parseRuns(parameters);
         for (int i = 0; i < count; i++) {

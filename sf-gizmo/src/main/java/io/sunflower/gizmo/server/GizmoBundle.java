@@ -16,7 +16,6 @@
 package io.sunflower.gizmo.server;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 
 import javax.inject.Singleton;
@@ -39,12 +38,7 @@ import io.sunflower.gizmo.template.TemplateEngineText;
 import io.sunflower.gizmo.template.TemplateEngineXml;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.handler.GarbageCollectionTask;
-import io.sunflower.undertow.handler.HealthChecksHandler;
-import io.sunflower.undertow.handler.LogConfigurationTask;
-import io.sunflower.undertow.handler.MetricsHandler;
-import io.sunflower.undertow.handler.TaskHandler;
-import io.undertow.server.HttpHandler;
+import io.sunflower.undertow.handler.HandlerModule;
 
 public abstract class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>, GizmoServerConfigurable<T> {
 
@@ -76,17 +70,8 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
 
                 bind(Context.class).to(UndertowContext.class);
 
-                // tasks
-                bind(LogConfigurationTask.class);
-                bind(GarbageCollectionTask.class);
-
-                // admin handlers;
-                MapBinder<String, HttpHandler> mapBinder = MapBinder.newMapBinder(binder(), String.class, HttpHandler.class);
-
-                mapBinder.addBinding("tasks").to(TaskHandler.class);
-                mapBinder.addBinding("healthcheck").to(HealthChecksHandler.class);
-                mapBinder.addBinding("metrics").to(MetricsHandler.class);
-
+                //
+                install(new HandlerModule());
             }
         });
     }

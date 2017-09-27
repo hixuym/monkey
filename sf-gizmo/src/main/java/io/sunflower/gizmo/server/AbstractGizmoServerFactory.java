@@ -47,12 +47,6 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
     private final PathHandler adminHandlers = new PathHandler();
 
     @JsonIgnore
-    @Override
-    public void addAdminHandler(String path, HttpHandler handler) {
-        adminHandlers.addPrefixPath(path, handler);
-    }
-
-    @JsonIgnore
     protected HttpHandler createAdminHandler() {
         return adminHandlers;
     }
@@ -78,7 +72,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
      */
     @JsonIgnore
     protected HttpHandler createApplicationHandler(Injector injector) {
-        // root handler for ninja app
+        // root handler for sf app
         GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
 
         // slipstream injector into undertow handler BEFORE server starts

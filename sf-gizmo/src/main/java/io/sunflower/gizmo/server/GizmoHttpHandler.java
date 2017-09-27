@@ -26,7 +26,7 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 
 /**
- * Handles a request from Undertow and then delegates to Ninja.
+ * Handles a request from Undertow and then delegates to sf.
  */
 public class GizmoHttpHandler implements HttpHandler {
     private static final Logger log = LoggerFactory.getLogger(GizmoHttpHandler.class);

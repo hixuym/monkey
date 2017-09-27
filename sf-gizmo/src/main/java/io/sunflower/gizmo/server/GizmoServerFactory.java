@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
-import io.undertow.server.HttpHandler;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultGizmoServerFactory.class)
 public interface GizmoServerFactory extends Discoverable {
@@ -28,7 +27,4 @@ public interface GizmoServerFactory extends Discoverable {
     GizmoServer build(Environment environment);
 
     GizmoConfiguration gizmoConfig();
-
-    void addAdminHandler(String path, HttpHandler handler);
-
 }
