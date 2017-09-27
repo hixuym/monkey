@@ -35,6 +35,7 @@ public class HandlerModule extends AbstractModule {
 
         mapBinder.addBinding("healthcheck").to(HealthChecksHandler.class);
         mapBinder.addBinding("metrics").to(MetricsHandler.class);
-        mapBinder.addBinding("cpuprofiler").toInstance(Handlers.blocking(new CpuProfileHandler()));
+
+//        mapBinder.addBinding("cpuprofiler").toInstance(Handlers.blocking(new CpuProfileHandler()));
     }
 }

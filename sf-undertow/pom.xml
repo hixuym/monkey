@@ -34,10 +34,6 @@
             <groupId>io.sunflower</groupId>
             <artifactId>sf-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.papertrail</groupId>
-            <artifactId>profiler</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

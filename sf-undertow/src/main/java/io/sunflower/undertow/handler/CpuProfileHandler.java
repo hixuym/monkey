@@ -15,10 +15,6 @@
 
 package io.sunflower.undertow.handler;
 
-import com.papertrail.profiler.CpuProfile;
-
-import org.joda.time.Duration;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.locks.Lock;
@@ -81,13 +77,13 @@ public class CpuProfileHandler implements HttpHandler {
     protected void doProfile(OutputStream out, int duration, int frequency, Thread.State state) throws IOException {
         if (lock.tryLock()) {
             try {
-                CpuProfile profile = CpuProfile.record(Duration.standardSeconds(duration),
-                    frequency, state);
-                if (profile == null) {
-                    throw new RuntimeException("could not create CpuProfile");
-                }
-                profile.writeGoogleProfile(out);
-                return;
+//                CpuProfile profile = CpuProfile.record(Duration.standardSeconds(duration),
+//                    frequency, state);
+//                if (profile == null) {
+//                    throw new RuntimeException("could not create CpuProfile");
+//                }
+//                profile.writeGoogleProfile(out);
+//                return;
             } finally {
                 lock.unlock();
             }
