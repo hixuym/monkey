@@ -20,18 +20,23 @@ import com.codahale.metrics.health.HealthCheck;
 import java.util.Map;
 import java.util.SortedMap;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
+@Singleton
 public class HealthChecksHandler implements HttpHandler {
     private static final String CONTENT_TYPE = "application/json";
     private static final String CACHE_CONTROL = "must-revalidate,no-cache,no-store";
 
     private final Environment environment;
 
+    @Inject
     public HealthChecksHandler(Environment environment) {
         this.environment = environment;
     }

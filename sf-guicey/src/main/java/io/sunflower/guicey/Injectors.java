@@ -20,6 +20,7 @@ import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,14 @@ public class Injectors {
         }
 
         return resutls;
+    }
+
+    public static <K, V> Map<K, V> mapOf(Injector injector, TypeLiteral<Map<K, V>> typeLiteral) {
+        return injector.getInstance(Key.get(typeLiteral));
+    }
+
+    public static <T> Set<T> setOf(Injector injector, TypeLiteral<Set<T>> typeLiteral) {
+        return injector.getInstance(Key.get(typeLiteral));
     }
 
 }

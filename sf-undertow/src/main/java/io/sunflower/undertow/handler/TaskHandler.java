@@ -1,33 +1,34 @@
 package io.sunflower.undertow.handler;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.io.CharStreams;
 import com.google.common.net.MediaType;
-
-import com.codahale.metrics.MetricRegistry;
+import com.google.inject.Injector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.inject.Inject;
+
+import io.sunflower.guicey.Injectors;
+import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.LifeCycle;
+import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.server.handlers.BlockingHandler;
-import io.undertow.server.handlers.form.EagerFormParsingHandler;
-import io.undertow.server.handlers.form.FormParserFactory;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 /**
  * Created by michael on 17/9/1.
@@ -39,29 +40,23 @@ public class TaskHandler implements HttpHandler {
     private final ConcurrentMap<String, Task> tasks;
     private final ConcurrentMap<Task, TaskExecutor> taskExecutors;
 
-    private MetricRegistry metricRegistry;
-
-    public final static String MAPPING = "tasks";
-
-    public static HttpHandler blockingWrapper(TaskHandler manager) {
-
-        HttpHandler h = manager;
-
-        // then eagerly parse form data (which is then included as an attachment)
-        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-        formParserFactoryBuilder.setDefaultCharset("utf-8");
-        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
-
-        // then requests MUST be blocking for IO to function
-        return new BlockingHandler(h);
-    }
-
     /**
      * Creates a new TaskHandler.
      */
-    public TaskHandler() {
+    @Inject
+    public TaskHandler(Injector injector, Environment environment) {
         this.tasks = new ConcurrentHashMap<>();
         this.taskExecutors = new ConcurrentHashMap<>();
+
+        Injectors.instanceOf(injector, Task.class).forEach(this::add);
+
+        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                logTasks();
+            }
+        });
+
     }
 
     private void doGet(HttpServerExchange exchange) {
@@ -69,7 +64,9 @@ public class TaskHandler implements HttpHandler {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
 
-            try (final PrintWriter output = new PrintWriter(exchange.getOutputStream())) {
+            StringWriter stringWriter = new StringWriter();
+
+            try (final PrintWriter output = new PrintWriter(stringWriter)) {
                 getTasks().stream()
                     .map(Task::getName)
                     .sorted()
@@ -77,6 +74,10 @@ public class TaskHandler implements HttpHandler {
 
                 output.flush();
             }
+
+            exchange.getResponseSender().send(stringWriter.toString());
+
+            return;
 
         } else if (tasks.containsKey(exchange.getRelativePath())) {
             exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
@@ -91,11 +92,12 @@ public class TaskHandler implements HttpHandler {
         final Task task = tasks.get(exchange.getRelativePath());
         if (task != null) {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8.toString());
-            final PrintWriter output = new PrintWriter(exchange.getOutputStream());
+            StringWriter stringWriter = new StringWriter();
+            final PrintWriter output = new PrintWriter(stringWriter);
             try {
                 final TaskExecutor taskExecutor = taskExecutors.get(task);
-                taskExecutor.executeTask(getParams(exchange), getBody(exchange), output);
-                exchange.endExchange();
+                taskExecutor.executeTask(getParams(exchange), output);
+                exchange.getResponseSender().send(stringWriter.toString());
             } catch (Exception e) {
                 LOGGER.error("Error running {}", task.getName(), e);
                 exchange.setStatusCode(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -137,11 +139,7 @@ public class TaskHandler implements HttpHandler {
         return results.build();
     }
 
-    private String getBody(HttpServerExchange exchange) throws IOException {
-        return CharStreams.toString(new InputStreamReader(exchange.getInputStream(), Charsets.UTF_8));
-    }
-
-    public void add(Task task) {
+    private void add(Task task) {
         tasks.put('/' + task.getName(), task);
 
         TaskExecutor taskExecutor = new TaskExecutor(task);
@@ -159,13 +157,22 @@ public class TaskHandler implements HttpHandler {
             this.task = task;
         }
 
-        public void executeTask(ImmutableMultimap<String, String> params, String body, PrintWriter output) throws Exception {
-            if (task instanceof PostBodyTask) {
-                PostBodyTask postBodyTask = (PostBodyTask) task;
-                postBodyTask.execute(params, body, output);
-            } else {
-                task.execute(params, output);
-            }
+        public void executeTask(ImmutableMultimap<String, String> params, PrintWriter output) throws Exception {
+            task.execute(params, output);
         }
+    }
+
+    private void logTasks() {
+        final StringBuilder stringBuilder = new StringBuilder(1024).append(String.format("%n%n"));
+
+        for (Task task : getTasks()) {
+            final String taskClassName = firstNonNull(task.getClass().getCanonicalName(), task.getClass().getName());
+            stringBuilder.append(String.format("    %-7s /tasks/%s (%s)%n",
+                "POST",
+                task.getName(),
+                taskClassName));
+        }
+
+        LOGGER.info("tasks = {}", stringBuilder.toString());
     }
 }

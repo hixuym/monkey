@@ -16,17 +16,12 @@
 package io.sunflower.gizmo.server;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.Binding;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 
-import com.codahale.metrics.health.HealthCheck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,37 +29,21 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.template.TemplateEngine;
-import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.guicey.Injectors;
-import io.sunflower.lifecycle.AbstractLifeCycle;
-import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.handler.GarbageCollectionTask;
-import io.sunflower.undertow.handler.HealthChecksHandler;
-import io.sunflower.undertow.handler.LogConfigurationTask;
-import io.sunflower.undertow.handler.Task;
-import io.sunflower.undertow.handler.TaskHandler;
 import io.undertow.Handlers;
 import io.undertow.predicate.Predicate;
 import io.undertow.predicate.Predicates;
 import io.undertow.server.HttpHandler;
-import io.undertow.server.handlers.BlockingHandler;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.RequestDumpingHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import io.undertow.server.handlers.accesslog.AccessLogReceiver;
 import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
-import io.undertow.server.handlers.form.EagerFormParsingHandler;
-import io.undertow.server.handlers.form.FormParserFactory;
-
-import static com.google.common.base.MoreObjects.firstNonNull;
 
 public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements GizmoServerFactory {
 
-    private final TaskHandler taskHandler = new TaskHandler();
     private final PathHandler adminHandlers = new PathHandler();
 
     @JsonIgnore
@@ -80,24 +59,14 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
 
     @Override
     public final GizmoServer build(Environment environment) {
-        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
-            @Override
-            public void lifeCycleStarting(LifeCycle event) {
-                logTasks();
-            }
-        });
-
-        taskHandler.add(new GarbageCollectionTask());
-        taskHandler.add(new LogConfigurationTask());
 
         Injector injector = environment.guicey().injector();
 
-        Injectors.instanceOf(injector, Task.class).forEach(taskHandler::add);
-
-        adminHandlers.addPrefixPath("tasks", TaskHandler.blockingWrapper(taskHandler));
-        adminHandlers.addPrefixPath("healthcheck", new HealthChecksHandler(environment));
+        Injectors.mapOf(injector, new TypeLiteral<Map<String, HttpHandler>>() {})
+            .forEach(adminHandlers::addPrefixPath);
 
         return buildServer(environment);
+
     }
 
     protected abstract GizmoServer buildServer(Environment environment);
@@ -125,15 +94,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
             h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
         }
 
-        // then eagerly parse form data (which is then included as an attachment)
-        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-        formParserFactoryBuilder.setDefaultCharset(GizmoConstant.UTF_8);
-        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
-
-        // then requests MUST be blocking for IO to function
-        h = new BlockingHandler(h);
-
-        return h;
+        return io.sunflower.undertow.handler.Handlers.blocking(h);
     }
 
     private ExecutorService accessLogExecutor = null;
@@ -170,22 +131,6 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
         }
 
         return httpHandler;
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Gizmo.class);
-
-    protected void logTasks() {
-        final StringBuilder stringBuilder = new StringBuilder(1024).append(String.format("%n%n"));
-
-        for (Task task : this.taskHandler.getTasks()) {
-            final String taskClassName = firstNonNull(task.getClass().getCanonicalName(), task.getClass().getName());
-            stringBuilder.append(String.format("    %-7s /tasks/%s (%s)%n",
-                "POST",
-                task.getName(),
-                taskClassName));
-        }
-
-        LOGGER.info("tasks = {}", stringBuilder.toString());
     }
 
 }
