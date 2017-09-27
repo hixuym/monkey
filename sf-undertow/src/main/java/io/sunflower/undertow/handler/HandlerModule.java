@@ -31,8 +31,10 @@ public class HandlerModule extends AbstractModule {
         // tasks
         bind(LogConfigurationTask.class);
         bind(GarbageCollectionTask.class);
+        bind(ThreadDumpTask.class);
 
         mapBinder.addBinding("healthcheck").to(HealthChecksHandler.class);
         mapBinder.addBinding("metrics").to(MetricsHandler.class);
+        mapBinder.addBinding("cpuprofiler").toInstance(Handlers.blocking(new CpuProfileHandler()));
     }
 }

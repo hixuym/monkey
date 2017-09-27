@@ -446,6 +446,11 @@
 
             <!-- Metrics -->
             <dependency>
+                <groupId>com.papertrail</groupId>
+                <artifactId>profiler</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-core</artifactId>
                 <version>${metrics3.version}</version>

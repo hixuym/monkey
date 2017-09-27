@@ -80,12 +80,12 @@ public class TaskHandler implements HttpHandler {
             return;
 
         } else if (tasks.containsKey(exchange.getRelativePath())) {
-            exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
+//            exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
+            doPost(exchange);
         } else {
             exchange.setStatusCode(StatusCodes.NOT_FOUND);
+            exchange.endExchange();
         }
-
-        exchange.endExchange();
     }
 
     private void doPost(HttpServerExchange exchange) {

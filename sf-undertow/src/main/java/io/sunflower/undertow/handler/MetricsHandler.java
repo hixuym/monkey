@@ -36,6 +36,8 @@ import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
 
+import static io.sunflower.undertow.handler.Handlers.param;
+
 @Singleton
 public class MetricsHandler implements HttpHandler {
 
@@ -85,14 +87,6 @@ public class MetricsHandler implements HttpHandler {
             exchange.getResponseSender()
                 .send(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(new JSONPObject(jsonp, registry)));
         }
-    }
-
-    private String param(HttpServerExchange exchange, String name) {
-        Deque<String> vals = exchange.getQueryParameters().get(name);
-        if (vals == null || vals.isEmpty()) {
-            return null;
-        }
-        return vals.getFirst();
     }
 
     private TimeUnit parseTimeUnit(String value, TimeUnit defaultValue) {
