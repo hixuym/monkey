@@ -40,7 +40,6 @@ import io.sunflower.gizmo.template.TemplateEngineXml;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.GarbageCollectionTask;
-import io.sunflower.undertow.handler.Handlers;
 import io.sunflower.undertow.handler.HealthChecksHandler;
 import io.sunflower.undertow.handler.LogConfigurationTask;
 import io.sunflower.undertow.handler.MetricsHandler;
