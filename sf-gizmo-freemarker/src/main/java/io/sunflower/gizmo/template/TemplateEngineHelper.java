@@ -23,9 +23,6 @@ import io.sunflower.gizmo.Route;
  */
 public class TemplateEngineHelper {
 
-    private static String VIEWS_DIR = "views";
-    private static String RESOURCES_DIR = "resources";
-
     public String getTemplateForResult(Route route, Result result, String suffix) {
         if (result.getTemplate() == null) {
             Class resourceClass = route.getResourceClass();
@@ -50,7 +47,7 @@ public class TemplateEngineHelper {
 
             // Replace resource prefix with views prefix
             String parentPackageOfResource = resourcePackageName
-                .replaceFirst(RESOURCES_DIR, VIEWS_DIR);
+                .replaceFirst("resources", "views");
 
             // And now we rewrite everything from "." notation to directories /
             String parentResourcePackageAsPath = parentPackageOfResource

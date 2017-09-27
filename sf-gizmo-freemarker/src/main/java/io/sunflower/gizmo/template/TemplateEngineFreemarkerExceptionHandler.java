@@ -63,8 +63,7 @@ public class TemplateEngineFreemarkerExceptionHandler implements
         } else {
             // print out full stacktrace if we are in test or dev mode
 
-            PrintWriter pw = (out instanceof PrintWriter) ? (PrintWriter) out
-                    : new PrintWriter(out);
+            PrintWriter pw = (out instanceof PrintWriter) ? (PrintWriter) out : new PrintWriter(out);
             pw.println("<!-- FREEMARKER ERROR MESSAGE STARTS HERE -->"
                     + "<script language=javascript>//\"></script>"
                     + "<script language=javascript>//\'></script>"

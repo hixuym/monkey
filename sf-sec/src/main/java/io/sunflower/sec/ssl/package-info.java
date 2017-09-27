@@ -14,7 +14,7 @@
  */
 
 /**
- * Jetty Util : Common SSL Utility Classes
+ * Common SSL Utility Classes
  */
 package io.sunflower.sec.ssl;
 

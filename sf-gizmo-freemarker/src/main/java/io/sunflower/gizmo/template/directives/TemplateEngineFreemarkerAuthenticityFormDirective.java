@@ -50,6 +50,10 @@ public class TemplateEngineFreemarkerAuthenticityFormDirective implements Templa
         }
 
         Writer out = env.getOut();
-        out.append("<input type=\"hidden\" value=\"" + context.getSession().getAuthenticityToken() + "\" name=\"" + GizmoConstant.AUTHENTICITY_TOKEN +  "\" />");
+        out.append("<input type=\"hidden\" value=\"")
+            .append(context.getSession().getAuthenticityToken())
+            .append("\" name=\"")
+            .append(GizmoConstant.AUTHENTICITY_TOKEN)
+            .append("\" />");
     }
 }

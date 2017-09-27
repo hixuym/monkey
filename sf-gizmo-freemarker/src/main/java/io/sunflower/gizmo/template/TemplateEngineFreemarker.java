@@ -264,11 +264,7 @@ public class TemplateEngineFreemarker implements TemplateEngine {
 
             Optional<String> messageValueOptional = messages.get(entry.getValue(), context, Optional.of(result));
 
-            if (!messageValueOptional.isPresent()) {
-                messageValue = entry.getValue();
-            } else {
-                messageValue = messageValueOptional.get();
-            }
+            messageValue = messageValueOptional.orElseGet(entry::getValue);
             // new way
             translatedFlashCookieMap.put(entry.getKey(), messageValue);
         }

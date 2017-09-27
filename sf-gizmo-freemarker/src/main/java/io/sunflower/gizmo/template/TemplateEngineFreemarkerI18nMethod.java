@@ -33,15 +33,13 @@ import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.i18n.Messages;
 import io.sunflower.gizmo.validation.ConstraintViolation;
 
-public class TemplateEngineFreemarkerI18nMethod implements
-    TemplateMethodModelEx {
+public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx {
 
-    public final static Logger logger
-        = LoggerFactory.getLogger(TemplateEngineFreemarkerAssetsAtMethod.class);
+    public final static Logger logger = LoggerFactory.getLogger(TemplateEngineFreemarkerAssetsAtMethod.class);
 
-    final Messages messages;
-    final Context context;
-    final Optional<Result> result;
+    private final Messages messages;
+    private final Context context;
+    private final Optional<Result> result;
 
     public TemplateEngineFreemarkerI18nMethod(Messages messages,
                                               Context context,

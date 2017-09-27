@@ -47,7 +47,7 @@ public class TemplateEngineFreemarkerAssetsAtMethod implements
 
     public TemplateModel exec(List args) throws TemplateModelException {
 
-       List argsWithResourceAndMethod = new ArrayList(args.size() + 2);
+       List<Object> argsWithResourceAndMethod = new ArrayList<>(args.size() + 2);
        argsWithResourceAndMethod.add(AssetsResource.class.getName());
        argsWithResourceAndMethod.add("serveStatic");
        argsWithResourceAndMethod.add("fileName");

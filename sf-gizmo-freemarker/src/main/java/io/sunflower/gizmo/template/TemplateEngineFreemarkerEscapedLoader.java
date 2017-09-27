@@ -1,42 +1,40 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package io.sunflower.gizmo.template;
 
 import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
+
+import freemarker.cache.TemplateLoader;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import freemarker.cache.TemplateLoader;
-
 /**
  * This class html-escapes variables like ${...} in all templates (ftl.html). If
  * you don't want to have something escaped you can use at your own risk:
  * <p>
- * 
+ *
  * <code>
  * <#noescape>${...}</#noescape>
  * </code>
- * 
+ *
  * (inside your template).
  * <p>
  * See also http://freemarker.org/docs/ref_directive_escape.html
- * 
+ *
  */
 public class TemplateEngineFreemarkerEscapedLoader implements TemplateLoader {
 
@@ -61,18 +59,14 @@ public class TemplateEngineFreemarkerEscapedLoader implements TemplateLoader {
 
     @Override
     public Reader getReader(Object templateSource, String encoding)
-            throws IOException {
+        throws IOException {
         Reader reader = delegate.getReader(templateSource, encoding);
         try {
             String templateText = CharStreams.toString(reader);
             return new StringReader(ESCAPE_PREFIX + templateText
-                    + ESCAPE_SUFFIX);
+                + ESCAPE_SUFFIX);
         } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                // close slient.
-            }
+            Closeables.closeQuietly(reader);
         }
     }
 

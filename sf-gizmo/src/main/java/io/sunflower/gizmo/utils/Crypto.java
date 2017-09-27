@@ -35,7 +35,6 @@ public class Crypto {
     @Inject
     public Crypto(GizmoConfiguration configuration) {
         this.applicationSecret = configuration.getApplicationSecret();
-
     }
 
     public String signHmacSha1(String message) {

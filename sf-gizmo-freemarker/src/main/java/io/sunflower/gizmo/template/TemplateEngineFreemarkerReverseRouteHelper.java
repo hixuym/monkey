@@ -35,7 +35,7 @@ import io.sunflower.gizmo.ReverseRouter;
 public class TemplateEngineFreemarkerReverseRouteHelper {
     private final Logger logger = LoggerFactory.getLogger(TemplateEngineFreemarkerReverseRouteHelper.class);
 
-    final ReverseRouter reverseRouter;
+    private final ReverseRouter reverseRouter;
 
     @Inject
     public TemplateEngineFreemarkerReverseRouteHelper(ReverseRouter router) {

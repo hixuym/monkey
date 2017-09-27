@@ -66,8 +66,7 @@ public class TemplateEngineFreemarkerPrettyTimeMethod implements
         if (value instanceof SimpleDate) {
             return ((SimpleDate) value).getAsDate();
         } else {
-            throw new RuntimeException(
-                    "Formattable object for PrettyTime not found!");
+            throw new RuntimeException("Formattable object for PrettyTime not found!");
         }
     }
 }
