@@ -54,7 +54,7 @@ public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
 
         HttpHandler adminHandler = createAdminHandler();
 
-        Undertow.ListenerBuilder listenerBuilder = getConnector().build();
+        Undertow.ListenerBuilder listenerBuilder = getConnector().build(environment);
 
         PathHandler rootHandler = new PathHandler();
 

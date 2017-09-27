@@ -81,7 +81,7 @@ public class DefaultGizmoServerFactory extends AbstractGizmoServerFactory {
 
         for (ConnectorFactory connectorFactory : getApplicationConnectors()) {
 
-            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
+            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build(environment);
 
             if (Strings.isNullOrEmpty(getApplicationContextPath())) {
                 listenerBuilder.setRootHandler(applicationHandler);
@@ -93,7 +93,7 @@ public class DefaultGizmoServerFactory extends AbstractGizmoServerFactory {
         }
 
         for (ConnectorFactory connectorFactory : getAdminConnectors()) {
-            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build();
+            Undertow.ListenerBuilder listenerBuilder = connectorFactory.build(environment);
 
             if (Strings.isNullOrEmpty(getAdminContextPath())) {
                 listenerBuilder.setRootHandler(adminHandler);

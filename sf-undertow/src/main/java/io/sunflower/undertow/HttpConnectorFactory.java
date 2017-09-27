@@ -3,6 +3,7 @@ package io.sunflower.undertow;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import io.sunflower.setup.Environment;
 import io.sunflower.validation.PortRange;
 import io.undertow.Undertow;
 
@@ -49,7 +50,7 @@ public class HttpConnectorFactory implements ConnectorFactory {
     }
 
     @Override
-    public Undertow.ListenerBuilder build() {
+    public Undertow.ListenerBuilder build(Environment environment) {
 
         Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
 

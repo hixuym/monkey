@@ -71,7 +71,7 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
                 bind(Context.class).to(UndertowContext.class);
 
                 //
-                install(new HandlerModule());
+                install(new HandlerModule(environment));
             }
         });
     }

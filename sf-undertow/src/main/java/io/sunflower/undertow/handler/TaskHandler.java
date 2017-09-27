@@ -43,20 +43,20 @@ public class TaskHandler implements HttpHandler {
     /**
      * Creates a new TaskHandler.
      */
-    @Inject
-    public TaskHandler(Injector injector, Environment environment) {
+    public TaskHandler(Environment environment) {
         this.tasks = new ConcurrentHashMap<>();
         this.taskExecutors = new ConcurrentHashMap<>();
-
-        Injectors.instanceOf(injector, Task.class).forEach(this::add);
 
         environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override
             public void lifeCycleStarting(LifeCycle event) {
+
+                Injectors.instanceOf(environment.guicey().injector(), Task.class)
+                    .forEach(TaskHandler.this::add);
+
                 logTasks();
             }
         });
-
     }
 
     private void doGet(HttpServerExchange exchange) {
@@ -139,7 +139,7 @@ public class TaskHandler implements HttpHandler {
         return results.build();
     }
 
-    private void add(Task task) {
+    public void add(Task task) {
         tasks.put('/' + task.getName(), task);
 
         TaskExecutor taskExecutor = new TaskExecutor(task);

@@ -3,6 +3,7 @@ package io.sunflower.undertow;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.sunflower.jackson.Discoverable;
+import io.sunflower.setup.Environment;
 import io.undertow.Undertow;
 
 /**
@@ -16,5 +17,5 @@ public interface ConnectorFactory extends Discoverable {
      *
      * @return a {@link Undertow.ListenerBuilder}
      */
-    Undertow.ListenerBuilder build();
+    Undertow.ListenerBuilder build(Environment environment);
 }

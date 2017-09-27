@@ -18,24 +18,33 @@ package io.sunflower.undertow.handler;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 
+import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 
 public class HandlerModule extends AbstractModule {
+
+    private final Environment environment;
+
+    public HandlerModule(Environment environment) {
+        this.environment = environment;
+    }
+
     @Override
     protected void configure() {
         // admin handlers;
         MapBinder<String, HttpHandler> mapBinder = MapBinder.newMapBinder(binder(), String.class, HttpHandler.class);
 
-        mapBinder.addBinding("tasks").to(TaskHandler.class);
+        TaskHandler taskHandler = new TaskHandler(environment);
 
-        // tasks
-        bind(LogConfigurationTask.class);
-        bind(GarbageCollectionTask.class);
-        bind(ThreadDumpTask.class);
-
+        mapBinder.addBinding("tasks").toInstance(taskHandler);
         mapBinder.addBinding("healthcheck").to(HealthChecksHandler.class);
         mapBinder.addBinding("metrics").to(MetricsHandler.class);
 
-//        mapBinder.addBinding("cpuprofiler").toInstance(Handlers.blocking(new CpuProfileHandler()));
+        // tasks
+        bind(TaskHandler.class).toInstance(taskHandler);
+
+        bind(LogConfigurationTask.class);
+        bind(GarbageCollectionTask.class);
+        bind(ThreadDumpTask.class);
     }
 }

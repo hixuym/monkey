@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.guicey.Injectors;
 import io.sunflower.setup.Environment;
+import io.sunflower.undertow.handler.Task;
+import io.sunflower.undertow.handler.TaskHandler;
 import io.undertow.Handlers;
 import io.undertow.predicate.Predicate;
 import io.undertow.predicate.Predicates;
@@ -54,13 +56,10 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
     @Override
     public final GizmoServer build(Environment environment) {
 
-        Injector injector = environment.guicey().injector();
-
-        Injectors.mapOf(injector, new TypeLiteral<Map<String, HttpHandler>>() {})
+        Injectors.mapOf(environment.guicey().injector(), new TypeLiteral<Map<String, HttpHandler>>() {})
             .forEach(adminHandlers::addPrefixPath);
 
         return buildServer(environment);
-
     }
 
     protected abstract GizmoServer buildServer(Environment environment);
