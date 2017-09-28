@@ -15,8 +15,10 @@
 
 package io.sunflower.mybatis;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -53,6 +55,7 @@ public abstract class MybatisBundle<T extends Configuration> implements Configur
 
     @Override
     public void run(T configuration, Environment environment) throws Exception {
+        PooledDataSourceFactory dataSourceFactory = getDataSourceFactory(configuration);
 
         ImmutableList.Builder<Class<?>> builder = new ImmutableList.Builder<>();
 
@@ -66,11 +69,21 @@ public abstract class MybatisBundle<T extends Configuration> implements Configur
             util.find(isMapper, pkg);
         }
 
+        String pkgs = dataSourceFactory.getProperties().get("search.packages");
+
+        if (StringUtils.isNotEmpty(pkgs)) {
+
+           List<String> scanPkgs = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(pkgs);
+
+            for (String pkg : scanPkgs) {
+                util.find(isMapper, pkg);
+            }
+        }
+
         builder.addAll(util.getClasses());
 
         List<Class<?>> mappers = builder.build();
 
-        PooledDataSourceFactory dataSourceFactory = getDataSourceFactory(configuration);
 
         SqlSessionFactory sqlSessionFactory =
             sqlSessionFactoryFactory.build(this,

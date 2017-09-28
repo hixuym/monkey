@@ -3,6 +3,7 @@ defaultName: Stranger
 
 logging:
   loggers:
+    "org.apache":  INFO
     "io.sunflower": INFO
     "io.ebean.SQL": TRACE
     "io.ebean.TXN": TRACE

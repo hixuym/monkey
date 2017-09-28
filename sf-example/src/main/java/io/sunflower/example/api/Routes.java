@@ -26,6 +26,7 @@ public class Routes implements ApplicationRoutes {
 
         router.GET().route("/").with(ApplicationResource::index);
         router.GET().route("/hello_world.json").with(ApplicationResource::helloWorldJson);
+        router.GET().route("/user_count.json").with(ApplicationResource::userCount);
 
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)

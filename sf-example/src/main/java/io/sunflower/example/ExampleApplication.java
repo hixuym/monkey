@@ -3,6 +3,7 @@ package io.sunflower.example;
 import com.google.inject.AbstractModule;
 
 import io.sunflower.Application;
+import io.sunflower.Configuration;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.ebean.EbeanBundle;
 import io.sunflower.example.api.Routes;
@@ -13,6 +14,7 @@ import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.gizmo.server.GizmoBundle;
 import io.sunflower.gizmo.server.GizmoServerFactory;
 import io.sunflower.gizmo.template.TemplateEngineFreemarker;
+import io.sunflower.mybatis.MybatisBundle;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
@@ -42,6 +44,13 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
         });
 
         bootstrap.addBundle(new EbeanBundle<ExampleConfiguration>() {
+            @Override
+            public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
+
+        bootstrap.addBundle(new MybatisBundle<ExampleConfiguration>() {
             @Override
             public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
                 return configuration.getDataSourceFactory();
