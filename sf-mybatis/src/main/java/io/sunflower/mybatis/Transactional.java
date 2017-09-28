@@ -113,7 +113,7 @@ public @interface Transactional {
    * executed within a transaction context where the values provide the following
    * corresponding behavior.
    */
-  public enum TxType {
+  enum TxType {
     /**
      *  <p>If called outside a transaction context, the interceptor must begin a new
      *  JTA transaction, the managed bean method execution must then continue

@@ -66,6 +66,7 @@
         <module>sf-mybatis</module>
         <module>sf-sec</module>
         <module>sf-postoffice</module>
+        <module>sf-testing</module>
     </modules>
 
     <licenses>
