@@ -42,6 +42,11 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
+            <artifactId>sf-mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.sunflower</groupId>
             <artifactId>sf-ebean</artifactId>
         </dependency>
 
