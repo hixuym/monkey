@@ -13,12 +13,12 @@ logging:
     "io.ebean.cache.COLL": TRACE
     "io.ebean.cache.NATKEY": TRACE
 
-server:
-  type: gizmo-simple
-  applicationContextPath: /app
-  adminContextPath: /admin
-  applicationSecret: 12345678
-  accessLogFormat: combined
+#server:
+#  type: gizmo-simple
+#  applicationContextPath: /app
+#  adminContextPath: /admin
+#  applicationSecret: 12345678
+#  accessLogFormat: combined
 #  applicationConnectors:
 #    - type: https
 #      port: 8443

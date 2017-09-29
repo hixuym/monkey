@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import io.ebean.EbeanServer;
 import io.sunflower.example.core.UserMapper;
+import io.sunflower.testing.ConfigOverride;
 import io.sunflower.testing.junit.SunflowerAppRule;
 
 import static io.sunflower.testing.ResourceHelpers.resourceFilePath;
@@ -33,7 +34,8 @@ public class UserMapperTests {
     @ClassRule
     public static SunflowerAppRule<ExampleConfiguration> appRule =
         new SunflowerAppRule<>(ExampleApplication.class,
-            resourceFilePath("example.yml"));
+            resourceFilePath("example.yml"),
+        ConfigOverride.config("server.type", "default"));
 
     @Inject
     private EbeanServer ebeanServer;
