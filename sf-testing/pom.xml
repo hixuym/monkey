@@ -27,8 +27,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
