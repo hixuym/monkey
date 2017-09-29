@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;
 import io.sunflower.undertow.HttpConnectorFactory;
@@ -27,7 +28,7 @@ import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
 
-@JsonTypeName("simple")
+@JsonTypeName("gizmo-simple")
 public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
 
     private ConnectorFactory connector = HttpConnectorFactory.application();
@@ -43,7 +44,7 @@ public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
     }
 
     @Override
-    public GizmoServer buildServer(Environment environment) {
+    public Server buildServer(Environment environment) {
         Undertow.Builder undertowBuilder = Undertow.builder()
             // NOTE: should ninja not use equals chars within its cookie values?
             .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
@@ -66,11 +67,6 @@ public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
         undertowBuilder.addListener(listenerBuilder);
 
         return new GizmoServer(environment, undertowBuilder.build());
-    }
-
-    @Override
-    public GizmoConfiguration gizmoConfig() {
-        return this;
     }
 
     private String applicationContextPath = "/app";

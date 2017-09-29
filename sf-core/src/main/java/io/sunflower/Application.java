@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import io.sunflower.cli.CheckCommand;
 import io.sunflower.cli.Cli;
+import io.sunflower.cli.ServerCommand;
 import io.sunflower.logging.BootstrapLogging;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -119,6 +120,7 @@ public abstract class Application<T extends Configuration> {
      */
     protected void addDefaultCommands(Bootstrap<T> bootstrap) {
         bootstrap.addCommand(new CheckCommand<>(this));
+        bootstrap.addCommand(new ServerCommand<>(this));
     }
 
     /**

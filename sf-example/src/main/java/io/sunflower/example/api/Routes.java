@@ -33,10 +33,5 @@ public class Routes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////
         router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsResource::serveWebJars);
         router.GET().route("/assets/{fileName: .*}").with(AssetsResource::serveStatic);
-
-        ///////////////////////////////////////////////////////////////////////
-        // Index / Catchall shows index page
-        ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/.*").with(ApplicationResource::index);
     }
 }

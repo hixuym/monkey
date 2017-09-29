@@ -2,8 +2,8 @@ template: Hello, %s!
 defaultName: Stranger
 
 logging:
+  level: DEBUG
   loggers:
-    "org.apache":  INFO
     "io.sunflower": INFO
     "io.ebean.SQL": TRACE
     "io.ebean.TXN": TRACE
@@ -13,23 +13,23 @@ logging:
     "io.ebean.cache.COLL": TRACE
     "io.ebean.cache.NATKEY": TRACE
 
-gizmo:
-#  type: simple
-#  applicationContextPath: /app
-#  adminContextPath: /admin
+server:
+  type: gizmo-simple
+  applicationContextPath: /app
+  adminContextPath: /admin
   applicationSecret: 12345678
   accessLogFormat: combined
-  applicationConnectors:
-    - type: https
-      port: 8443
-      validateCerts: true
-      validatePeers: true
-      supportedProtocols: ['TLSv1.1', 'TLSv1.2']
-      excludedProtocols:  []
-      supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
-      excludedCipherSuites: []
-      allowRenegotiation: false
-      endpointIdentificationAlgorithm: HTTPS
+#  applicationConnectors:
+#    - type: https
+#      port: 8443
+#      validateCerts: true
+#      validatePeers: true
+#      supportedProtocols: ['TLSv1.1', 'TLSv1.2']
+#      excludedProtocols:  []
+#      supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
+#      excludedCipherSuites: []
+#      allowRenegotiation: false
+#      endpointIdentificationAlgorithm: HTTPS
 
 metrics:
   frequency: 1 minutes

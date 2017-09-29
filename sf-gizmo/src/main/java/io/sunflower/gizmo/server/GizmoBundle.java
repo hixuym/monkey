@@ -40,19 +40,17 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.HandlerModule;
 
-public abstract class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>, GizmoServerConfigurable<T> {
-
-    private volatile GizmoServerFactory serverFactory;
+public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     @Override
     public void run(T configuration, Environment environment) throws Exception {
 
-        this.serverFactory = getGizmoServerFacotory(configuration);
-
         environment.guicey().addModule(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(GizmoConfiguration.class).toInstance(serverFactory.gizmoConfig());
+                if (configuration.getServerFactory() instanceof GizmoConfiguration) {
+                    bind(GizmoConfiguration.class).toInstance((GizmoConfiguration) configuration.getServerFactory());
+                }
 
                 // Routing
                 Multibinder.newSetBinder(binder(), ParamParser.class);
@@ -78,10 +76,6 @@ public abstract class GizmoBundle<T extends Configuration> implements Configured
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-        bootstrap.addCommand(new ServerCommand<>(bootstrap.getApplication(), this));
     }
 
-    public GizmoServerFactory getServerFactory() {
-        return serverFactory;
-    }
 }

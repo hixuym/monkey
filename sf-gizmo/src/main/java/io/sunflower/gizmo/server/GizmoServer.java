@@ -26,13 +26,14 @@ import io.sunflower.gizmo.Gizmo;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.lifecycle.ContainerLifeCycle;
+import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.undertow.Undertow;
 
 /**
  * sunflower standalone based on Undertow.
  */
-public class GizmoServer extends ContainerLifeCycle {
+public class GizmoServer extends Server {
 
     private Logger logger = LoggerFactory.getLogger(GizmoServer.class);
 

@@ -17,6 +17,7 @@ package io.sunflower.testing.junit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.http.client.HttpClient;
 import org.junit.rules.ExternalResource;
 
 import java.util.Optional;
@@ -28,11 +29,13 @@ import javax.annotation.Nullable;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.cli.Command;
+import io.sunflower.cli.ServerCommand;
+import io.sunflower.client.HttpClientBuilder;
+import io.sunflower.client.HttpClientConfiguration;
 import io.sunflower.lifecycle.Managed;
 import io.sunflower.setup.Environment;
 import io.sunflower.testing.ConfigOverride;
 import io.sunflower.testing.SunflowerTestSupport;
-import io.sunflower.testing.TestCommand;
 
 public class SunflowerAppRule<C extends Configuration> extends ExternalResource {
 
@@ -55,7 +58,7 @@ public class SunflowerAppRule<C extends Configuration> extends ExternalResource 
 
     public SunflowerAppRule(Class<? extends Application<C>> applicationClass, String configPath,
                             Optional<String> customPropertyPrefix, ConfigOverride... configOverrides) {
-        this(applicationClass, configPath, customPropertyPrefix, TestCommand::new, configOverrides);
+        this(applicationClass, configPath, customPropertyPrefix, ServerCommand::new, configOverrides);
     }
 
     public SunflowerAppRule(Class<? extends Application<C>> applicationClass, String configPath,
@@ -167,6 +170,19 @@ public class SunflowerAppRule<C extends Configuration> extends ExternalResource 
 
     public SunflowerTestSupport<C> getTestSupport() {
         return testSupport;
+    }
+
+    public void inject(Object test) {
+        testSupport.getInjector().injectMembers(test);
+    }
+
+    public HttpClient client(HttpClientConfiguration configuration) {
+        if (configuration == null) {
+            configuration = new HttpClientConfiguration();
+        }
+        return new HttpClientBuilder(getEnvironment())
+            .using(configuration)
+            .build(getApplication().getName());
     }
 
 }

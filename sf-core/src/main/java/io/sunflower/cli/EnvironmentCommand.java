@@ -39,13 +39,11 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
             bootstrap.getHealthCheckRegistry());
 
         configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
+        configuration.getServerFactory().configure(environment);
 
         bootstrap.run(configuration, environment);
-
         application.run(configuration, environment);
-
         environment.guicey().commit();
-
         run(environment, namespace, configuration);
     }
 

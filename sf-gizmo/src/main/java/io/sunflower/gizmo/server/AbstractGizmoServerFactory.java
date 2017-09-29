@@ -31,6 +31,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.guicey.Injectors;
+import io.sunflower.server.Server;
+import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.Task;
 import io.sunflower.undertow.handler.TaskHandler;
@@ -44,7 +46,7 @@ import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import io.undertow.server.handlers.accesslog.AccessLogReceiver;
 import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
 
-public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements GizmoServerFactory {
+public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements ServerFactory {
 
     private final PathHandler adminHandlers = new PathHandler();
 
@@ -54,7 +56,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
     }
 
     @Override
-    public final GizmoServer build(Environment environment) {
+    public final Server build(Environment environment) {
 
         Injectors.mapOf(environment.guicey().injector(), new TypeLiteral<Map<String, HttpHandler>>() {})
             .forEach(adminHandlers::addPrefixPath);
@@ -62,7 +64,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
         return buildServer(environment);
     }
 
-    protected abstract GizmoServer buildServer(Environment environment);
+    protected abstract Server buildServer(Environment environment);
 
     /**
      *
@@ -126,4 +128,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
         return httpHandler;
     }
 
+    @Override
+    public void configure(Environment environment) {
+    }
 }

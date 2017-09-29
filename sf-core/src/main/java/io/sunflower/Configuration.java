@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import io.sunflower.logging.DefaultLoggingFactory;
 import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
+import io.sunflower.server.DefaultServerFactory;
+import io.sunflower.server.ServerFactory;
 
 /**
  * An object representation of the YAML configuration file. Extend this with your own configuration properties, and
@@ -62,11 +64,33 @@ import io.sunflower.metrics.MetricsFactory;
 public class Configuration {
 
     @Valid
+    @NotNull
+    private ServerFactory serverFactory = new DefaultServerFactory();
+
+    @Valid
     private LoggingFactory logging;
 
     @Valid
     @NotNull
     private MetricsFactory metrics = new MetricsFactory();
+
+    /**
+     * Returns the server-specific section of the configuration file.
+     *
+     * @return server-specific configuration parameters
+     */
+    @JsonProperty("server")
+    public ServerFactory getServerFactory() {
+        return serverFactory;
+    }
+
+    /**
+     * Sets the HTTP-specific section of the configuration file.
+     */
+    @JsonProperty("server")
+    public void setServerFactory(ServerFactory factory) {
+        this.serverFactory = factory;
+    }
 
     /**
      * Returns the logging-specific section of the configuration file.
@@ -103,6 +127,7 @@ public class Configuration {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
+            .add("server", serverFactory)
             .add("logging", logging)
             .add("metrics", metrics)
             .toString();

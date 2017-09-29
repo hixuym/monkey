@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.Injector;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,10 +37,12 @@ import javax.annotation.Nullable;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.cli.Command;
+import io.sunflower.cli.ServerCommand;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.Managed;
+import io.sunflower.server.Server;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
@@ -72,7 +75,7 @@ public class SunflowerTestSupport<C extends Configuration> {
     protected Environment environment;
     protected List<ServiceListener<C>> listeners = new ArrayList<>();
 
-    protected MockServer server;
+    protected Server server;
 
     public SunflowerTestSupport(Class<? extends Application<C>> applicationClass,
                                 @Nullable String configPath,
@@ -82,7 +85,7 @@ public class SunflowerTestSupport<C extends Configuration> {
 
     public SunflowerTestSupport(Class<? extends Application<C>> applicationClass, String configPath,
                                 Optional<String> customPropertyPrefix, ConfigOverride... configOverrides) {
-        this(applicationClass, configPath, customPropertyPrefix, TestCommand::new, configOverrides);
+        this(applicationClass, configPath, customPropertyPrefix, ServerCommand::new, configOverrides);
     }
 
     public SunflowerTestSupport(Class<? extends Application<C>> applicationClass, String configPath,
@@ -108,7 +111,7 @@ public class SunflowerTestSupport<C extends Configuration> {
      */
     public SunflowerTestSupport(Class<? extends Application<C>> applicationClass,
                                 C configuration) {
-        this(applicationClass, configuration, TestCommand::new);
+        this(applicationClass, configuration, ServerCommand::new);
     }
 
 
@@ -185,8 +188,8 @@ public class SunflowerTestSupport<C extends Configuration> {
                     environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
                         @Override
                         public void lifeCycleStarted(LifeCycle event) {
-                            if (event instanceof MockServer) {
-                                server = (MockServer) event;
+                            if (event instanceof Server) {
+                                server = (Server) event;
                             }
                         }
                     });
@@ -202,6 +205,7 @@ public class SunflowerTestSupport<C extends Configuration> {
                     }
                 }
             };
+
             if (explicitConfig) {
                 bootstrap.setConfigurationFactoryFactory((klass, validator, objectMapper, propertyPrefix) ->
                     new POJOConfigurationFactory<>(configuration));
@@ -262,6 +266,10 @@ public class SunflowerTestSupport<C extends Configuration> {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Injector getInjector() {
+        return environment.guicey().injector();
     }
 
     @SuppressWarnings("unchecked")

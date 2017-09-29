@@ -10,7 +10,7 @@ import io.undertow.Undertow;
 /**
  * Builds HTTP connectors.
  */
-@JsonTypeName("server")
+@JsonTypeName("http")
 public class HttpConnectorFactory implements ConnectorFactory {
     public static ConnectorFactory application() {
         final HttpConnectorFactory factory = new HttpConnectorFactory();

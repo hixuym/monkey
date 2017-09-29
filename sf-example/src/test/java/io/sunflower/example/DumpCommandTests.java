@@ -13,9 +13,27 @@
  * limitations under the License.
  */
 
-package io.sunflower.testing;
+package io.sunflower.example;
 
-import io.sunflower.lifecycle.ContainerLifeCycle;
+import org.junit.Test;
 
-public class MockServer extends ContainerLifeCycle {
+import io.sunflower.example.cli.DumpConfigCommand;
+import io.sunflower.setup.Bootstrap;
+import io.sunflower.testing.BaseCommandTest;
+
+public class DumpCommandTests extends BaseCommandTest {
+    @Override
+    protected Bootstrap getBootstrap() {
+
+        Bootstrap<ExampleConfiguration> bootstrap = new Bootstrap<>(new ExampleApplication());
+
+        bootstrap.addCommand(new DumpConfigCommand());
+        return bootstrap;
+    }
+
+
+    @Test
+    public void testDump() throws Exception {
+        cli.run("dump");
+    }
 }

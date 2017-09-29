@@ -8,9 +8,6 @@ import javax.validation.Valid;
 
 import io.sunflower.Configuration;
 import io.sunflower.db.DataSourceFactory;
-import io.sunflower.db.PooledDataSourceFactory;
-import io.sunflower.gizmo.server.DefaultGizmoServerFactory;
-import io.sunflower.gizmo.server.GizmoServerFactory;
 
 /**
  * Created by michael on 17/9/2.
@@ -19,9 +16,6 @@ public class ExampleConfiguration extends Configuration {
 
     @Valid
     private DataSourceFactory dataSourceFactory = new DataSourceFactory();
-
-    @Valid
-    private GizmoServerFactory serverFactory = new DefaultGizmoServerFactory();
 
     @NotEmpty
     private String template;
@@ -42,18 +36,7 @@ public class ExampleConfiguration extends Configuration {
     }
 
     public void setDefaultName(String name) {
-
         this.defaultName = name;
-    }
-
-    @JsonProperty("gizmo")
-    public GizmoServerFactory getServerFactory() {
-        return serverFactory;
-    }
-
-    @JsonProperty("gizmo")
-    public void setServerFactory(GizmoServerFactory serverFactory) {
-        this.serverFactory = serverFactory;
     }
 
     @JsonProperty("database")

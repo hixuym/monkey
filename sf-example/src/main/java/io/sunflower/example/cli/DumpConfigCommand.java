@@ -17,6 +17,7 @@ package io.sunflower.example.cli;
 
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import io.sunflower.cli.Cli;
 import io.sunflower.cli.ConfiguredCommand;
 import io.sunflower.example.ExampleConfiguration;
 import io.sunflower.setup.Bootstrap;
@@ -29,6 +30,11 @@ public class DumpConfigCommand extends ConfiguredCommand<ExampleConfiguration> {
 
     @Override
     protected void run(Bootstrap bootstrap, Namespace namespace, ExampleConfiguration configuration) throws Exception {
-        System.out.println(String.format(configuration.getTemplate(), configuration.getDefaultName()));
+        System.out.println("dump..");
+    }
+
+    @Override
+    public void onError(Cli cli, Namespace namespace, Throwable e) {
+        System.out.println(e.toString());
     }
 }

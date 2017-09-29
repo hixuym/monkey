@@ -13,10 +13,9 @@
  * limitations under the License.
  */
 
-package io.sunflower.gizmo.server;
+package io.sunflower.server;
 
-import io.sunflower.Configuration;
+import io.sunflower.lifecycle.ContainerLifeCycle;
 
-public interface GizmoServerConfigurable<T extends Configuration> {
-    GizmoServerFactory getGizmoServerFacotory(T configuration);
+public abstract class Server extends ContainerLifeCycle {
 }
