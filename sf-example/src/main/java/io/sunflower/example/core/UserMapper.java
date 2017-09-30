@@ -15,11 +15,10 @@
 
 package io.sunflower.example.core;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import io.sunflower.mybatis.DAO;
-
-@DAO
+@Mapper
 public interface UserMapper {
 
     @Select("select count(1) from tb_user")

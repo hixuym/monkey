@@ -19,6 +19,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -63,7 +64,7 @@ public abstract class MybatisBundle<T extends Configuration> implements Configur
 
         util.setClassLoader(environment.classLoader());
 
-        ResolverUtil.Test isMapper = new ResolverUtil.AnnotatedWith(DAO.class);
+        ResolverUtil.Test isMapper = new ResolverUtil.AnnotatedWith(Mapper.class);
 
         for (String pkg : scanPkgs) {
             util.find(isMapper, pkg);
