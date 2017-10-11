@@ -1,17 +1,16 @@
 package io.sunflower.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.assertj.core.data.MapEntry;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import io.sunflower.jackson.Jackson;
+import io.sunflower.validation.BaseValidator;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -20,432 +19,434 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import io.sunflower.jackson.Jackson;
-import io.sunflower.validation.BaseValidator;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import org.assertj.core.data.MapEntry;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public abstract class BaseConfigurationFactoryTest {
 
-    private static final String NEWLINE = System.lineSeparator();
+  private static final String NEWLINE = System.lineSeparator();
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static class ExampleServer {
+  @SuppressWarnings("UnusedDeclaration")
+  public static class ExampleServer {
 
-        @JsonProperty
-        private int port = 8000;
+    @JsonProperty
+    private int port = 8000;
 
-        public int getPort() {
-            return port;
-        }
-
-        public static ExampleServer create(int port) {
-            ExampleServer server = new ExampleServer();
-            server.port = port;
-            return server;
-        }
-
+    public int getPort() {
+      return port;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static class Example {
-
-        @NotNull
-        @Pattern(regexp = "[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?")
-        private String name;
-
-        @JsonProperty
-        private int age = 1;
-
-        List<String> type;
-
-        @JsonProperty
-        private Map<String, String> properties = new LinkedHashMap<>();
-
-        @JsonProperty
-        private List<ExampleServer> servers = new ArrayList<>();
-
-        private boolean admin;
-
-        @JsonProperty("my.logger")
-        private Map<String, String> logger = new LinkedHashMap<>();
-
-        public String getName() {
-            return name;
-        }
-
-        public List<String> getType() {
-            return type;
-        }
-
-        public Map<String, String> getProperties() {
-            return properties;
-        }
-
-        public List<ExampleServer> getServers() {
-            return servers;
-        }
-
-        public boolean isAdmin() {
-            return admin;
-        }
-
-        public void setAdmin(boolean admin) {
-            this.admin = admin;
-        }
-
-        public Map<String, String> getLogger() {
-            return logger;
-        }
+    public static ExampleServer create(int port) {
+      ExampleServer server = new ExampleServer();
+      server.port = port;
+      return server;
     }
 
-    static class ExampleWithDefaults {
+  }
 
-        @NotNull
-        @Pattern(regexp = "[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?")
-        @JsonProperty
-        String name = "Coda Hale";
+  @SuppressWarnings("UnusedDeclaration")
+  public static class Example {
 
-        @JsonProperty
-        List<String> type = ImmutableList.of("coder", "wizard");
+    @NotNull
+    @Pattern(regexp = "[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?")
+    private String name;
 
-        @JsonProperty
-        Map<String, String> properties = ImmutableMap.of("debug", "true", "settings.enabled", "false");
+    @JsonProperty
+    private int age = 1;
 
-        @JsonProperty
-        List<ExampleServer> servers = ImmutableList.of(
-            ExampleServer.create(8080), ExampleServer.create(8081), ExampleServer.create(8082));
+    List<String> type;
 
-        @JsonProperty
-        @Valid
-        CacheBuilderSpec cacheBuilderSpec = CacheBuilderSpec.disableCaching();
+    @JsonProperty
+    private Map<String, String> properties = new LinkedHashMap<>();
+
+    @JsonProperty
+    private List<ExampleServer> servers = new ArrayList<>();
+
+    private boolean admin;
+
+    @JsonProperty("my.logger")
+    private Map<String, String> logger = new LinkedHashMap<>();
+
+    public String getName() {
+      return name;
     }
 
-    static class NonInsatiableExample {
-
-        @JsonProperty
-        String name = "Code Hale";
-
-        NonInsatiableExample(@JsonProperty("name") String name) {
-            this.name = name;
-        }
+    public List<String> getType() {
+      return type;
     }
 
-    protected final Validator validator = BaseValidator.newValidator();
-    protected ConfigurationFactory<Example> factory;
-    protected File malformedFile;
-    protected File emptyFile;
-    protected File invalidFile;
-    protected File validFile;
-    protected File typoFile;
-    protected File wrongTypeFile;
-    protected File malformedAdvancedFile;
-
-    protected static File resourceFileName(String resourceName) throws URISyntaxException {
-        return new File(Resources.getResource(resourceName).toURI());
+    public Map<String, String> getProperties() {
+      return properties;
     }
 
-    @After
-    public void resetConfigOverrides() {
-        for (Enumeration<?> props = System.getProperties().propertyNames(); props.hasMoreElements(); ) {
-            String keyString = (String) props.nextElement();
-            if (keyString.startsWith("sf.")) {
-                System.clearProperty(keyString);
-            }
-        }
+    public List<ExampleServer> getServers() {
+      return servers;
     }
 
-    @Before
-    public abstract void setUp() throws Exception;
-
-    @Test
-    public void usesDefaultedCacheBuilderSpec() throws Exception {
-        final ExampleWithDefaults example =
-            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf")
-                .build();
-        assertThat(example.cacheBuilderSpec)
-            .isNotNull();
-        assertThat(example.cacheBuilderSpec)
-            .isEqualTo(CacheBuilderSpec.disableCaching());
+    public boolean isAdmin() {
+      return admin;
     }
 
-    @Test
-    public void loadsValidConfigFiles() throws Exception {
-        final Example example = factory.build(validFile);
-
-        assertThat(example.getName())
-            .isEqualTo("Coda Hale");
-
-        assertThat(example.getType().get(0))
-            .isEqualTo("coder");
-        assertThat(example.getType().get(1))
-            .isEqualTo("wizard");
-
-        assertThat(example.getProperties())
-            .contains(MapEntry.entry("debug", "true"),
-                MapEntry.entry("settings.enabled", "false"));
-
-        assertThat(example.getServers())
-            .hasSize(3);
-        assertThat(example.getServers().get(0).getPort())
-            .isEqualTo(8080);
-
+    public void setAdmin(boolean admin) {
+      this.admin = admin;
     }
 
-    @Test
-    public void handlesSimpleOverride() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
-        final Example example = factory.build(validFile);
-        assertThat(example.getName())
-            .isEqualTo("Coda Hale Overridden");
+    public Map<String, String> getLogger() {
+      return logger;
     }
+  }
 
-    @Test
-    public void handlesExistingOverrideWithPeriod() throws Exception {
-        System.setProperty("sf.my\\.logger.level", "debug");
-        final Example example = factory.build(validFile);
-        assertThat(example.getLogger().get("level"))
-            .isEqualTo("debug");
+  static class ExampleWithDefaults {
+
+    @NotNull
+    @Pattern(regexp = "[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?")
+    @JsonProperty
+    String name = "Coda Hale";
+
+    @JsonProperty
+    List<String> type = ImmutableList.of("coder", "wizard");
+
+    @JsonProperty
+    Map<String, String> properties = ImmutableMap.of("debug", "true", "settings.enabled", "false");
+
+    @JsonProperty
+    List<ExampleServer> servers = ImmutableList.of(
+        ExampleServer.create(8080), ExampleServer.create(8081), ExampleServer.create(8082));
+
+    @JsonProperty
+    @Valid
+    CacheBuilderSpec cacheBuilderSpec = CacheBuilderSpec.disableCaching();
+  }
+
+  static class NonInsatiableExample {
+
+    @JsonProperty
+    String name = "Code Hale";
+
+    NonInsatiableExample(@JsonProperty("name") String name) {
+      this.name = name;
     }
+  }
 
-    @Test
-    public void handlesNewOverrideWithPeriod() throws Exception {
-        System.setProperty("sf.my\\.logger.com\\.example", "error");
-        final Example example = factory.build(validFile);
-        assertThat(example.getLogger().get("com.example"))
-            .isEqualTo("error");
+  protected final Validator validator = BaseValidator.newValidator();
+  protected ConfigurationFactory<Example> factory;
+  protected File malformedFile;
+  protected File emptyFile;
+  protected File invalidFile;
+  protected File validFile;
+  protected File typoFile;
+  protected File wrongTypeFile;
+  protected File malformedAdvancedFile;
+
+  protected static File resourceFileName(String resourceName) throws URISyntaxException {
+    return new File(Resources.getResource(resourceName).toURI());
+  }
+
+  @After
+  public void resetConfigOverrides() {
+    for (Enumeration<?> props = System.getProperties().propertyNames(); props.hasMoreElements(); ) {
+      String keyString = (String) props.nextElement();
+      if (keyString.startsWith("sf.")) {
+        System.clearProperty(keyString);
+      }
     }
+  }
 
-    @Test
-    public void handlesArrayOverride() throws Exception {
-        System.setProperty("sf.type", "coder,wizard,overridden");
-        final Example example = factory.build(validFile);
-        assertThat(example.getType().get(2))
-            .isEqualTo("overridden");
-        assertThat(example.getType().size())
-            .isEqualTo(3);
+  @Before
+  public abstract void setUp() throws Exception;
+
+  @Test
+  public void usesDefaultedCacheBuilderSpec() throws Exception {
+    final ExampleWithDefaults example =
+        new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
+            Jackson.newObjectMapper(), "sf")
+            .build();
+    assertThat(example.cacheBuilderSpec)
+        .isNotNull();
+    assertThat(example.cacheBuilderSpec)
+        .isEqualTo(CacheBuilderSpec.disableCaching());
+  }
+
+  @Test
+  public void loadsValidConfigFiles() throws Exception {
+    final Example example = factory.build(validFile);
+
+    assertThat(example.getName())
+        .isEqualTo("Coda Hale");
+
+    assertThat(example.getType().get(0))
+        .isEqualTo("coder");
+    assertThat(example.getType().get(1))
+        .isEqualTo("wizard");
+
+    assertThat(example.getProperties())
+        .contains(MapEntry.entry("debug", "true"),
+            MapEntry.entry("settings.enabled", "false"));
+
+    assertThat(example.getServers())
+        .hasSize(3);
+    assertThat(example.getServers().get(0).getPort())
+        .isEqualTo(8080);
+
+  }
+
+  @Test
+  public void handlesSimpleOverride() throws Exception {
+    System.setProperty("sf.name", "Coda Hale Overridden");
+    final Example example = factory.build(validFile);
+    assertThat(example.getName())
+        .isEqualTo("Coda Hale Overridden");
+  }
+
+  @Test
+  public void handlesExistingOverrideWithPeriod() throws Exception {
+    System.setProperty("sf.my\\.logger.level", "debug");
+    final Example example = factory.build(validFile);
+    assertThat(example.getLogger().get("level"))
+        .isEqualTo("debug");
+  }
+
+  @Test
+  public void handlesNewOverrideWithPeriod() throws Exception {
+    System.setProperty("sf.my\\.logger.com\\.example", "error");
+    final Example example = factory.build(validFile);
+    assertThat(example.getLogger().get("com.example"))
+        .isEqualTo("error");
+  }
+
+  @Test
+  public void handlesArrayOverride() throws Exception {
+    System.setProperty("sf.type", "coder,wizard,overridden");
+    final Example example = factory.build(validFile);
+    assertThat(example.getType().get(2))
+        .isEqualTo("overridden");
+    assertThat(example.getType().size())
+        .isEqualTo(3);
+  }
+
+  @Test
+  public void handlesArrayOverrideEscaped() throws Exception {
+    System.setProperty("sf.type", "coder,wizard,overr\\,idden");
+    final Example example = factory.build(validFile);
+    assertThat(example.getType().get(2))
+        .isEqualTo("overr,idden");
+    assertThat(example.getType().size())
+        .isEqualTo(3);
+  }
+
+  @Test
+  public void handlesSingleElementArrayOverride() throws Exception {
+    System.setProperty("sf.type", "overridden");
+    final Example example = factory.build(validFile);
+    assertThat(example.getType().get(0))
+        .isEqualTo("overridden");
+    assertThat(example.getType().size())
+        .isEqualTo(1);
+  }
+
+  @Test
+  public void overridesArrayWithIndices() throws Exception {
+    System.setProperty("sf.type[1]", "overridden");
+    final Example example = factory.build(validFile);
+
+    assertThat(example.getType().get(0))
+        .isEqualTo("coder");
+    assertThat(example.getType().get(1))
+        .isEqualTo("overridden");
+  }
+
+  @Test
+  public void overridesArrayWithIndicesReverse() throws Exception {
+    System.setProperty("sf.type[0]", "overridden");
+    final Example example = factory.build(validFile);
+
+    assertThat(example.getType().get(0))
+        .isEqualTo("overridden");
+    assertThat(example.getType().get(1))
+        .isEqualTo("wizard");
+  }
+
+  @Test
+  public void overridesArrayPropertiesWithIndices() throws Exception {
+    System.setProperty("sf.servers[0].port", "7000");
+    System.setProperty("sf.servers[2].port", "9000");
+    final Example example = factory.build(validFile);
+
+    assertThat(example.getServers())
+        .hasSize(3);
+    assertThat(example.getServers().get(0).getPort())
+        .isEqualTo(7000);
+    assertThat(example.getServers().get(2).getPort())
+        .isEqualTo(9000);
+  }
+
+  @Test
+  public void overrideMapProperty() throws Exception {
+    System.setProperty("sf.properties.settings.enabled", "true");
+    final Example example = factory.build(validFile);
+    assertThat(example.getProperties())
+        .contains(MapEntry.entry("debug", "true"),
+            MapEntry.entry("settings.enabled", "true"));
+  }
+
+  @Test
+  public void throwsAnExceptionOnUnexpectedArrayOverride() throws Exception {
+    System.setProperty("sf.servers.port", "9000");
+    try {
+      factory.build(validFile);
+      failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage())
+          .containsOnlyOnce("target is an array but no index specified");
     }
+  }
 
-    @Test
-    public void handlesArrayOverrideEscaped() throws Exception {
-        System.setProperty("sf.type", "coder,wizard,overr\\,idden");
-        final Example example = factory.build(validFile);
-        assertThat(example.getType().get(2))
-            .isEqualTo("overr,idden");
-        assertThat(example.getType().size())
-            .isEqualTo(3);
+  @Test(expected = ConfigurationParsingException.class)
+  public void throwsAnExceptionOnArrayOverrideWithInvalidType() throws Exception {
+    System.setProperty("sf.servers", "one,two");
+
+    factory.build(validFile);
+    failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
+  }
+
+  @Test
+  public void throwsAnExceptionOnOverrideArrayIndexOutOfBounds() throws Exception {
+    System.setProperty("sf.type[2]", "invalid");
+    try {
+      factory.build(validFile);
+      failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      assertThat(e.getMessage())
+          .containsOnlyOnce("index is greater than size of array");
     }
+  }
 
-    @Test
-    public void handlesSingleElementArrayOverride() throws Exception {
-        System.setProperty("sf.type", "overridden");
-        final Example example = factory.build(validFile);
-        assertThat(example.getType().get(0))
-            .isEqualTo("overridden");
-        assertThat(example.getType().size())
-            .isEqualTo(1);
+  @Test
+  public void throwsAnExceptionOnOverrideArrayPropertyIndexOutOfBounds() throws Exception {
+    System.setProperty("sf.servers[4].port", "9000");
+    try {
+      factory.build(validFile);
+      failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      assertThat(e.getMessage())
+          .containsOnlyOnce("index is greater than size of array");
     }
+  }
 
-    @Test
-    public void overridesArrayWithIndices() throws Exception {
-        System.setProperty("sf.type[1]", "overridden");
-        final Example example = factory.build(validFile);
+  @Test
+  public void throwsAnExceptionOnMalformedFiles() throws Exception {
+    factory.build(malformedFile);
+    failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
+  }
 
-        assertThat(example.getType().get(0))
-            .isEqualTo("coder");
-        assertThat(example.getType().get(1))
-            .isEqualTo("overridden");
+  @Test
+  public void throwsAnExceptionOnEmptyFiles() throws Exception {
+    try {
+      factory.build(emptyFile);
+      failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
+    } catch (ConfigurationParsingException e) {
+      assertThat(e.getMessage())
+          .containsOnlyOnce(" * Configuration at " + emptyFile.toString() + " must not be empty");
     }
+  }
 
-    @Test
-    public void overridesArrayWithIndicesReverse() throws Exception {
-        System.setProperty("sf.type[0]", "overridden");
-        final Example example = factory.build(validFile);
-
-        assertThat(example.getType().get(0))
-            .isEqualTo("overridden");
-        assertThat(example.getType().get(1))
-            .isEqualTo("wizard");
+  @Test
+  public void throwsAnExceptionOnInvalidFiles() throws Exception {
+    try {
+      factory.build(invalidFile);
+      failBecauseExceptionWasNotThrown(ConfigurationValidationException.class);
+    } catch (ConfigurationValidationException e) {
+      if ("en".equals(Locale.getDefault().getLanguage())) {
+        assertThat(e.getMessage())
+            .endsWith(String.format(
+                "%s has an error:%n" +
+                    "  * name must match \"[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?\"%n",
+                invalidFile.getName()));
+      }
     }
+  }
 
-    @Test
-    public void overridesArrayPropertiesWithIndices() throws Exception {
-        System.setProperty("sf.servers[0].port", "7000");
-        System.setProperty("sf.servers[2].port", "9000");
-        final Example example = factory.build(validFile);
+  @Test
+  public void handleOverrideDefaultConfiguration() throws Exception {
+    System.setProperty("sf.name", "Coda Hale Overridden");
+    System.setProperty("sf.type", "coder,wizard,overridden");
+    System.setProperty("sf.properties.settings.enabled", "true");
+    System.setProperty("sf.servers[0].port", "8090");
+    System.setProperty("sf.servers[2].port", "8092");
 
-        assertThat(example.getServers())
-            .hasSize(3);
-        assertThat(example.getServers().get(0).getPort())
-            .isEqualTo(7000);
-        assertThat(example.getServers().get(2).getPort())
-            .isEqualTo(9000);
-    }
+    final ExampleWithDefaults example =
+        new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
+            Jackson.newObjectMapper(), "sf")
+            .build();
 
-    @Test
-    public void overrideMapProperty() throws Exception {
-        System.setProperty("sf.properties.settings.enabled", "true");
-        final Example example = factory.build(validFile);
-        assertThat(example.getProperties())
-            .contains(MapEntry.entry("debug", "true"),
-                MapEntry.entry("settings.enabled", "true"));
-    }
+    assertThat(example.name).isEqualTo("Coda Hale Overridden");
+    assertThat(example.type.get(2)).isEqualTo("overridden");
+    assertThat(example.type.size()).isEqualTo(3);
+    assertThat(example.properties).containsEntry("settings.enabled", "true");
+    assertThat(example.servers.get(0).getPort()).isEqualTo(8090);
+    assertThat(example.servers.get(2).getPort()).isEqualTo(8092);
+  }
 
-    @Test
-    public void throwsAnExceptionOnUnexpectedArrayOverride() throws Exception {
-        System.setProperty("sf.servers.port", "9000");
-        try {
-            factory.build(validFile);
-            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage())
-                .containsOnlyOnce("target is an array but no index specified");
-        }
-    }
+  @Test
+  public void handleDefaultConfigurationWithoutOverriding() throws Exception {
+    final ExampleWithDefaults example =
+        new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
+            Jackson.newObjectMapper(), "sf")
+            .build();
 
-    @Test(expected = ConfigurationParsingException.class)
-    public void throwsAnExceptionOnArrayOverrideWithInvalidType() throws Exception {
-        System.setProperty("sf.servers", "one,two");
+    assertThat(example.name).isEqualTo("Coda Hale");
+    assertThat(example.type).isEqualTo(ImmutableList.of("coder", "wizard"));
+    assertThat(example.properties)
+        .isEqualTo(ImmutableMap.of("debug", "true", "settings.enabled", "false"));
+    assertThat(example.servers.get(0).getPort()).isEqualTo(8080);
+    assertThat(example.servers.get(1).getPort()).isEqualTo(8081);
+    assertThat(example.servers.get(2).getPort()).isEqualTo(8082);
+  }
 
-        factory.build(validFile);
-        failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
-    }
+  @Test
+  public void throwsAnExceptionIfDefaultConfigurationCantBeInstantiated() throws Exception {
+    System.setProperty("sf.name", "Coda Hale Overridden");
+    final YamlConfigurationFactory<NonInsatiableExample> factory =
+        new YamlConfigurationFactory<>(NonInsatiableExample.class, validator,
+            Jackson.newObjectMapper(), "sf");
+    assertThatThrownBy(factory::build)
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Unable create an instance of the configuration class: " +
+            "'io.sunflower.configuration.BaseConfigurationFactoryTest.NonInsatiableExample'");
+  }
 
-    @Test
-    public void throwsAnExceptionOnOverrideArrayIndexOutOfBounds() throws Exception {
-        System.setProperty("sf.type[2]", "invalid");
-        try {
-            factory.build(validFile);
-            failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            assertThat(e.getMessage())
-                .containsOnlyOnce("index is greater than size of array");
-        }
-    }
+  @Test
+  public void printsDidYouMeanOnUnrecognizedField() throws Exception {
+    assertThatThrownBy(() -> factory.build(typoFile))
+        .isInstanceOf(ConfigurationParsingException.class)
+        .hasMessage(String.format("%s has an error:%n" +
+            "  * Unrecognized field at: propertis%n" +
+            "    Did you mean?:%n" +
+            "      - properties%n" +
+            "      - servers%n" +
+            "      - type%n" +
+            "      - name%n" +
+            "      - age%n" +
+            "        [2 more]%n", typoFile));
+  }
 
-    @Test
-    public void throwsAnExceptionOnOverrideArrayPropertyIndexOutOfBounds() throws Exception {
-        System.setProperty("sf.servers[4].port", "9000");
-        try {
-            factory.build(validFile);
-            failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            assertThat(e.getMessage())
-                .containsOnlyOnce("index is greater than size of array");
-        }
-    }
+  @Test
+  public void incorrectTypeIsFound() throws Exception {
+    assertThatThrownBy(() -> factory.build(wrongTypeFile))
+        .isInstanceOf(ConfigurationParsingException.class)
+        .hasMessage(String.format("%s has an error:" + NEWLINE +
+                "  * Incorrect type of value at: age; is of type: String, expected: int" + NEWLINE,
+            wrongTypeFile));
+  }
 
-    @Test
-    public void throwsAnExceptionOnMalformedFiles() throws Exception {
-        factory.build(malformedFile);
-        failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
-    }
-
-    @Test
-    public void throwsAnExceptionOnEmptyFiles() throws Exception {
-        try {
-            factory.build(emptyFile);
-            failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
-        } catch (ConfigurationParsingException e) {
-            assertThat(e.getMessage())
-                .containsOnlyOnce(" * Configuration at " + emptyFile.toString() + " must not be empty");
-        }
-    }
-
-    @Test
-    public void throwsAnExceptionOnInvalidFiles() throws Exception {
-        try {
-            factory.build(invalidFile);
-            failBecauseExceptionWasNotThrown(ConfigurationValidationException.class);
-        } catch (ConfigurationValidationException e) {
-            if ("en".equals(Locale.getDefault().getLanguage())) {
-                assertThat(e.getMessage())
-                    .endsWith(String.format(
-                        "%s has an error:%n" +
-                            "  * name must match \"[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?\"%n",
-                        invalidFile.getName()));
-            }
-        }
-    }
-
-    @Test
-    public void handleOverrideDefaultConfiguration() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
-        System.setProperty("sf.type", "coder,wizard,overridden");
-        System.setProperty("sf.properties.settings.enabled", "true");
-        System.setProperty("sf.servers[0].port", "8090");
-        System.setProperty("sf.servers[2].port", "8092");
-
-        final ExampleWithDefaults example =
-            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf")
-                .build();
-
-        assertThat(example.name).isEqualTo("Coda Hale Overridden");
-        assertThat(example.type.get(2)).isEqualTo("overridden");
-        assertThat(example.type.size()).isEqualTo(3);
-        assertThat(example.properties).containsEntry("settings.enabled", "true");
-        assertThat(example.servers.get(0).getPort()).isEqualTo(8090);
-        assertThat(example.servers.get(2).getPort()).isEqualTo(8092);
-    }
-
-    @Test
-    public void handleDefaultConfigurationWithoutOverriding() throws Exception {
-        final ExampleWithDefaults example =
-            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf")
-                .build();
-
-        assertThat(example.name).isEqualTo("Coda Hale");
-        assertThat(example.type).isEqualTo(ImmutableList.of("coder", "wizard"));
-        assertThat(example.properties).isEqualTo(ImmutableMap.of("debug", "true", "settings.enabled", "false"));
-        assertThat(example.servers.get(0).getPort()).isEqualTo(8080);
-        assertThat(example.servers.get(1).getPort()).isEqualTo(8081);
-        assertThat(example.servers.get(2).getPort()).isEqualTo(8082);
-    }
-
-    @Test
-    public void throwsAnExceptionIfDefaultConfigurationCantBeInstantiated() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
-        final YamlConfigurationFactory<NonInsatiableExample> factory =
-            new YamlConfigurationFactory<>(NonInsatiableExample.class, validator, Jackson.newObjectMapper(), "sf");
-        assertThatThrownBy(factory::build)
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Unable create an instance of the configuration class: " +
-                "'io.sunflower.configuration.BaseConfigurationFactoryTest.NonInsatiableExample'");
-    }
-
-    @Test
-    public void printsDidYouMeanOnUnrecognizedField() throws Exception {
-        assertThatThrownBy(() -> factory.build(typoFile))
-            .isInstanceOf(ConfigurationParsingException.class)
-            .hasMessage(String.format("%s has an error:%n" +
-                "  * Unrecognized field at: propertis%n" +
-                "    Did you mean?:%n" +
-                "      - properties%n" +
-                "      - servers%n" +
-                "      - type%n" +
-                "      - name%n" +
-                "      - age%n" +
-                "        [2 more]%n", typoFile));
-    }
-
-    @Test
-    public void incorrectTypeIsFound() throws Exception {
-        assertThatThrownBy(() -> factory.build(wrongTypeFile))
-            .isInstanceOf(ConfigurationParsingException.class)
-            .hasMessage(String.format("%s has an error:" + NEWLINE +
-                "  * Incorrect type of value at: age; is of type: String, expected: int" + NEWLINE, wrongTypeFile));
-    }
-
-    @Test
-    public void printsDetailedInformationOnMalformedContent() throws Exception {
-        factory.build(malformedAdvancedFile);
-    }
+  @Test
+  public void printsDetailedInformationOnMalformedContent() throws Exception {
+    factory.build(malformedAdvancedFile);
+  }
 }

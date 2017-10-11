@@ -1,14 +1,15 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package io.sunflower.gizmo.exceptions;
@@ -28,51 +29,53 @@ import io.sunflower.gizmo.Result;
  */
 public class RenderingException extends GizmoException {
 
-    final static String DEFAULT_MESSAGE = "Result rendering failed and that's all we know.";
+  final static String DEFAULT_MESSAGE = "Result rendering failed and that's all we know.";
 
-    private final String title;
-    private final Result result;
-    private final String sourcePath;
-    private final int lineNumber;
+  private final String title;
+  private final Result result;
+  private final String sourcePath;
+  private final int lineNumber;
 
-    public RenderingException() {
-        this(DEFAULT_MESSAGE, null, null, null, null, -1);
-    }
+  public RenderingException() {
+    this(DEFAULT_MESSAGE, null, null, null, null, -1);
+  }
 
-    public RenderingException(String message) {
-        this(message, null, null, null, null, -1);
-    }
+  public RenderingException(String message) {
+    this(message, null, null, null, null, -1);
+  }
 
-    public RenderingException(String message, Throwable cause) {
-        this(message, cause, null, null, null, -1);
-    }
+  public RenderingException(String message, Throwable cause) {
+    this(message, cause, null, null, null, -1);
+  }
 
-    public RenderingException(String message, Throwable cause, Result result, String sourcePath, int lineNumber) {
-        this(message, cause, result, null, sourcePath, lineNumber);
-    }
+  public RenderingException(String message, Throwable cause, Result result, String sourcePath,
+      int lineNumber) {
+    this(message, cause, result, null, sourcePath, lineNumber);
+  }
 
-    public RenderingException(String message, Throwable cause, Result result, String title, String sourcePath, int lineNumber) {
-        super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
-        this.title = title;
-        this.result = result;
-        this.sourcePath = sourcePath;
-        this.lineNumber = lineNumber;
-    }
+  public RenderingException(String message, Throwable cause, Result result, String title,
+      String sourcePath, int lineNumber) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
+    this.title = title;
+    this.result = result;
+    this.sourcePath = sourcePath;
+    this.lineNumber = lineNumber;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Result getResult() {
-        return result;
-    }
+  public Result getResult() {
+    return result;
+  }
 
-    public String getSourcePath() {
-        return sourcePath;
-    }
+  public String getSourcePath() {
+    return sourcePath;
+  }
 
-    public int getLineNumber() {
-        return lineNumber;
-    }
+  public int getLineNumber() {
+    return lineNumber;
+  }
 
 }

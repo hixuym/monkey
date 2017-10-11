@@ -16,13 +16,13 @@
 package io.sunflower.postoffice;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import io.sunflower.postoffice.mock.PostofficeMockImpl;
 
 @JsonTypeName("mock")
 public class MockPostofficeFactory implements PostofficeFactory {
-    @Override
-    public Postoffice build() {
-        return new PostofficeMockImpl();
-    }
+
+  @Override
+  public Postoffice build() {
+    return new PostofficeMockImpl();
+  }
 }

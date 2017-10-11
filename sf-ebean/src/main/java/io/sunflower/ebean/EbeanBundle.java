@@ -15,13 +15,13 @@
 
 package io.sunflower.ebean;
 
+import static com.google.inject.matcher.Matchers.annotatedWith;
+import static com.google.inject.matcher.Matchers.any;
+import static com.google.inject.matcher.Matchers.not;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.name.Names;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.sunflower.Configuration;
@@ -31,99 +31,104 @@ import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
-import static com.google.inject.matcher.Matchers.annotatedWith;
-import static com.google.inject.matcher.Matchers.any;
-import static com.google.inject.matcher.Matchers.not;
+public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>,
+    DatabaseConfiguration<T> {
 
-public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
-    public static final String DEFAULT_NAME = "ebean";
+  public static final String DEFAULT_NAME = "ebean";
 
-    private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
-        @Override
-        public boolean matches(Method method) {
-            return method.getDeclaringClass() == Object.class;
-        }
-    };
-
-    private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
-        @Override
-        public boolean matches(Method method) {
-            return method.isSynthetic();
-        }
-    };
-
-    private EbeanServer ebeanServer;
-    private final EbeanServerFactory ebeanServerFactory;
-
-    private final ImmutableList<String> scanPkgs;
-
-    protected EbeanBundle(String... scanPkgs) {
-        this(new EbeanServerFactory(), scanPkgs);
-    }
-
-    protected EbeanBundle(EbeanServerFactory ebeanServerFactory, String... scanPkgs) {
-
-        ImmutableList.Builder<String> builder = ImmutableList.builder();
-
-        builder.addAll(Arrays.asList(scanPkgs));
-
-        this.scanPkgs = builder.build();
-
-        this.ebeanServerFactory = ebeanServerFactory;
-    }
-
-    public boolean isDefault() {
-        return DEFAULT_NAME.equalsIgnoreCase(name());
-    }
-
+  private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
     @Override
-    public void run(T configuration, Environment environment) throws Exception {
-        final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
-
-        this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
-
-        environment.guicey().addModule((binder) -> {
-            if (isDefault()) {
-                binder.bind(EbeanServer.class).toInstance(ebeanServer);
-            } else {
-                binder.bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
-            }
-
-            // class-level @Txn
-            EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
-
-            binder.bindInterceptor(any(), not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)), txnInterceptor);
-            // Intercept classes annotated with Transactional, but avoid "double"
-            // interception when a mathod is also annotated inside an annotated
-            // class.
-            binder.bindInterceptor(annotatedWith(Transactional.class), not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
-        });
-
-        environment.healthChecks().register(name(),
-            new EbeanServerHealthCheck(
-                environment.getHealthCheckExecutorService(),
-                dbConfig.getValidationQueryTimeout().orElse(Duration.seconds(5)),
-                ebeanServer,
-                dbConfig.getValidationQuery()));
+    public boolean matches(Method method) {
+      return method.getDeclaringClass() == Object.class;
     }
+  };
 
+  private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
     @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-        bootstrap.addCommand(new DbMigrationCommand());
+    public boolean matches(Method method) {
+      return method.isSynthetic();
     }
+  };
 
-    /**
-     * Override to configure the name of the bundle (It's used for the bundle health check and database pool metrics)
-     */
-    protected String name() {
-        return DEFAULT_NAME;
-    }
+  private EbeanServer ebeanServer;
+  private final EbeanServerFactory ebeanServerFactory;
 
-    protected void configure(ServerConfig serverConfig) {
-    }
+  private final ImmutableList<String> scanPkgs;
 
-    public EbeanServer getEbeanServer() {
-        return ebeanServer;
-    }
+  protected EbeanBundle(String... scanPkgs) {
+    this(new EbeanServerFactory(), scanPkgs);
+  }
+
+  protected EbeanBundle(EbeanServerFactory ebeanServerFactory, String... scanPkgs) {
+
+    ImmutableList.Builder<String> builder = ImmutableList.builder();
+
+    builder.addAll(Arrays.asList(scanPkgs));
+
+    this.scanPkgs = builder.build();
+
+    this.ebeanServerFactory = ebeanServerFactory;
+  }
+
+  public boolean isDefault() {
+    return DEFAULT_NAME.equalsIgnoreCase(name());
+  }
+
+  @Override
+  public void run(T configuration, Environment environment) throws Exception {
+    final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
+
+    this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
+
+    environment.guicey().addModule((binder) -> {
+      if (isDefault()) {
+        binder.bind(EbeanServer.class).toInstance(ebeanServer);
+      } else {
+        binder.bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
+      }
+
+      // class-level @Txn
+      EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
+
+      binder.bindInterceptor(any(),
+          not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
+          txnInterceptor);
+      // Intercept classes annotated with Transactional, but avoid "double"
+      // interception when a mathod is also annotated inside an annotated
+      // class.
+      binder.bindInterceptor(annotatedWith(Transactional.class),
+          not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
+          txnInterceptor);
+    });
+
+    environment.healthChecks().register(name(),
+        new EbeanServerHealthCheck(
+            environment.getHealthCheckExecutorService(),
+            dbConfig.getValidationQueryTimeout().orElse(Duration.seconds(5)),
+            ebeanServer,
+            dbConfig.getValidationQuery()));
+  }
+
+  @Override
+  public void initialize(Bootstrap<?> bootstrap) {
+    bootstrap.addCommand(new DbMigrationCommand());
+  }
+
+  /**
+   * Override to configure the name of the bundle (It's used for the bundle health check and
+   * database pool metrics)
+   */
+  protected String name() {
+    return DEFAULT_NAME;
+  }
+
+  protected void configure(ServerConfig serverConfig) {
+  }
+
+  public EbeanServer getEbeanServer() {
+    return ebeanServer;
+  }
 }

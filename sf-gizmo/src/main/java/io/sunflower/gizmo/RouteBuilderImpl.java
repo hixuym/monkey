@@ -1,14 +1,15 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package io.sunflower.gizmo;
@@ -17,10 +18,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.util.Providers;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
+import io.sunflower.gizmo.application.ApplicationFilters;
+import io.sunflower.gizmo.params.ResourceMethodInvoker;
+import io.sunflower.gizmo.utils.LambdaRoute;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -28,287 +29,283 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.inject.Inject;
-
-import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
-import io.sunflower.gizmo.application.ApplicationFilters;
-import io.sunflower.gizmo.params.ResourceMethodInvoker;
-import io.sunflower.gizmo.utils.LambdaRoute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RouteBuilderImpl implements RouteBuilder {
-    private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
 
-    protected final static String GLOBAL_FILTERS_DEFAULT_LOCATION = "conf.Filters";
+  private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
 
-    private String httpMethod;
-    private String uri;
-    private Method functionalMethod;
-    private Optional<Method> implementationMethod;  // method to use for parameter/annotation extraction
-    private Optional<Object> targetObject;          // instance to invoke
-    private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
-    private final List<Class<? extends Filter>> localFilters;
+  protected final static String GLOBAL_FILTERS_DEFAULT_LOCATION = "conf.Filters";
 
-    private ApplicationFilters globalFilters;
+  private String httpMethod;
+  private String uri;
+  private Method functionalMethod;
+  private Optional<Method> implementationMethod;  // method to use for parameter/annotation extraction
+  private Optional<Object> targetObject;          // instance to invoke
+  private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
+  private final List<Class<? extends Filter>> localFilters;
 
-    @Inject
-    public void setGlobalFilters(ApplicationFilters globalFilters) {
-        this.globalFilters = globalFilters;
-    }
+  private ApplicationFilters globalFilters;
 
-    @Inject
-    public RouteBuilderImpl() {
-        this.implementationMethod = Optional.empty();
-        this.targetObject = Optional.empty();
-        this.globalFiltersOptional = Optional.empty();
-        this.localFilters = Lists.newArrayList();
-    }
+  @Inject
+  public void setGlobalFilters(ApplicationFilters globalFilters) {
+    this.globalFilters = globalFilters;
+  }
 
-    public RouteBuilderImpl GET() {
-        httpMethod = "GET";
-        return this;
-    }
+  @Inject
+  public RouteBuilderImpl() {
+    this.implementationMethod = Optional.empty();
+    this.targetObject = Optional.empty();
+    this.globalFiltersOptional = Optional.empty();
+    this.localFilters = Lists.newArrayList();
+  }
 
-    public RouteBuilderImpl POST() {
-        httpMethod = "POST";
-        return this;
-    }
+  public RouteBuilderImpl GET() {
+    httpMethod = "GET";
+    return this;
+  }
 
-    public RouteBuilderImpl PUT() {
-        httpMethod = "PUT";
-        return this;
-    }
+  public RouteBuilderImpl POST() {
+    httpMethod = "POST";
+    return this;
+  }
 
-    public RouteBuilderImpl DELETE() {
-        httpMethod = "DELETE";
-        return this;
-    }
+  public RouteBuilderImpl PUT() {
+    httpMethod = "PUT";
+    return this;
+  }
 
-    public RouteBuilderImpl OPTIONS() {
-        httpMethod = "OPTIONS";
-        return this;
-    }
+  public RouteBuilderImpl DELETE() {
+    httpMethod = "DELETE";
+    return this;
+  }
 
-    public RouteBuilderImpl HEAD() {
-        httpMethod = "HEAD";
-        return this;
-    }
+  public RouteBuilderImpl OPTIONS() {
+    httpMethod = "OPTIONS";
+    return this;
+  }
 
-    public RouteBuilderImpl METHOD(String method) {
-        httpMethod = method;
-        return this;
-    }
+  public RouteBuilderImpl HEAD() {
+    httpMethod = "HEAD";
+    return this;
+  }
 
-    @Override
-    public void with(Class resourceClass, String resourceMethod) {
-        this.functionalMethod
-            = verifyControllerMethod(resourceClass, resourceMethod);
-    }
+  public RouteBuilderImpl METHOD(String method) {
+    httpMethod = method;
+    return this;
+  }
 
-    @Override
-    public Void with(ResourceMethod resourceMethod) {
-        LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
-        this.functionalMethod = lambdaRoute.getFunctionalMethod();
-        this.implementationMethod = lambdaRoute.getImplementationMethod();
-        this.targetObject = lambdaRoute.getTargetObject();
-        return null;
-    }
+  @Override
+  public void with(Class resourceClass, String resourceMethod) {
+    this.functionalMethod
+        = verifyControllerMethod(resourceClass, resourceMethod);
+  }
 
-    @Override
-    public RouteBuilder globalFilters(List<Class<? extends Filter>> filtersToAdd) {
-        this.globalFiltersOptional = Optional.of(filtersToAdd);
-        return this;
-    }
+  @Override
+  public Void with(ResourceMethod resourceMethod) {
+    LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
+    this.functionalMethod = lambdaRoute.getFunctionalMethod();
+    this.implementationMethod = lambdaRoute.getImplementationMethod();
+    this.targetObject = lambdaRoute.getTargetObject();
+    return null;
+  }
 
-    @SafeVarargs
-    @Override
-    public final RouteBuilder globalFilters(Class<? extends Filter>... filtersToAdd) {
-        List<Class<? extends Filter>> globalFiltersTemp = Lists.newArrayList(filtersToAdd);
-        globalFilters(globalFiltersTemp);
-        return this;
-    }
+  @Override
+  public RouteBuilder globalFilters(List<Class<? extends Filter>> filtersToAdd) {
+    this.globalFiltersOptional = Optional.of(filtersToAdd);
+    return this;
+  }
 
-    @Override
-    public RouteBuilder filters(List<Class<? extends Filter>> filtersToAdd) {
-        this.localFilters.addAll(filtersToAdd);
-        return this;
-    }
+  @SafeVarargs
+  @Override
+  public final RouteBuilder globalFilters(Class<? extends Filter>... filtersToAdd) {
+    List<Class<? extends Filter>> globalFiltersTemp = Lists.newArrayList(filtersToAdd);
+    globalFilters(globalFiltersTemp);
+    return this;
+  }
 
-    @SafeVarargs
-    @Override
-    public final RouteBuilder filters(Class<? extends Filter>... filtersToAdd) {
-        List<Class<? extends Filter>> filtersTemp = Lists.newArrayList(filtersToAdd);
-        filters(filtersTemp);
-        return this;
-    }
+  @Override
+  public RouteBuilder filters(List<Class<? extends Filter>> filtersToAdd) {
+    this.localFilters.addAll(filtersToAdd);
+    return this;
+  }
 
-    @Override
-    public RouteBuilder route(String uri) {
-        this.uri = uri;
-        return this;
-    }
+  @SafeVarargs
+  @Override
+  public final RouteBuilder filters(Class<? extends Filter>... filtersToAdd) {
+    List<Class<? extends Filter>> filtersTemp = Lists.newArrayList(filtersToAdd);
+    filters(filtersTemp);
+    return this;
+  }
 
-    /**
-     * Routes are usually defined in conf/Routes.java as router.GET().route("/teapot").with(FilterController.class,
-     * "teapot");
-     *
-     * Unfortunately "teapot" is not checked by the compiler. We do that here at runtime.
-     *
-     * We are reloading when there are changes. So this is almost as good as compile time checking.
-     *
-     * @param controllerClass  The controller class
-     * @param controllerMethod The method
-     * @return The actual method
-     */
-    private Method verifyControllerMethod(Class<?> controllerClass,
-                                          String controllerMethod) {
-        try {
-            Method methodFromQueryingClass = null;
+  @Override
+  public RouteBuilder route(String uri) {
+    this.uri = uri;
+    return this;
+  }
 
-            // 1. Make sure method is in class
-            // 2. Make sure only one method is there. Otherwise we cannot really
-            // know what to do with the parameters.
-            for (Method method : controllerClass.getMethods()) {
-                if (method.getName().equals(controllerMethod)) {
-                    if (methodFromQueryingClass == null) {
-                        methodFromQueryingClass = method;
-                    } else {
-                        throw new NoSuchMethodException();
-                    }
-                }
-            }
+  /**
+   * Routes are usually defined in conf/Routes.java as router.GET().route("/teapot").with(FilterController.class,
+   * "teapot");
+   *
+   * Unfortunately "teapot" is not checked by the compiler. We do that here at runtime.
+   *
+   * We are reloading when there are changes. So this is almost as good as compile time checking.
+   *
+   * @param controllerClass  The controller class
+   * @param controllerMethod The method
+   * @return The actual method
+   */
+  private Method verifyControllerMethod(Class<?> controllerClass,
+      String controllerMethod) {
+    try {
+      Method methodFromQueryingClass = null;
 
-            if (methodFromQueryingClass == null) {
-                throw new NoSuchMethodException();
-            }
-
-            // make sure that the return type of that controller method
-            // is of type Result.
-            if (Result.class.isAssignableFrom(methodFromQueryingClass.getReturnType())) {
-                return methodFromQueryingClass;
-            } else {
-                throw new NoSuchMethodException();
-            }
-
-        } catch (SecurityException e) {
-            log.error(
-                "Error while checking for valid Controller / controllerMethod combination",
-                e);
-        } catch (NoSuchMethodException e) {
-            log.error("Error in route configuration!!!");
-            log.error("Can not find Controller " + controllerClass.getName()
-                + " and method " + controllerMethod);
-            log.error("Hint: make sure the controller returns a Result!");
-            log.error("Hint: Gizmo does not allow more than one method with the same name!");
+      // 1. Make sure method is in class
+      // 2. Make sure only one method is there. Otherwise we cannot really
+      // know what to do with the parameters.
+      for (Method method : controllerClass.getMethods()) {
+        if (method.getName().equals(controllerMethod)) {
+          if (methodFromQueryingClass == null) {
+            methodFromQueryingClass = method;
+          } else {
+            throw new NoSuchMethodException();
+          }
         }
-        return null;
+      }
+
+      if (methodFromQueryingClass == null) {
+        throw new NoSuchMethodException();
+      }
+
+      // make sure that the return type of that controller method
+      // is of type Result.
+      if (Result.class.isAssignableFrom(methodFromQueryingClass.getReturnType())) {
+        return methodFromQueryingClass;
+      } else {
+        throw new NoSuchMethodException();
+      }
+
+    } catch (SecurityException e) {
+      log.error(
+          "Error while checking for valid Controller / controllerMethod combination",
+          e);
+    } catch (NoSuchMethodException e) {
+      log.error("Error in route configuration!!!");
+      log.error("Can not find Controller " + controllerClass.getName()
+          + " and method " + controllerMethod);
+      log.error("Hint: make sure the controller returns a Result!");
+      log.error("Hint: Gizmo does not allow more than one method with the same name!");
+    }
+    return null;
+  }
+
+  /**
+   * Build the route.
+   *
+   * @param injector The injector to build the route with
+   * @return The built route
+   */
+  public Route buildRoute(Injector injector) {
+    if (functionalMethod == null) {
+      log.error("Error in route configuration for {}", uri);
+      throw new IllegalStateException("Route missing a controller method");
     }
 
-    /**
-     * Build the route.
-     *
-     * @param injector The injector to build the route with
-     * @return The built route
-     */
-    public Route buildRoute(Injector injector) {
-        if (functionalMethod == null) {
-            log.error("Error in route configuration for {}", uri);
-            throw new IllegalStateException("Route missing a controller method");
-        }
+    // Calculate filters
+    LinkedList<Class<? extends Filter>> allFilters = new LinkedList<>();
 
-        // Calculate filters
-        LinkedList<Class<? extends Filter>> allFilters = new LinkedList<>();
+    allFilters.addAll(calculateGlobalFilters(this.globalFiltersOptional, injector));
 
-        allFilters.addAll(calculateGlobalFilters(this.globalFiltersOptional, injector));
+    allFilters.addAll(this.localFilters);
 
-        allFilters.addAll(this.localFilters);
-
-        allFilters.addAll(calculateFiltersForClass(functionalMethod.getDeclaringClass()));
-        FilterWith filterWith = functionalMethod.getAnnotation(FilterWith.class);
-        if (filterWith != null) {
-            allFilters.addAll(Arrays.asList(filterWith.value()));
-        }
-
-        FilterChain filterChain = buildFilterChain(injector, allFilters);
-
-        return new Route(httpMethod, uri, functionalMethod, filterChain);
+    allFilters.addAll(calculateFiltersForClass(functionalMethod.getDeclaringClass()));
+    FilterWith filterWith = functionalMethod.getAnnotation(FilterWith.class);
+    if (filterWith != null) {
+      allFilters.addAll(Arrays.asList(filterWith.value()));
     }
 
-    private List<Class<? extends Filter>> calculateGlobalFilters(
-        Optional<List<Class<? extends Filter>>> globalFiltersList, Injector injector) {
-        List<Class<? extends Filter>> allFilters = Lists.newArrayList();
+    FilterChain filterChain = buildFilterChain(injector, allFilters);
 
-        // Setting globalFilters in route will deactivate the filters defined
-        // by conf.Filters
-        if (globalFiltersList.isPresent()) {
-            allFilters.addAll(globalFiltersList.get());
-        } else {
-            if (this.globalFilters != null)
-                this.globalFilters.addFilters(allFilters);
-        }
+    return new Route(httpMethod, uri, functionalMethod, filterChain);
+  }
 
-        return allFilters;
+  private List<Class<? extends Filter>> calculateGlobalFilters(
+      Optional<List<Class<? extends Filter>>> globalFiltersList, Injector injector) {
+    List<Class<? extends Filter>> allFilters = Lists.newArrayList();
 
+    // Setting globalFilters in route will deactivate the filters defined
+    // by conf.Filters
+    if (globalFiltersList.isPresent()) {
+      allFilters.addAll(globalFiltersList.get());
+    } else {
+      if (this.globalFilters != null) {
+        this.globalFilters.addFilters(allFilters);
+      }
     }
 
-    private FilterChain buildFilterChain(Injector injector,
-                                         LinkedList<Class<? extends Filter>> filters) {
+    return allFilters;
 
+  }
 
-        if (filters.isEmpty()) {
+  private FilterChain buildFilterChain(Injector injector,
+      LinkedList<Class<? extends Filter>> filters) {
 
-            // either target object (functional method) or guice will create new instance
-            Provider<?> targetProvider = (targetObject.isPresent() ?
-                Providers.of(targetObject.get())
-                : injector.getProvider(functionalMethod.getDeclaringClass()));
+    if (filters.isEmpty()) {
 
-            // invoke functional method with optionally using impl for argument extraction
-            ResourceMethodInvoker methodInvoker
-                = ResourceMethodInvoker.build(
-                functionalMethod, implementationMethod.orElse(functionalMethod), injector);
+      // either target object (functional method) or guice will create new instance
+      Provider<?> targetProvider = (targetObject.isPresent() ?
+          Providers.of(targetObject.get())
+          : injector.getProvider(functionalMethod.getDeclaringClass()));
 
-            return new FilterChainEnd(targetProvider, methodInvoker);
+      // invoke functional method with optionally using impl for argument extraction
+      ResourceMethodInvoker methodInvoker
+          = ResourceMethodInvoker.build(
+          functionalMethod, implementationMethod.orElse(functionalMethod), injector);
 
-        } else {
+      return new FilterChainEnd(targetProvider, methodInvoker);
 
-            Class<? extends Filter> filter = filters.pop();
+    } else {
 
+      Class<? extends Filter> filter = filters.pop();
 
-            Provider<? extends Filter> filterProvider = injector.getProvider(filter);
+      Provider<? extends Filter> filterProvider = injector.getProvider(filter);
 
-            return new FilterChainImpl(filterProvider, buildFilterChain(injector, filters));
+      return new FilterChainImpl(filterProvider, buildFilterChain(injector, filters));
 
-        }
+    }
+  }
+
+  private Set<Class<? extends Filter>> calculateFiltersForClass(
+      Class controller) {
+    LinkedHashSet<Class<? extends Filter>> filters = new LinkedHashSet<>();
+
+    //
+    // Step up the superclass tree, so that superclass filters come first
+    //
+
+    // Superclass
+    if (controller.getSuperclass() != null) {
+      filters.addAll(calculateFiltersForClass(controller.getSuperclass()));
     }
 
-    private Set<Class<? extends Filter>> calculateFiltersForClass(
-        Class controller) {
-        LinkedHashSet<Class<? extends Filter>> filters = new LinkedHashSet<>();
-
-        //
-        // Step up the superclass tree, so that superclass filters come first
-        //
-
-        // Superclass
-        if (controller.getSuperclass() != null) {
-            filters.addAll(calculateFiltersForClass(controller.getSuperclass()));
-        }
-
-        // Interfaces
-        if (controller.getInterfaces() != null) {
-            for (Class clazz : controller.getInterfaces()) {
-                filters.addAll(calculateFiltersForClass(clazz));
-            }
-        }
-
-        // Now add from here
-        FilterWith filterWith = (FilterWith) controller
-            .getAnnotation(FilterWith.class);
-        if (filterWith != null) {
-            filters.addAll(Arrays.asList(filterWith.value()));
-        }
-
-        // And return
-        return filters;
+    // Interfaces
+    if (controller.getInterfaces() != null) {
+      for (Class clazz : controller.getInterfaces()) {
+        filters.addAll(calculateFiltersForClass(clazz));
+      }
     }
+
+    // Now add from here
+    FilterWith filterWith = (FilterWith) controller
+        .getAnnotation(FilterWith.class);
+    if (filterWith != null) {
+      filters.addAll(Arrays.asList(filterWith.value()));
+    }
+
+    // And return
+    return filters;
+  }
 }

@@ -15,35 +15,35 @@
 
 package io.sunflower.migrations;
 
-import java.sql.SQLException;
-
 import io.sunflower.db.ManagedDataSource;
+import java.sql.SQLException;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
 
-public class CloseableLiquibaseWithFileSystemMigrationsFile extends CloseableLiquibase implements AutoCloseable {
+public class CloseableLiquibaseWithFileSystemMigrationsFile extends CloseableLiquibase implements
+    AutoCloseable {
 
-    CloseableLiquibaseWithFileSystemMigrationsFile(
-        ManagedDataSource dataSource,
-        Database database,
-        String file
-    ) throws LiquibaseException, SQLException {
-        super(file,
-            new FileSystemResourceAccessor(),
-            database,
-            dataSource);
-    }
+  CloseableLiquibaseWithFileSystemMigrationsFile(
+      ManagedDataSource dataSource,
+      Database database,
+      String file
+  ) throws LiquibaseException, SQLException {
+    super(file,
+        new FileSystemResourceAccessor(),
+        database,
+        dataSource);
+  }
 
-    public CloseableLiquibaseWithFileSystemMigrationsFile(
-        ManagedDataSource dataSource,
-        String file
-    ) throws LiquibaseException, SQLException {
-        this(dataSource,
-            DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(dataSource.getConnection())),
-            file);
-    }
+  public CloseableLiquibaseWithFileSystemMigrationsFile(
+      ManagedDataSource dataSource,
+      String file
+  ) throws LiquibaseException, SQLException {
+    this(dataSource,
+        DatabaseFactory.getInstance()
+            .findCorrectDatabaseImplementation(new JdbcConnection(dataSource.getConnection())),
+        file);
+  }
 }

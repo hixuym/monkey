@@ -21,27 +21,29 @@ import io.sunflower.db.DatabaseConfiguration;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
-public abstract class MigrationsBundle<T extends Configuration> implements Bundle, DatabaseConfiguration<T> {
-    private static final String DEFAULT_NAME = "db";
-    private static final String DEFAULT_MIGRATIONS_FILE = "migrations.xml";
+public abstract class MigrationsBundle<T extends Configuration> implements Bundle,
+    DatabaseConfiguration<T> {
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public final void initialize(Bootstrap<?> bootstrap) {
-        final Class<T> klass = (Class<T>) bootstrap.getApplication().getConfigurationClass();
-        bootstrap.addCommand(new DbCommand<>(name(), this, klass, getMigrationsFileName()));
-    }
+  private static final String DEFAULT_NAME = "db";
+  private static final String DEFAULT_MIGRATIONS_FILE = "migrations.xml";
 
-    public String getMigrationsFileName() {
-        return DEFAULT_MIGRATIONS_FILE;
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public final void initialize(Bootstrap<?> bootstrap) {
+    final Class<T> klass = (Class<T>) bootstrap.getApplication().getConfigurationClass();
+    bootstrap.addCommand(new DbCommand<>(name(), this, klass, getMigrationsFileName()));
+  }
 
-    public String name() {
-        return DEFAULT_NAME;
-    }
+  public String getMigrationsFileName() {
+    return DEFAULT_MIGRATIONS_FILE;
+  }
 
-    @Override
-    public final void run(Environment environment) {
-        // nothing doing
-    }
+  public String name() {
+    return DEFAULT_NAME;
+  }
+
+  @Override
+  public final void run(Environment environment) {
+    // nothing doing
+  }
 }

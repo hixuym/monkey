@@ -10,10 +10,10 @@ import ch.qos.logback.core.spi.DeferredProcessingAware;
  */
 public interface AsyncAppenderFactory<E extends DeferredProcessingAware> {
 
-    /**
-     * Creates an {@link AsyncAppenderBase} of type E
-     *
-     * @return a new {@link AsyncAppenderBase}
-     */
-    AsyncAppenderBase<E> build();
+  /**
+   * Creates an {@link AsyncAppenderBase} of type E
+   *
+   * @return a new {@link AsyncAppenderBase}
+   */
+  AsyncAppenderBase<E> build();
 }

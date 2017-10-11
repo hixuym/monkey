@@ -1,181 +1,177 @@
 /**
- * Copyright (C) 2012-2017 the original author or authors. <p> Licensed under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
- * <p> http://www.apache.org/licenses/LICENSE-2.0 <p> Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language governing permissions and limitations
- * under the License.
+ * Copyright (C) 2012-2017 the original author or authors. <p> Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at <p> http://www.apache.org/licenses/LICENSE-2.0 <p> Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package io.sunflower.postoffice.commonsmail;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
-
+import io.sunflower.postoffice.Mail;
+import io.sunflower.postoffice.common.Tuple;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-
-import io.sunflower.postoffice.Mail;
-import io.sunflower.postoffice.common.Tuple;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.MultiPartEmail;
 
 public class CommonsmailHelperImpl implements CommonsmailHelper {
 
-    /**
-     * Creates a MultiPartEmail. Selects the correct implementation
-     * regarding html (MultiPartEmail) and/or txt content or both.
-     *
-     * Populates the mutlipart email accordingly with the txt / html content.
-     */
-    @Override
-    public MultiPartEmail createMultiPartEmailWithContent(Mail mail) throws EmailException {
+  /**
+   * Creates a MultiPartEmail. Selects the correct implementation
+   * regarding html (MultiPartEmail) and/or txt content or both.
+   *
+   * Populates the mutlipart email accordingly with the txt / html content.
+   */
+  @Override
+  public MultiPartEmail createMultiPartEmailWithContent(Mail mail) throws EmailException {
 
-        MultiPartEmail multiPartEmail;
+    MultiPartEmail multiPartEmail;
 
-        // set if it is a txt or html mail:
+    // set if it is a txt or html mail:
 
-        if (mail.getBodyHtml() == null || mail.getBodyHtml().equals("")) {
+    if (mail.getBodyHtml() == null || mail.getBodyHtml().equals("")) {
 
-            multiPartEmail = new MultiPartEmail();
-            multiPartEmail.setMsg(mail.getBodyText());
+      multiPartEmail = new MultiPartEmail();
+      multiPartEmail.setMsg(mail.getBodyText());
 
-        } else if (mail.getBodyText() == null || mail.getBodyText().equals("")) {
-            multiPartEmail = new HtmlEmail().setHtmlMsg(mail.getBodyHtml());
-        } else {
-            multiPartEmail =
-                new HtmlEmail().setHtmlMsg(mail.getBodyHtml()).setTextMsg(mail.getBodyText());
-        }
-
-        // and return the nicely configured mail:
-        return multiPartEmail;
+    } else if (mail.getBodyText() == null || mail.getBodyText().equals("")) {
+      multiPartEmail = new HtmlEmail().setHtmlMsg(mail.getBodyHtml());
+    } else {
+      multiPartEmail =
+          new HtmlEmail().setHtmlMsg(mail.getBodyHtml()).setTextMsg(mail.getBodyText());
     }
 
-    @Override
-    public void doPopulateMultipartMailWithContent(MultiPartEmail multiPartEmail, Mail mail)
-        throws AddressException, EmailException {
+    // and return the nicely configured mail:
+    return multiPartEmail;
+  }
 
-        String charset = "utf-8";
-        if (mail.getCharset() != null) {
-            charset = mail.getCharset();
-        }
+  @Override
+  public void doPopulateMultipartMailWithContent(MultiPartEmail multiPartEmail, Mail mail)
+      throws AddressException, EmailException {
 
-        multiPartEmail.setCharset(charset);
+    String charset = "utf-8";
+    if (mail.getCharset() != null) {
+      charset = mail.getCharset();
+    }
 
+    multiPartEmail.setCharset(charset);
 
-        String subject = "";
-        if (mail.getSubject() != null) {
-            subject = mail.getSubject();
-        }
+    String subject = "";
+    if (mail.getSubject() != null) {
+      subject = mail.getSubject();
+    }
 
-        multiPartEmail.setSubject(subject);
+    multiPartEmail.setSubject(subject);
 
-        if (mail.getFrom() != null) {
+    if (mail.getFrom() != null) {
 
-            Tuple<String, String> from = createValidEmailFromString(mail.getFrom());
+      Tuple<String, String> from = createValidEmailFromString(mail.getFrom());
 
-            if (from.y != null) {
-                multiPartEmail.setFrom(from.x, from.y);
-            } else {
-                multiPartEmail.setFrom(from.x);
-            }
-
-        }
-
-
-        if (mail.getTos() != null) {
-            if (!mail.getTos().isEmpty()) {
-                List<Tuple<String, String>> emails = createListOfAddresses(mail.getTos());
-                for (Tuple<String, String> email : emails) {
-
-                    if (email.y != null) {
-                        multiPartEmail.addTo(email.x, email.y);
-                    } else {
-                        multiPartEmail.addTo(email.x);
-                    }
-
-                }
-            }
-        }
-
-        if (mail.getReplyTo() != null) {
-            if (!mail.getReplyTo().isEmpty()) {
-                List<Tuple<String, String>> emails = createListOfAddresses(mail.getReplyTo());
-                for (Tuple<String, String> email : emails) {
-                    multiPartEmail.addReplyTo(email.x, email.y);
-                }
-            }
-        }
-
-        if (mail.getCcs() != null) {
-            if (!mail.getCcs().isEmpty()) {
-                List<Tuple<String, String>> emails = createListOfAddresses(mail.getCcs());
-                for (Tuple<String, String> email : emails) {
-                    multiPartEmail.addCc(email.x, email.y);
-                }
-            }
-        }
-
-        if (mail.getBccs() != null) {
-            if (!mail.getBccs().isEmpty()) {
-                List<Tuple<String, String>> emails = createListOfAddresses(mail.getBccs());
-                for (Tuple<String, String> email : emails) {
-                    multiPartEmail.addBcc(email.x, email.y);
-                }
-            }
-        }
-
-        if (mail.getHeaders() != null) {
-            multiPartEmail.setHeaders(mail.getHeaders());
-        }
+      if (from.y != null) {
+        multiPartEmail.setFrom(from.x, from.y);
+      } else {
+        multiPartEmail.setFrom(from.x);
+      }
 
     }
 
-    @Override
-    public void doSetServerParameter(MultiPartEmail multiPartEmail, String smtpHost,
-                                     Integer smtpPort, Boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
-                                     Boolean smtpDebug) {
+    if (mail.getTos() != null) {
+      if (!mail.getTos().isEmpty()) {
+        List<Tuple<String, String>> emails = createListOfAddresses(mail.getTos());
+        for (Tuple<String, String> email : emails) {
 
-        // /set config params:
-        multiPartEmail.setHostName(smtpHost);
-        multiPartEmail.setSmtpPort(smtpPort);
-        multiPartEmail.setSSLOnConnect(smtpSsl);
+          if (email.y != null) {
+            multiPartEmail.addTo(email.x, email.y);
+          } else {
+            multiPartEmail.addTo(email.x);
+          }
 
-        smtpUser.ifPresent(s -> multiPartEmail.setAuthentication(s, smtpPassword.get()));
-
-        multiPartEmail.setDebug(smtpDebug);
-
-    }
-
-    @Override
-    public List<Tuple<String, String>> createListOfAddresses(Collection<String> emails)
-        throws AddressException {
-        List<Tuple<String, String>> tuples = new ArrayList<Tuple<String, String>>();
-
-        for (String email : emails) {
-
-            tuples.add(createValidEmailFromString(email));
         }
-
-        return tuples;
-
+      }
     }
 
-    @Override
-    public Tuple<String, String> createValidEmailFromString(String email) throws AddressException {
-
-        InternetAddress internetAddress = new InternetAddress(email);
-
-        Tuple<String, String> tuple =
-            new Tuple<>(internetAddress.getAddress(), internetAddress
-                .getPersonal());
-
-        return tuple;
-
+    if (mail.getReplyTo() != null) {
+      if (!mail.getReplyTo().isEmpty()) {
+        List<Tuple<String, String>> emails = createListOfAddresses(mail.getReplyTo());
+        for (Tuple<String, String> email : emails) {
+          multiPartEmail.addReplyTo(email.x, email.y);
+        }
+      }
     }
+
+    if (mail.getCcs() != null) {
+      if (!mail.getCcs().isEmpty()) {
+        List<Tuple<String, String>> emails = createListOfAddresses(mail.getCcs());
+        for (Tuple<String, String> email : emails) {
+          multiPartEmail.addCc(email.x, email.y);
+        }
+      }
+    }
+
+    if (mail.getBccs() != null) {
+      if (!mail.getBccs().isEmpty()) {
+        List<Tuple<String, String>> emails = createListOfAddresses(mail.getBccs());
+        for (Tuple<String, String> email : emails) {
+          multiPartEmail.addBcc(email.x, email.y);
+        }
+      }
+    }
+
+    if (mail.getHeaders() != null) {
+      multiPartEmail.setHeaders(mail.getHeaders());
+    }
+
+  }
+
+  @Override
+  public void doSetServerParameter(MultiPartEmail multiPartEmail, String smtpHost,
+      Integer smtpPort, Boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
+      Boolean smtpDebug) {
+
+    // /set config params:
+    multiPartEmail.setHostName(smtpHost);
+    multiPartEmail.setSmtpPort(smtpPort);
+    multiPartEmail.setSSLOnConnect(smtpSsl);
+
+    smtpUser.ifPresent(s -> multiPartEmail.setAuthentication(s, smtpPassword.get()));
+
+    multiPartEmail.setDebug(smtpDebug);
+
+  }
+
+  @Override
+  public List<Tuple<String, String>> createListOfAddresses(Collection<String> emails)
+      throws AddressException {
+    List<Tuple<String, String>> tuples = new ArrayList<Tuple<String, String>>();
+
+    for (String email : emails) {
+
+      tuples.add(createValidEmailFromString(email));
+    }
+
+    return tuples;
+
+  }
+
+  @Override
+  public Tuple<String, String> createValidEmailFromString(String email) throws AddressException {
+
+    InternetAddress internetAddress = new InternetAddress(email);
+
+    Tuple<String, String> tuple =
+        new Tuple<>(internetAddress.getAddress(), internetAddress
+            .getPersonal());
+
+    return tuple;
+
+  }
 
 }

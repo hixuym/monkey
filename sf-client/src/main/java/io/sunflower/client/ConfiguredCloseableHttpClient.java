@@ -19,19 +19,21 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 public class ConfiguredCloseableHttpClient {
-    private final CloseableHttpClient closeableHttpClient;
-    private final RequestConfig defaultRequestConfig;
 
-    /* package */ ConfiguredCloseableHttpClient(CloseableHttpClient closeableHttpClient, RequestConfig defaultRequestConfig) {
-        this.closeableHttpClient = closeableHttpClient;
-        this.defaultRequestConfig = defaultRequestConfig;
-    }
+  private final CloseableHttpClient closeableHttpClient;
+  private final RequestConfig defaultRequestConfig;
 
-    public RequestConfig getDefaultRequestConfig() {
-        return defaultRequestConfig;
-    }
+  /* package */ ConfiguredCloseableHttpClient(CloseableHttpClient closeableHttpClient,
+      RequestConfig defaultRequestConfig) {
+    this.closeableHttpClient = closeableHttpClient;
+    this.defaultRequestConfig = defaultRequestConfig;
+  }
 
-    public CloseableHttpClient getClient() {
-        return closeableHttpClient;
-    }
+  public RequestConfig getDefaultRequestConfig() {
+    return defaultRequestConfig;
+  }
+
+  public CloseableHttpClient getClient() {
+    return closeableHttpClient;
+  }
 }

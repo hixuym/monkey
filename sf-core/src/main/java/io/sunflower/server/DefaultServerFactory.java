@@ -16,17 +16,18 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import io.sunflower.setup.Environment;
 
 @JsonTypeName("default")
 public class DefaultServerFactory implements ServerFactory {
-    @Override
-    public Server build(Environment environment) {
-        return new Server() {};
-    }
 
-    @Override
-    public void configure(Environment environment) {
-    }
+  @Override
+  public Server build(Environment environment) {
+    return new Server() {
+    };
+  }
+
+  @Override
+  public void configure(Environment environment) {
+  }
 }

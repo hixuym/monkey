@@ -23,56 +23,61 @@ import io.sunflower.gizmo.ResourceMethods.ResourceMethod4;
 import io.sunflower.gizmo.ResourceMethods.ResourceMethod7;
 
 /**
- * Interface that exposes multiple with methods that accept a large number of various argument combinations.
+ * Interface that exposes multiple with methods that accept a large number of various argument
+ * combinations.
  *
  * @param <T> The result to return
  */
 public interface WithResourceMethod<T> {
 
-    T with(ResourceMethods.ResourceMethod resourceMethod);
+  T with(ResourceMethods.ResourceMethod resourceMethod);
 
-    default T with(ResourceMethod0 resourceMethod0) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod0);
-    }
+  default T with(ResourceMethod0 resourceMethod0) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod0);
+  }
 
-    default <A> T with(ResourceMethod1<A> resourceMethod1) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod1);
-    }
+  default <A> T with(ResourceMethod1<A> resourceMethod1) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod1);
+  }
 
-    default <A, B> T with(ResourceMethod2<A, B> resourceMethod2) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod2);
-    }
+  default <A, B> T with(ResourceMethod2<A, B> resourceMethod2) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod2);
+  }
 
-    default <A, B, C> T with(ResourceMethods.ResourceMethod3<A, B, C> resourceMethod3) {
-        return with((ResourceMethod) resourceMethod3);
-    }
+  default <A, B, C> T with(ResourceMethods.ResourceMethod3<A, B, C> resourceMethod3) {
+    return with((ResourceMethod) resourceMethod3);
+  }
 
-    default <A, B, C, D> T with(ResourceMethod4<A, B, C, D> resourceMethod4) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod4);
-    }
+  default <A, B, C, D> T with(ResourceMethod4<A, B, C, D> resourceMethod4) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod4);
+  }
 
-    default <A, B, C, D, E> T with(ResourceMethods.ResourceMethod5<A, B, C, D, E> resourceMethod5) {
-        return with((ResourceMethod) resourceMethod5);
-    }
+  default <A, B, C, D, E> T with(ResourceMethods.ResourceMethod5<A, B, C, D, E> resourceMethod5) {
+    return with((ResourceMethod) resourceMethod5);
+  }
 
-    default <A, B, C, D, E, F> T with(ResourceMethods.ResourceMethod6<A, B, C, D, E, F> resourceMethod6) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod6);
-    }
+  default <A, B, C, D, E, F> T with(
+      ResourceMethods.ResourceMethod6<A, B, C, D, E, F> resourceMethod6) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod6);
+  }
 
-    default <A, B, C, D, E, F, G> T with(ResourceMethod7<A, B, C, D, E, F, G> resourceMethod7) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod7);
-    }
+  default <A, B, C, D, E, F, G> T with(ResourceMethod7<A, B, C, D, E, F, G> resourceMethod7) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod7);
+  }
 
-    default <A, B, C, D, E, F, G, H> T with(ResourceMethods.ResourceMethod8<A, B, C, D, E, F, G, H> resourceMethod8) {
-        return with((ResourceMethod) resourceMethod8);
-    }
+  default <A, B, C, D, E, F, G, H> T with(
+      ResourceMethods.ResourceMethod8<A, B, C, D, E, F, G, H> resourceMethod8) {
+    return with((ResourceMethod) resourceMethod8);
+  }
 
-    default <A, B, C, D, E, F, G, H, I> T with(ResourceMethods.ResourceMethod9<A, B, C, D, E, F, G, H, I> resourceMethod9) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod9);
-    }
+  default <A, B, C, D, E, F, G, H, I> T with(
+      ResourceMethods.ResourceMethod9<A, B, C, D, E, F, G, H, I> resourceMethod9) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod9);
+  }
 
-    default <A, B, C, D, E, F, G, H, I, J> T with(ResourceMethods.ResourceMethod10<A, B, C, D, E, F, G, H, I, J> resourceMethod10) {
-        return with((ResourceMethods.ResourceMethod) resourceMethod10);
-    }
+  default <A, B, C, D, E, F, G, H, I, J> T with(
+      ResourceMethods.ResourceMethod10<A, B, C, D, E, F, G, H, I, J> resourceMethod10) {
+    return with((ResourceMethods.ResourceMethod) resourceMethod10);
+  }
 
 }

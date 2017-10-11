@@ -16,7 +16,6 @@
 package com.example.conf;
 
 import com.example.resources.DummyApplication;
-
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 
@@ -26,11 +25,11 @@ import io.sunflower.gizmo.application.ApplicationRoutes;
 // works properly.
 public class Routes implements ApplicationRoutes {
 
-    @Override
-    public void init(Router router) {
+  @Override
+  public void init(Router router) {
 
-        router.GET().route("/").with(DummyApplication.class, "dummyMethod");
+    router.GET().route("/").with(DummyApplication.class, "dummyMethod");
 
-    }
+  }
 
 }

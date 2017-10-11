@@ -1,13 +1,5 @@
 package io.sunflower.validation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.Constraint;
-import javax.validation.Payload;
-
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.FIELD;
@@ -16,9 +8,16 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.util.concurrent.TimeUnit;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+
 /**
- * The annotated element must be a {@link io.sunflower.util.Duration} whose value must be higher or equal to the
- * specified minimum.
+ * The annotated element must be a {@link io.sunflower.util.Duration} whose value must be higher or
+ * equal to the specified minimum.
  * <p/>
  * <code>null</code> elements are considered valid
  */
@@ -27,19 +26,20 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = MinDurationValidator.class)
 public @interface MinDuration {
-    String message() default "must be greater than or equal to {value} {unit}";
 
-    Class<?>[] groups() default {};
+  String message() default "must be greater than or equal to {value} {unit}";
 
-    @SuppressWarnings("UnusedDeclaration") Class<? extends Payload>[] payload() default {};
+  Class<?>[] groups() default {};
 
-    /**
-     * @return value the element must be higher or equal to
-     */
-    long value();
+  @SuppressWarnings("UnusedDeclaration") Class<? extends Payload>[] payload() default {};
 
-    /**
-     * @return unit of the value the element must be higher or equal to
-     */
-    TimeUnit unit() default TimeUnit.SECONDS;
+  /**
+   * @return value the element must be higher or equal to
+   */
+  long value();
+
+  /**
+   * @return unit of the value the element must be higher or equal to
+   */
+  TimeUnit unit() default TimeUnit.SECONDS;
 }

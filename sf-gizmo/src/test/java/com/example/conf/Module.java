@@ -24,17 +24,19 @@ import com.google.inject.AbstractModule;
 public class Module extends AbstractModule {
 
 
-    @Override
-    protected void configure() {
+  @Override
+  protected void configure() {
 
-        bind(DummyInterfaceForTesting.class).to(DummyClassForTesting.class);
+    bind(DummyInterfaceForTesting.class).to(DummyClassForTesting.class);
 
-    }
+  }
 
-    public static interface DummyInterfaceForTesting {
-    }
+  public static interface DummyInterfaceForTesting {
 
-    public static class DummyClassForTesting implements DummyInterfaceForTesting {
-    }
+  }
+
+  public static class DummyClassForTesting implements DummyInterfaceForTesting {
+
+  }
 
 }

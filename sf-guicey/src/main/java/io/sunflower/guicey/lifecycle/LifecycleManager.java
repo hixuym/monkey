@@ -1,14 +1,15 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package io.sunflower.guicey.lifecycle;
@@ -22,34 +23,35 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(LifecycleManagerImpl.class)
 public interface LifecycleManager {
-    /**
-     * Start the application
-     */
-    void start();
 
-    /**
-     * Stop the application
-     */
-    void stop();
+  /**
+   * Start the application
+   */
+  void start();
 
-    /**
-     * Whether the application is started
-     *
-     * @return True if the application is started
-     */
-    boolean isStarted();
+  /**
+   * Stop the application
+   */
+  void stop();
 
-    /**
-     * Get the state of the lifecycle
-     *
-     * @return The state
-     */
-    State getState();
+  /**
+   * Whether the application is started
+   *
+   * @return True if the application is started
+   */
+  boolean isStarted();
 
-    /**
-     * Get the time that the service has been up for
-     *
-     * @return The time that the service has been up for
-     */
-    long getUpTime();
+  /**
+   * Get the state of the lifecycle
+   *
+   * @return The state
+   */
+  State getState();
+
+  /**
+   * Get the time that the service has been up for
+   *
+   * @return The time that the service has been up for
+   */
+  long getUpTime();
 }

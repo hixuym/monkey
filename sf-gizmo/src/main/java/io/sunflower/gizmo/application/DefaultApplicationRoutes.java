@@ -18,8 +18,9 @@ package io.sunflower.gizmo.application;
 import io.sunflower.gizmo.Router;
 
 public class DefaultApplicationRoutes implements ApplicationRoutes {
-    @Override
-    public void init(Router router) {
 
-    }
+  @Override
+  public void init(Router router) {
+
+  }
 }

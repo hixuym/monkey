@@ -15,6 +15,16 @@
 
 package io.sunflower.gizmo;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import io.sunflower.gizmo.utils.HttpCacheToolkit;
+import io.sunflower.gizmo.utils.MimeTypes;
+import io.sunflower.gizmo.utils.ResponseStreams;
+import java.io.ByteArrayOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,371 +34,369 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.ByteArrayOutputStream;
-
-import io.sunflower.gizmo.utils.HttpCacheToolkit;
-import io.sunflower.gizmo.utils.MimeTypes;
-import io.sunflower.gizmo.utils.ResponseStreams;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class AssetsResourceTest {
 
-    @Mock
-    MimeTypes mimeTypes;
+  @Mock
+  MimeTypes mimeTypes;
 
-    @Mock
-    HttpCacheToolkit httpCacheToolkit;
+  @Mock
+  HttpCacheToolkit httpCacheToolkit;
 
-    @Mock
-    Context contextRenderable;
+  @Mock
+  Context contextRenderable;
 
-    @Captor
-    ArgumentCaptor<Result> resultCaptor;
+  @Captor
+  ArgumentCaptor<Result> resultCaptor;
 
-    @Mock
-    ResponseStreams responseStreams;
+  @Mock
+  ResponseStreams responseStreams;
 
-    @Mock
-    GizmoConfiguration configuration;
+  @Mock
+  GizmoConfiguration configuration;
 
-    AssetsResource assetsResource;
+  AssetsResource assetsResource;
 
-    @Before
-    public void before() {
-        assetsResource = new AssetsResource(
-            new AssetsResourceHelper(),
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
-    }
+  @Before
+  public void before() {
+    assetsResource = new AssetsResource(
+        new AssetsResourceHelper(),
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
+  }
 
 
-    @Test
-    public void testServeStatic404() throws Exception {
-        when(contextRenderable.getRequestPath()).thenReturn("notAvailable");
-        Result result2 = assetsResource.serveStatic();
+  @Test
+  public void testServeStatic404() throws Exception {
+    when(contextRenderable.getRequestPath()).thenReturn("notAvailable");
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testServeStaticSecurityClassesWithoutSlash() throws Exception {
-        when(contextRenderable.getRequestPath()).thenReturn("ninja/Ninja.class");
-        Result result2 = assetsResource.serveStatic();
+  @Test
+  public void testServeStaticSecurityClassesWithoutSlash() throws Exception {
+    when(contextRenderable.getRequestPath()).thenReturn("ninja/Ninja.class");
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testServeStaticSecurityClassesAbsolute() throws Exception {
+  @Test
+  public void testServeStaticSecurityClassesAbsolute() throws Exception {
 
-        when(contextRenderable.getRequestPath()).thenReturn("/ninja/Ninja.class");
-        Result result2 = assetsResource.serveStatic();
+    when(contextRenderable.getRequestPath()).thenReturn("/ninja/Ninja.class");
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testServeStaticSecurityNoRelativPathWorks() throws Exception {
-        //This theoretically could work as robots.txt is there..
-        // But it should
-        when(contextRenderable.getRequestPath()).thenReturn("/assets/../../conf/heroku.conf");
+  @Test
+  public void testServeStaticSecurityNoRelativPathWorks() throws Exception {
+    //This theoretically could work as robots.txt is there..
+    // But it should
+    when(contextRenderable.getRequestPath()).thenReturn("/assets/../../conf/heroku.conf");
 
-        Result result2 = assetsResource.serveStatic();
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
-    }
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
+  }
 
-    @Test
-    public void testServeStaticDirectory() throws Exception {
-        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+  @Test
+  public void testServeStaticDirectory() throws Exception {
+    AssetsResourceHelper assetsResourceHelper = Mockito
+        .mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsResource = new AssetsResource(
-            assetsResourceHelper,
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
+    assetsResource = new AssetsResource(
+        assetsResourceHelper,
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
 
-        when(contextRenderable.getRequestPath()).thenReturn("/");
-        Result result2 = assetsResource.serveStatic();
+    when(contextRenderable.getRequestPath()).thenReturn("/");
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
 
-        verify(assetsResourceHelper).isDirectoryURL(this.getClass().getResource("/assets/"));
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
-    }
+    verify(assetsResourceHelper).isDirectoryURL(this.getClass().getResource("/assets/"));
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(Results.notFound().getStatusCode(), resultCaptor.getValue().getStatusCode());
+  }
 
-    @Test
-    public void testServeStatic304NotModified() throws Exception {
+  @Test
+  public void testServeStatic304NotModified() throws Exception {
 
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/assets/testasset.txt");
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/assets/testasset.txt");
 
-        Result result2 = assetsResource.serveStatic();
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        Result result = Results.ok();
-        // manually set to not modified => asset controller should
-        // only finalize, but not stream
-        result.status(Result.SC_304_NOT_MODIFIED);
+    Result result = Results.ok();
+    // manually set to not modified => asset controller should
+    // only finalize, but not stream
+    result.status(Result.SC_304_NOT_MODIFIED);
 
-        renderable.render(contextRenderable, result);
-        // test streaming of resource:
-        // => not modified:
-        // check etag has been called
-        verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
-            Mockito.eq(result), Mockito.anyLong());
+    renderable.render(contextRenderable, result);
+    // test streaming of resource:
+    // => not modified:
+    // check etag has been called
+    verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
+        Mockito.eq(result), Mockito.anyLong());
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
 
-        // make sure we get the correct result...
-        assertEquals(Result.SC_304_NOT_MODIFIED, resultCaptor.getValue()
-            .getStatusCode());
+    // make sure we get the correct result...
+    assertEquals(Result.SC_304_NOT_MODIFIED, resultCaptor.getValue()
+        .getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testStaticDirectoryIsFileSystemInDevMode() throws Exception {
+  @Test
+  public void testStaticDirectoryIsFileSystemInDevMode() throws Exception {
 
-        // some more setup needed:
-        Mockito.when(configuration.isDev()).thenReturn(true);
-        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+    // some more setup needed:
+    Mockito.when(configuration.isDev()).thenReturn(true);
+    AssetsResourceHelper assetsResourceHelper = Mockito
+        .mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsResource = new AssetsResource(
-            assetsResourceHelper,
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
+    assetsResource = new AssetsResource(
+        assetsResourceHelper,
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
 
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/assets/testasset-not-existent.txt");
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/assets/testasset-not-existent.txt");
 
-        Result result2 = assetsResource.serveStatic();
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
-        renderable.render(contextRenderable, Results.ok());
-        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset-not-existent.txt", true);
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(404, resultCaptor.getValue().getStatusCode());
+    Renderable renderable = (Renderable) result2.getRenderable();
+    renderable.render(contextRenderable, Results.ok());
+    verify(assetsResourceHelper)
+        .normalizePathWithoutLeadingSlash("/assets/testasset-not-existent.txt", true);
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(404, resultCaptor.getValue().getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testStaticDirectoryClassPathWhenFileNotInFileSystemInDevMode() throws Exception {
+  @Test
+  public void testStaticDirectoryClassPathWhenFileNotInFileSystemInDevMode() throws Exception {
 
-        // some more setup needed:
-        Mockito.when(configuration.isDev()).thenReturn(true);
-        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+    // some more setup needed:
+    Mockito.when(configuration.isDev()).thenReturn(true);
+    AssetsResourceHelper assetsResourceHelper = Mockito
+        .mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
 
-        assetsResource = new AssetsResource(
-            assetsResourceHelper,
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
+    assetsResource = new AssetsResource(
+        assetsResourceHelper,
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
 
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/assets/testasset.txt");
-        when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.any(Result.class))).thenReturn(
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/assets/testasset.txt");
+    when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.any(Result.class)))
+        .thenReturn(
             responseStreams);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        when(responseStreams.getOutputStream()).thenReturn(
-            byteArrayOutputStream);
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    when(responseStreams.getOutputStream()).thenReturn(
+        byteArrayOutputStream);
 
-        Result result2 = assetsResource.serveStatic();
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
-        renderable.render(contextRenderable, Results.ok());
-        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-        assertEquals(200, resultCaptor.getValue().getStatusCode());
+    Renderable renderable = (Renderable) result2.getRenderable();
+    renderable.render(contextRenderable, Results.ok());
+    verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    assertEquals(200, resultCaptor.getValue().getStatusCode());
 
-    }
+  }
 
-    @Test
-    public void testStaticDirectoryIsClassPathInProdMode() throws Exception {
+  @Test
+  public void testStaticDirectoryIsClassPathInProdMode() throws Exception {
 
-        // some more setup needed:
-        Mockito.when(configuration.isDev()).thenReturn(false);
-        AssetsResourceHelper assetsResourceHelper = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
-        assetsResource = new AssetsResource(
-            assetsResourceHelper,
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/assets/testasset.txt");
-        when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.any(Result.class))).thenReturn(
+    // some more setup needed:
+    Mockito.when(configuration.isDev()).thenReturn(false);
+    AssetsResourceHelper assetsResourceHelper = Mockito
+        .mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+    assetsResource = new AssetsResource(
+        assetsResourceHelper,
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/assets/testasset.txt");
+    when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.any(Result.class)))
+        .thenReturn(
             responseStreams);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        when(responseStreams.getOutputStream()).thenReturn(
-            byteArrayOutputStream);
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    when(responseStreams.getOutputStream()).thenReturn(
+        byteArrayOutputStream);
 
-        Result result2 = assetsResource.serveStatic();
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
-        renderable.render(contextRenderable, Results.ok());
-        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
+    Renderable renderable = (Renderable) result2.getRenderable();
+    renderable.render(contextRenderable, Results.ok());
+    verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/assets/testasset.txt", true);
 
-    }
+  }
 
-    @Test
-    public void testServeStaticNormalOperationModifiedNoCaching()
-        throws Exception {
+  @Test
+  public void testServeStaticNormalOperationModifiedNoCaching()
+      throws Exception {
 
-        Result result = Results.ok();
+    Result result = Results.ok();
 
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/assets/testasset.txt");
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/assets/testasset.txt");
 
-        when(mimeTypes.getContentType(Mockito.eq(contextRenderable),
-            Mockito.anyString())).thenReturn("mimetype");
+    when(mimeTypes.getContentType(Mockito.eq(contextRenderable),
+        Mockito.anyString())).thenReturn("mimetype");
 
-        when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result))).thenReturn(
-            responseStreams);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        when(responseStreams.getOutputStream()).thenReturn(
-            byteArrayOutputStream);
-        Result result2 = assetsResource.serveStatic();
-
-        Renderable renderable = (Renderable) result2.getRenderable();
-
-        renderable.render(contextRenderable, result);
-        // test streaming of resource:
-        // => not modified:
-        // check etag has been called
-        verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
-            Mockito.eq(result), Mockito.anyLong());
-
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
-
-        // make sure we get the correct result...
-        assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
-        // we mocked this one:
-        assertEquals("mimetype", result.getContentType());
-
-        // make sure the content is okay...
-        assertEquals("testasset", byteArrayOutputStream.toString());
-
-    }
-
-    @Test
-    public void testServeStaticRobotsTxt()
-        throws Exception {
-
-        Result result = Results.ok();
-
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/robots.txt");
-
-        when(mimeTypes.getContentType(Mockito.eq(contextRenderable),
-            Mockito.anyString())).thenReturn("mimetype");
-
-        when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result))).thenReturn(
+    when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result)))
+        .thenReturn(
             responseStreams);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        when(responseStreams.getOutputStream()).thenReturn(
-            byteArrayOutputStream);
-        Result result2 = assetsResource.serveStatic();
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    when(responseStreams.getOutputStream()).thenReturn(
+        byteArrayOutputStream);
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        renderable.render(contextRenderable, result);
-        // test streaming of resource:
-        // => not modified:
-        // check etag has been called
-        verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
-            Mockito.eq(result), Mockito.anyLong());
+    renderable.render(contextRenderable, result);
+    // test streaming of resource:
+    // => not modified:
+    // check etag has been called
+    verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
+        Mockito.eq(result), Mockito.anyLong());
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
 
-        // make sure we get the correct result...
-        assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
-        // we mocked this one:
-        assertEquals("mimetype", result.getContentType());
+    // make sure we get the correct result...
+    assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
+    // we mocked this one:
+    assertEquals("mimetype", result.getContentType());
 
-        String content = byteArrayOutputStream.toString();
-        assertThat(content, containsString("User-agent: *"));
-        assertThat(content, containsString("Disallow: /"));
-    }
+    // make sure the content is okay...
+    assertEquals("testasset", byteArrayOutputStream.toString());
 
-    @Test
-    public void testServeWebJars() throws Exception {
-        AssetsResourceHelper assetsResourceHelper
-            = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
-        assetsResource = new AssetsResource(
-            assetsResourceHelper,
-            httpCacheToolkit,
-            mimeTypes,
-            configuration);
-        Result result = Results.ok();
+  }
 
-        when(contextRenderable.getRequestPath()).thenReturn(
-            "/webjar_asset.txt");
+  @Test
+  public void testServeStaticRobotsTxt()
+      throws Exception {
 
-        when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result))).thenReturn(
+    Result result = Results.ok();
+
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/robots.txt");
+
+    when(mimeTypes.getContentType(Mockito.eq(contextRenderable),
+        Mockito.anyString())).thenReturn("mimetype");
+
+    when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result)))
+        .thenReturn(
             responseStreams);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        when(responseStreams.getOutputStream()).thenReturn(
-            byteArrayOutputStream);
-        Result result2 = assetsResource.serveWebJars();
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    when(responseStreams.getOutputStream()).thenReturn(
+        byteArrayOutputStream);
+    Result result2 = assetsResource.serveStatic();
 
-        Renderable renderable = (Renderable) result2.getRenderable();
+    Renderable renderable = (Renderable) result2.getRenderable();
 
-        renderable.render(contextRenderable, result);
+    renderable.render(contextRenderable, result);
+    // test streaming of resource:
+    // => not modified:
+    // check etag has been called
+    verify(httpCacheToolkit).addEtag(Mockito.eq(contextRenderable),
+        Mockito.eq(result), Mockito.anyLong());
 
-        verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
 
-        // make sure we get the correct result...
-        assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
+    // make sure we get the correct result...
+    assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
+    // we mocked this one:
+    assertEquals("mimetype", result.getContentType());
 
-        assertEquals("webjar_asset", byteArrayOutputStream.toString());
-        verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/webjar_asset.txt", true);
+    String content = byteArrayOutputStream.toString();
+    assertThat(content, containsString("User-agent: *"));
+    assertThat(content, containsString("Disallow: /"));
+  }
 
-    }
+  @Test
+  public void testServeWebJars() throws Exception {
+    AssetsResourceHelper assetsResourceHelper
+        = Mockito.mock(AssetsResourceHelper.class, Mockito.CALLS_REAL_METHODS);
+    assetsResource = new AssetsResource(
+        assetsResourceHelper,
+        httpCacheToolkit,
+        mimeTypes,
+        configuration);
+    Result result = Results.ok();
+
+    when(contextRenderable.getRequestPath()).thenReturn(
+        "/webjar_asset.txt");
+
+    when(contextRenderable.finalizeHeadersWithoutFlashAndSessionCookie(Mockito.eq(result)))
+        .thenReturn(
+            responseStreams);
+
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    when(responseStreams.getOutputStream()).thenReturn(
+        byteArrayOutputStream);
+    Result result2 = assetsResource.serveWebJars();
+
+    Renderable renderable = (Renderable) result2.getRenderable();
+
+    renderable.render(contextRenderable, result);
+
+    verify(contextRenderable).finalizeHeadersWithoutFlashAndSessionCookie(resultCaptor.capture());
+
+    // make sure we get the correct result...
+    assertEquals(Result.SC_200_OK, resultCaptor.getValue().getStatusCode());
+
+    assertEquals("webjar_asset", byteArrayOutputStream.toString());
+    verify(assetsResourceHelper).normalizePathWithoutLeadingSlash("/webjar_asset.txt", true);
+
+  }
 }

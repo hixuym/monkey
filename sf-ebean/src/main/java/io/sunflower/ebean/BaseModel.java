@@ -15,17 +15,15 @@
 
 package io.sunflower.ebean;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
-
 import io.ebean.BeanState;
 import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.UpdatedTimestamp;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
  * Created by michael on 16/5/28.
@@ -33,87 +31,87 @@ import io.ebean.annotation.UpdatedTimestamp;
 @MappedSuperclass
 public class BaseModel extends Model implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    private Long id;
+  @Id
+  private Long id;
 
-    @Version
-    private Long version;
+  @Version
+  private Long version;
 
-    @CreatedTimestamp
-    private Timestamp whenCreated;
+  @CreatedTimestamp
+  private Timestamp whenCreated;
 
-    @UpdatedTimestamp
-    private Timestamp whenUpdated;
+  @UpdatedTimestamp
+  private Timestamp whenUpdated;
 
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
-    }
+  /**
+   * @return the id
+   */
+  public Long getId() {
+    return id;
+  }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
+  /**
+   * @param id the id to set
+   */
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    /**
-     * @return the version
-     */
-    public Long getVersion() {
-        return version;
-    }
+  /**
+   * @return the version
+   */
+  public Long getVersion() {
+    return version;
+  }
 
-    /**
-     * @param version the version to set
-     */
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+  /**
+   * @param version the version to set
+   */
+  public void setVersion(Long version) {
+    this.version = version;
+  }
 
-    /**
-     * @return the whenCreated
-     */
-    public Timestamp getWhenCreated() {
-        return whenCreated;
-    }
+  /**
+   * @return the whenCreated
+   */
+  public Timestamp getWhenCreated() {
+    return whenCreated;
+  }
 
-    /**
-     * @param whenCreated the whenCreated to set
-     */
-    public void setWhenCreated(Timestamp whenCreated) {
-        this.whenCreated = whenCreated;
-    }
+  /**
+   * @param whenCreated the whenCreated to set
+   */
+  public void setWhenCreated(Timestamp whenCreated) {
+    this.whenCreated = whenCreated;
+  }
 
-    /**
-     * @return the whenUpdated
-     */
-    public Timestamp getWhenUpdated() {
-        return whenUpdated;
-    }
+  /**
+   * @return the whenUpdated
+   */
+  public Timestamp getWhenUpdated() {
+    return whenUpdated;
+  }
 
-    /**
-     * @param whenUpdated the whenUpdated to set
-     */
-    public void setWhenUpdated(Timestamp whenUpdated) {
-        this.whenUpdated = whenUpdated;
-    }
+  /**
+   * @param whenUpdated the whenUpdated to set
+   */
+  public void setWhenUpdated(Timestamp whenUpdated) {
+    this.whenUpdated = whenUpdated;
+  }
 
-    // 未持久化的临时对象
-    public boolean isNew() {
-        return db().getBeanState(this).isNew();
-    }
+  // 未持久化的临时对象
+  public boolean isNew() {
+    return db().getBeanState(this).isNew();
+  }
 
-    public boolean isNewOrDirty() {
-        return db().getBeanState(this).isNewOrDirty();
-    }
+  public boolean isNewOrDirty() {
+    return db().getBeanState(this).isNewOrDirty();
+  }
 
-    public BeanState state() {
-        return db().getBeanState(this);
-    }
+  public BeanState state() {
+    return db().getBeanState(this);
+  }
 
 }

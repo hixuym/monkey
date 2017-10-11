@@ -15,10 +15,10 @@
   -->
 
 <FindBugsFilter>
-    <Match>
-        <Class name="~.*\.*Test"/>
-    </Match>
-    <Match>
-        <Package name="~org\.openjdk\.jmh.*"/>
-    </Match>
+  <Match>
+    <Class name="~.*\.*Test"/>
+  </Match>
+  <Match>
+    <Package name="~org\.openjdk\.jmh.*"/>
+  </Match>
 </FindBugsFilter>

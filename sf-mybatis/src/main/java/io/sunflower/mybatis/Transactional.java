@@ -18,16 +18,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
 /**
- * Any method marked with this annotation will be considered for
- * transactionality.
+ * Any method marked with this annotation will be considered for transactionality.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 public @interface Transactional {
 
   /**
@@ -64,8 +62,8 @@ public @interface Transactional {
    * Flag to indicate the auto commit policy.
    *
    * @return false by default, user defined otherwise.
-   *
-   * @deprecated Users that intend auto commit can achieve it by simply not using {@literal @Transactional}
+   * @deprecated Users that intend auto commit can achieve it by simply not using {@literal
+   * @Transactional}
    */
   @Deprecated
   boolean autoCommit() default false;
@@ -73,16 +71,15 @@ public @interface Transactional {
   /**
    * The exception re-thrown when an error occurs during the transaction.
    *
-   * @return the exception re-thrown when an error occurs during the
-   *         transaction.
+   * @return the exception re-thrown when an error occurs during the transaction.
    */
   Class<? extends Throwable> rethrowExceptionsAs() default Exception.class;
 
   /**
    * A custom error message when throwing the custom exception.
    *
-   * It supports java.util.Formatter place holders, intercepted method
-   * arguments will be used as message format arguments.
+   * It supports java.util.Formatter place holders, intercepted method arguments will be used as
+   * message format arguments.
    *
    * @return a custom error message when throwing the custom exception.
    * @see java.util.Formatter#format(String, Object...)
@@ -90,11 +87,13 @@ public @interface Transactional {
   String exceptionMessage() default "";
 
   /**
-   * If true, the transaction will never committed but rather rolled back, useful for testing purposes.
+   * If true, the transaction will never committed but rather rolled back, useful for testing
+   * purposes.
    *
    * This parameter is false by default.
    *
-   * @return if true, the transaction will never committed but rather rolled back, useful for testing purposes.
+   * @return if true, the transaction will never committed but rather rolled back, useful for
+   * testing purposes.
    */
   boolean rollbackOnly() default false;
 
@@ -103,71 +102,62 @@ public @interface Transactional {
   //
 
   /**
-   * The TxType element of the Transactional annotation indicates whether a bean method
-   * is to be executed within a transaction context.
+   * The TxType element of the Transactional annotation indicates whether a bean method is to be
+   * executed within a transaction context.
    */
   TxType value() default TxType.REQUIRED;
 
   /**
-   * The TxType element of the annotation indicates whether a bean method is to be
-   * executed within a transaction context where the values provide the following
-   * corresponding behavior.
+   * The TxType element of the annotation indicates whether a bean method is to be executed within a
+   * transaction context where the values provide the following corresponding behavior.
    */
   enum TxType {
     /**
-     *  <p>If called outside a transaction context, the interceptor must begin a new
-     *  JTA transaction, the managed bean method execution must then continue
-     *  inside this transaction context, and the transaction must be completed by
-     *  the interceptor.</p>
-     *  <p>If called inside a transaction context, the managed bean
-     *  method execution must then continue inside this transaction context.</p>
+     * <p>If called outside a transaction context, the interceptor must begin a new JTA transaction,
+     * the managed bean method execution must then continue inside this transaction context, and the
+     * transaction must be completed by the interceptor.</p> <p>If called inside a transaction
+     * context, the managed bean method execution must then continue inside this transaction
+     * context.</p>
      */
     REQUIRED,
 
     /**
-     *  <p>If called outside a transaction context, the interceptor must begin a new
-     *  JTA transaction, the managed bean method execution must then continue
-     *  inside this transaction context, and the transaction must be completed by
-     *  the interceptor.</p>
-     *  <p>If called inside a transaction context, the current transaction context must
-     *  be suspended, a new JTA transaction will begin, the managed bean method
-     *  execution must then continue inside this transaction context, the transaction
-     *  must be completed, and the previously suspended transaction must be resumed.</p>
+     * <p>If called outside a transaction context, the interceptor must begin a new JTA transaction,
+     * the managed bean method execution must then continue inside this transaction context, and the
+     * transaction must be completed by the interceptor.</p> <p>If called inside a transaction
+     * context, the current transaction context must be suspended, a new JTA transaction will begin,
+     * the managed bean method execution must then continue inside this transaction context, the
+     * transaction must be completed, and the previously suspended transaction must be resumed.</p>
      */
     REQUIRES_NEW,
 
     /**
-     *  <p>If called outside a transaction context, a TransactionalException with a
-     *  nested TransactionRequiredException must be thrown.</p>
-     *  <p>If called inside a transaction context, managed bean method execution will
-     *  then continue under that context.</p>
+     * <p>If called outside a transaction context, a TransactionalException with a nested
+     * TransactionRequiredException must be thrown.</p> <p>If called inside a transaction context,
+     * managed bean method execution will then continue under that context.</p>
      */
     MANDATORY,
 
     /**
-     *  <p>If called outside a transaction context, managed bean method execution
-     *  must then continue outside a transaction context.</p>
-     *  <p>If called inside a transaction context, the managed bean method execution
-     *  must then continue inside this transaction context.</p>
+     * <p>If called outside a transaction context, managed bean method execution must then continue
+     * outside a transaction context.</p> <p>If called inside a transaction context, the managed
+     * bean method execution must then continue inside this transaction context.</p>
      */
     SUPPORTS,
 
     /**
-     *  <p>If called outside a transaction context, managed bean method execution
-     *  must then continue outside a transaction context.</p>
-     *  <p>If called inside a transaction context, the current transaction context must
-     *  be suspended, the managed bean method execution must then continue
-     *  outside a transaction context, and the previously suspended transaction
-     *  must be resumed by the interceptor that suspended it after the method
-     *  execution has completed.</p>
+     * <p>If called outside a transaction context, managed bean method execution must then continue
+     * outside a transaction context.</p> <p>If called inside a transaction context, the current
+     * transaction context must be suspended, the managed bean method execution must then continue
+     * outside a transaction context, and the previously suspended transaction must be resumed by
+     * the interceptor that suspended it after the method execution has completed.</p>
      */
     NOT_SUPPORTED,
 
     /**
-     *  <p>If called outside a transaction context, managed bean method execution
-     *  must then continue outside a transaction context.</p>
-     *  <p>If called inside a transaction context, a TransactionalException with
-     *  a nested InvalidTransactionException must be thrown.</p>
+     * <p>If called outside a transaction context, managed bean method execution must then continue
+     * outside a transaction context.</p> <p>If called inside a transaction context, a
+     * TransactionalException with a nested InvalidTransactionException must be thrown.</p>
      */
     NEVER
   }

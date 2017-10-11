@@ -17,9 +17,6 @@ package io.sunflower.gizmo.server;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-
-import javax.inject.Singleton;
-
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.gizmo.Context;
@@ -39,43 +36,45 @@ import io.sunflower.gizmo.template.TemplateEngineXml;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.HandlerModule;
+import javax.inject.Singleton;
 
 public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    @Override
-    public void run(T configuration, Environment environment) throws Exception {
+  @Override
+  public void run(T configuration, Environment environment) throws Exception {
 
-        environment.guicey().addModule(new AbstractModule() {
-            @Override
-            protected void configure() {
-                if (configuration.getServerFactory() instanceof GizmoConfiguration) {
-                    bind(GizmoConfiguration.class).toInstance((GizmoConfiguration) configuration.getServerFactory());
-                }
+    environment.guicey().addModule(new AbstractModule() {
+      @Override
+      protected void configure() {
+        if (configuration.getServerFactory() instanceof GizmoConfiguration) {
+          bind(GizmoConfiguration.class)
+              .toInstance((GizmoConfiguration) configuration.getServerFactory());
+        }
 
-                // Routing
-                Multibinder.newSetBinder(binder(), ParamParser.class);
-                bind(RouteBuilder.class).to(RouteBuilderImpl.class);
-                bind(Router.class).to(RouterImpl.class).in(Singleton.class);
+        // Routing
+        Multibinder.newSetBinder(binder(), ParamParser.class);
+        bind(RouteBuilder.class).to(RouteBuilderImpl.class);
+        bind(Router.class).to(RouterImpl.class).in(Singleton.class);
 
-                bind(BodyParserEnginePost.class);
-                bind(BodyParserEngineXml.class);
-                bind(BodyParserEngineJson.class);
+        bind(BodyParserEnginePost.class);
+        bind(BodyParserEngineXml.class);
+        bind(BodyParserEngineJson.class);
 
-                bind(TemplateEngineJson.class);
-                bind(TemplateEngineJsonP.class);
-                bind(TemplateEngineXml.class);
-                bind(TemplateEngineText.class);
+        bind(TemplateEngineJson.class);
+        bind(TemplateEngineJsonP.class);
+        bind(TemplateEngineXml.class);
+        bind(TemplateEngineText.class);
 
-                bind(Context.class).to(UndertowContext.class);
+        bind(Context.class).to(UndertowContext.class);
 
-                //
-                install(new HandlerModule(environment));
-            }
-        });
-    }
+        //
+        install(new HandlerModule(environment));
+      }
+    });
+  }
 
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-    }
+  @Override
+  public void initialize(Bootstrap<?> bootstrap) {
+  }
 
 }

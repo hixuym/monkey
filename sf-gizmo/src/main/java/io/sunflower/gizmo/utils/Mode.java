@@ -17,18 +17,18 @@ package io.sunflower.gizmo.utils;
 
 public enum Mode {
 
-    prod("prod"),
-    dev("dev"),
-    test("test");
+  prod("prod"),
+  dev("dev"),
+  test("test");
 
-    private String mode;
+  private String mode;
 
-    Mode(String mode) {
-        this.mode = mode;
-    }
+  Mode(String mode) {
+    this.mode = mode;
+  }
 
-    public String toString() {
-        return mode;
-    }
+  public String toString() {
+    return mode;
+  }
 
 }

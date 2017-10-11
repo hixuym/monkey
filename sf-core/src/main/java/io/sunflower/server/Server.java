@@ -18,4 +18,5 @@ package io.sunflower.server;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 
 public abstract class Server extends ContainerLifeCycle {
+
 }

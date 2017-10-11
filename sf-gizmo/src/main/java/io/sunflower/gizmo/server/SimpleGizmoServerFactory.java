@@ -17,8 +17,6 @@ package io.sunflower.gizmo.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;
@@ -31,69 +29,69 @@ import io.undertow.server.handlers.PathHandler;
 @JsonTypeName("gizmo-simple")
 public class SimpleGizmoServerFactory extends AbstractGizmoServerFactory {
 
-    private ConnectorFactory connector = HttpConnectorFactory.application();
+  private ConnectorFactory connector = HttpConnectorFactory.application();
 
-    @JsonProperty
-    public ConnectorFactory getConnector() {
-        return connector;
-    }
+  @JsonProperty
+  public ConnectorFactory getConnector() {
+    return connector;
+  }
 
-    @JsonProperty
-    public void setConnector(ConnectorFactory connector) {
-        this.connector = connector;
-    }
+  @JsonProperty
+  public void setConnector(ConnectorFactory connector) {
+    this.connector = connector;
+  }
 
-    @Override
-    public Server buildServer(Environment environment) {
-        Undertow.Builder undertowBuilder = Undertow.builder()
-            // NOTE: should ninja not use equals chars within its cookie values?
-            .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
+  @Override
+  public Server buildServer(Environment environment) {
+    Undertow.Builder undertowBuilder = Undertow.builder()
+        // NOTE: should ninja not use equals chars within its cookie values?
+        .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
 
-        logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
+    logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
 
-        HttpHandler applicationHandler = createApplicationHandler(environment.guicey().injector());
+    HttpHandler applicationHandler = createApplicationHandler(environment.guicey().injector());
 
-        HttpHandler adminHandler = createAdminHandler();
+    HttpHandler adminHandler = createAdminHandler();
 
-        Undertow.ListenerBuilder listenerBuilder = getConnector().build(environment);
+    Undertow.ListenerBuilder listenerBuilder = getConnector().build(environment);
 
-        PathHandler rootHandler = new PathHandler();
+    PathHandler rootHandler = new PathHandler();
 
-        rootHandler.addPrefixPath(getApplicationContextPath(), applicationHandler);
-        rootHandler.addPrefixPath(getAdminContextPath(), adminHandler);
+    rootHandler.addPrefixPath(getApplicationContextPath(), applicationHandler);
+    rootHandler.addPrefixPath(getAdminContextPath(), adminHandler);
 
-        listenerBuilder.setRootHandler(addAccessLogWrapper("access", environment, rootHandler));
+    listenerBuilder.setRootHandler(addAccessLogWrapper("access", environment, rootHandler));
 
-        undertowBuilder.addListener(listenerBuilder);
+    undertowBuilder.addListener(listenerBuilder);
 
-        return new GizmoServer(environment, undertowBuilder.build());
-    }
+    return new GizmoServer(environment, undertowBuilder.build());
+  }
 
-    private String applicationContextPath = "/app";
-    private String adminContextPath = "/admin";
+  private String applicationContextPath = "/app";
+  private String adminContextPath = "/admin";
 
-    @JsonProperty
-    @Override
-    public String getApplicationContextPath() {
-        return applicationContextPath;
-    }
+  @JsonProperty
+  @Override
+  public String getApplicationContextPath() {
+    return applicationContextPath;
+  }
 
-    @JsonProperty
-    @Override
-    public void setApplicationContextPath(String applicationContextPath) {
-        this.applicationContextPath = applicationContextPath;
-    }
+  @JsonProperty
+  @Override
+  public void setApplicationContextPath(String applicationContextPath) {
+    this.applicationContextPath = applicationContextPath;
+  }
 
-    @JsonProperty
-    @Override
-    public String getAdminContextPath() {
-        return adminContextPath;
-    }
+  @JsonProperty
+  @Override
+  public String getAdminContextPath() {
+    return adminContextPath;
+  }
 
-    @JsonProperty
-    @Override
-    public void setAdminContextPath(String adminContextPath) {
-        this.adminContextPath = adminContextPath;
-    }
+  @JsonProperty
+  @Override
+  public void setAdminContextPath(String adminContextPath) {
+    this.adminContextPath = adminContextPath;
+  }
 
 }

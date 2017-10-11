@@ -15,61 +15,59 @@
 
 package io.sunflower.gizmo.template;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Map;
-import java.util.TreeMap;
-
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.utils.ResponseStreams;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.utils.ResponseStreams;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Map;
+import java.util.TreeMap;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests for text/plain render.
  */
 public class TemplateEngineTextTest {
 
-    Context context;
-    ResponseStreams responseStreams;
-    Result result;
-    StringWriter writer;
+  Context context;
+  ResponseStreams responseStreams;
+  Result result;
+  StringWriter writer;
 
-    @Before
-    public void setUp() throws IOException {
-        context = mock(Context.class);
-        responseStreams = mock(ResponseStreams.class);
-        result = mock(Result.class);
+  @Before
+  public void setUp() throws IOException {
+    context = mock(Context.class);
+    responseStreams = mock(ResponseStreams.class);
+    result = mock(Result.class);
 
-        Map<String, String> map = new TreeMap<String, String>() {
-            {
-                put("apples", "oranges");
-                put("cars", "trucks");
-            }
-        };
+    Map<String, String> map = new TreeMap<String, String>() {
+      {
+        put("apples", "oranges");
+        put("cars", "trucks");
+      }
+    };
 
-        when(result.getRenderable()).thenReturn(map);
-        writer = new StringWriter();
-        when(context.finalizeHeaders(result)).thenReturn(responseStreams);
-        when(responseStreams.getWriter()).thenReturn(writer);
-    }
+    when(result.getRenderable()).thenReturn(map);
+    writer = new StringWriter();
+    when(context.finalizeHeaders(result)).thenReturn(responseStreams);
+    when(responseStreams.getWriter()).thenReturn(writer);
+  }
 
-    @Test
-    public void testTextRendering() throws IOException {
+  @Test
+  public void testTextRendering() throws IOException {
 
-        TemplateEngineText textEngine = new TemplateEngineText();
-        textEngine.invoke(context, result);
+    TemplateEngineText textEngine = new TemplateEngineText();
+    textEngine.invoke(context, result);
 
-        String text = writer.toString();
-        assertEquals("{apples=oranges, cars=trucks}", text);
-        verify(context).finalizeHeaders(result);
-    }
+    String text = writer.toString();
+    assertEquals("{apples=oranges, cars=trucks}", text);
+    verify(context).finalizeHeaders(result);
+  }
 
 }

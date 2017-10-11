@@ -14,13 +14,11 @@
  */
 package io.sunflower.gizmo.template;
 
+import static org.junit.Assert.assertThat;
+
 import freemarker.template.SimpleDate;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
-
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -31,75 +29,75 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static org.junit.Assert.assertThat;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
 
 /**
  * @author James Moger
  */
 public class TemplateEngineFreemarkerPrettyTimeMethodTest {
 
-    Map<Locale, String> expections = new HashMap<Locale, String>() {
+  Map<Locale, String> expections = new HashMap<Locale, String>() {
 
-        private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-        {
-            put(Locale.ENGLISH, "1 day ago");
-            put(Locale.GERMAN, "vor 1 Tag");
-            put(Locale.FRENCH, "il y a 1 jour");
-            put(Locale.ITALIAN, "1 giorno fa");
-            put(Locale.CHINESE, "1 天 前");
-            put(Locale.JAPANESE, "1日前");
-            put(Locale.KOREAN, "1일 전");
-        }
-    };
-
-    @Test
-    public void testThatJavaUtilDateWorks() throws Exception {
-
-        test(new SimpleDate(new java.util.Date(getYesterdaysMillis()), SimpleDate.DATE));
+    {
+      put(Locale.ENGLISH, "1 day ago");
+      put(Locale.GERMAN, "vor 1 Tag");
+      put(Locale.FRENCH, "il y a 1 jour");
+      put(Locale.ITALIAN, "1 giorno fa");
+      put(Locale.CHINESE, "1 天 前");
+      put(Locale.JAPANESE, "1日前");
+      put(Locale.KOREAN, "1일 전");
     }
+  };
 
-    @Test
-    public void testThatJavaSqlDateWorks() throws Exception {
+  @Test
+  public void testThatJavaUtilDateWorks() throws Exception {
 
-        test(new SimpleDate(new Date(getYesterdaysMillis())));
+    test(new SimpleDate(new java.util.Date(getYesterdaysMillis()), SimpleDate.DATE));
+  }
+
+  @Test
+  public void testThatJavaSqlDateWorks() throws Exception {
+
+    test(new SimpleDate(new Date(getYesterdaysMillis())));
+  }
+
+  @Test
+  public void testThatJavaSqlTimeWorks() throws Exception {
+
+    test(new SimpleDate(new Time(getYesterdaysMillis())));
+  }
+
+  @Test
+  public void testThatJavaSqlTimestampWorks() throws Exception {
+
+    test(new SimpleDate(new Timestamp(getYesterdaysMillis())));
+  }
+
+  private long getYesterdaysMillis() {
+    // return yesterday => "25" works even for summertime
+    return Instant.now().minus(25, ChronoUnit.HOURS).toEpochMilli();
+  }
+
+  public void test(SimpleDate simpleDate) throws Exception {
+
+    for (Map.Entry<Locale, String> entry : expections.entrySet()) {
+
+      Locale locale = entry.getKey();
+      String expected = entry.getValue();
+
+      TemplateEngineFreemarkerPrettyTimeMethod method = new TemplateEngineFreemarkerPrettyTimeMethod(
+          locale);
+
+      List args = new ArrayList();
+      args.add(simpleDate);
+
+      TemplateModel returnValue = method.exec(args);
+
+      assertThat(((SimpleScalar) returnValue).getAsString(),
+          CoreMatchers.equalTo(expected));
     }
-
-    @Test
-    public void testThatJavaSqlTimeWorks() throws Exception {
-
-        test(new SimpleDate(new Time(getYesterdaysMillis())));
-    }
-
-    @Test
-    public void testThatJavaSqlTimestampWorks() throws Exception {
-
-        test(new SimpleDate(new Timestamp(getYesterdaysMillis())));
-    }
-
-    private long getYesterdaysMillis() {
-        // return yesterday => "25" works even for summertime
-        return Instant.now().minus(25, ChronoUnit.HOURS).toEpochMilli();
-    }
-
-    public void test(SimpleDate simpleDate) throws Exception {
-
-        for (Map.Entry<Locale, String> entry : expections.entrySet()) {
-
-            Locale locale = entry.getKey();
-            String expected = entry.getValue();
-
-            TemplateEngineFreemarkerPrettyTimeMethod method = new TemplateEngineFreemarkerPrettyTimeMethod(
-                locale);
-
-            List args = new ArrayList();
-            args.add(simpleDate);
-
-            TemplateModel returnValue = method.exec(args);
-
-            assertThat(((SimpleScalar) returnValue).getAsString(),
-                CoreMatchers.equalTo(expected));
-        }
-    }
+  }
 }

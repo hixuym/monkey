@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface SpiMeta {
-    String name() default "";
+
+  String name() default "";
 }

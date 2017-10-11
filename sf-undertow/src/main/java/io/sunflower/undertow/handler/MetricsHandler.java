@@ -15,85 +15,84 @@
 
 package io.sunflower.undertow.handler;
 
-import com.google.common.base.Strings;
+import static io.sunflower.undertow.handler.Handlers.param;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-
-import java.util.Deque;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import com.google.common.base.Strings;
 import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
-
-import static io.sunflower.undertow.handler.Handlers.param;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class MetricsHandler implements HttpHandler {
 
-    private static final String CONTENT_TYPE = "application/json";
+  private static final String CONTENT_TYPE = "application/json";
 
-    private static final String RATE_UNIT = "rateUnit";
-    private static final String DURATION_UNIT = "durationUnit";
-    private static final String SHOW_SAMPLES = "showSamples";
-    private static final String ALLOWED_ORIGIN = "allowedOrigin";
+  private static final String RATE_UNIT = "rateUnit";
+  private static final String DURATION_UNIT = "durationUnit";
+  private static final String SHOW_SAMPLES = "showSamples";
+  private static final String ALLOWED_ORIGIN = "allowedOrigin";
 
-    private static final String jsonpParamName = "jsonpCallback";
+  private static final String jsonpParamName = "jsonpCallback";
 
-    private final Environment environment;
+  private final Environment environment;
 
-    private transient MetricRegistry registry;
+  private transient MetricRegistry registry;
 
-    @Inject
-    public MetricsHandler(Environment environment) {
-        this.environment = environment;
-        this.registry = environment.metrics();
+  @Inject
+  public MetricsHandler(Environment environment) {
+    this.environment = environment;
+    this.registry = environment.metrics();
+  }
+
+  @Override
+  public void handleRequest(HttpServerExchange exchange) throws Exception {
+    String allowedOrigin = param(exchange, ALLOWED_ORIGIN);
+
+    if (allowedOrigin != null) {
+      exchange.getResponseHeaders()
+          .put(new HttpString("Access-Control-Allow-Origin"), allowedOrigin);
     }
 
-    @Override
-    public void handleRequest(HttpServerExchange exchange) throws Exception {
-        String allowedOrigin = param(exchange, ALLOWED_ORIGIN);
+    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
+    exchange.getResponseHeaders().put(Headers.CACHE_CONTROL, "must-revalidate,no-cache,no-store");
 
-        if (allowedOrigin != null) {
-            exchange.getResponseHeaders().put(new HttpString("Access-Control-Allow-Origin"), allowedOrigin);
-        }
+    final TimeUnit rateUnit = parseTimeUnit(param(exchange, RATE_UNIT), TimeUnit.SECONDS);
+    final TimeUnit durationUnit = parseTimeUnit(param(exchange, DURATION_UNIT), TimeUnit.SECONDS);
+    final boolean showSamples = Boolean.parseBoolean(param(exchange, SHOW_SAMPLES));
 
-        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
-        exchange.getResponseHeaders().put(Headers.CACHE_CONTROL, "must-revalidate,no-cache,no-store");
+    ObjectMapper mapper = environment.getObjectMapper()
+        .registerModule(new MetricsModule(rateUnit, durationUnit, showSamples));
 
-        final TimeUnit rateUnit = parseTimeUnit(param(exchange, RATE_UNIT), TimeUnit.SECONDS);
-        final TimeUnit durationUnit = parseTimeUnit(param(exchange, DURATION_UNIT), TimeUnit.SECONDS);
-        final boolean showSamples = Boolean.parseBoolean(param(exchange, SHOW_SAMPLES));
+    exchange.setStatusCode(StatusCodes.OK);
 
-        ObjectMapper mapper = environment.getObjectMapper().registerModule(new MetricsModule(rateUnit, durationUnit, showSamples));
+    String jsonp = param(exchange, jsonpParamName);
 
-        exchange.setStatusCode(StatusCodes.OK);
-
-        String jsonp = param(exchange, jsonpParamName);
-
-        if (Strings.isNullOrEmpty(jsonp)) {
-            exchange.getResponseSender().send(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(registry));
-        } else {
-            exchange.getResponseSender()
-                .send(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(new JSONPObject(jsonp, registry)));
-        }
+    if (Strings.isNullOrEmpty(jsonp)) {
+      exchange.getResponseSender()
+          .send(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(registry));
+    } else {
+      exchange.getResponseSender()
+          .send(mapper.writerWithDefaultPrettyPrinter()
+              .writeValueAsString(new JSONPObject(jsonp, registry)));
     }
+  }
 
-    private TimeUnit parseTimeUnit(String value, TimeUnit defaultValue) {
-        try {
-            return TimeUnit.valueOf(String.valueOf(value).toUpperCase(Locale.US));
-        } catch (IllegalArgumentException e) {
-            return defaultValue;
-        }
+  private TimeUnit parseTimeUnit(String value, TimeUnit defaultValue) {
+    try {
+      return TimeUnit.valueOf(String.valueOf(value).toUpperCase(Locale.US));
+    } catch (IllegalArgumentException e) {
+      return defaultValue;
     }
+  }
 }

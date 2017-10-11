@@ -10,17 +10,17 @@ import ch.qos.logback.core.filter.Filter;
  */
 public class ThresholdLevelFilterFactory implements LevelFilterFactory<ILoggingEvent> {
 
-    /**
-     * Creates and starts a {@link Filter} for the given threshold.
-     *
-     * @param threshold The minimum event level for this filter.
-     * @return a new, started {@link Filter}
-     */
-    @Override
-    public Filter<ILoggingEvent> build(Level threshold) {
-        final ThresholdFilter filter = new ThresholdFilter();
-        filter.setLevel(threshold.toString());
-        filter.start();
-        return filter;
-    }
+  /**
+   * Creates and starts a {@link Filter} for the given threshold.
+   *
+   * @param threshold The minimum event level for this filter.
+   * @return a new, started {@link Filter}
+   */
+  @Override
+  public Filter<ILoggingEvent> build(Level threshold) {
+    final ThresholdFilter filter = new ThresholdFilter();
+    filter.setLevel(threshold.toString());
+    filter.start();
+    return filter;
+  }
 }

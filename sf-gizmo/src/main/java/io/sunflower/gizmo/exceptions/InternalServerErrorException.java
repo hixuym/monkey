@@ -1,14 +1,15 @@
 /**
  * Copyright (C) 2012-2017 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package io.sunflower.gizmo.exceptions;
@@ -26,21 +27,21 @@ import io.sunflower.gizmo.Result;
  */
 public class InternalServerErrorException extends GizmoException {
 
-    final static String DEFAULT_MESSAGE = "That's an internal server error and all we know.";
+  final static String DEFAULT_MESSAGE = "That's an internal server error and all we know.";
 
-    public InternalServerErrorException() {
-        super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE);
-    }
+  public InternalServerErrorException() {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE);
+  }
 
-    public InternalServerErrorException(String message) {
-        super(Result.SC_500_INTERNAL_SERVER_ERROR, message);
-    }
+  public InternalServerErrorException(String message) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, message);
+  }
 
-    public InternalServerErrorException(String message, Throwable cause) {
-        super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
-    }
+  public InternalServerErrorException(String message, Throwable cause) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
+  }
 
-    public InternalServerErrorException(Throwable cause) {
-        super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE, cause);
-    }
+  public InternalServerErrorException(Throwable cause) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE, cause);
+  }
 }

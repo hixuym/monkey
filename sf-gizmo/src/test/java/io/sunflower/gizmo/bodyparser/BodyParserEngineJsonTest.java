@@ -15,16 +15,14 @@
 
 package io.sunflower.gizmo.bodyparser;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.exceptions.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,13 +30,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.exceptions.BadRequestException;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit tests for the Json body parser.
@@ -48,201 +45,206 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class BodyParserEngineJsonTest {
 
-    private static final String DATA_FIRSTNAME = "John";
-    private static final String DATA_LASTNAME = "Do";
-    private static final Integer DATA_BIRTHYEAR = 1664;
-    private static final String DATA_LASTSEEN = "2015-03-15 15:45:00";
-    private static final String PARSER_DATEFORMAT = "yyyy-MM-dd hh:mm:ss";
-    private static final String PARSER_DATETZ = "GMT";
+  private static final String DATA_FIRSTNAME = "John";
+  private static final String DATA_LASTNAME = "Do";
+  private static final Integer DATA_BIRTHYEAR = 1664;
+  private static final String DATA_LASTSEEN = "2015-03-15 15:45:00";
+  private static final String PARSER_DATEFORMAT = "yyyy-MM-dd hh:mm:ss";
+  private static final String PARSER_DATETZ = "GMT";
 
-    @Mock
-    private Context context;
+  @Mock
+  private Context context;
 
-    @Test
-    public void testValidJsonBody() {
-        final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"}",
+  @Test
+  public void testValidJsonBody() {
+    final String jsonDocument = String.format(
+        "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"}",
+        BodyParserEngineJsonTest.DATA_FIRSTNAME,
+        BodyParserEngineJsonTest.DATA_LASTNAME,
+        BodyParserEngineJsonTest.DATA_BIRTHYEAR,
+        BodyParserEngineJsonTest.DATA_LASTSEEN);
+    final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
+    final ObjectMapper jsonObjMapper = new ObjectMapper();
+    final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
+    SimpleTestForm testForm = null;
+
+    try {
+      Mockito.when(context.getInputStream()).thenReturn(is);
+    } catch (IOException ignore) {
+    }
+    try {
+      testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
+    } catch (BadRequestException ignore) {
+    } finally {
+      try {
+        is.close();
+      } catch (IOException ignore) {
+      }
+    }
+
+    final Calendar cal = Calendar.getInstance();
+    final SimpleDateFormat dateFormat = new SimpleDateFormat(
+        BodyParserEngineJsonTest.PARSER_DATEFORMAT);
+    dateFormat.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
+    try {
+      cal.setTime(dateFormat.parse(BodyParserEngineJsonTest.DATA_LASTSEEN));
+    } catch (ParseException ignore) {
+    }
+    cal.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
+
+    assertTrue(testForm != null);
+    assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
+    assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
+    assertThat(testForm.birthYear, CoreMatchers.equalTo(BodyParserEngineJsonTest.DATA_BIRTHYEAR));
+    assertTrue(testForm.lastSeen != null);
+    assertTrue(testForm.lastSeen.compareTo(cal) == 0);
+  }
+
+  @Test
+  public void testEmptyJsonBody() {
+    final String jsonDocument = "";
+    final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
+    final ObjectMapper jsonObjMapper = new ObjectMapper();
+    final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
+    boolean badRequestThrown = false;
+
+    try {
+      Mockito.when(context.getInputStream()).thenReturn(is);
+    } catch (IOException ignore) {
+    }
+    try {
+      bodyParserEngineJson.invoke(context, SimpleTestForm.class);
+    } catch (BadRequestException ignore) {
+      badRequestThrown = true;
+    } finally {
+      try {
+        is.close();
+      } catch (IOException ignore) {
+      }
+    }
+
+    assertTrue(badRequestThrown);
+  }
+
+  @Test
+  public void testInvalidJsonBody() {
+    final String jsonDocument = String
+        .format("{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"",
             BodyParserEngineJsonTest.DATA_FIRSTNAME,
             BodyParserEngineJsonTest.DATA_LASTNAME,
             BodyParserEngineJsonTest.DATA_BIRTHYEAR,
             BodyParserEngineJsonTest.DATA_LASTSEEN);
-        final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
-        final ObjectMapper jsonObjMapper = new ObjectMapper();
-        final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
-        SimpleTestForm testForm = null;
+    final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
+    final ObjectMapper jsonObjMapper = new ObjectMapper();
+    final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
+    boolean badRequestThrown = false;
 
-        try {
-            Mockito.when(context.getInputStream()).thenReturn(is);
-        } catch (IOException ignore) {
-        }
-        try {
-            testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
-        } catch (BadRequestException ignore) {
-        } finally {
-            try {
-                is.close();
-            } catch (IOException ignore) {
-            }
-        }
-
-        final Calendar cal = Calendar.getInstance();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(BodyParserEngineJsonTest.PARSER_DATEFORMAT);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
-        try {
-            cal.setTime(dateFormat.parse(BodyParserEngineJsonTest.DATA_LASTSEEN));
-        } catch (ParseException ignore) {
-        }
-        cal.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
-
-        assertTrue(testForm != null);
-        assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
-        assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
-        assertThat(testForm.birthYear, CoreMatchers.equalTo(BodyParserEngineJsonTest.DATA_BIRTHYEAR));
-        assertTrue(testForm.lastSeen != null);
-        assertTrue(testForm.lastSeen.compareTo(cal) == 0);
+    try {
+      Mockito.when(context.getInputStream()).thenReturn(is);
+    } catch (IOException ignore) {
+    }
+    try {
+      bodyParserEngineJson.invoke(context, SimpleTestForm.class);
+    } catch (BadRequestException ignore) {
+      badRequestThrown = true;
+    } finally {
+      try {
+        is.close();
+      } catch (IOException ignore) {
+      }
     }
 
-    @Test
-    public void testEmptyJsonBody() {
-        final String jsonDocument = "";
-        final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
-        final ObjectMapper jsonObjMapper = new ObjectMapper();
-        final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
-        boolean badRequestThrown = false;
+    assertTrue(badRequestThrown);
+  }
 
-        try {
-            Mockito.when(context.getInputStream()).thenReturn(is);
-        } catch (IOException ignore) {
-        }
-        try {
-            bodyParserEngineJson.invoke(context, SimpleTestForm.class);
-        } catch (BadRequestException ignore) {
-            badRequestThrown = true;
-        } finally {
-            try {
-                is.close();
-            } catch (IOException ignore) {
-            }
-        }
+  @Test
+  public void testJsonBodyWithFullSpacesAndEndOfLines() {
+    final String jsonDocument = String.format(
+        "  \n\n\n    {  \n    \"firstName\"  \n  :   \"%s\", \"lastName\"\n : \"%s\", \"birthYear\":%d,\n \"lastSeen\":\"%s\"}   ",
+        BodyParserEngineJsonTest.DATA_FIRSTNAME,
+        BodyParserEngineJsonTest.DATA_LASTNAME,
+        BodyParserEngineJsonTest.DATA_BIRTHYEAR,
+        BodyParserEngineJsonTest.DATA_LASTSEEN);
+    final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
+    final ObjectMapper jsonObjMapper = new ObjectMapper();
+    final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
+    SimpleTestForm testForm = null;
 
-        assertTrue(badRequestThrown);
+    try {
+      Mockito.when(context.getInputStream()).thenReturn(is);
+    } catch (IOException ignore) {
+    }
+    try {
+      testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
+    } catch (BadRequestException ignore) {
+    } finally {
+      try {
+        is.close();
+      } catch (IOException ignore) {
+      }
     }
 
-    @Test
-    public void testInvalidJsonBody() {
-        final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\", \"birthYear\":%d, \"lastSeen\":\"%s\"",
-            BodyParserEngineJsonTest.DATA_FIRSTNAME,
-            BodyParserEngineJsonTest.DATA_LASTNAME,
-            BodyParserEngineJsonTest.DATA_BIRTHYEAR,
-            BodyParserEngineJsonTest.DATA_LASTSEEN);
-        final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
-        final ObjectMapper jsonObjMapper = new ObjectMapper();
-        final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
-        boolean badRequestThrown = false;
+    final Calendar cal = Calendar.getInstance();
+    final SimpleDateFormat dateFormat = new SimpleDateFormat(
+        BodyParserEngineJsonTest.PARSER_DATEFORMAT);
+    dateFormat.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
+    try {
+      cal.setTime(dateFormat.parse(BodyParserEngineJsonTest.DATA_LASTSEEN));
+    } catch (ParseException ignore) {
+    }
+    cal.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
 
-        try {
-            Mockito.when(context.getInputStream()).thenReturn(is);
-        } catch (IOException ignore) {
-        }
-        try {
-            bodyParserEngineJson.invoke(context, SimpleTestForm.class);
-        } catch (BadRequestException ignore) {
-            badRequestThrown = true;
-        } finally {
-            try {
-                is.close();
-            } catch (IOException ignore) {
-            }
-        }
+    assertTrue(testForm != null);
+    assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
+    assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
+    assertThat(testForm.birthYear, CoreMatchers.equalTo(BodyParserEngineJsonTest.DATA_BIRTHYEAR));
+    assertTrue(testForm.lastSeen != null);
+    assertTrue(testForm.lastSeen.compareTo(cal) == 0);
+  }
 
-        assertTrue(badRequestThrown);
+  @Test
+  public void testJsonBodyWithMissingVariables() {
+    final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\"}",
+        BodyParserEngineJsonTest.DATA_FIRSTNAME,
+        BodyParserEngineJsonTest.DATA_LASTNAME);
+    final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
+    final ObjectMapper jsonObjMapper = new ObjectMapper();
+    final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
+    SimpleTestForm testForm = null;
+
+    try {
+      Mockito.when(context.getInputStream()).thenReturn(is);
+    } catch (IOException ignore) {
+    }
+    try {
+      testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
+    } catch (BadRequestException ignore) {
+    } finally {
+      try {
+        is.close();
+      } catch (IOException ignore) {
+      }
     }
 
-    @Test
-    public void testJsonBodyWithFullSpacesAndEndOfLines() {
-        final String jsonDocument = String.format("  \n\n\n    {  \n    \"firstName\"  \n  :   \"%s\", \"lastName\"\n : \"%s\", \"birthYear\":%d,\n \"lastSeen\":\"%s\"}   ",
-            BodyParserEngineJsonTest.DATA_FIRSTNAME,
-            BodyParserEngineJsonTest.DATA_LASTNAME,
-            BodyParserEngineJsonTest.DATA_BIRTHYEAR,
-            BodyParserEngineJsonTest.DATA_LASTSEEN);
-        final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
-        final ObjectMapper jsonObjMapper = new ObjectMapper();
-        final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
-        SimpleTestForm testForm = null;
+    assertTrue(testForm != null);
+    assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
+    assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
+    assertTrue(testForm.birthYear == null);
+    assertTrue(testForm.lastSeen == null);
+  }
 
-        try {
-            Mockito.when(context.getInputStream()).thenReturn(is);
-        } catch (IOException ignore) {
-        }
-        try {
-            testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
-        } catch (BadRequestException ignore) {
-        } finally {
-            try {
-                is.close();
-            } catch (IOException ignore) {
-            }
-        }
+  /**
+   * Simple form used during unit tests.
+   *
+   * @author Thibault Meyer
+   */
+  private static final class SimpleTestForm {
 
-        final Calendar cal = Calendar.getInstance();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(BodyParserEngineJsonTest.PARSER_DATEFORMAT);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
-        try {
-            cal.setTime(dateFormat.parse(BodyParserEngineJsonTest.DATA_LASTSEEN));
-        } catch (ParseException ignore) {
-        }
-        cal.setTimeZone(TimeZone.getTimeZone(BodyParserEngineJsonTest.PARSER_DATETZ));
+    public String firstName;
+    public String lastName;
+    public Integer birthYear;
 
-        assertTrue(testForm != null);
-        assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
-        assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
-        assertThat(testForm.birthYear, CoreMatchers.equalTo(BodyParserEngineJsonTest.DATA_BIRTHYEAR));
-        assertTrue(testForm.lastSeen != null);
-        assertTrue(testForm.lastSeen.compareTo(cal) == 0);
-    }
-
-    @Test
-    public void testJsonBodyWithMissingVariables() {
-        final String jsonDocument = String.format("{\"firstName\":\"%s\", \"lastName\":\"%s\"}",
-            BodyParserEngineJsonTest.DATA_FIRSTNAME,
-            BodyParserEngineJsonTest.DATA_LASTNAME);
-        final InputStream is = new ByteArrayInputStream(jsonDocument.getBytes());
-        final ObjectMapper jsonObjMapper = new ObjectMapper();
-        final BodyParserEngineJson bodyParserEngineJson = new BodyParserEngineJson(jsonObjMapper);
-        SimpleTestForm testForm = null;
-
-        try {
-            Mockito.when(context.getInputStream()).thenReturn(is);
-        } catch (IOException ignore) {
-        }
-        try {
-            testForm = bodyParserEngineJson.invoke(context, SimpleTestForm.class);
-        } catch (BadRequestException ignore) {
-        } finally {
-            try {
-                is.close();
-            } catch (IOException ignore) {
-            }
-        }
-
-        assertTrue(testForm != null);
-        assertThat(testForm.firstName, equalTo(BodyParserEngineJsonTest.DATA_FIRSTNAME));
-        assertThat(testForm.lastName, equalTo(BodyParserEngineJsonTest.DATA_LASTNAME));
-        assertTrue(testForm.birthYear == null);
-        assertTrue(testForm.lastSeen == null);
-    }
-
-    /**
-     * Simple form used during unit tests.
-     *
-     * @author Thibault Meyer
-     */
-    private static final class SimpleTestForm {
-
-        public String firstName;
-        public String lastName;
-        public Integer birthYear;
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = BodyParserEngineJsonTest.PARSER_DATEFORMAT, timezone = BodyParserEngineJsonTest.PARSER_DATETZ)
-        public Calendar lastSeen;
-    }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = BodyParserEngineJsonTest.PARSER_DATEFORMAT, timezone = BodyParserEngineJsonTest.PARSER_DATETZ)
+    public Calendar lastSeen;
+  }
 }

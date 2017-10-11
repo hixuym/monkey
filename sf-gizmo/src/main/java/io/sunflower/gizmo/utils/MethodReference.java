@@ -19,54 +19,55 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * Compound key of a Class and the name of a method in it. Primarily used for reverse route lookups.
+ * Compound key of a Class and the name of a method in it. Primarily used for reverse route
+ * lookups.
  */
 public class MethodReference {
 
-    private final Class declaringClass;
-    private final String methodName;
+  private final Class declaringClass;
+  private final String methodName;
 
-    public MethodReference(Class declaringClass, String methodName) {
-        this.declaringClass = declaringClass;
-        this.methodName = methodName;
-    }
+  public MethodReference(Class declaringClass, String methodName) {
+    this.declaringClass = declaringClass;
+    this.methodName = methodName;
+  }
 
-    public MethodReference(Method method) {
-        this(method.getDeclaringClass(), method.getName());
-    }
+  public MethodReference(Method method) {
+    this(method.getDeclaringClass(), method.getName());
+  }
 
-    public Class getDeclaringClass() {
-        return declaringClass;
-    }
+  public Class getDeclaringClass() {
+    return declaringClass;
+  }
 
-    public String getMethodName() {
-        return methodName;
-    }
+  public String getMethodName() {
+    return methodName;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.declaringClass);
-        hash = 83 * hash + Objects.hashCode(this.methodName);
-        return hash;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 83 * hash + Objects.hashCode(this.declaringClass);
+    hash = 83 * hash + Objects.hashCode(this.methodName);
+    return hash;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final MethodReference other = (MethodReference) obj;
-        if (!Objects.equals(this.methodName, other.methodName)) {
-            return false;
-        }
-        return Objects.equals(this.declaringClass, other.declaringClass);
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final MethodReference other = (MethodReference) obj;
+    if (!Objects.equals(this.methodName, other.methodName)) {
+      return false;
+    }
+    return Objects.equals(this.declaringClass, other.declaringClass);
+  }
 
 }

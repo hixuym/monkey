@@ -20,13 +20,13 @@ import io.sunflower.db.DataSourceFactory;
 
 public class TestMigrationConfiguration extends Configuration {
 
-    private DataSourceFactory dataSource;
+  private DataSourceFactory dataSource;
 
-    public TestMigrationConfiguration(DataSourceFactory dataSource) {
-        this.dataSource = dataSource;
-    }
+  public TestMigrationConfiguration(DataSourceFactory dataSource) {
+    this.dataSource = dataSource;
+  }
 
-    public DataSourceFactory getDataSource() {
-        return dataSource;
-    }
+  public DataSourceFactory getDataSource() {
+    return dataSource;
+  }
 }

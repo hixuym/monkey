@@ -14,250 +14,328 @@
  */
 package io.sunflower.gizmo.params;
 
+import static org.junit.Assert.assertThat;
+
+import io.sunflower.gizmo.validation.Validation;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import io.sunflower.gizmo.validation.Validation;
-
-import static org.junit.Assert.assertThat;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ParamParsersTest {
 
-    @Mock
-    Validation validation;
+  @Mock
+  Validation validation;
 
-    @Test
-    public void testBooleanParamParser() {
-        ParamParsers.BooleanParamParser booleanParamParser = new ParamParsers.BooleanParamParser();
+  @Test
+  public void testBooleanParamParser() {
+    ParamParsers.BooleanParamParser booleanParamParser = new ParamParsers.BooleanParamParser();
 
-        assertThat(booleanParamParser.getParsedType(), Matchers.is(Boolean.class));
+    assertThat(booleanParamParser.getParsedType(), Matchers.is(Boolean.class));
 
-        assertThat(booleanParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(booleanParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
-        assertThat(booleanParamParser.parseParameter("param1", "123123", validation), Matchers.nullValue());
-        assertThat(booleanParamParser.parseParameter("param1", "-", validation), Matchers.nullValue());
-        assertThat(booleanParamParser.parseParameter("param1", "+", validation), Matchers.nullValue());
+    assertThat(booleanParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(booleanParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
+    assertThat(booleanParamParser.parseParameter("param1", "123123", validation),
+        Matchers.nullValue());
+    assertThat(booleanParamParser.parseParameter("param1", "-", validation), Matchers.nullValue());
+    assertThat(booleanParamParser.parseParameter("param1", "+", validation), Matchers.nullValue());
 
-        assertThat(booleanParamParser.parseParameter("param1", "true", validation), Matchers.is(Boolean.TRUE));
-        assertThat(booleanParamParser.parseParameter("param1", "TRUE", validation), Matchers.is(Boolean.TRUE));
+    assertThat(booleanParamParser.parseParameter("param1", "true", validation),
+        Matchers.is(Boolean.TRUE));
+    assertThat(booleanParamParser.parseParameter("param1", "TRUE", validation),
+        Matchers.is(Boolean.TRUE));
 
-        assertThat(booleanParamParser.parseParameter("param1", "false", validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "FALSE", validation), Matchers.is(Boolean.FALSE));
-    }
+    assertThat(booleanParamParser.parseParameter("param1", "false", validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "FALSE", validation),
+        Matchers.is(Boolean.FALSE));
+  }
 
-    @Test
-    public void testPrimitiveBooleanParamParser() {
-        ParamParsers.PrimitiveBooleanParamParser booleanParamParser = new ParamParsers.PrimitiveBooleanParamParser();
+  @Test
+  public void testPrimitiveBooleanParamParser() {
+    ParamParsers.PrimitiveBooleanParamParser booleanParamParser = new ParamParsers.PrimitiveBooleanParamParser();
 
-        assertThat(booleanParamParser.getParsedType(), Matchers.is(Boolean.class));
+    assertThat(booleanParamParser.getParsedType(), Matchers.is(Boolean.class));
 
-        // No null for primitives
-        assertThat(booleanParamParser.parseParameter("param1", null, validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "123123", validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "-", validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "+", validation), Matchers.is(Boolean.FALSE));
+    // No null for primitives
+    assertThat(booleanParamParser.parseParameter("param1", null, validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "123123", validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "-", validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "+", validation),
+        Matchers.is(Boolean.FALSE));
 
-        assertThat(booleanParamParser.parseParameter("param1", "true", validation), Matchers.is(Boolean.TRUE));
-        assertThat(booleanParamParser.parseParameter("param1", "TRUE", validation), Matchers.is(Boolean.TRUE));
+    assertThat(booleanParamParser.parseParameter("param1", "true", validation),
+        Matchers.is(Boolean.TRUE));
+    assertThat(booleanParamParser.parseParameter("param1", "TRUE", validation),
+        Matchers.is(Boolean.TRUE));
 
-        assertThat(booleanParamParser.parseParameter("param1", "false", validation), Matchers.is(Boolean.FALSE));
-        assertThat(booleanParamParser.parseParameter("param1", "FALSE", validation), Matchers.is(Boolean.FALSE));
-    }
+    assertThat(booleanParamParser.parseParameter("param1", "false", validation),
+        Matchers.is(Boolean.FALSE));
+    assertThat(booleanParamParser.parseParameter("param1", "FALSE", validation),
+        Matchers.is(Boolean.FALSE));
+  }
 
-    @Test
-    public void testStringParamParser() {
-        ParamParsers.StringParamParser stringParamParser = new ParamParsers.StringParamParser();
+  @Test
+  public void testStringParamParser() {
+    ParamParsers.StringParamParser stringParamParser = new ParamParsers.StringParamParser();
 
-        assertThat(stringParamParser.getParsedType(), Matchers.is(String.class));
+    assertThat(stringParamParser.getParsedType(), Matchers.is(String.class));
 
-        assertThat(stringParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(stringParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(stringParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is(new String("asdfasdf")));
-    }
+    assertThat(stringParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(stringParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(stringParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is(new String("asdfasdf")));
+  }
 
-    @Test
-    public void testIntegerParamParser() {
-        ParamParsers.IntegerParamParser integerParamParser = new ParamParsers.IntegerParamParser();
+  @Test
+  public void testIntegerParamParser() {
+    ParamParsers.IntegerParamParser integerParamParser = new ParamParsers.IntegerParamParser();
 
-        assertThat(integerParamParser.getParsedType(), Matchers.is(Integer.class));
+    assertThat(integerParamParser.getParsedType(), Matchers.is(Integer.class));
 
-        assertThat(integerParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(integerParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(integerParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
+    assertThat(integerParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(integerParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(integerParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
 
-        assertThat(integerParamParser.parseParameter("param1", "0", validation), Matchers.is(new Integer(0)));
-        assertThat(integerParamParser.parseParameter("param1", "000", validation), Matchers.is(new Integer(0)));
-        assertThat(integerParamParser.parseParameter("param1", "123", validation), Matchers.is(new Integer(123)));
-        assertThat(integerParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Integer(-123)));
-    }
+    assertThat(integerParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Integer(0)));
+    assertThat(integerParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Integer(0)));
+    assertThat(integerParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Integer(123)));
+    assertThat(integerParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Integer(-123)));
+  }
 
-    @Test
-    public void testPrimitiveIntegerParamParser() {
-        ParamParsers.PrimitiveIntegerParamParser integerParamParser = new ParamParsers.PrimitiveIntegerParamParser();
+  @Test
+  public void testPrimitiveIntegerParamParser() {
+    ParamParsers.PrimitiveIntegerParamParser integerParamParser = new ParamParsers.PrimitiveIntegerParamParser();
 
-        assertThat(integerParamParser.getParsedType(), Matchers.is(Integer.class));
+    assertThat(integerParamParser.getParsedType(), Matchers.is(Integer.class));
 
-        // No null form primitives
-        assertThat(integerParamParser.parseParameter("param1", null, validation), Matchers.is((int) 0));
-        assertThat(integerParamParser.parseParameter("param1", "", validation), Matchers.is((int) 0));
-        assertThat(integerParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is((int) 0));
+    // No null form primitives
+    assertThat(integerParamParser.parseParameter("param1", null, validation), Matchers.is((int) 0));
+    assertThat(integerParamParser.parseParameter("param1", "", validation), Matchers.is((int) 0));
+    assertThat(integerParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is((int) 0));
 
-        assertThat(integerParamParser.parseParameter("param1", "0", validation), Matchers.is((int) 0));
-        assertThat(integerParamParser.parseParameter("param1", "000", validation), Matchers.is((int) 0));
-        assertThat(integerParamParser.parseParameter("param1", "123", validation), Matchers.is((int) 123));
-        assertThat(integerParamParser.parseParameter("param1", "-123", validation), Matchers.is((int) -123));
-    }
+    assertThat(integerParamParser.parseParameter("param1", "0", validation), Matchers.is((int) 0));
+    assertThat(integerParamParser.parseParameter("param1", "000", validation),
+        Matchers.is((int) 0));
+    assertThat(integerParamParser.parseParameter("param1", "123", validation),
+        Matchers.is((int) 123));
+    assertThat(integerParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is((int) -123));
+  }
 
-    @Test
-    public void testShortParamParser() {
-        ParamParsers.ShortParamParser shortParamParser = new ParamParsers.ShortParamParser();
+  @Test
+  public void testShortParamParser() {
+    ParamParsers.ShortParamParser shortParamParser = new ParamParsers.ShortParamParser();
 
-        assertThat(shortParamParser.getParsedType(), Matchers.is(Short.class));
+    assertThat(shortParamParser.getParsedType(), Matchers.is(Short.class));
 
-        assertThat(shortParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(shortParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(shortParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
+    assertThat(shortParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(shortParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(shortParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
 
-        assertThat(shortParamParser.parseParameter("param1", "0", validation), Matchers.is(new Short((short) 0)));
-        assertThat(shortParamParser.parseParameter("param1", "000", validation), Matchers.is(new Short((short) 0)));
-        assertThat(shortParamParser.parseParameter("param1", "123", validation), Matchers.is(new Short((short) 123)));
-        assertThat(shortParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Short((short) -123)));
-    }
+    assertThat(shortParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Short((short) 0)));
+    assertThat(shortParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Short((short) 0)));
+    assertThat(shortParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Short((short) 123)));
+    assertThat(shortParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Short((short) -123)));
+  }
 
-    @Test
-    public void testPrimitiveShortParamParser() {
-        ParamParsers.PrimitiveShortParamParser shortParamParser = new ParamParsers.PrimitiveShortParamParser();
+  @Test
+  public void testPrimitiveShortParamParser() {
+    ParamParsers.PrimitiveShortParamParser shortParamParser = new ParamParsers.PrimitiveShortParamParser();
 
-        assertThat(shortParamParser.getParsedType(), Matchers.is(Short.class));
+    assertThat(shortParamParser.getParsedType(), Matchers.is(Short.class));
 
-        // No null form primitives
-        assertThat(shortParamParser.parseParameter("param1", null, validation), Matchers.is((short) 0));
-        assertThat(shortParamParser.parseParameter("param1", "", validation), Matchers.is((short) 0));
-        assertThat(shortParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is((short) 0));
+    // No null form primitives
+    assertThat(shortParamParser.parseParameter("param1", null, validation), Matchers.is((short) 0));
+    assertThat(shortParamParser.parseParameter("param1", "", validation), Matchers.is((short) 0));
+    assertThat(shortParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is((short) 0));
 
-        assertThat(shortParamParser.parseParameter("param1", "0", validation), Matchers.is((short) 0));
-        assertThat(shortParamParser.parseParameter("param1", "000", validation), Matchers.is((short) 0));
-        assertThat(shortParamParser.parseParameter("param1", "123", validation), Matchers.is((short) 123));
-        assertThat(shortParamParser.parseParameter("param1", "-123", validation), Matchers.is((short) -123));
-    }
+    assertThat(shortParamParser.parseParameter("param1", "0", validation), Matchers.is((short) 0));
+    assertThat(shortParamParser.parseParameter("param1", "000", validation),
+        Matchers.is((short) 0));
+    assertThat(shortParamParser.parseParameter("param1", "123", validation),
+        Matchers.is((short) 123));
+    assertThat(shortParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is((short) -123));
+  }
 
-    @Test
-    public void testLongParamParser() {
-        ParamParsers.LongParamParser longParamParser = new ParamParsers.LongParamParser();
+  @Test
+  public void testLongParamParser() {
+    ParamParsers.LongParamParser longParamParser = new ParamParsers.LongParamParser();
 
-        assertThat(longParamParser.getParsedType(), Matchers.is(Long.class));
+    assertThat(longParamParser.getParsedType(), Matchers.is(Long.class));
 
-        assertThat(longParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(longParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(longParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
+    assertThat(longParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(longParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(longParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
 
-        assertThat(longParamParser.parseParameter("param1", "0", validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "000", validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "123", validation), Matchers.is(new Long(123)));
-        assertThat(longParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Long(-123)));
-    }
+    assertThat(longParamParser.parseParameter("param1", "0", validation), Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Long(123)));
+    assertThat(longParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Long(-123)));
+  }
 
-    @Test
-    public void testPrimitiveLongParamParser() {
-        ParamParsers.PrimitiveLongParamParser longParamParser = new ParamParsers.PrimitiveLongParamParser();
+  @Test
+  public void testPrimitiveLongParamParser() {
+    ParamParsers.PrimitiveLongParamParser longParamParser = new ParamParsers.PrimitiveLongParamParser();
 
-        assertThat(longParamParser.getParsedType(), Matchers.is(Long.class));
+    assertThat(longParamParser.getParsedType(), Matchers.is(Long.class));
 
-        // No null form primitives
-        assertThat(longParamParser.parseParameter("param1", null, validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "", validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is(new Long(0)));
+    // No null form primitives
+    assertThat(longParamParser.parseParameter("param1", null, validation),
+        Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "", validation), Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is(new Long(0)));
 
-        assertThat(longParamParser.parseParameter("param1", "0", validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "000", validation), Matchers.is(new Long(0)));
-        assertThat(longParamParser.parseParameter("param1", "123", validation), Matchers.is(new Long(123)));
-        assertThat(longParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Long(-123)));
-    }
+    assertThat(longParamParser.parseParameter("param1", "0", validation), Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Long(0)));
+    assertThat(longParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Long(123)));
+    assertThat(longParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Long(-123)));
+  }
 
-    @Test
-    public void testFloatParamParser() {
-        ParamParsers.FloatParamParser floatParamParser = new ParamParsers.FloatParamParser();
+  @Test
+  public void testFloatParamParser() {
+    ParamParsers.FloatParamParser floatParamParser = new ParamParsers.FloatParamParser();
 
-        assertThat(floatParamParser.getParsedType(), Matchers.is(Float.class));
+    assertThat(floatParamParser.getParsedType(), Matchers.is(Float.class));
 
-        assertThat(floatParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(floatParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(floatParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
+    assertThat(floatParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(floatParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(floatParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
 
-        assertThat(floatParamParser.parseParameter("param1", "0", validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "000", validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "123", validation), Matchers.is(new Float(123)));
-        assertThat(floatParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Float(-123)));
+    assertThat(floatParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Float(123)));
+    assertThat(floatParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Float(-123)));
 
-        assertThat(floatParamParser.parseParameter("param1", "0.1", validation), Matchers.is(new Float(0.1)));
-        assertThat(floatParamParser.parseParameter("param1", "123.1", validation), Matchers.is(new Float(123.1)));
-        assertThat(floatParamParser.parseParameter("param1", "-123.1", validation), Matchers.is(new Float(-123.1)));
-    }
+    assertThat(floatParamParser.parseParameter("param1", "0.1", validation),
+        Matchers.is(new Float(0.1)));
+    assertThat(floatParamParser.parseParameter("param1", "123.1", validation),
+        Matchers.is(new Float(123.1)));
+    assertThat(floatParamParser.parseParameter("param1", "-123.1", validation),
+        Matchers.is(new Float(-123.1)));
+  }
 
-    @Test
-    public void testPrimitiveFloatParamParser() {
-        ParamParsers.PrimitiveFloatParamParser floatParamParser = new ParamParsers.PrimitiveFloatParamParser();
+  @Test
+  public void testPrimitiveFloatParamParser() {
+    ParamParsers.PrimitiveFloatParamParser floatParamParser = new ParamParsers.PrimitiveFloatParamParser();
 
-        assertThat(floatParamParser.getParsedType(), Matchers.is(Float.class));
+    assertThat(floatParamParser.getParsedType(), Matchers.is(Float.class));
 
-        // No null form primitives
-        assertThat(floatParamParser.parseParameter("param1", null, validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "", validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is(new Float(0)));
+    // No null form primitives
+    assertThat(floatParamParser.parseParameter("param1", null, validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "", validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is(new Float(0)));
 
-        assertThat(floatParamParser.parseParameter("param1", "0", validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "000", validation), Matchers.is(new Float(0)));
-        assertThat(floatParamParser.parseParameter("param1", "123", validation), Matchers.is(new Float(123)));
-        assertThat(floatParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Float(-123)));
+    assertThat(floatParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Float(0)));
+    assertThat(floatParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Float(123)));
+    assertThat(floatParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Float(-123)));
 
-        assertThat(floatParamParser.parseParameter("param1", "0.1", validation), Matchers.is(new Float(0.1)));
-        assertThat(floatParamParser.parseParameter("param1", "123.1", validation), Matchers.is(new Float(123.1)));
-        assertThat(floatParamParser.parseParameter("param1", "-123.1", validation), Matchers.is(new Float(-123.1)));
-    }
+    assertThat(floatParamParser.parseParameter("param1", "0.1", validation),
+        Matchers.is(new Float(0.1)));
+    assertThat(floatParamParser.parseParameter("param1", "123.1", validation),
+        Matchers.is(new Float(123.1)));
+    assertThat(floatParamParser.parseParameter("param1", "-123.1", validation),
+        Matchers.is(new Float(-123.1)));
+  }
 
-    @Test
-    public void testDoubleParamParser() {
-        ParamParsers.DoubleParamParser doubleParamParser = new ParamParsers.DoubleParamParser();
+  @Test
+  public void testDoubleParamParser() {
+    ParamParsers.DoubleParamParser doubleParamParser = new ParamParsers.DoubleParamParser();
 
-        assertThat(doubleParamParser.getParsedType(), Matchers.is(Double.class));
+    assertThat(doubleParamParser.getParsedType(), Matchers.is(Double.class));
 
-        assertThat(doubleParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
-        assertThat(doubleParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
-        assertThat(doubleParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.nullValue());
+    assertThat(doubleParamParser.parseParameter("param1", null, validation), Matchers.nullValue());
+    assertThat(doubleParamParser.parseParameter("param1", "", validation), Matchers.nullValue());
+    assertThat(doubleParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.nullValue());
 
-        assertThat(doubleParamParser.parseParameter("param1", "0", validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "000", validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "123", validation), Matchers.is(new Double(123)));
-        assertThat(doubleParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Double(-123)));
+    assertThat(doubleParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Double(123)));
+    assertThat(doubleParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Double(-123)));
 
-        assertThat(doubleParamParser.parseParameter("param1", "0.1", validation), Matchers.is(new Double(0.1)));
-        assertThat(doubleParamParser.parseParameter("param1", "123.1", validation), Matchers.is(new Double(123.1)));
-        assertThat(doubleParamParser.parseParameter("param1", "-123.1", validation), Matchers.is(new Double(-123.1)));
-    }
+    assertThat(doubleParamParser.parseParameter("param1", "0.1", validation),
+        Matchers.is(new Double(0.1)));
+    assertThat(doubleParamParser.parseParameter("param1", "123.1", validation),
+        Matchers.is(new Double(123.1)));
+    assertThat(doubleParamParser.parseParameter("param1", "-123.1", validation),
+        Matchers.is(new Double(-123.1)));
+  }
 
-    @Test
-    public void testPrimitiveDoubleParamParser() {
-        ParamParsers.PrimitiveDoubleParamParser doubleParamParser = new ParamParsers.PrimitiveDoubleParamParser();
+  @Test
+  public void testPrimitiveDoubleParamParser() {
+    ParamParsers.PrimitiveDoubleParamParser doubleParamParser = new ParamParsers.PrimitiveDoubleParamParser();
 
-        assertThat(doubleParamParser.getParsedType(), Matchers.is(Double.class));
+    assertThat(doubleParamParser.getParsedType(), Matchers.is(Double.class));
 
-        // No null form primitives
-        assertThat(doubleParamParser.parseParameter("param1", null, validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "", validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "asdfasdf", validation), Matchers.is(new Double(0)));
+    // No null form primitives
+    assertThat(doubleParamParser.parseParameter("param1", null, validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "", validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "asdfasdf", validation),
+        Matchers.is(new Double(0)));
 
-        assertThat(doubleParamParser.parseParameter("param1", "0", validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "000", validation), Matchers.is(new Double(0)));
-        assertThat(doubleParamParser.parseParameter("param1", "123", validation), Matchers.is(new Double(123)));
-        assertThat(doubleParamParser.parseParameter("param1", "-123", validation), Matchers.is(new Double(-123)));
+    assertThat(doubleParamParser.parseParameter("param1", "0", validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "000", validation),
+        Matchers.is(new Double(0)));
+    assertThat(doubleParamParser.parseParameter("param1", "123", validation),
+        Matchers.is(new Double(123)));
+    assertThat(doubleParamParser.parseParameter("param1", "-123", validation),
+        Matchers.is(new Double(-123)));
 
-        assertThat(doubleParamParser.parseParameter("param1", "0.1", validation), Matchers.is(new Double(0.1)));
-        assertThat(doubleParamParser.parseParameter("param1", "123.1", validation), Matchers.is(new Double(123.1)));
-        assertThat(doubleParamParser.parseParameter("param1", "-123.1", validation), Matchers.is(new Double(-123.1)));
-    }
+    assertThat(doubleParamParser.parseParameter("param1", "0.1", validation),
+        Matchers.is(new Double(0.1)));
+    assertThat(doubleParamParser.parseParameter("param1", "123.1", validation),
+        Matchers.is(new Double(123.1)));
+    assertThat(doubleParamParser.parseParameter("param1", "-123.1", validation),
+        Matchers.is(new Double(-123.1)));
+  }
 }

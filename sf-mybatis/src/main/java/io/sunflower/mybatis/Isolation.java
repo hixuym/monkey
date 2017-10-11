@@ -17,23 +17,24 @@ package io.sunflower.mybatis;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
 /**
- * Enum of isolation levels.  This enum exists because Java annotations
- * do not support null default values - so we need to add the DEFAULT
- * level which means - do not specify an isolation level.
+ * Enum of isolation levels.  This enum exists because Java annotations do not support null default
+ * values - so we need to add the DEFAULT level which means - do not specify an isolation level.
  *
  * @author Jeff Butler
  * @since 3.1
  */
 public enum Isolation {
 
-  DEFAULT(null), NONE(TransactionIsolationLevel.NONE), READ_COMMITTED(
-      TransactionIsolationLevel.READ_COMMITTED), READ_UNCOMMITTED(
-          TransactionIsolationLevel.READ_UNCOMMITTED), REPEATABLE_READ(
-              TransactionIsolationLevel.REPEATABLE_READ), SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);
+  DEFAULT(null),
+  NONE(TransactionIsolationLevel.NONE),
+  READ_COMMITTED(TransactionIsolationLevel.READ_COMMITTED),
+  READ_UNCOMMITTED(TransactionIsolationLevel.READ_UNCOMMITTED),
+  REPEATABLE_READ(TransactionIsolationLevel.REPEATABLE_READ),
+  SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);
 
   private final TransactionIsolationLevel transactionIsolationLevel;
 
-  private Isolation(TransactionIsolationLevel transactionIsolationLevel) {
+  Isolation(TransactionIsolationLevel transactionIsolationLevel) {
     this.transactionIsolationLevel = transactionIsolationLevel;
   }
 

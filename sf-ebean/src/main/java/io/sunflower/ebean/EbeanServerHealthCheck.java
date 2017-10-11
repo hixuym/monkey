@@ -15,58 +15,56 @@
 
 package io.sunflower.ebean;
 
-import com.google.common.util.concurrent.MoreExecutors;
-
 import com.codahale.metrics.health.HealthCheck;
-
-import java.util.concurrent.ExecutorService;
-
+import com.google.common.util.concurrent.MoreExecutors;
 import io.ebean.EbeanServer;
 import io.ebean.SqlQuery;
 import io.sunflower.db.TimeBoundHealthCheck;
 import io.sunflower.util.Duration;
+import java.util.concurrent.ExecutorService;
 
 public class EbeanServerHealthCheck extends HealthCheck {
 
-    private final EbeanServer ebeanServer;
-    private final String validationQuery;
-    private final TimeBoundHealthCheck timeBoundHealthCheck;
+  private final EbeanServer ebeanServer;
+  private final String validationQuery;
+  private final TimeBoundHealthCheck timeBoundHealthCheck;
 
-    public EbeanServerHealthCheck(EbeanServer ebeanServer,
-                                  String validationQuery) {
-        this(MoreExecutors.newDirectExecutorService(), Duration.seconds(0), ebeanServer, validationQuery);
-    }
+  public EbeanServerHealthCheck(EbeanServer ebeanServer,
+      String validationQuery) {
+    this(MoreExecutors.newDirectExecutorService(), Duration.seconds(0), ebeanServer,
+        validationQuery);
+  }
 
-    public EbeanServerHealthCheck(ExecutorService executorService,
-                                  Duration duration,
-                                  EbeanServer ebeanServer,
-                                  String validationQuery) {
-        this.ebeanServer = ebeanServer;
-        this.validationQuery = validationQuery;
-        this.timeBoundHealthCheck = new TimeBoundHealthCheck(executorService, duration);
-    }
+  public EbeanServerHealthCheck(ExecutorService executorService,
+      Duration duration,
+      EbeanServer ebeanServer,
+      String validationQuery) {
+    this.ebeanServer = ebeanServer;
+    this.validationQuery = validationQuery;
+    this.timeBoundHealthCheck = new TimeBoundHealthCheck(executorService, duration);
+  }
 
-    @Override
-    protected Result check() throws Exception {
-        return timeBoundHealthCheck.check(() -> {
+  @Override
+  protected Result check() throws Exception {
+    return timeBoundHealthCheck.check(() -> {
 
-            ebeanServer.beginTransaction();
-            try {
+      ebeanServer.beginTransaction();
+      try {
 
-                SqlQuery sqlQuery = ebeanServer.createSqlQuery(validationQuery);
+        SqlQuery sqlQuery = ebeanServer.createSqlQuery(validationQuery);
 
-                sqlQuery.findList();
+        sqlQuery.findList();
 
-                ebeanServer.commitTransaction();
-            } catch (Exception e) {
-                ebeanServer.rollbackTransaction();
+        ebeanServer.commitTransaction();
+      } catch (Exception e) {
+        ebeanServer.rollbackTransaction();
 
-                throw e;
-            } finally {
-                ebeanServer.endTransaction();
-            }
+        throw e;
+      } finally {
+        ebeanServer.endTransaction();
+      }
 
-            return Result.healthy();
-        });
-    }
+      return Result.healthy();
+    });
+  }
 }

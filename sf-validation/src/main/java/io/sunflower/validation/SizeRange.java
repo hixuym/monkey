@@ -1,16 +1,5 @@
 package io.sunflower.validation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.validation.Constraint;
-import javax.validation.OverridesAttribute;
-import javax.validation.Payload;
-import javax.validation.ReportAsSingleViolation;
-
-import io.sunflower.util.SizeUnit;
-
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.FIELD;
@@ -19,8 +8,18 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import io.sunflower.util.SizeUnit;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+import javax.validation.OverridesAttribute;
+import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
+
 /**
- * The annotated element has to be in the appropriate range. Apply on {@link io.sunflower.util.Size} instances.
+ * The annotated element has to be in the appropriate range. Apply on {@link io.sunflower.util.Size}
+ * instances.
  */
 @Documented
 @Constraint(validatedBy = {})
@@ -30,31 +29,33 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @MaxSize(value = Long.MAX_VALUE, unit = SizeUnit.TERABYTES)
 @ReportAsSingleViolation
 public @interface SizeRange {
-    @OverridesAttribute(constraint = MinSize.class, name = "value")
-    long min() default 0;
 
-    @OverridesAttribute(constraint = MaxSize.class, name = "value")
-    long max() default Long.MAX_VALUE;
+  @OverridesAttribute(constraint = MinSize.class, name = "value")
+  long min() default 0;
 
-    @OverridesAttribute.List({
-        @OverridesAttribute(constraint = MinSize.class, name = "unit"),
-        @OverridesAttribute(constraint = MaxSize.class, name = "unit")
-    })
-    SizeUnit unit() default SizeUnit.BYTES;
+  @OverridesAttribute(constraint = MaxSize.class, name = "value")
+  long max() default Long.MAX_VALUE;
 
-    String message() default "must be between {min} {unit} and {max} {unit}";
+  @OverridesAttribute.List({
+      @OverridesAttribute(constraint = MinSize.class, name = "unit"),
+      @OverridesAttribute(constraint = MaxSize.class, name = "unit")
+  })
+  SizeUnit unit() default SizeUnit.BYTES;
 
-    Class<?>[] groups() default {};
+  String message() default "must be between {min} {unit} and {max} {unit}";
 
-    @SuppressWarnings("UnusedDeclaration") Class<? extends Payload>[] payload() default {};
+  Class<?>[] groups() default {};
 
-    /**
-     * Defines several {@code @SizeRange} annotations on the same element.
-     */
-    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-    @Retention(RUNTIME)
-    @Documented
-    public @interface List {
-        SizeRange[] value();
-    }
+  @SuppressWarnings("UnusedDeclaration") Class<? extends Payload>[] payload() default {};
+
+  /**
+   * Defines several {@code @SizeRange} annotations on the same element.
+   */
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+  @Retention(RUNTIME)
+  @Documented
+  public @interface List {
+
+    SizeRange[] value();
+  }
 }

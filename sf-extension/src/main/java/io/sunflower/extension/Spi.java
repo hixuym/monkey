@@ -29,6 +29,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Spi {
 
-    Scope scope() default Scope.PROTOTYPE;
+  Scope scope() default Scope.PROTOTYPE;
 
 }

@@ -15,31 +15,31 @@
 
 package io.sunflower.example.core;
 
+import io.sunflower.ebean.BaseModel;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import io.sunflower.ebean.BaseModel;
 
 @Entity
 @Table(name = "tb_user")
 public class User extends BaseModel {
-    private String name;
 
-    private Integer age;
+  private String name;
 
-    public String getName() {
-        return name;
-    }
+  private Integer age;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Integer getAge() {
-        return age;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
+  public Integer getAge() {
+    return age;
+  }
+
+  public void setAge(Integer age) {
+    this.age = age;
+  }
 }

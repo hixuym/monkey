@@ -14,17 +14,18 @@
 package io.sunflower.reflect;
 
 public interface Test6 {
-    void setFoo(String s);
 
-    void setBar(boolean b);
+  void setFoo(String s);
 
-    void setBaz(String baz);
+  void setBar(boolean b);
 
-    void testIgnore();
+  void setBaz(String baz);
 
-    String getFoo();
+  void testIgnore();
 
-    boolean isBar();
+  String getFoo();
 
-    String getBaz();
+  boolean isBar();
+
+  String getBaz();
 }

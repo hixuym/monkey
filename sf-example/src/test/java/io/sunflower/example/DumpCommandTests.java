@@ -15,25 +15,25 @@
 
 package io.sunflower.example;
 
-import org.junit.Test;
-
 import io.sunflower.example.cli.DumpConfigCommand;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.testing.BaseCommandTest;
+import org.junit.Test;
 
 public class DumpCommandTests extends BaseCommandTest {
-    @Override
-    protected Bootstrap getBootstrap() {
 
-        Bootstrap<ExampleConfiguration> bootstrap = new Bootstrap<>(new ExampleApplication());
+  @Override
+  protected Bootstrap getBootstrap() {
 
-        bootstrap.addCommand(new DumpConfigCommand());
-        return bootstrap;
-    }
+    Bootstrap<ExampleConfiguration> bootstrap = new Bootstrap<>(new ExampleApplication());
+
+    bootstrap.addCommand(new DumpConfigCommand());
+    return bootstrap;
+  }
 
 
-    @Test
-    public void testDump() throws Exception {
-        cli.run("dump");
-    }
+  @Test
+  public void testDump() throws Exception {
+    cli.run("dump");
+  }
 }

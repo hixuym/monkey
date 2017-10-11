@@ -15,40 +15,38 @@
 
 package io.sunflower.undertow.handler;
 
-import com.google.common.collect.ImmutableMultimap;
-
 import com.codahale.metrics.jvm.ThreadDump;
-
+import com.google.common.collect.ImmutableMultimap;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.lang.management.ManagementFactory;
 
 public class ThreadDumpTask extends Task {
 
-    private transient ThreadDump threadDump;
+  private transient ThreadDump threadDump;
 
-    public ThreadDumpTask() {
-        super("dump-thread");
-        try {
-            // Some PaaS like Google App Engine blacklist java.lang.managament
-            this.threadDump = new ThreadDump(ManagementFactory.getThreadMXBean());
-        } catch (NoClassDefFoundError ncdfe) {
-            this.threadDump = null; // we won't be able to provide thread dump
-        }
+  public ThreadDumpTask() {
+    super("dump-thread");
+    try {
+      // Some PaaS like Google App Engine blacklist java.lang.managament
+      this.threadDump = new ThreadDump(ManagementFactory.getThreadMXBean());
+    } catch (NoClassDefFoundError ncdfe) {
+      this.threadDump = null; // we won't be able to provide thread dump
+    }
+  }
+
+  @Override
+  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
+      throws Exception {
+    if (threadDump == null) {
+      output.println("Sorry your runtime environment does not allow to dump threads.");
+      return;
     }
 
-    @Override
-    public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
-        if (threadDump == null) {
-            output.println("Sorry your runtime environment does not allow to dump threads.");
-            return;
-        }
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    threadDump.dump(out);
 
-        threadDump.dump(out);
-
-        output.println(out.toString());
-    }
+    output.println(out.toString());
+  }
 }

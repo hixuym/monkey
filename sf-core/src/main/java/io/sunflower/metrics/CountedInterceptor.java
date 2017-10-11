@@ -18,47 +18,45 @@ package io.sunflower.metrics;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
-
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author James Moger
  */
 class CountedInterceptor implements MethodInterceptor {
 
-    private final Provider<MetricRegistry> metricRegistry;
+  private final Provider<MetricRegistry> metricRegistry;
 
-    @Inject
-    public CountedInterceptor(Provider<MetricRegistry> metricRegistry) {
-        this.metricRegistry = metricRegistry;
+  @Inject
+  public CountedInterceptor(Provider<MetricRegistry> metricRegistry) {
+    this.metricRegistry = metricRegistry;
+  }
+
+  @Override
+  public Object invoke(MethodInvocation invocation) throws Throwable {
+
+    Counted counted = invocation.getMethod().getAnnotation(Counted.class);
+    String counterName = counted.value();
+
+    if (counterName.isEmpty()) {
+      counterName = MetricRegistry.name(invocation.getThis().getClass()
+          .getSuperclass(), invocation.getMethod().getName());
     }
 
-    @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    Counter counter = metricRegistry.get().counter(counterName);
 
-        Counted counted = invocation.getMethod().getAnnotation(Counted.class);
-        String counterName = counted.value();
+    counter.inc();
 
-        if (counterName.isEmpty()) {
-            counterName = MetricRegistry.name(invocation.getThis().getClass()
-                .getSuperclass(), invocation.getMethod().getName());
-        }
-
-        Counter counter = metricRegistry.get().counter(counterName);
-
-        counter.inc();
-
-        try {
-            return invocation.proceed();
-        } finally {
-            if (counted.active()) {
-                counter.dec();
-            }
-        }
+    try {
+      return invocation.proceed();
+    } finally {
+      if (counted.active()) {
+        counter.dec();
+      }
     }
+  }
 
 }

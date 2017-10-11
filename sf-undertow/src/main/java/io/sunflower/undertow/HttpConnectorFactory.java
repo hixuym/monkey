@@ -2,7 +2,6 @@ package io.sunflower.undertow;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import io.sunflower.setup.Environment;
 import io.sunflower.validation.PortRange;
 import io.undertow.Undertow;
@@ -12,52 +11,53 @@ import io.undertow.Undertow;
  */
 @JsonTypeName("http")
 public class HttpConnectorFactory implements ConnectorFactory {
-    public static ConnectorFactory application() {
-        final HttpConnectorFactory factory = new HttpConnectorFactory();
-        factory.port = 8080;
-        return factory;
-    }
 
-    public static ConnectorFactory admin() {
-        final HttpConnectorFactory factory = new HttpConnectorFactory();
-        factory.port = 8081;
-        return factory;
-    }
+  public static ConnectorFactory application() {
+    final HttpConnectorFactory factory = new HttpConnectorFactory();
+    factory.port = 8080;
+    return factory;
+  }
 
-    @PortRange
-    private int port = 8080;
+  public static ConnectorFactory admin() {
+    final HttpConnectorFactory factory = new HttpConnectorFactory();
+    factory.port = 8081;
+    return factory;
+  }
 
-    private String bindHost = null;
+  @PortRange
+  private int port = 8080;
 
-    @JsonProperty
-    public int getPort() {
-        return port;
-    }
+  private String bindHost = null;
 
-    @JsonProperty
-    public void setPort(int port) {
-        this.port = port;
-    }
+  @JsonProperty
+  public int getPort() {
+    return port;
+  }
 
-    @JsonProperty
-    public String getBindHost() {
-        return bindHost;
-    }
+  @JsonProperty
+  public void setPort(int port) {
+    this.port = port;
+  }
 
-    @JsonProperty
-    public void setBindHost(String bindHost) {
-        this.bindHost = bindHost;
-    }
+  @JsonProperty
+  public String getBindHost() {
+    return bindHost;
+  }
 
-    @Override
-    public Undertow.ListenerBuilder build(Environment environment) {
+  @JsonProperty
+  public void setBindHost(String bindHost) {
+    this.bindHost = bindHost;
+  }
 
-        Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
+  @Override
+  public Undertow.ListenerBuilder build(Environment environment) {
 
-        builder.setType(Undertow.ListenerType.HTTP);
-        builder.setHost(bindHost);
-        builder.setPort(port);
+    Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
 
-        return builder;
-    }
+    builder.setType(Undertow.ListenerType.HTTP);
+    builder.setHost(bindHost);
+    builder.setPort(port);
+
+    return builder;
+  }
 }

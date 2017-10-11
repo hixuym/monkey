@@ -15,75 +15,74 @@
 
 package io.sunflower.gizmo.utils;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import io.sunflower.gizmo.GizmoConfiguration;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
+import io.sunflower.gizmo.GizmoConfiguration;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
 @RunWith(MockitoJUnitRunner.class)
 public class CookieEncryptionTest {
 
-    @Mock
-    GizmoConfiguration configuration;
+  @Mock
+  GizmoConfiguration configuration;
 
-    @Test
-    public void testThatEncryptionAndDecryptionWorksWhenEnabled() {
-        String applicationSecret = SecretGenerator.generateSecret();
-        when(configuration.getApplicationSecret())
-            .thenReturn(applicationSecret);
-        when(configuration.isCookieEncrypted())
-            .thenReturn(true);
-        CookieEncryption cookieEncryption = new CookieEncryption(configuration);
+  @Test
+  public void testThatEncryptionAndDecryptionWorksWhenEnabled() {
+    String applicationSecret = SecretGenerator.generateSecret();
+    when(configuration.getApplicationSecret())
+        .thenReturn(applicationSecret);
+    when(configuration.isCookieEncrypted())
+        .thenReturn(true);
+    CookieEncryption cookieEncryption = new CookieEncryption(configuration);
 
-        String stringToEncrypt = "a_very_big_secret";
-        String encrypted = cookieEncryption.encrypt(stringToEncrypt);
-        assertThat(encrypted, not(equalTo(stringToEncrypt)));
+    String stringToEncrypt = "a_very_big_secret";
+    String encrypted = cookieEncryption.encrypt(stringToEncrypt);
+    assertThat(encrypted, not(equalTo(stringToEncrypt)));
 
-        String decrypted = cookieEncryption.decrypt(encrypted);
-        assertThat(decrypted, equalTo(stringToEncrypt));
-    }
+    String decrypted = cookieEncryption.decrypt(encrypted);
+    assertThat(decrypted, equalTo(stringToEncrypt));
+  }
 
-    @Test
-    public void testThatEncryptionDoesNotDoAnythingWhenDisabled() {
-        when(configuration.isCookieEncrypted())
-            .thenReturn(false);
+  @Test
+  public void testThatEncryptionDoesNotDoAnythingWhenDisabled() {
+    when(configuration.isCookieEncrypted())
+        .thenReturn(false);
 
-        CookieEncryption cookieEncryption = new CookieEncryption(configuration);
+    CookieEncryption cookieEncryption = new CookieEncryption(configuration);
 
-        String stringToEncrypt = "a_very_big_secret";
-        String encrypted = cookieEncryption.encrypt(stringToEncrypt);
-        assertThat(encrypted, equalTo(stringToEncrypt));
+    String stringToEncrypt = "a_very_big_secret";
+    String encrypted = cookieEncryption.encrypt(stringToEncrypt);
+    assertThat(encrypted, equalTo(stringToEncrypt));
 
-        String decrypted = cookieEncryption.decrypt(encrypted);
-        assertThat(decrypted, equalTo(stringToEncrypt));
-    }
+    String decrypted = cookieEncryption.decrypt(encrypted);
+    assertThat(decrypted, equalTo(stringToEncrypt));
+  }
 
-    @Test(expected = RuntimeException.class)
-    public void testThatEncryptionFailsWhenSecretEmpty() {
-        String applicationSecret = "";
-        when(configuration.getApplicationSecret())
-            .thenReturn(applicationSecret);
-        when(configuration.isCookieEncrypted())
-            .thenReturn(true);
-        new CookieEncryption(configuration);
-    }
+  @Test(expected = RuntimeException.class)
+  public void testThatEncryptionFailsWhenSecretEmpty() {
+    String applicationSecret = "";
+    when(configuration.getApplicationSecret())
+        .thenReturn(applicationSecret);
+    when(configuration.isCookieEncrypted())
+        .thenReturn(true);
+    new CookieEncryption(configuration);
+  }
 
-    @Test(expected = RuntimeException.class)
-    public void testThatEncryptionFailsWhenSecretTooSmall() {
-        String applicationSecret = "1234";
-        when(configuration.getApplicationSecret())
-            .thenReturn(applicationSecret);
-        when(configuration.isCookieEncrypted())
-            .thenReturn(true);
-        new CookieEncryption(configuration);
-    }
+  @Test(expected = RuntimeException.class)
+  public void testThatEncryptionFailsWhenSecretTooSmall() {
+    String applicationSecret = "1234";
+    when(configuration.getApplicationSecret())
+        .thenReturn(applicationSecret);
+    when(configuration.isCookieEncrypted())
+        .thenReturn(true);
+    new CookieEncryption(configuration);
+  }
 
 
 }

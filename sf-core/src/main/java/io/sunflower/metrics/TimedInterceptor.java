@@ -18,45 +18,44 @@ package io.sunflower.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author ra
  */
 class TimedInterceptor implements MethodInterceptor {
 
-    private final Provider<MetricRegistry> metricRegistry;
+  private final Provider<MetricRegistry> metricRegistry;
 
-    @Inject
-    public TimedInterceptor(Provider<MetricRegistry> metricRegistry) {
-        this.metricRegistry = metricRegistry;
+  @Inject
+  public TimedInterceptor(Provider<MetricRegistry> metricRegistry) {
+    this.metricRegistry = metricRegistry;
+  }
+
+  @Override
+  public Object invoke(MethodInvocation invocation) throws Throwable {
+
+    String timerName = invocation.getMethod().getAnnotation(Timed.class).value();
+
+    if (timerName.isEmpty()) {
+      timerName = MetricRegistry
+          .name(invocation.getThis().getClass().getSuperclass(), invocation.getMethod().getName());
     }
 
-    @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    Timer.Context timerContext
+        = metricRegistry.get()
+        .timer(timerName)
+        .time();
 
-        String timerName = invocation.getMethod().getAnnotation(Timed.class).value();
-
-        if (timerName.isEmpty()) {
-            timerName = MetricRegistry.name(invocation.getThis().getClass().getSuperclass(), invocation.getMethod().getName());
-        }
-
-        Timer.Context timerContext
-            = metricRegistry.get()
-            .timer(timerName)
-            .time();
-
-        try {
-            return invocation.proceed();
-        } finally {
-            timerContext.stop();
-            timerContext.close();
-        }
+    try {
+      return invocation.proceed();
+    } finally {
+      timerContext.stop();
+      timerContext.close();
     }
+  }
 
 }

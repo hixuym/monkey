@@ -15,22 +15,6 @@
 
 package io.sunflower.gizmo.template;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Collections;
-
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.Results;
-import io.sunflower.gizmo.utils.ResponseStreams;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,88 +22,112 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.Results;
+import io.sunflower.gizmo.utils.ResponseStreams;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+
 /**
  * Tests for JSONP render.
  */
 public class TemplateEngineJsonPTest {
 
-    Logger logger;
-    GizmoConfiguration properties;
-    Context context;
-    ResponseStreams responseStreams;
-    Result result;
-    ObjectMapper objectMapper;
-    ByteArrayOutputStream outputStream;
+  Logger logger;
+  GizmoConfiguration properties;
+  Context context;
+  ResponseStreams responseStreams;
+  Result result;
+  ObjectMapper objectMapper;
+  ByteArrayOutputStream outputStream;
 
-    @Before
-    public void setUp() throws IOException {
-        logger = mock(Logger.class);
-        properties = mock(GizmoConfiguration.class);
-        context = mock(Context.class);
-        responseStreams = mock(ResponseStreams.class);
-        result = Results.jsonp().render(Collections.singletonList(123));
-        objectMapper = new ObjectMapper();
-        outputStream = new ByteArrayOutputStream();
-        when(properties.getJsonpCallbackParam()).thenReturn("callback");
-        when(context.finalizeHeaders(result)).thenReturn(responseStreams);
-        when(responseStreams.getOutputStream()).thenReturn(outputStream);
-    }
+  @Before
+  public void setUp() throws IOException {
+    logger = mock(Logger.class);
+    properties = mock(GizmoConfiguration.class);
+    context = mock(Context.class);
+    responseStreams = mock(ResponseStreams.class);
+    result = Results.jsonp().render(Collections.singletonList(123));
+    objectMapper = new ObjectMapper();
+    outputStream = new ByteArrayOutputStream();
+    when(properties.getJsonpCallbackParam()).thenReturn("callback");
+    when(context.finalizeHeaders(result)).thenReturn(responseStreams);
+    when(responseStreams.getOutputStream()).thenReturn(outputStream);
+  }
 
-    @Test
-    public void testCorrectFlow() throws IOException {
-        when(context.getParameter("callback", TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE)).thenReturn("App.callback");
+  @Test
+  public void testCorrectFlow() throws IOException {
+    when(context.getParameter("callback", TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE))
+        .thenReturn("App.callback");
 
-        TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
-        jsonpEngine.invoke(context, result);
+    TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
+    jsonpEngine.invoke(context, result);
 
-        String jsonp = new String(outputStream.toByteArray(), "UTF-8");
-        assertEquals("App.callback([123])", jsonp);
-        verify(context).finalizeHeaders(result);
-    }
+    String jsonp = new String(outputStream.toByteArray(), "UTF-8");
+    assertEquals("App.callback([123])", jsonp);
+    verify(context).finalizeHeaders(result);
+  }
 
-    @Test
-    public void testMissingCallbackVariableFlow() throws IOException {
-        TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
-        jsonpEngine.invoke(context, result);
+  @Test
+  public void testMissingCallbackVariableFlow() throws IOException {
+    TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
+    jsonpEngine.invoke(context, result);
 
-        String jsonp = new String(outputStream.toByteArray(), "UTF-8");
-        assertEquals(TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE + "([123])", jsonp);
-        verify(context).finalizeHeaders(result);
-    }
+    String jsonp = new String(outputStream.toByteArray(), "UTF-8");
+    assertEquals(TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE + "([123])", jsonp);
+    verify(context).finalizeHeaders(result);
+  }
 
-    @Test
-    public void testBadCallbackNameFlow() throws IOException {
-        when(context.getParameter("callback", TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE)).thenReturn(".callback");
+  @Test
+  public void testBadCallbackNameFlow() throws IOException {
+    when(context.getParameter("callback", TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE))
+        .thenReturn(".callback");
 
-        TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
-        jsonpEngine.invoke(context, result);
+    TemplateEngineJsonP jsonpEngine = new TemplateEngineJsonP(objectMapper, properties);
+    jsonpEngine.invoke(context, result);
 
-        String jsonp = new String(outputStream.toByteArray(), "UTF-8");
-        assertEquals(TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE + "([123])", jsonp);
-        verify(context).finalizeHeaders(result);
-    }
+    String jsonp = new String(outputStream.toByteArray(), "UTF-8");
+    assertEquals(TemplateEngineJsonP.DEFAULT_CALLBACK_PARAMETER_VALUE + "([123])", jsonp);
+    verify(context).finalizeHeaders(result);
+  }
 
-    @Test
-    public void testIsThisASecureCallbackName() {
-        assertTrue("simple function", TemplateEngineJsonP.isThisASecureCallbackName("onResponse"));
-        assertTrue("object function", TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path"));
-        assertTrue("object function", TemplateEngineJsonP.isThisASecureCallbackName("MyApp.Path.myCallback123"));
-        assertTrue("object function, path with numbers",
-            TemplateEngineJsonP.isThisASecureCallbackName("MyApp123.Path789.myCallback123"));
-        assertTrue("complex path", TemplateEngineJsonP.isThisASecureCallbackName("Ext.data.JsonP.callback4"));
-        assertTrue("complex path, $ in identity.", TemplateEngineJsonP.isThisASecureCallbackName("$42.ajaxHandler"));
+  @Test
+  public void testIsThisASecureCallbackName() {
+    assertTrue("simple function", TemplateEngineJsonP.isThisASecureCallbackName("onResponse"));
+    assertTrue("object function", TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path"));
+    assertTrue("object function",
+        TemplateEngineJsonP.isThisASecureCallbackName("MyApp.Path.myCallback123"));
+    assertTrue("object function, path with numbers",
+        TemplateEngineJsonP.isThisASecureCallbackName("MyApp123.Path789.myCallback123"));
+    assertTrue("complex path",
+        TemplateEngineJsonP.isThisASecureCallbackName("Ext.data.JsonP.callback4"));
+    assertTrue("complex path, $ in identity.",
+        TemplateEngineJsonP.isThisASecureCallbackName("$42.ajaxHandler"));
 
-        assertFalse("wrong first character", TemplateEngineJsonP.isThisASecureCallbackName("42$.q"));
-        assertFalse("period in the front, simple", TemplateEngineJsonP.isThisASecureCallbackName(".onResponse"));
-        assertFalse("period in the end, simple", TemplateEngineJsonP.isThisASecureCallbackName("onResponse."));
-        assertFalse("period in the front, object function", TemplateEngineJsonP.isThisASecureCallbackName(".MyPath.path"));
-        assertFalse("period in the end, complex path", TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path.path2."));
-        assertFalse("two subsequent periods", TemplateEngineJsonP.isThisASecureCallbackName("MyPath..path.path2"));
-        assertFalse("function call", TemplateEngineJsonP.isThisASecureCallbackName("alert(document.cookie)"));
+    assertFalse("wrong first character", TemplateEngineJsonP.isThisASecureCallbackName("42$.q"));
+    assertFalse("period in the front, simple",
+        TemplateEngineJsonP.isThisASecureCallbackName(".onResponse"));
+    assertFalse("period in the end, simple",
+        TemplateEngineJsonP.isThisASecureCallbackName("onResponse."));
+    assertFalse("period in the front, object function",
+        TemplateEngineJsonP.isThisASecureCallbackName(".MyPath.path"));
+    assertFalse("period in the end, complex path",
+        TemplateEngineJsonP.isThisASecureCallbackName("MyPath.path.path2."));
+    assertFalse("two subsequent periods",
+        TemplateEngineJsonP.isThisASecureCallbackName("MyPath..path.path2"));
+    assertFalse("function call",
+        TemplateEngineJsonP.isThisASecureCallbackName("alert(document.cookie)"));
 
-        // Cases not supported by the validator.
-        assertFalse("simple array", TemplateEngineJsonP.isThisASecureCallbackName("somearray[12345]"));
-        assertFalse("unicode characters", TemplateEngineJsonP.isThisASecureCallbackName("\\u0062oo"));
-        assertFalse("unicode characters", TemplateEngineJsonP.isThisASecureCallbackName("\\u0020"));
-    }
+    // Cases not supported by the validator.
+    assertFalse("simple array", TemplateEngineJsonP.isThisASecureCallbackName("somearray[12345]"));
+    assertFalse("unicode characters", TemplateEngineJsonP.isThisASecureCallbackName("\\u0062oo"));
+    assertFalse("unicode characters", TemplateEngineJsonP.isThisASecureCallbackName("\\u0020"));
+  }
 }

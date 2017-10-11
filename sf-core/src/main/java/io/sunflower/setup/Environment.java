@@ -1,9 +1,6 @@
 package io.sunflower.setup;
 
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
+import static java.util.Objects.requireNonNull;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
@@ -15,221 +12,222 @@ import com.codahale.metrics.json.HealthCheckModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.SortedMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.validation.Validator;
-
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.metrics.MetricsModule;
-
-import static java.util.Objects.requireNonNull;
+import java.util.SortedMap;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import javax.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A sunflower application's environment.
  */
 public class Environment {
-    private final String name;
-    private final MetricRegistry metricRegistry;
-    private final HealthCheckRegistry healthCheckRegistry;
 
-    private final ObjectMapper objectMapper;
-    private final XmlMapper xmlMapper;
+  private final String name;
+  private final MetricRegistry metricRegistry;
+  private final HealthCheckRegistry healthCheckRegistry;
 
-    private Validator validator;
+  private final ObjectMapper objectMapper;
+  private final XmlMapper xmlMapper;
 
-    private final LifecycleEnvironment lifecycleEnvironment;
-    private final GuiceyEnvironment guiceyEnvironment;
+  private Validator validator;
 
-    private final ExecutorService healthCheckExecutorService;
-    private final ClassLoader classLoader;
+  private final LifecycleEnvironment lifecycleEnvironment;
+  private final GuiceyEnvironment guiceyEnvironment;
 
-    /**
-     * Creates a new environment.
-     *
-     * @param name         the name of the application
-     * @param objectMapper the {@link ObjectMapper} for the application
-     */
-    public Environment(String name,
-                       ObjectMapper objectMapper,
-                       XmlMapper xmlMapper,
-                       Validator validator,
-                       MetricRegistry metricRegistry,
-                       ClassLoader classLoader,
-                       HealthCheckRegistry healthCheckRegistry) {
-        this.name = name;
-        this.objectMapper = objectMapper;
-        this.xmlMapper = xmlMapper;
+  private final ExecutorService healthCheckExecutorService;
+  private final ClassLoader classLoader;
 
-        this.metricRegistry = metricRegistry;
-        this.healthCheckRegistry = healthCheckRegistry;
+  /**
+   * Creates a new environment.
+   *
+   * @param name the name of the application
+   * @param objectMapper the {@link ObjectMapper} for the application
+   */
+  public Environment(String name,
+      ObjectMapper objectMapper,
+      XmlMapper xmlMapper,
+      Validator validator,
+      MetricRegistry metricRegistry,
+      ClassLoader classLoader,
+      HealthCheckRegistry healthCheckRegistry) {
+    this.name = name;
+    this.objectMapper = objectMapper;
+    this.xmlMapper = xmlMapper;
 
-        this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
+    this.metricRegistry = metricRegistry;
+    this.healthCheckRegistry = healthCheckRegistry;
 
-        this.validator = validator;
-        this.classLoader = classLoader;
+    this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
 
-        this.guiceyEnvironment = new GuiceyEnvironment();
+    this.validator = validator;
+    this.classLoader = classLoader;
 
-        this.guiceyEnvironment.addModule(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bindConstant().annotatedWith(Names.named("application.name")).to(getName());
-                bind(ObjectMapper.class).toInstance(getObjectMapper());
-                bind(XmlMapper.class).toInstance(getXmlMapper());
-                bind(MetricRegistry.class).toInstance(metrics());
-                bind(HealthCheckRegistry.class).toInstance(healthChecks());
-                bind(Validator.class).toInstance(getValidator());
-                bind(Environment.class).toInstance(Environment.this);
-            }
-        }, new MetricsModule());
+    this.guiceyEnvironment = new GuiceyEnvironment();
 
-        this.lifecycleEnvironment = new LifecycleEnvironment();
+    this.guiceyEnvironment.addModule(new AbstractModule() {
+      @Override
+      protected void configure() {
+        bindConstant().annotatedWith(Names.named("application.name")).to(getName());
+        bind(ObjectMapper.class).toInstance(getObjectMapper());
+        bind(XmlMapper.class).toInstance(getXmlMapper());
+        bind(MetricRegistry.class).toInstance(metrics());
+        bind(HealthCheckRegistry.class).toInstance(healthChecks());
+        bind(Validator.class).toInstance(getValidator());
+        bind(Environment.class).toInstance(Environment.this);
+      }
+    }, new MetricsModule());
 
-        lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
-            @Override
-            public void lifeCycleStarting(LifeCycle event) {
-                logHealthChecks();
-            }
-        });
+    this.lifecycleEnvironment = new LifecycleEnvironment();
 
-        this.healthCheckExecutorService = this.lifecycle().executorService("TimeBoundHealthCheck-pool-%d")
-            .workQueue(new ArrayBlockingQueue<>(1))
-            .minThreads(1)
-            .maxThreads(4)
-            .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-            .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
-            .build();
+    lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+      @Override
+      public void lifeCycleStarting(LifeCycle event) {
+        logHealthChecks();
+      }
+    });
 
-        try {
-            SharedMetricRegistries.getDefault();
-        } catch (IllegalStateException e) {
-            SharedMetricRegistries.setDefault("default", metricRegistry);
-        }
-        try {
-            SharedHealthCheckRegistries.getDefault();
-        } catch (IllegalStateException e) {
-            SharedHealthCheckRegistries.setDefault("default", healthCheckRegistry);
-        }
+    this.healthCheckExecutorService = this.lifecycle()
+        .executorService("TimeBoundHealthCheck-pool-%d")
+        .workQueue(new ArrayBlockingQueue<>(1))
+        .minThreads(1)
+        .maxThreads(4)
+        .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+        .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
+        .build();
+
+    try {
+      SharedMetricRegistries.getDefault();
+    } catch (IllegalStateException e) {
+      SharedMetricRegistries.setDefault("default", metricRegistry);
     }
-
-    /**
-     * Creates an environment with default health check registry
-     */
-    public Environment(String name,
-                       ObjectMapper objectMapper,
-                       XmlMapper xmlMapper,
-                       Validator validator,
-                       MetricRegistry metricRegistry,
-                       ClassLoader classLoader) {
-        this(name, objectMapper, xmlMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
+    try {
+      SharedHealthCheckRegistries.getDefault();
+    } catch (IllegalStateException e) {
+      SharedHealthCheckRegistries.setDefault("default", healthCheckRegistry);
     }
+  }
 
-    /**
-     * Returns an {@link ExecutorService} to run time bound health checks
-     */
-    public ExecutorService getHealthCheckExecutorService() {
-        return healthCheckExecutorService;
+  /**
+   * Creates an environment with default health check registry
+   */
+  public Environment(String name,
+      ObjectMapper objectMapper,
+      XmlMapper xmlMapper,
+      Validator validator,
+      MetricRegistry metricRegistry,
+      ClassLoader classLoader) {
+    this(name, objectMapper, xmlMapper, validator, metricRegistry, classLoader,
+        new HealthCheckRegistry());
+  }
+
+  /**
+   * Returns an {@link ExecutorService} to run time bound health checks
+   */
+  public ExecutorService getHealthCheckExecutorService() {
+    return healthCheckExecutorService;
+  }
+
+  /**
+   * Returns the application's {@link LifecycleEnvironment}.
+   */
+  public LifecycleEnvironment lifecycle() {
+    return lifecycleEnvironment;
+  }
+
+  /**
+   * Returns the application's {@link ObjectMapper}.
+   */
+  public ObjectMapper getObjectMapper() {
+    return objectMapper;
+  }
+
+  public XmlMapper getXmlMapper() {
+    return xmlMapper;
+  }
+
+  /**
+   * Returns the application's name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the application's {@link Validator}.
+   */
+  public Validator getValidator() {
+    return validator;
+  }
+
+  /**
+   * Sets the application's {@link Validator}.
+   */
+  public void setValidator(Validator validator) {
+    this.validator = requireNonNull(validator);
+  }
+
+  /**
+   * Returns the application's {@link MetricRegistry}.
+   */
+  public MetricRegistry metrics() {
+    return metricRegistry;
+  }
+
+  public GuiceyEnvironment guicey() {
+    return this.guiceyEnvironment;
+  }
+
+  /**
+   * @return application's {@link ClassLoader}.
+   */
+  public ClassLoader classLoader() {
+    return this.classLoader;
+  }
+
+  /**
+   * Returns the application's {@link HealthCheckRegistry}.
+   */
+  public HealthCheckRegistry healthChecks() {
+    return healthCheckRegistry;
+  }
+
+  public SortedMap<String, HealthCheck.Result> runHealthChecks() {
+    return healthCheckRegistry.runHealthChecks(MoreExecutors.newDirectExecutorService());
+  }
+
+  public ObjectWriter healthCheckWriter() {
+    return objectMapper.registerModule(new HealthCheckModule())
+        .writerWithDefaultPrettyPrinter();
+  }
+
+  private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
+
+  private void logHealthChecks() {
+    if (healthChecks().getNames().size() <= 1) {
+      LOGGER.warn(String.format(
+          "%n" +
+              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+              "!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !%n" +
+              "!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !%n" +
+              "!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !%n" +
+              "!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !%n" +
+              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      ));
     }
-
-    /**
-     * Returns the application's {@link LifecycleEnvironment}.
-     */
-    public LifecycleEnvironment lifecycle() {
-        return lifecycleEnvironment;
-    }
-
-    /**
-     * Returns the application's {@link ObjectMapper}.
-     */
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    public XmlMapper getXmlMapper() {
-        return xmlMapper;
-    }
-
-    /**
-     * Returns the application's name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Returns the application's {@link Validator}.
-     */
-    public Validator getValidator() {
-        return validator;
-    }
-
-    /**
-     * Sets the application's {@link Validator}.
-     */
-    public void setValidator(Validator validator) {
-        this.validator = requireNonNull(validator);
-    }
-
-    /**
-     * Returns the application's {@link MetricRegistry}.
-     */
-    public MetricRegistry metrics() {
-        return metricRegistry;
-    }
-
-    public GuiceyEnvironment guicey() {
-        return this.guiceyEnvironment;
-    }
-
-    /**
-     * @return application's {@link ClassLoader}.
-     */
-    public ClassLoader classLoader() {
-        return this.classLoader;
-    }
-
-    /**
-     * Returns the application's {@link HealthCheckRegistry}.
-     */
-    public HealthCheckRegistry healthChecks() {
-        return healthCheckRegistry;
-    }
-
-    public SortedMap<String, HealthCheck.Result> runHealthChecks() {
-        return healthCheckRegistry.runHealthChecks(MoreExecutors.newDirectExecutorService());
-    }
-
-    public ObjectWriter healthCheckWriter() {
-        return objectMapper.registerModule(new HealthCheckModule())
-            .writerWithDefaultPrettyPrinter();
-    }
-
-    private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
-
-    private void logHealthChecks() {
-        if (healthChecks().getNames().size() <= 1) {
-            LOGGER.warn(String.format(
-                "%n" +
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
-                    "!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !%n" +
-                    "!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !%n" +
-                    "!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !%n" +
-                    "!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !%n" +
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-            ));
-        }
-        LOGGER.info("health checks = {}", healthChecks().getNames());
-    }
+    LOGGER.info("health checks = {}", healthChecks().getNames());
+  }
 }

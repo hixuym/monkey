@@ -1,34 +1,35 @@
 package io.sunflower.configuration;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assume.assumeThat;
 
+import org.junit.Test;
+
 public class EnvironmentVariableLookupTest {
-    @Test(expected = UndefinedEnvironmentVariableException.class)
-    public void defaultConstructorEnablesStrict() {
-        assumeThat(System.getenv("nope"), nullValue());
 
-        EnvironmentVariableLookup lookup = new EnvironmentVariableLookup();
-        lookup.lookup("nope");
-    }
+  @Test(expected = UndefinedEnvironmentVariableException.class)
+  public void defaultConstructorEnablesStrict() {
+    assumeThat(System.getenv("nope"), nullValue());
 
-    @Test
-    public void lookupReplacesWithEnvironmentVariables() {
-        EnvironmentVariableLookup lookup = new EnvironmentVariableLookup(false);
+    EnvironmentVariableLookup lookup = new EnvironmentVariableLookup();
+    lookup.lookup("nope");
+  }
 
-        // Let's hope this doesn't break on Windows
-        assertThat(lookup.lookup("TEST")).isEqualTo(System.getenv("TEST"));
-        assertThat(lookup.lookup("nope")).isNull();
-    }
+  @Test
+  public void lookupReplacesWithEnvironmentVariables() {
+    EnvironmentVariableLookup lookup = new EnvironmentVariableLookup(false);
 
-    @Test(expected = UndefinedEnvironmentVariableException.class)
-    public void lookupThrowsExceptionInStrictMode() {
-        assumeThat(System.getenv("nope"), nullValue());
+    // Let's hope this doesn't break on Windows
+    assertThat(lookup.lookup("TEST")).isEqualTo(System.getenv("TEST"));
+    assertThat(lookup.lookup("nope")).isNull();
+  }
 
-        EnvironmentVariableLookup lookup = new EnvironmentVariableLookup(true);
-        lookup.lookup("nope");
-    }
+  @Test(expected = UndefinedEnvironmentVariableException.class)
+  public void lookupThrowsExceptionInStrictMode() {
+    assumeThat(System.getenv("nope"), nullValue());
+
+    EnvironmentVariableLookup lookup = new EnvironmentVariableLookup(true);
+    lookup.lookup("nope");
+  }
 }

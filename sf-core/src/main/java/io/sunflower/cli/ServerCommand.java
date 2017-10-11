@@ -31,71 +31,76 @@ import org.slf4j.LoggerFactory;
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  */
 public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerCommand.class);
 
-    private final Class<T> configurationClass;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerCommand.class);
 
-    public ServerCommand(Application<T> application) {
-        this(application, "server", "Runs the Sunflower application as an HTTP server");
-    }
+  private final Class<T> configurationClass;
 
-    /**
-     * A constructor to allow reuse of the server command as a different name
-     * @param application the application using this command
-     * @param name the argument name to invoke this command
-     * @param description a summary of what the command does
-     */
-    protected ServerCommand(final Application<T> application, final String name, final String description) {
-        super(application, name, description);
-        this.configurationClass = application.getConfigurationClass();
-    }
+  public ServerCommand(Application<T> application) {
+    this(application, "server", "Runs the Sunflower application as an HTTP server");
+  }
 
-    /*
-         * Since we don't subclass ServerCommand, we need a concrete reference to the configuration
-         * class.
-         */
-    @Override
-    protected Class<T> getConfigurationClass() {
-        return configurationClass;
-    }
+  /**
+   * A constructor to allow reuse of the server command as a different name
+   *
+   * @param application the application using this command
+   * @param name the argument name to invoke this command
+   * @param description a summary of what the command does
+   */
+  protected ServerCommand(final Application<T> application, final String name,
+      final String description) {
+    super(application, name, description);
+    this.configurationClass = application.getConfigurationClass();
+  }
 
-    @Override
-    protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        final Server server = configuration.getServerFactory().build(environment);
+  /*
+       * Since we don't subclass ServerCommand, we need a concrete reference to the configuration
+       * class.
+       */
+  @Override
+  protected Class<T> getConfigurationClass() {
+    return configurationClass;
+  }
 
+  @Override
+  protected void run(Environment environment, Namespace namespace, T configuration)
+      throws Exception {
+    final Server server = configuration.getServerFactory().build(environment);
+
+    try {
+      environment.lifecycle().attach(server);
+      server.addLifeCycleListener(new LifeCycleListener());
+      cleanupAsynchronously();
+      server.start();
+
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         try {
-            environment.lifecycle().attach(server);
-            server.addLifeCycleListener(new LifeCycleListener());
-            cleanupAsynchronously();
-            server.start();
-
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    server.stop();
-                } catch (Exception e) {
-                    LOGGER.warn("Failure during stop server", e);
-                }
-            }));
+          server.stop();
         } catch (Exception e) {
-            LOGGER.error("Unable to start server, shutting down", e);
-            try {
-                server.stop();
-            } catch (Exception e1) {
-                LOGGER.warn("Failure during stop server", e1);
-            }
-            try {
-                cleanup();
-            } catch (Exception e2) {
-                LOGGER.warn("Failure during cleanup", e2);
-            }
-            throw e;
+          LOGGER.warn("Failure during stop server", e);
         }
+      }));
+    } catch (Exception e) {
+      LOGGER.error("Unable to start server, shutting down", e);
+      try {
+        server.stop();
+      } catch (Exception e1) {
+        LOGGER.warn("Failure during stop server", e1);
+      }
+      try {
+        cleanup();
+      } catch (Exception e2) {
+        LOGGER.warn("Failure during cleanup", e2);
+      }
+      throw e;
     }
+  }
 
-    private class LifeCycleListener extends AbstractLifeCycle.AbstractLifeCycleListener {
-        @Override
-        public void lifeCycleStopped(LifeCycle event) {
-            cleanup();
-        }
+  private class LifeCycleListener extends AbstractLifeCycle.AbstractLifeCycleListener {
+
+    @Override
+    public void lifeCycleStopped(LifeCycle event) {
+      cleanup();
     }
+  }
 }

@@ -15,37 +15,36 @@
 
 package io.sunflower.gizmo;
 
-import org.junit.Test;
-
-import java.util.Map;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.junit.Assert.assertThat;
 
+import java.util.Map;
+import org.junit.Test;
+
 public class RouteParameterTest {
 
-    @Test
-    public void parse() {
-        Map<String, RouteParameter> params;
-        RouteParameter param;
+  @Test
+  public void parse() {
+    Map<String, RouteParameter> params;
+    RouteParameter param;
 
-        // no named parameters is null
-        params = RouteParameter.parse("/user");
-        assertThat(params, aMapWithSize(0));
+    // no named parameters is null
+    params = RouteParameter.parse("/user");
+    assertThat(params, aMapWithSize(0));
 
-        params = RouteParameter.parse("/user/{id}/{email: [0-9]+}");
+    params = RouteParameter.parse("/user/{id}/{email: [0-9]+}");
 
-        param = params.get("id");
-        assertThat(param.getName(), is("id"));
-        assertThat(param.getToken(), is("{id}"));
-        assertThat(param.getRegex(), is(nullValue()));
+    param = params.get("id");
+    assertThat(param.getName(), is("id"));
+    assertThat(param.getToken(), is("{id}"));
+    assertThat(param.getRegex(), is(nullValue()));
 
-        param = params.get("email");
-        assertThat(param.getName(), is("email"));
-        assertThat(param.getToken(), is("{email: [0-9]+}"));
-        assertThat(param.getRegex(), is("[0-9]+"));
-    }
+    param = params.get("email");
+    assertThat(param.getName(), is("email"));
+    assertThat(param.getToken(), is("{email: [0-9]+}"));
+    assertThat(param.getRegex(), is("[0-9]+"));
+  }
 
 }

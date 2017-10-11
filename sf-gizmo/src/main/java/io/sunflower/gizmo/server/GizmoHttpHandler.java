@@ -16,46 +16,45 @@
 package io.sunflower.gizmo.server;
 
 import com.google.inject.Injector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Gizmo;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles a request from Undertow and then delegates to sf.
  */
 public class GizmoHttpHandler implements HttpHandler {
-    private static final Logger log = LoggerFactory.getLogger(GizmoHttpHandler.class);
 
-    private Injector injector;
-    private String context;
-    private Gizmo gizmo;
+  private static final Logger log = LoggerFactory.getLogger(GizmoHttpHandler.class);
 
-    public void init(Injector injector, String context) {
-        this.gizmo = injector.getInstance(Gizmo.class);
-        this.injector = injector;
-        this.context = context;
-    }
+  private Injector injector;
+  private String context;
+  private Gizmo gizmo;
 
-    public Injector getInjector() {
-        return injector;
-    }
+  public void init(Injector injector, String context) {
+    this.gizmo = injector.getInstance(Gizmo.class);
+    this.injector = injector;
+    this.context = context;
+  }
 
-    @Override
-    public void handleRequest(HttpServerExchange exchange) throws Exception {
-        // create Ninja compatible context element
-        UndertowContext undertowContext
-            = (UndertowContext) injector.getProvider(Context.class).get();
+  public Injector getInjector() {
+    return injector;
+  }
 
-        // initialize it
-        undertowContext.init(exchange, context);
+  @Override
+  public void handleRequest(HttpServerExchange exchange) throws Exception {
+    // create Ninja compatible context element
+    UndertowContext undertowContext
+        = (UndertowContext) injector.getProvider(Context.class).get();
 
-        // invoke gizmo on it
-        gizmo.onRouteRequest(undertowContext);
-    }
+    // initialize it
+    undertowContext.init(exchange, context);
+
+    // invoke gizmo on it
+    gizmo.onRouteRequest(undertowContext);
+  }
 
 }

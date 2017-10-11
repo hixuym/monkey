@@ -20,9 +20,7 @@ import static java.lang.Thread.currentThread;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-
 import javax.inject.Inject;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.ibatis.logging.Log;
@@ -34,9 +32,9 @@ import org.apache.ibatis.session.SqlSessionManager;
  */
 public final class TransactionalMethodInterceptor implements MethodInterceptor {
 
-  private static final Class<?>[] CAUSE_TYPES = new Class[] { Throwable.class };
+  private static final Class<?>[] CAUSE_TYPES = new Class[]{Throwable.class};
 
-  private static final Class<?>[] MESSAGE_CAUSE_TYPES = new Class[] { String.class, Throwable.class };
+  private static final Class<?>[] MESSAGE_CAUSE_TYPES = new Class[]{String.class, Throwable.class};
 
   /**
    * This class logger.
@@ -80,12 +78,14 @@ public final class TransactionalMethodInterceptor implements MethodInterceptor {
 
     if (isSessionInherited) {
       if (log.isDebugEnabled()) {
-        log.debug(format("%s - SqlSession already set for thread: %s", debugPrefix, currentThread().getId()));
+        log.debug(format("%s - SqlSession already set for thread: %s", debugPrefix,
+            currentThread().getId()));
       }
     } else {
       if (log.isDebugEnabled()) {
         log.debug(
-            format("%s - SqlSession not set for thread: %s, creating a new one", debugPrefix, currentThread().getId()));
+            format("%s - SqlSession not set for thread: %s, creating a new one", debugPrefix,
+                currentThread().getId()));
       }
 
       sqlSessionManager.startManagedSession(transactional.executorType(),
@@ -104,27 +104,31 @@ public final class TransactionalMethodInterceptor implements MethodInterceptor {
         try {
           if (needsRollback) {
             if (log.isDebugEnabled()) {
-              log.debug(debugPrefix + " - SqlSession of thread: " + currentThread().getId() + " rolling back");
+              log.debug(debugPrefix + " - SqlSession of thread: " + currentThread().getId()
+                  + " rolling back");
             }
 
             sqlSessionManager.rollback(true);
           } else {
             if (log.isDebugEnabled()) {
-              log.debug(debugPrefix + " - SqlSession of thread: " + currentThread().getId() + " committing");
+              log.debug(debugPrefix + " - SqlSession of thread: " + currentThread().getId()
+                  + " committing");
             }
 
             sqlSessionManager.commit(transactional.force());
           }
         } finally {
           if (log.isDebugEnabled()) {
-            log.debug(format("%s - SqlSession of thread: %s terminated its life-cycle, closing it", debugPrefix,
+            log.debug(format("%s - SqlSession of thread: %s terminated its life-cycle, closing it",
+                debugPrefix,
                 currentThread().getId()));
           }
 
           sqlSessionManager.close();
         }
       } else if (log.isDebugEnabled()) {
-        log.debug(format("%s - SqlSession of thread: %s is inherited, skipped close operation", debugPrefix,
+        log.debug(format("%s - SqlSession of thread: %s is inherited, skipped close operation",
+            debugPrefix,
             currentThread().getId()));
       }
     }
@@ -132,7 +136,8 @@ public final class TransactionalMethodInterceptor implements MethodInterceptor {
     return object;
   }
 
-  private Throwable convertThrowableIfNeeded(MethodInvocation invocation, Transactional transactional, Throwable t) {
+  private Throwable convertThrowableIfNeeded(MethodInvocation invocation,
+      Transactional transactional, Throwable t) {
     Method interceptedMethod = invocation.getMethod();
 
     // check the caught exception is declared in the invoked method
@@ -154,27 +159,30 @@ public final class TransactionalMethodInterceptor implements MethodInterceptor {
 
     if (transactional.exceptionMessage().length() != 0) {
       errorMessage = format(transactional.exceptionMessage(), invocation.getArguments());
-      initargs = new Object[] { errorMessage, t };
+      initargs = new Object[]{errorMessage, t};
       initargsType = MESSAGE_CAUSE_TYPES;
     } else {
-      initargs = new Object[] { t };
+      initargs = new Object[]{t};
       initargsType = CAUSE_TYPES;
     }
 
-    Constructor<? extends Throwable> exceptionConstructor = getMatchingConstructor(transactional.rethrowExceptionsAs(),
+    Constructor<? extends Throwable> exceptionConstructor = getMatchingConstructor(
+        transactional.rethrowExceptionsAs(),
         initargsType);
     Throwable rethrowEx = null;
     if (exceptionConstructor != null) {
       try {
         rethrowEx = exceptionConstructor.newInstance(initargs);
       } catch (Exception e) {
-        errorMessage = format("Impossible to re-throw '%s', it needs the constructor with %s argument(s).",
+        errorMessage = format(
+            "Impossible to re-throw '%s', it needs the constructor with %s argument(s).",
             transactional.rethrowExceptionsAs().getName(), Arrays.toString(initargsType));
         log.error(errorMessage, e);
         rethrowEx = new RuntimeException(errorMessage, e);
       }
     } else {
-      errorMessage = format("Impossible to re-throw '%s', it needs the constructor with %s or %s argument(s).",
+      errorMessage = format(
+          "Impossible to re-throw '%s', it needs the constructor with %s or %s argument(s).",
           transactional.rethrowExceptionsAs().getName(), Arrays.toString(CAUSE_TYPES),
           Arrays.toString(MESSAGE_CAUSE_TYPES));
       log.error(errorMessage);
@@ -185,7 +193,8 @@ public final class TransactionalMethodInterceptor implements MethodInterceptor {
   }
 
   @SuppressWarnings("unchecked")
-  private static <E extends Throwable> Constructor<E> getMatchingConstructor(Class<E> type, Class<?>[] argumentsType) {
+  private static <E extends Throwable> Constructor<E> getMatchingConstructor(Class<E> type,
+      Class<?>[] argumentsType) {
     Class<? super E> currentType = type;
     while (Object.class != currentType) {
       for (Constructor<?> constructor : currentType.getConstructors()) {

@@ -15,25 +15,27 @@
 
 package io.sunflower.ebean;
 
+import io.ebean.PersistBatch;
+import io.ebean.TxIsolation;
+import io.ebean.TxType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.ebean.PersistBatch;
-import io.ebean.TxIsolation;
-import io.ebean.TxType;
-
 /**
- * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is used via javaagent,
- * ANT task or IDE enhancement plugin etc. </i></b> </p> <p> Note: Currently there are 3 known annotations that perform
- * this role. <ul> <li>EJB's javax.ejb.TransactionAttribute</li> <li>Spring's org.springframework.transaction.annotation.Transactional</li>
- * <li>and this one, Ebean's own Transactional</li> </ul> Spring created their one because the EJB annotation does not
- * support features such as isolation level and specifying rollbackOn, noRollbackOn exceptions. This one exists for
- * Ebean because I agree that the standard one is insufficient and don't want to include a dependency on Spring. </p>
- * <p> The default behaviour of EJB (and hence Spring) is to NOT ROLLBACK on checked exceptions. I find this very
- * counter-intuitive. Ebean will provide a property to set the default behaviour to rollback on any exception and
- * optionally change the setting to be consistent with EJB/Spring if people wish to do so. </p> <p>
+ * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is
+ * used via javaagent, ANT task or IDE enhancement plugin etc. </i></b> </p> <p> Note: Currently
+ * there are 3 known annotations that perform this role. <ul> <li>EJB's
+ * javax.ejb.TransactionAttribute</li> <li>Spring's org.springframework.transaction.annotation.Transactional</li>
+ * <li>and this one, Ebean's own Transactional</li> </ul> Spring created their one because the EJB
+ * annotation does not support features such as isolation level and specifying rollbackOn,
+ * noRollbackOn exceptions. This one exists for Ebean because I agree that the standard one is
+ * insufficient and don't want to include a dependency on Spring. </p> <p> The default behaviour of
+ * EJB (and hence Spring) is to NOT ROLLBACK on checked exceptions. I find this very
+ * counter-intuitive. Ebean will provide a property to set the default behaviour to rollback on any
+ * exception and optionally change the setting to be consistent with EJB/Spring if people wish to do
+ * so. </p> <p>
  * <pre>{@code
  *
  *  // a normal class
@@ -62,65 +64,66 @@ import io.ebean.TxType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transactional {
 
-    /**
-     * The type of transaction scoping. Defaults to REQUIRED.
-     */
-    TxType type() default TxType.REQUIRED;
+  /**
+   * The type of transaction scoping. Defaults to REQUIRED.
+   */
+  TxType type() default TxType.REQUIRED;
 
-    /**
-     * Persist batch mode for the transaction.
-     */
-    PersistBatch batch() default PersistBatch.INHERIT;
+  /**
+   * Persist batch mode for the transaction.
+   */
+  PersistBatch batch() default PersistBatch.INHERIT;
 
-    /**
-     * Persist batch mode for the request if not set on the transaction. <p> If batch is set to NONE then batchOnCascade
-     * can be set to INSERT or ALL and then each save(), delete(), insert(), update() request that cascades to child
-     * beans can use JDBC batch. </p>
-     */
-    PersistBatch batchOnCascade() default PersistBatch.INHERIT;
+  /**
+   * Persist batch mode for the request if not set on the transaction. <p> If batch is set to NONE
+   * then batchOnCascade can be set to INSERT or ALL and then each save(), delete(), insert(),
+   * update() request that cascades to child beans can use JDBC batch. </p>
+   */
+  PersistBatch batchOnCascade() default PersistBatch.INHERIT;
 
-    /**
-     * The batch size to use when using JDBC batch mode. <p> If unset this defaults to the value set in ServerConfig.
-     * </p>
-     */
-    int batchSize() default 0;
+  /**
+   * The batch size to use when using JDBC batch mode. <p> If unset this defaults to the value set
+   * in ServerConfig. </p>
+   */
+  int batchSize() default 0;
 
-    /**
-     * Set to false when we want to skip getting generatedKeys. <p> This is typically used in the case of large batch
-     * inserts where we get a performance benefit from not calling getGeneratedKeys (as we are going to insert a lot of
-     * rows and have no need for the Id values after the insert). </p>
-     */
-    boolean getGeneratedKeys() default true;
+  /**
+   * Set to false when we want to skip getting generatedKeys. <p> This is typically used in the case
+   * of large batch inserts where we get a performance benefit from not calling getGeneratedKeys (as
+   * we are going to insert a lot of rows and have no need for the Id values after the insert).
+   * </p>
+   */
+  boolean getGeneratedKeys() default true;
 
-    /**
-     * The transaction isolation level this transaction should have. <p> This will only be used if this scope creates
-     * the transaction. If the transaction has already started then this will currently be ignored (you could argue that
-     * it should throw an exception). </p>
-     */
-    TxIsolation isolation() default TxIsolation.DEFAULT;
+  /**
+   * The transaction isolation level this transaction should have. <p> This will only be used if
+   * this scope creates the transaction. If the transaction has already started then this will
+   * currently be ignored (you could argue that it should throw an exception). </p>
+   */
+  TxIsolation isolation() default TxIsolation.DEFAULT;
 
-    /**
-     * Set this to true if the transaction should be only contain queries.
-     */
-    boolean readOnly() default false;
+  /**
+   * Set this to true if the transaction should be only contain queries.
+   */
+  boolean readOnly() default false;
 
-    /**
-     * The name of the server that you want the transaction to be created from. <p> If left blank the 'default' server
-     * is used. </p>
-     */
-    String serverName() default EbeanBundle.DEFAULT_NAME;
+  /**
+   * The name of the server that you want the transaction to be created from. <p> If left blank the
+   * 'default' server is used. </p>
+   */
+  String serverName() default EbeanBundle.DEFAULT_NAME;
 
-    // int timeout() default 0;
+  // int timeout() default 0;
 
-    /**
-     * The Throwable's that will explicitly cause a rollback to occur.
-     */
-    Class<? extends Throwable>[] rollbackFor() default {};
+  /**
+   * The Throwable's that will explicitly cause a rollback to occur.
+   */
+  Class<? extends Throwable>[] rollbackFor() default {};
 
-    /**
-     * The Throwable's that will explicitly NOT cause a rollback to occur.
-     */
-    Class<? extends Throwable>[] noRollbackFor() default {};
+  /**
+   * The Throwable's that will explicitly NOT cause a rollback to occur.
+   */
+  Class<? extends Throwable>[] noRollbackFor() default {};
 
 }
 

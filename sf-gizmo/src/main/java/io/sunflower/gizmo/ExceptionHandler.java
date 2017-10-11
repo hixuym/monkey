@@ -20,43 +20,43 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultExceptionHandler.class)
 public interface ExceptionHandler {
 
-    /**
-     *
-     * @param context
-     * @param exception
-     * @param underlyingResult
-     * @return
-     */
-    Result onException(Context context, Exception exception, Result underlyingResult);
+  /**
+   *
+   * @param context
+   * @param exception
+   * @param underlyingResult
+   * @return
+   */
+  Result onException(Context context, Exception exception, Result underlyingResult);
 
-    /**
-     * Should handle cases where no route can be found for a given request.
-     *
-     * Should lead to a html error 404 - not found (and be used with the same mindset).
-     *
-     * Usually used by onRouteRequest(...).
-     */
-    Result getNotFoundResult(Context context);
+  /**
+   * Should handle cases where no route can be found for a given request.
+   *
+   * Should lead to a html error 404 - not found (and be used with the same mindset).
+   *
+   * Usually used by onRouteRequest(...).
+   */
+  Result getNotFoundResult(Context context);
 
-    /**
-     * Should handle cases where access is unauthorized
-     *
-     * Should lead to a html error 401 - unauthorized (and be used with the same mindset).
-     *
-     * By default, WWW-Authenticate is set to None.
-     *
-     * Usually used by BasicAuthFilter for instance(...).
-     */
-    Result getUnauthorizedResult(Context context);
+  /**
+   * Should handle cases where access is unauthorized
+   *
+   * Should lead to a html error 401 - unauthorized (and be used with the same mindset).
+   *
+   * By default, WWW-Authenticate is set to None.
+   *
+   * Usually used by BasicAuthFilter for instance(...).
+   */
+  Result getUnauthorizedResult(Context context);
 
-    /**
-     * Should handle cases where access is forbidden
-     *
-     * Should lead to a html error 403 - forbidden (and be used with the same mindset).
-     *
-     * Usually used by SecureFilter for instance(...).
-     */
-    Result getForbiddenResult(Context context);
+  /**
+   * Should handle cases where access is forbidden
+   *
+   * Should lead to a html error 403 - forbidden (and be used with the same mindset).
+   *
+   * Usually used by SecureFilter for instance(...).
+   */
+  Result getForbiddenResult(Context context);
 
 
 }

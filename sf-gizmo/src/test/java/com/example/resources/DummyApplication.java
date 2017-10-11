@@ -21,8 +21,8 @@ import io.sunflower.gizmo.Results;
 
 public class DummyApplication {
 
-    public Result dummyMethod() {
-        return Results.ok();
-    }
+  public Result dummyMethod() {
+    return Results.ok();
+  }
 
 }

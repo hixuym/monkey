@@ -21,32 +21,31 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-
 import java.util.Map;
 import java.util.Set;
 
 public class Injectors {
 
-    public static <T> Set<T> instanceOf(Injector injector, Class<T> baseClass) {
+  public static <T> Set<T> instanceOf(Injector injector, Class<T> baseClass) {
 
-        Set<T> resutls = Sets.newHashSet();
+    Set<T> resutls = Sets.newHashSet();
 
-        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
-            if (baseClass.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType())) {
-                Provider<? extends T> provider = (Provider) binding.getValue().getProvider();
-                resutls.add(provider.get());
-            }
-        }
-
-        return resutls;
+    for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
+      if (baseClass.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType())) {
+        Provider<? extends T> provider = (Provider) binding.getValue().getProvider();
+        resutls.add(provider.get());
+      }
     }
 
-    public static <K, V> Map<K, V> mapOf(Injector injector, TypeLiteral<Map<K, V>> typeLiteral) {
-        return injector.getInstance(Key.get(typeLiteral));
-    }
+    return resutls;
+  }
 
-    public static <T> Set<T> setOf(Injector injector, TypeLiteral<Set<T>> typeLiteral) {
-        return injector.getInstance(Key.get(typeLiteral));
-    }
+  public static <K, V> Map<K, V> mapOf(Injector injector, TypeLiteral<Map<K, V>> typeLiteral) {
+    return injector.getInstance(Key.get(typeLiteral));
+  }
+
+  public static <T> Set<T> setOf(Injector injector, TypeLiteral<Set<T>> typeLiteral) {
+    return injector.getInstance(Key.get(typeLiteral));
+  }
 
 }

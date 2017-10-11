@@ -18,23 +18,23 @@ package io.sunflower.reflect;
  */
 public class Test10 {
 
-    public final String s;
-    public final Integer i;
+  public final String s;
+  public final Integer i;
 
-    Test10(int i) {
-        this(null, i);
-    }
+  Test10(int i) {
+    this(null, i);
+  }
 
-    Test10(String s) {
-        this(s, null);
-    }
+  Test10(String s) {
+    this(s, null);
+  }
 
-    Test10(String s, int i) {
-        this(s, (Integer) i);
-    }
+  Test10(String s, int i) {
+    this(s, (Integer) i);
+  }
 
-    Test10(String s, Integer i) {
-        this.s = s;
-        this.i = i;
-    }
+  Test10(String s, Integer i) {
+    this.s = s;
+    this.i = i;
+  }
 }

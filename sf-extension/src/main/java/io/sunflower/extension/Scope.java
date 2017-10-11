@@ -20,13 +20,13 @@ package io.sunflower.extension;
  */
 public enum Scope {
 
-    /**
-     * 单例模式
-     */
-    SINGLETON,
+  /**
+   * 单例模式
+   */
+  SINGLETON,
 
-    /**
-     * 多例模式
-     */
-    PROTOTYPE
+  /**
+   * 多例模式
+   */
+  PROTOTYPE
 }

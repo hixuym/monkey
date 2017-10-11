@@ -15,27 +15,15 @@
 
 package io.sunflower.gizmo.server;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.guicey.Injectors;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.handler.Task;
-import io.sunflower.undertow.handler.TaskHandler;
 import io.undertow.Handlers;
 import io.undertow.predicate.Predicate;
 import io.undertow.predicate.Predicates;
@@ -45,90 +33,99 @@ import io.undertow.server.handlers.RequestDumpingHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import io.undertow.server.handlers.accesslog.AccessLogReceiver;
 import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import org.apache.commons.lang3.StringUtils;
 
-public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements ServerFactory {
+public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements
+    ServerFactory {
 
-    private final PathHandler adminHandlers = new PathHandler();
+  private final PathHandler adminHandlers = new PathHandler();
 
-    @JsonIgnore
-    protected HttpHandler createAdminHandler() {
-        return adminHandlers;
+  @JsonIgnore
+  protected HttpHandler createAdminHandler() {
+    return adminHandlers;
+  }
+
+  @Override
+  public final Server build(Environment environment) {
+
+    Injectors.mapOf(environment.guicey().injector(), new TypeLiteral<Map<String, HttpHandler>>() {
+    })
+        .forEach(adminHandlers::addPrefixPath);
+
+    return buildServer(environment);
+  }
+
+  protected abstract Server buildServer(Environment environment);
+
+  /**
+   *
+   * @param injector
+   * @return
+   */
+  @JsonIgnore
+  protected HttpHandler createApplicationHandler(Injector injector) {
+    // root handler for sf app
+    GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
+
+    // slipstream injector into undertow handler BEFORE server starts
+    gizmoHttpHandler.init(injector, getApplicationContextPath());
+
+    HttpHandler h = gizmoHttpHandler;
+
+    // wireshark enabled?
+    if (isTraceEnabled()) {
+      logger.info("Undertow tracing of requests and responses activated (undertow.tracing = true)");
+      // only activate request dumping on non-assets
+      Predicate isAssets = Predicates.prefix("/assets");
+      h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
     }
 
-    @Override
-    public final Server build(Environment environment) {
+    return io.sunflower.undertow.handler.Handlers.blocking(h);
+  }
 
-        Injectors.mapOf(environment.guicey().injector(), new TypeLiteral<Map<String, HttpHandler>>() {})
-            .forEach(adminHandlers::addPrefixPath);
+  private ExecutorService accessLogExecutor = null;
 
-        return buildServer(environment);
+  @JsonIgnore
+  protected HttpHandler addAccessLogWrapper(String baseName, Environment environment,
+      HttpHandler httpHandler) {
+    String format = getAccessLogFormat();
+
+    if (StringUtils.isNotEmpty(format)) {
+
+      if (accessLogExecutor == null) {
+        accessLogExecutor = environment.lifecycle().executorService("AccessLog-pool-%d-" + baseName)
+            .maxThreads(2)
+            .minThreads(1)
+            .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+            .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
+            .build();
+      }
+
+      Path log = Paths.get(getAccessLogPath());
+
+      if (!log.toFile().exists()) {
+        boolean r = log.toFile().mkdirs();
+      }
+
+      AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
+          .setLogBaseName(baseName)
+          .setLogWriteExecutor(accessLogExecutor)
+          .setOutputDirectory(log)
+          .setRotate(isAccessLogRotate())
+          .build();
+
+      return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
     }
 
-    protected abstract Server buildServer(Environment environment);
+    return httpHandler;
+  }
 
-    /**
-     *
-     * @param injector
-     * @return
-     */
-    @JsonIgnore
-    protected HttpHandler createApplicationHandler(Injector injector) {
-        // root handler for sf app
-        GizmoHttpHandler gizmoHttpHandler = new GizmoHttpHandler();
-
-        // slipstream injector into undertow handler BEFORE server starts
-        gizmoHttpHandler.init(injector, getApplicationContextPath());
-
-        HttpHandler h = gizmoHttpHandler;
-
-        // wireshark enabled?
-        if (isTraceEnabled()) {
-            logger.info("Undertow tracing of requests and responses activated (undertow.tracing = true)");
-            // only activate request dumping on non-assets
-            Predicate isAssets = Predicates.prefix("/assets");
-            h = Handlers.predicate(isAssets, h, new RequestDumpingHandler(h));
-        }
-
-        return io.sunflower.undertow.handler.Handlers.blocking(h);
-    }
-
-    private ExecutorService accessLogExecutor = null;
-
-    @JsonIgnore
-    protected HttpHandler addAccessLogWrapper(String baseName, Environment environment, HttpHandler httpHandler) {
-        String format = getAccessLogFormat();
-
-        if (StringUtils.isNotEmpty(format)) {
-
-            if (accessLogExecutor == null) {
-                accessLogExecutor = environment.lifecycle().executorService("AccessLog-pool-%d-" + baseName)
-                    .maxThreads(2)
-                    .minThreads(1)
-                    .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-                    .rejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy())
-                    .build();
-            }
-
-            Path log = Paths.get(getAccessLogPath());
-
-            if (!log.toFile().exists()) {
-                boolean r = log.toFile().mkdirs();
-            }
-
-            AccessLogReceiver receiver = DefaultAccessLogReceiver.builder()
-                .setLogBaseName(baseName)
-                .setLogWriteExecutor(accessLogExecutor)
-                .setOutputDirectory(log)
-                .setRotate(isAccessLogRotate())
-                .build();
-
-            return new AccessLogHandler(httpHandler, receiver, format, environment.classLoader());
-        }
-
-        return httpHandler;
-    }
-
-    @Override
-    public void configure(Environment environment) {
-    }
+  @Override
+  public void configure(Environment environment) {
+  }
 }

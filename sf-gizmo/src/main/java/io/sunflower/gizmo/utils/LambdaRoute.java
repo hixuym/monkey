@@ -15,67 +15,66 @@
  */
 package io.sunflower.gizmo.utils;
 
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
-
 public class LambdaRoute {
 
-    private final Method functionalMethod;
-    private final Optional<Method> implementationMethod;
-    private final Optional<Object> targetObject;
+  private final Method functionalMethod;
+  private final Optional<Method> implementationMethod;
+  private final Optional<Object> targetObject;
 
-    public LambdaRoute(Method functionalMethod, Method implementationMethod, Object targetObject) {
-        this.functionalMethod = functionalMethod;
-        this.implementationMethod = Optional.ofNullable(implementationMethod);
-        this.targetObject = Optional.ofNullable(targetObject);
+  public LambdaRoute(Method functionalMethod, Method implementationMethod, Object targetObject) {
+    this.functionalMethod = functionalMethod;
+    this.implementationMethod = Optional.ofNullable(implementationMethod);
+    this.targetObject = Optional.ofNullable(targetObject);
+  }
+
+  public Method getFunctionalMethod() {
+    return functionalMethod;
+  }
+
+  public Optional<Method> getImplementationMethod() {
+    return implementationMethod;
+  }
+
+  public Optional<Object> getTargetObject() {
+    return targetObject;
+  }
+
+  static public LambdaRoute resolve(ResourceMethod resourceMethod) {
+    try {
+      Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(resourceMethod);
+
+      switch (lambdaInfo.getKind()) {
+        case ANY_INSTANCE_METHOD_REFERENCE:
+        case STATIC_METHOD_REFERENCE:
+          // call impl method just like before Java 8
+          return new LambdaRoute(lambdaInfo.getImplementationMethod(), null, null);
+        case SPECIFIC_INSTANCE_METHOD_REFERENCE:
+        case ANONYMOUS_METHOD_REFERENCE:
+          // only safe to use the impl method for argument types if
+          // the number of arguments matches between the methods
+          if (lambdaInfo.areMethodParameterCountsEqual()) {
+            return new LambdaRoute(
+                lambdaInfo.getFunctionalMethod(),
+                lambdaInfo.getImplementationMethod(),
+                resourceMethod);
+          }
+      }
+    } catch (IllegalArgumentException e) {
+      // unable to detect lambda (e.g. such as anonymous/concrete class)
     }
 
-    public Method getFunctionalMethod() {
-        return functionalMethod;
+    // fallback to simple call the "apply" method on the supplied method instance
+    try {
+      Method functionalMethod = Lambdas.getMethod(resourceMethod.getClass(), "apply");
+      functionalMethod.setAccessible(true);
+      return new LambdaRoute(functionalMethod, null, resourceMethod);
+    } catch (NoSuchMethodException | ClassNotFoundException e) {
+      throw new RuntimeException(e);
     }
-
-    public Optional<Method> getImplementationMethod() {
-        return implementationMethod;
-    }
-
-    public Optional<Object> getTargetObject() {
-        return targetObject;
-    }
-
-    static public LambdaRoute resolve(ResourceMethod resourceMethod) {
-        try {
-            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(resourceMethod);
-
-            switch (lambdaInfo.getKind()) {
-                case ANY_INSTANCE_METHOD_REFERENCE:
-                case STATIC_METHOD_REFERENCE:
-                    // call impl method just like before Java 8
-                    return new LambdaRoute(lambdaInfo.getImplementationMethod(), null, null);
-                case SPECIFIC_INSTANCE_METHOD_REFERENCE:
-                case ANONYMOUS_METHOD_REFERENCE:
-                    // only safe to use the impl method for argument types if
-                    // the number of arguments matches between the methods
-                    if (lambdaInfo.areMethodParameterCountsEqual()) {
-                        return new LambdaRoute(
-                            lambdaInfo.getFunctionalMethod(),
-                            lambdaInfo.getImplementationMethod(),
-                            resourceMethod);
-                    }
-            }
-        } catch (IllegalArgumentException e) {
-            // unable to detect lambda (e.g. such as anonymous/concrete class)
-        }
-
-        // fallback to simple call the "apply" method on the supplied method instance
-        try {
-            Method functionalMethod = Lambdas.getMethod(resourceMethod.getClass(), "apply");
-            functionalMethod.setAccessible(true);
-            return new LambdaRoute(functionalMethod, null, resourceMethod);
-        } catch (NoSuchMethodException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+  }
 
 }

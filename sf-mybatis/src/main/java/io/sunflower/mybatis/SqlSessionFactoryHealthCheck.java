@@ -15,57 +15,54 @@
 
 package io.sunflower.mybatis;
 
-import com.google.common.util.concurrent.MoreExecutors;
-
 import com.codahale.metrics.health.HealthCheck;
-
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-
+import com.google.common.util.concurrent.MoreExecutors;
+import io.sunflower.db.TimeBoundHealthCheck;
+import io.sunflower.util.Duration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.concurrent.ExecutorService;
-
-import io.sunflower.db.TimeBoundHealthCheck;
-import io.sunflower.util.Duration;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class SqlSessionFactoryHealthCheck extends HealthCheck {
 
-    private final SqlSessionFactory sqlSessionFactory;
-    private final String validationQuery;
-    private final TimeBoundHealthCheck timeBoundHealthCheck;
+  private final SqlSessionFactory sqlSessionFactory;
+  private final String validationQuery;
+  private final TimeBoundHealthCheck timeBoundHealthCheck;
 
-    public SqlSessionFactoryHealthCheck(SqlSessionFactory sqlSessionFactory,
-                                        String validationQuery) {
-        this(MoreExecutors.newDirectExecutorService(), Duration.seconds(0), sqlSessionFactory, validationQuery);
-    }
+  public SqlSessionFactoryHealthCheck(SqlSessionFactory sqlSessionFactory,
+      String validationQuery) {
+    this(MoreExecutors.newDirectExecutorService(), Duration.seconds(0), sqlSessionFactory,
+        validationQuery);
+  }
 
-    public SqlSessionFactoryHealthCheck(ExecutorService executorService,
-                                        Duration duration,
-                                        SqlSessionFactory sqlSessionFactory,
-                                        String validationQuery) {
-        this.sqlSessionFactory = sqlSessionFactory;
-        this.validationQuery = validationQuery;
-        this.timeBoundHealthCheck = new TimeBoundHealthCheck(executorService, duration);
-    }
+  public SqlSessionFactoryHealthCheck(ExecutorService executorService,
+      Duration duration,
+      SqlSessionFactory sqlSessionFactory,
+      String validationQuery) {
+    this.sqlSessionFactory = sqlSessionFactory;
+    this.validationQuery = validationQuery;
+    this.timeBoundHealthCheck = new TimeBoundHealthCheck(executorService, duration);
+  }
 
-    @Override
-    protected Result check() throws Exception {
-        return timeBoundHealthCheck.check(() -> {
-            SqlSession sqlSession = sqlSessionFactory.openSession();
-            try {
-                Connection conn = sqlSession.getConnection();
-                PreparedStatement preparedStatement = conn.prepareStatement(validationQuery);
-                preparedStatement.executeQuery();
-                sqlSession.commit();
-            } catch (Exception e) {
-                sqlSession.rollback();
-                throw e;
-            } finally {
-                sqlSession.close();
-            }
+  @Override
+  protected Result check() throws Exception {
+    return timeBoundHealthCheck.check(() -> {
+      SqlSession sqlSession = sqlSessionFactory.openSession();
+      try {
+        Connection conn = sqlSession.getConnection();
+        PreparedStatement preparedStatement = conn.prepareStatement(validationQuery);
+        preparedStatement.executeQuery();
+        sqlSession.commit();
+      } catch (Exception e) {
+        sqlSession.rollback();
+        throw e;
+      } finally {
+        sqlSession.close();
+      }
 
-            return Result.healthy();
-        });
-    }
+      return Result.healthy();
+    });
+  }
 }

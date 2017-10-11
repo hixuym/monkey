@@ -15,13 +15,13 @@
 
 package io.sunflower.gizmo.application;
 
+import io.sunflower.gizmo.Filter;
 import java.util.List;
 
-import io.sunflower.gizmo.Filter;
-
 public class DefaultApplicationFilters implements ApplicationFilters {
-    @Override
-    public void addFilters(List<Class<? extends Filter>> filters) {
 
-    }
+  @Override
+  public void addFilters(List<Class<? extends Filter>> filters) {
+
+  }
 }

@@ -14,70 +14,72 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
  * A utility class for Jackson.
  */
 public class Jackson {
-    private Jackson() { /* singleton */ }
 
-    public static XmlMapper newXmlMapper() {
-        JacksonXmlModule xmlModule = new JacksonXmlModule();
+  private Jackson() { /* singleton */ }
 
-        // Check out: https://github.com/FasterXML/jackson-dataformat-xml
-        // setDefaultUseWrapper produces more similar output to
-        // the Json output. You can change that with annotations in your
-        // models.
-        xmlModule.setDefaultUseWrapper(false);
+  public static XmlMapper newXmlMapper() {
+    JacksonXmlModule xmlModule = new JacksonXmlModule();
 
-        XmlMapper xmlMapper = new XmlMapper(xmlModule);
+    // Check out: https://github.com/FasterXML/jackson-dataformat-xml
+    // setDefaultUseWrapper produces more similar output to
+    // the Json output. You can change that with annotations in your
+    // models.
+    xmlModule.setDefaultUseWrapper(false);
 
-        xmlMapper.registerModule(new AfterburnerModule());
+    XmlMapper xmlMapper = new XmlMapper(xmlModule);
 
-        return xmlMapper;
-    }
+    xmlMapper.registerModule(new AfterburnerModule());
 
-    /**
-     * Creates a new {@link ObjectMapper} with Guava, Logback, and Joda Time support, as well as support for {@link
-     * JsonSnakeCase}. Also includes all {@link Discoverable} interface implementations.
-     */
-    public static ObjectMapper newObjectMapper() {
-        final ObjectMapper mapper = new ObjectMapper();
+    return xmlMapper;
+  }
 
-        return configure(mapper);
-    }
+  /**
+   * Creates a new {@link ObjectMapper} with Guava, Logback, and Joda Time support, as well as
+   * support for {@link JsonSnakeCase}. Also includes all {@link Discoverable} interface
+   * implementations.
+   */
+  public static ObjectMapper newObjectMapper() {
+    final ObjectMapper mapper = new ObjectMapper();
 
-    /**
-     * Creates a new {@link ObjectMapper} with a custom {@link com.fasterxml.jackson.core.JsonFactory} with Guava,
-     * Logback, and Joda Time support, as well as support for {@link JsonSnakeCase}. Also includes all {@link
-     * Discoverable} interface implementations.
-     *
-     * @param jsonFactory instance of {@link com.fasterxml.jackson.core.JsonFactory} to use for the created {@link
-     *                    com.fasterxml.jackson.databind.ObjectMapper} instance.
-     */
-    public static ObjectMapper newObjectMapper(JsonFactory jsonFactory) {
-        final ObjectMapper mapper = new ObjectMapper(jsonFactory);
+    return configure(mapper);
+  }
 
-        return configure(mapper);
-    }
+  /**
+   * Creates a new {@link ObjectMapper} with a custom {@link com.fasterxml.jackson.core.JsonFactory}
+   * with Guava, Logback, and Joda Time support, as well as support for {@link JsonSnakeCase}. Also
+   * includes all {@link Discoverable} interface implementations.
+   *
+   * @param jsonFactory instance of {@link com.fasterxml.jackson.core.JsonFactory} to use for the
+   * created {@link com.fasterxml.jackson.databind.ObjectMapper} instance.
+   */
+  public static ObjectMapper newObjectMapper(JsonFactory jsonFactory) {
+    final ObjectMapper mapper = new ObjectMapper(jsonFactory);
 
-    /**
-     * Creates a new minimal {@link ObjectMapper} that will work with Dropwizard out of box. <p><b>NOTE:</b> Use it, if
-     * the default Dropwizard's {@link ObjectMapper}, created in {@link #newObjectMapper()}, is too aggressive for
-     * you.</p>
-     */
-    public static ObjectMapper newMinimalObjectMapper() {
-        return new ObjectMapper()
-            .registerModule(new GuavaModule())
-            .setSubtypeResolver(new DiscoverableSubtypeResolver());
-    }
+    return configure(mapper);
+  }
 
-    private static ObjectMapper configure(ObjectMapper mapper) {
-        mapper.registerModule(new GuavaModule());
-        mapper.registerModule(new GuavaExtrasModule());
-        mapper.registerModule(new AfterburnerModule());
-        mapper.registerModule(new FuzzyEnumModule());
-        mapper.registerModule(new ParameterNamesModule());
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new JavaTimeModule());
-        mapper.setPropertyNamingStrategy(new AnnotationSensitivePropertyNamingStrategy());
-        mapper.setSubtypeResolver(new DiscoverableSubtypeResolver());
+  /**
+   * Creates a new minimal {@link ObjectMapper} that will work with Dropwizard out of box.
+   * <p><b>NOTE:</b> Use it, if the default Dropwizard's {@link ObjectMapper}, created in {@link
+   * #newObjectMapper()}, is too aggressive for you.</p>
+   */
+  public static ObjectMapper newMinimalObjectMapper() {
+    return new ObjectMapper()
+        .registerModule(new GuavaModule())
+        .setSubtypeResolver(new DiscoverableSubtypeResolver());
+  }
 
-        return mapper;
-    }
+  private static ObjectMapper configure(ObjectMapper mapper) {
+    mapper.registerModule(new GuavaModule());
+    mapper.registerModule(new GuavaExtrasModule());
+    mapper.registerModule(new AfterburnerModule());
+    mapper.registerModule(new FuzzyEnumModule());
+    mapper.registerModule(new ParameterNamesModule());
+    mapper.registerModule(new Jdk8Module());
+    mapper.registerModule(new JavaTimeModule());
+    mapper.setPropertyNamingStrategy(new AnnotationSensitivePropertyNamingStrategy());
+    mapper.setSubtypeResolver(new DiscoverableSubtypeResolver());
+
+    return mapper;
+  }
 }

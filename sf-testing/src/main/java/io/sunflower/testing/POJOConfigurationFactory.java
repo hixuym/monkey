@@ -16,40 +16,39 @@
 package io.sunflower.testing;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.File;
-
 import io.sunflower.Configuration;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
+import java.io.File;
 
 public class POJOConfigurationFactory<C extends Configuration>
     extends YamlConfigurationFactory<C> {
-    protected final C configuration;
 
-    @SuppressWarnings("unchecked")
-    public POJOConfigurationFactory(C cfg) {
-        super((Class<C>) cfg.getClass(), null, null, null);
-        configuration = cfg;
-    }
+  protected final C configuration;
 
-    @Override
-    public C build(ConfigurationSourceProvider provider, String path) {
-        return configuration;
-    }
+  @SuppressWarnings("unchecked")
+  public POJOConfigurationFactory(C cfg) {
+    super((Class<C>) cfg.getClass(), null, null, null);
+    configuration = cfg;
+  }
 
-    @Override
-    public C build(File file) {
-        return configuration;
-    }
+  @Override
+  public C build(ConfigurationSourceProvider provider, String path) {
+    return configuration;
+  }
 
-    @Override
-    public C build() {
-        return configuration;
-    }
+  @Override
+  public C build(File file) {
+    return configuration;
+  }
 
-    @Override
-    protected C build(JsonNode node, String path) {
-        return configuration;
-    }
+  @Override
+  public C build() {
+    return configuration;
+  }
+
+  @Override
+  protected C build(JsonNode node, String path) {
+    return configuration;
+  }
 }

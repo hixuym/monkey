@@ -19,7 +19,6 @@ import static org.apache.ibatis.session.SqlSessionManager.newInstance;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 

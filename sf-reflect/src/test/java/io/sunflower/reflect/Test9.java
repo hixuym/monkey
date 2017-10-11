@@ -17,9 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Test9 {
-    Map<String, String> map = new HashMap<String, String>();
 
-    public void put(String name, String value) {
-        map.put(name, value);
-    }
+  Map<String, String> map = new HashMap<String, String>();
+
+  public void put(String name, String value) {
+    map.put(name, value);
+  }
 }

@@ -15,46 +15,44 @@
 
 package io.sunflower.example;
 
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-
-import javax.inject.Inject;
+import static io.sunflower.testing.ResourceHelpers.resourceFilePath;
+import static org.junit.Assert.assertNotNull;
 
 import io.ebean.EbeanServer;
 import io.sunflower.example.core.UserMapper;
 import io.sunflower.testing.ConfigOverride;
 import io.sunflower.testing.junit.SunflowerAppRule;
-
-import static io.sunflower.testing.ResourceHelpers.resourceFilePath;
-import static org.junit.Assert.assertNotNull;
+import javax.inject.Inject;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 public class UserMapperTests {
 
-    @ClassRule
-    public static SunflowerAppRule<ExampleConfiguration> appRule =
-        new SunflowerAppRule<>(ExampleApplication.class,
-            resourceFilePath("example.yml"),
-        ConfigOverride.config("server.type", "default"));
+  @ClassRule
+  public static SunflowerAppRule<ExampleConfiguration> appRule =
+      new SunflowerAppRule<>(ExampleApplication.class,
+          resourceFilePath("example.yml"),
+          ConfigOverride.config("server.type", "default"));
 
-    @Inject
-    private EbeanServer ebeanServer;
+  @Inject
+  private EbeanServer ebeanServer;
 
-    @Inject
-    private UserMapper userMapper;
+  @Inject
+  private UserMapper userMapper;
 
-    @Before
-    public void init() {
-        appRule.inject(this);
-    }
+  @Before
+  public void init() {
+    appRule.inject(this);
+  }
 
-    @Test
-    public void testUserMapper() {
-        assertNotNull(userMapper);
-    }
+  @Test
+  public void testUserMapper() {
+    assertNotNull(userMapper);
+  }
 
-    @Test
-    public void testEbeanServer() {
-        assertNotNull(ebeanServer);
-    }
+  @Test
+  public void testEbeanServer() {
+    assertNotNull(ebeanServer);
+  }
 }

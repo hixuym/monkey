@@ -20,5 +20,6 @@ package io.sunflower.extension;
  */
 @Spi(scope = Scope.SINGLETON)
 public interface SpiTestInterface {
-    long spiHello();
+
+  long spiHello();
 }

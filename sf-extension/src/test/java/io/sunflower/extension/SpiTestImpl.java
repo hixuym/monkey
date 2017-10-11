@@ -22,16 +22,17 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @SpiMeta(name = "spitest")
 public class SpiTestImpl implements SpiTestInterface {
-    private static AtomicLong counter = new AtomicLong(0);
-    private long index = 0;
 
-    public SpiTestImpl() {
-        index = counter.incrementAndGet();
-    }
+  private static AtomicLong counter = new AtomicLong(0);
+  private long index = 0;
 
-    @Override
-    public long spiHello() {
-        return index;
-    }
+  public SpiTestImpl() {
+    index = counter.incrementAndGet();
+  }
+
+  @Override
+  public long spiHello() {
+    return index;
+  }
 
 }

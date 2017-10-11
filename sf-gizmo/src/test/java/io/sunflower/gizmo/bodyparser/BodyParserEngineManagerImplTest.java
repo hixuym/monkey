@@ -15,18 +15,14 @@
 
 package io.sunflower.gizmo.bodyparser;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.multibindings.Multibinder;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import java.util.Collections;
-import java.util.List;
-
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.RouterImpl;
@@ -34,47 +30,48 @@ import io.sunflower.gizmo.i18n.Lang;
 import io.sunflower.gizmo.i18n.LangImpl;
 import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.guicey.LoggerProvider;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import java.util.Collections;
+import java.util.List;
+import org.junit.Test;
+import org.slf4j.Logger;
 
 public class BodyParserEngineManagerImplTest {
 
-    @Test
-    public void testContentTypes() {
-        List<String> types = Lists.newArrayList(createBodyParserEngineManager().getContentTypes());
-        Collections.sort(types);
-        assertThat(types.toString(),
-            equalTo("[application/json, application/x-www-form-urlencoded, application/xml]"));
-    }
+  @Test
+  public void testContentTypes() {
+    List<String> types = Lists.newArrayList(createBodyParserEngineManager().getContentTypes());
+    Collections.sort(types);
+    assertThat(types.toString(),
+        equalTo("[application/json, application/x-www-form-urlencoded, application/xml]"));
+  }
 
-    private BodyParserEngineManager createBodyParserEngineManager(final Class<?>... toBind) {
-        return createInjector(toBind).getInstance(BodyParserEngineManager.class);
-    }
+  private BodyParserEngineManager createBodyParserEngineManager(final Class<?>... toBind) {
+    return createInjector(toBind).getInstance(BodyParserEngineManager.class);
+  }
 
-    private Injector createInjector(final Class<?>... toBind) {
-        return Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
+  private Injector createInjector(final Class<?>... toBind) {
+    return Guice.createInjector(new AbstractModule() {
+      @Override
+      protected void configure() {
 
-                bind(Logger.class).toProvider(LoggerProvider.class);
-                bind(Lang.class).to(LangImpl.class);
+        bind(Logger.class).toProvider(LoggerProvider.class);
+        bind(Lang.class).to(LangImpl.class);
 
-                Multibinder.newSetBinder(binder(), ParamParser.class);
-                bind(Router.class).to(RouterImpl.class);
+        Multibinder.newSetBinder(binder(), ParamParser.class);
+        bind(Router.class).to(RouterImpl.class);
 
-                bind(BodyParserEnginePost.class);
-                bind(BodyParserEngineJson.class);
-                bind(BodyParserEngineXml.class);
+        bind(BodyParserEnginePost.class);
+        bind(BodyParserEngineJson.class);
+        bind(BodyParserEngineXml.class);
 
-                bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
+        bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
 
-                for (Class<?> clazz : toBind) {
+        for (Class<?> clazz : toBind) {
 
-                    bind(clazz);
+          bind(clazz);
 
-                }
-            }
-        });
-    }
+        }
+      }
+    });
+  }
 }

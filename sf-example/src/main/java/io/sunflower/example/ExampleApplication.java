@@ -1,7 +1,6 @@
 package io.sunflower.example;
 
 import com.google.inject.AbstractModule;
-
 import io.sunflower.Application;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.ebean.EbeanBundle;
@@ -21,44 +20,44 @@ import io.sunflower.setup.Environment;
  */
 public class ExampleApplication extends Application<ExampleConfiguration> {
 
-    public static void main(String[] args) throws Exception {
-        new ExampleApplication().run(args);
-    }
+  public static void main(String[] args) throws Exception {
+    new ExampleApplication().run(args);
+  }
 
-    @Override
-    public String getName() {
-        return "sf-example";
-    }
+  @Override
+  public String getName() {
+    return "sf-example";
+  }
 
-    @Override
-    public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-        bootstrap.addCommand(new DumpConfigCommand());
-        bootstrap.addBundle(new GizmoBundle<>());
-        bootstrap.addBundle(new EbeanBundle<ExampleConfiguration>() {
-            @Override
-            public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
-                return configuration.getDataSourceFactory();
-            }
-        });
+  @Override
+  public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
+    bootstrap.addCommand(new DumpConfigCommand());
+    bootstrap.addBundle(new GizmoBundle<>());
+    bootstrap.addBundle(new EbeanBundle<ExampleConfiguration>() {
+      @Override
+      public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
+        return configuration.getDataSourceFactory();
+      }
+    });
 
-        bootstrap.addBundle(new MybatisBundle<ExampleConfiguration>() {
-            @Override
-            public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
-                return configuration.getDataSourceFactory();
-            }
-        });
-    }
+    bootstrap.addBundle(new MybatisBundle<ExampleConfiguration>() {
+      @Override
+      public PooledDataSourceFactory getDataSourceFactory(ExampleConfiguration configuration) {
+        return configuration.getDataSourceFactory();
+      }
+    });
+  }
 
-    @Override
-    public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
-        environment.guicey().addModule(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(ApplicationRoutes.class).to(Routes.class);
-                bind(TemplateEngineFreemarker.class);
-                bind(Gizmo.class).to(InstrumentedGizmo.class);
-            }
-        });
-    }
+  @Override
+  public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
+    environment.guicey().addModule(new AbstractModule() {
+      @Override
+      protected void configure() {
+        bind(ApplicationRoutes.class).to(Routes.class);
+        bind(TemplateEngineFreemarker.class);
+        bind(Gizmo.class).to(InstrumentedGizmo.class);
+      }
+    });
+  }
 
 }

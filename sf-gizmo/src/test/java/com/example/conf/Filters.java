@@ -14,22 +14,21 @@
  */
 package com.example.conf;
 
-import java.util.List;
-
 import io.sunflower.gizmo.Filter;
 import io.sunflower.gizmo.application.ApplicationFilters;
+import java.util.List;
 
 // Used in some testcases...
 public class Filters implements ApplicationFilters {
 
-    Class<? extends Filter> filterToAdd;
+  Class<? extends Filter> filterToAdd;
 
-    public Filters(Class<? extends Filter> filterToAdd) {
-        this.filterToAdd = filterToAdd;
-    }
+  public Filters(Class<? extends Filter> filterToAdd) {
+    this.filterToAdd = filterToAdd;
+  }
 
-    @Override
-    public void addFilters(List<Class<? extends Filter>> filters) {
-        filters.add(filterToAdd);
-    }
+  @Override
+  public void addFilters(List<Class<? extends Filter>> filters) {
+    filters.add(filterToAdd);
+  }
 }

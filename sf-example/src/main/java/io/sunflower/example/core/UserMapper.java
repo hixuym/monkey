@@ -21,6 +21,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
 
-    @Select("select count(1) from tb_user")
-    int getUserCount();
+  @Select("select count(1) from tb_user")
+  int getUserCount();
 }

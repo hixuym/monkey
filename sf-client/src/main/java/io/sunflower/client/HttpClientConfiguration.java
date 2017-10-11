@@ -19,191 +19,189 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.client.proxy.ProxyConfiguration;
 import io.sunflower.client.ssl.TlsConfiguration;
 import io.sunflower.util.Duration;
-
-import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
-
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
+import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 
 /**
  * The configuration class used by {@link HttpClientBuilder}.
- *
  */
 public class HttpClientConfiguration {
-    @NotNull
-    private Duration timeout = Duration.milliseconds(500);
 
-    @NotNull
-    private Duration connectionTimeout = Duration.milliseconds(500);
+  @NotNull
+  private Duration timeout = Duration.milliseconds(500);
 
-    @NotNull
-    private Duration connectionRequestTimeout = Duration.milliseconds(500);
+  @NotNull
+  private Duration connectionTimeout = Duration.milliseconds(500);
 
-    @NotNull
-    private Duration timeToLive = Duration.hours(1);
+  @NotNull
+  private Duration connectionRequestTimeout = Duration.milliseconds(500);
 
-    private boolean cookiesEnabled = false;
+  @NotNull
+  private Duration timeToLive = Duration.hours(1);
 
-    @Min(1)
-    @Max(Integer.MAX_VALUE)
-    private int maxConnections = 1024;
+  private boolean cookiesEnabled = false;
 
-    @Min(1)
-    @Max(Integer.MAX_VALUE)
-    private int maxConnectionsPerRoute = 1024;
+  @Min(1)
+  @Max(Integer.MAX_VALUE)
+  private int maxConnections = 1024;
 
-    @NotNull
-    private Duration keepAlive = Duration.milliseconds(0);
+  @Min(1)
+  @Max(Integer.MAX_VALUE)
+  private int maxConnectionsPerRoute = 1024;
 
-    @Min(0)
-    @Max(1000)
-    private int retries = 0;
+  @NotNull
+  private Duration keepAlive = Duration.milliseconds(0);
 
-    @NotNull
-    @UnwrapValidatedValue(false)
-    private Optional<String> userAgent = Optional.empty();
+  @Min(0)
+  @Max(1000)
+  private int retries = 0;
 
-    @Valid
-    @Nullable
-    private ProxyConfiguration proxyConfiguration;
+  @NotNull
+  @UnwrapValidatedValue(false)
+  private Optional<String> userAgent = Optional.empty();
 
-    @NotNull
-    private Duration validateAfterInactivityPeriod = Duration.microseconds(0);
+  @Valid
+  @Nullable
+  private ProxyConfiguration proxyConfiguration;
 
-    public Duration getKeepAlive() {
-        return keepAlive;
-    }
+  @NotNull
+  private Duration validateAfterInactivityPeriod = Duration.microseconds(0);
 
-    @Valid
-    @Nullable
-    private TlsConfiguration tlsConfiguration;
+  public Duration getKeepAlive() {
+    return keepAlive;
+  }
 
-    @JsonProperty
-    public void setKeepAlive(Duration keepAlive) {
-        this.keepAlive = keepAlive;
-    }
+  @Valid
+  @Nullable
+  private TlsConfiguration tlsConfiguration;
 
-    @JsonProperty
-    public int getMaxConnectionsPerRoute() {
-        return maxConnectionsPerRoute;
-    }
+  @JsonProperty
+  public void setKeepAlive(Duration keepAlive) {
+    this.keepAlive = keepAlive;
+  }
 
-    @JsonProperty
-    public void setMaxConnectionsPerRoute(int maxConnectionsPerRoute) {
-        this.maxConnectionsPerRoute = maxConnectionsPerRoute;
-    }
+  @JsonProperty
+  public int getMaxConnectionsPerRoute() {
+    return maxConnectionsPerRoute;
+  }
 
-    @JsonProperty
-    public Duration getTimeout() {
-        return timeout;
-    }
+  @JsonProperty
+  public void setMaxConnectionsPerRoute(int maxConnectionsPerRoute) {
+    this.maxConnectionsPerRoute = maxConnectionsPerRoute;
+  }
 
-    @JsonProperty
-    public Duration getConnectionTimeout() {
-        return connectionTimeout;
-    }
+  @JsonProperty
+  public Duration getTimeout() {
+    return timeout;
+  }
 
-    @JsonProperty
-    public Duration getTimeToLive() {
-        return timeToLive;
-    }
+  @JsonProperty
+  public Duration getConnectionTimeout() {
+    return connectionTimeout;
+  }
 
-    @JsonProperty
-    public boolean isCookiesEnabled() {
-        return cookiesEnabled;
-    }
+  @JsonProperty
+  public Duration getTimeToLive() {
+    return timeToLive;
+  }
 
-    @JsonProperty
-    public void setTimeout(Duration duration) {
-        this.timeout = duration;
-    }
+  @JsonProperty
+  public boolean isCookiesEnabled() {
+    return cookiesEnabled;
+  }
 
-    @JsonProperty
-    public void setConnectionTimeout(Duration duration) {
-        this.connectionTimeout = duration;
-    }
+  @JsonProperty
+  public void setTimeout(Duration duration) {
+    this.timeout = duration;
+  }
 
-    @JsonProperty
-    public Duration getConnectionRequestTimeout() {
-        return connectionRequestTimeout;
-    }
+  @JsonProperty
+  public void setConnectionTimeout(Duration duration) {
+    this.connectionTimeout = duration;
+  }
 
-    @JsonProperty
-    public void setConnectionRequestTimeout(Duration connectionRequestTimeout) {
-        this.connectionRequestTimeout = connectionRequestTimeout;
-    }
+  @JsonProperty
+  public Duration getConnectionRequestTimeout() {
+    return connectionRequestTimeout;
+  }
 
-    @JsonProperty
-    public void setTimeToLive(Duration timeToLive) {
-        this.timeToLive = timeToLive;
-    }
+  @JsonProperty
+  public void setConnectionRequestTimeout(Duration connectionRequestTimeout) {
+    this.connectionRequestTimeout = connectionRequestTimeout;
+  }
 
-    @JsonProperty
-    public void setCookiesEnabled(boolean enabled) {
-        this.cookiesEnabled = enabled;
-    }
+  @JsonProperty
+  public void setTimeToLive(Duration timeToLive) {
+    this.timeToLive = timeToLive;
+  }
 
-    @JsonProperty
-    public int getMaxConnections() {
-        return maxConnections;
-    }
+  @JsonProperty
+  public void setCookiesEnabled(boolean enabled) {
+    this.cookiesEnabled = enabled;
+  }
 
-    @JsonProperty
-    public void setMaxConnections(int maxConnections) {
-        this.maxConnections = maxConnections;
-    }
+  @JsonProperty
+  public int getMaxConnections() {
+    return maxConnections;
+  }
 
-    @JsonProperty
-    public int getRetries() {
-        return retries;
-    }
+  @JsonProperty
+  public void setMaxConnections(int maxConnections) {
+    this.maxConnections = maxConnections;
+  }
 
-    @JsonProperty
-    public void setRetries(int retries) {
-        this.retries = retries;
-    }
+  @JsonProperty
+  public int getRetries() {
+    return retries;
+  }
 
-    @JsonProperty
-    public Optional<String> getUserAgent() {
-        return userAgent;
-    }
+  @JsonProperty
+  public void setRetries(int retries) {
+    this.retries = retries;
+  }
 
-    @JsonProperty
-    public void setUserAgent(Optional<String> userAgent) {
-        this.userAgent = userAgent;
-    }
+  @JsonProperty
+  public Optional<String> getUserAgent() {
+    return userAgent;
+  }
 
-    @JsonProperty("proxy")
-    public ProxyConfiguration getProxyConfiguration() {
-        return proxyConfiguration;
-    }
+  @JsonProperty
+  public void setUserAgent(Optional<String> userAgent) {
+    this.userAgent = userAgent;
+  }
 
-    @JsonProperty("proxy")
-    public void setProxyConfiguration(ProxyConfiguration proxyConfiguration) {
-        this.proxyConfiguration = proxyConfiguration;
-    }
+  @JsonProperty("proxy")
+  public ProxyConfiguration getProxyConfiguration() {
+    return proxyConfiguration;
+  }
 
-    @JsonProperty
-    public Duration getValidateAfterInactivityPeriod() {
-        return validateAfterInactivityPeriod;
-    }
+  @JsonProperty("proxy")
+  public void setProxyConfiguration(ProxyConfiguration proxyConfiguration) {
+    this.proxyConfiguration = proxyConfiguration;
+  }
 
-    @JsonProperty
-    public void setValidateAfterInactivityPeriod(Duration validateAfterInactivityPeriod) {
-        this.validateAfterInactivityPeriod = validateAfterInactivityPeriod;
-    }
+  @JsonProperty
+  public Duration getValidateAfterInactivityPeriod() {
+    return validateAfterInactivityPeriod;
+  }
 
-    @JsonProperty("tls")
-    public TlsConfiguration getTlsConfiguration() {
-        return tlsConfiguration;
-    }
+  @JsonProperty
+  public void setValidateAfterInactivityPeriod(Duration validateAfterInactivityPeriod) {
+    this.validateAfterInactivityPeriod = validateAfterInactivityPeriod;
+  }
 
-    @JsonProperty("tls")
-    public void setTlsConfiguration(TlsConfiguration tlsConfiguration) {
-        this.tlsConfiguration = tlsConfiguration;
-    }
+  @JsonProperty("tls")
+  public TlsConfiguration getTlsConfiguration() {
+    return tlsConfiguration;
+  }
+
+  @JsonProperty("tls")
+  public void setTlsConfiguration(TlsConfiguration tlsConfiguration) {
+    this.tlsConfiguration = tlsConfiguration;
+  }
 }

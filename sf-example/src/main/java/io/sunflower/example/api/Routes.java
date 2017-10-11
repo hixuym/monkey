@@ -21,17 +21,18 @@ import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 
 public class Routes implements ApplicationRoutes {
-    @Override
-    public void init(Router router) {
 
-        router.GET().route("/").with(ApplicationResource::index);
-        router.GET().route("/hello_world.json").with(ApplicationResource::helloWorldJson);
-        router.GET().route("/user_count.json").with(ApplicationResource::userCount);
+  @Override
+  public void init(Router router) {
 
-        ///////////////////////////////////////////////////////////////////////
-        // Assets (pictures / javascript)
-        ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsResource::serveWebJars);
-        router.GET().route("/assets/{fileName: .*}").with(AssetsResource::serveStatic);
-    }
+    router.GET().route("/").with(ApplicationResource::index);
+    router.GET().route("/hello_world.json").with(ApplicationResource::helloWorldJson);
+    router.GET().route("/user_count.json").with(ApplicationResource::userCount);
+
+    ///////////////////////////////////////////////////////////////////////
+    // Assets (pictures / javascript)
+    ///////////////////////////////////////////////////////////////////////
+    router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsResource::serveWebJars);
+    router.GET().route("/assets/{fileName: .*}").with(AssetsResource::serveStatic);
+  }
 }

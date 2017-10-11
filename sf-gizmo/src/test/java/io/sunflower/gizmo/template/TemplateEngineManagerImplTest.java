@@ -15,17 +15,15 @@
 
 package io.sunflower.gizmo.template;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import java.util.Collections;
-import java.util.List;
-
 import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
@@ -35,145 +33,153 @@ import io.sunflower.gizmo.RouterImpl;
 import io.sunflower.gizmo.i18n.Lang;
 import io.sunflower.gizmo.i18n.LangImpl;
 import io.sunflower.guicey.LoggerProvider;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import java.util.Collections;
+import java.util.List;
+import org.junit.Test;
+import org.slf4j.Logger;
 
 public class TemplateEngineManagerImplTest {
 
-    @Test
-    public void testGetJson() {
-        assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-            ContentTypes.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
-    }
+  @Test
+  public void testGetJson() {
+    assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
+        ContentTypes.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
+  }
 
-    @Test
-    public void testGetJsonP() {
-        assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-            ContentTypes.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
-    }
+  @Test
+  public void testGetJsonP() {
+    assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
+        ContentTypes.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
+  }
 
-    @Test
-    public void testGetCustom() {
-        assertThat(createTemplateEngineManager(CustomTemplateEngine.class).getTemplateEngineForContentType(
+  @Test
+  public void testGetCustom() {
+    assertThat(
+        createTemplateEngineManager(CustomTemplateEngine.class).getTemplateEngineForContentType(
             "custom"), instanceOf(CustomTemplateEngine.class));
-    }
+  }
 
-    @Test
-    public void testOverrideJson() {
-        assertThat(createTemplateEngineManager(OverrideJsonTemplateEngine.class).getTemplateEngineForContentType(
+  @Test
+  public void testOverrideJson() {
+    assertThat(createTemplateEngineManager(OverrideJsonTemplateEngine.class)
+        .getTemplateEngineForContentType(
             ContentTypes.APPLICATION_JSON), instanceOf(OverrideJsonTemplateEngine.class));
-    }
+  }
 
-    @Test
-    public void testOverrideHtml() {
-        assertThat(createTemplateEngineManager(OverrideHtmlTemplateEngine.class).getTemplateEngineForContentType(
+  @Test
+  public void testOverrideHtml() {
+    assertThat(createTemplateEngineManager(OverrideHtmlTemplateEngine.class)
+        .getTemplateEngineForContentType(
             ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine.class));
+  }
+
+  @Test
+  public void testOverrideHtmlOrderMatters() {
+    TemplateEngineManager templateEngineManager
+        = createTemplateEngineManager(
+        OverrideHtmlTemplateEngine.class,
+        OverrideHtmlTemplateEngine3.class,
+        OverrideHtmlTemplateEngine2.class);
+
+    assertThat(templateEngineManager.getTemplateEngineForContentType(
+        ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
+  }
+
+  @Test
+  public void testContentTypes() {
+    List<String> types = Lists.newArrayList(createTemplateEngineManager().getContentTypes());
+    Collections.sort(types);
+    assertThat(types.toString(),
+        equalTo("[application/javascript, application/json, application/xml, text/plain]"));
+  }
+
+  @Test
+  public void testGetNonExistingProducesNoNPE() {
+    TemplateEngineManager manager = createTemplateEngineManager(OverrideJsonTemplateEngine.class);
+    // return default json engine.
+    assertNull(manager.getTemplateEngineForContentType("non/existing"));
+  }
+
+  public static abstract class MockTemplateEngine implements TemplateEngine {
+
+    @Override
+    public void invoke(Context context, Result result) {
+
     }
 
-    @Test
-    public void testOverrideHtmlOrderMatters() {
-        TemplateEngineManager templateEngineManager
-            = createTemplateEngineManager(
-            OverrideHtmlTemplateEngine.class,
-            OverrideHtmlTemplateEngine3.class,
-            OverrideHtmlTemplateEngine2.class);
+    @Override
+    public String getSuffixOfTemplatingEngine() {
+      return null;
 
-        assertThat(templateEngineManager.getTemplateEngineForContentType(
-            ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
     }
+  }
 
-    @Test
-    public void testContentTypes() {
-        List<String> types = Lists.newArrayList(createTemplateEngineManager().getContentTypes());
-        Collections.sort(types);
-        assertThat(types.toString(),
-            equalTo("[application/javascript, application/json, application/xml, text/plain]"));
+  public static class CustomTemplateEngine extends MockTemplateEngine {
+
+    @Override
+    public String getContentType() {
+      return "custom";
     }
+  }
 
-    @Test
-    public void testGetNonExistingProducesNoNPE() {
-        TemplateEngineManager manager = createTemplateEngineManager(OverrideJsonTemplateEngine.class);
-        // return default json engine.
-        assertNull(manager.getTemplateEngineForContentType("non/existing"));
+  public static class OverrideJsonTemplateEngine extends MockTemplateEngine {
+
+    @Override
+    public String getContentType() {
+      return ContentTypes.APPLICATION_JSON;
     }
+  }
 
-    public static abstract class MockTemplateEngine implements TemplateEngine {
-        @Override
-        public void invoke(Context context, Result result) {
+  public static class OverrideHtmlTemplateEngine extends MockTemplateEngine {
+
+    @Override
+    public String getContentType() {
+      return ContentTypes.TEXT_HTML;
+    }
+  }
+
+  public static class OverrideHtmlTemplateEngine2 extends MockTemplateEngine {
+
+    @Override
+    public String getContentType() {
+      return ContentTypes.TEXT_HTML;
+    }
+  }
+
+  public static class OverrideHtmlTemplateEngine3 extends MockTemplateEngine {
+
+    @Override
+    public String getContentType() {
+      return ContentTypes.TEXT_HTML;
+    }
+  }
+
+  private TemplateEngineManager createTemplateEngineManager(final Class<?>... toBind) {
+    return createInjector(toBind).getInstance(TemplateEngineManager.class);
+  }
+
+  private Injector createInjector(final Class<?>... toBind) {
+    return Guice.createInjector(new AbstractModule() {
+      @Override
+      protected void configure() {
+
+        bind(Logger.class).toProvider(LoggerProvider.class);
+        bind(Lang.class).to(LangImpl.class);
+        bind(Router.class).to(RouterImpl.class);
+
+        bind(TemplateEngineText.class);
+        bind(TemplateEngineJson.class);
+        bind(TemplateEngineJsonP.class);
+        bind(TemplateEngineXml.class);
+
+        bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
+
+        for (Class<?> clazz : toBind) {
+
+          bind(clazz);
 
         }
-
-        @Override
-        public String getSuffixOfTemplatingEngine() {
-            return null;
-
-        }
-    }
-
-    public static class CustomTemplateEngine extends MockTemplateEngine {
-        @Override
-        public String getContentType() {
-            return "custom";
-        }
-    }
-
-    public static class OverrideJsonTemplateEngine extends MockTemplateEngine {
-        @Override
-        public String getContentType() {
-            return ContentTypes.APPLICATION_JSON;
-        }
-    }
-
-    public static class OverrideHtmlTemplateEngine extends MockTemplateEngine {
-        @Override
-        public String getContentType() {
-            return ContentTypes.TEXT_HTML;
-        }
-    }
-
-    public static class OverrideHtmlTemplateEngine2 extends MockTemplateEngine {
-        @Override
-        public String getContentType() {
-            return ContentTypes.TEXT_HTML;
-        }
-    }
-
-    public static class OverrideHtmlTemplateEngine3 extends MockTemplateEngine {
-        @Override
-        public String getContentType() {
-            return ContentTypes.TEXT_HTML;
-        }
-    }
-
-    private TemplateEngineManager createTemplateEngineManager(final Class<?>... toBind) {
-        return createInjector(toBind).getInstance(TemplateEngineManager.class);
-    }
-
-    private Injector createInjector(final Class<?>... toBind) {
-        return Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-
-                bind(Logger.class).toProvider(LoggerProvider.class);
-                bind(Lang.class).to(LangImpl.class);
-                bind(Router.class).to(RouterImpl.class);
-
-                bind(TemplateEngineText.class);
-                bind(TemplateEngineJson.class);
-                bind(TemplateEngineJsonP.class);
-                bind(TemplateEngineXml.class);
-
-                bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
-
-                for (Class<?> clazz : toBind) {
-
-                    bind(clazz);
-
-                }
-            }
-        });
-    }
+      }
+    });
+  }
 }
