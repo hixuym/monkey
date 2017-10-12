@@ -44,7 +44,7 @@ public class Scheduler {
   private Injector injector;
   private volatile ScheduledExecutorService executor;
   private final List<Object> objectsToSchedule = Collections
-      .synchronizedList(new ArrayList<Object>());
+      .synchronizedList(new ArrayList<>());
 
   @Start(order = 90)
   public void start() {
@@ -82,7 +82,7 @@ public class Scheduler {
   }
 
   private void scheduleCachedObjects() {
-    List<Object> copy = new ArrayList<Object>(objectsToSchedule);
+    List<Object> copy = new ArrayList<>(objectsToSchedule);
     objectsToSchedule.clear();
     for (Object object : copy) {
       schedule(object);
@@ -123,16 +123,13 @@ public class Scheduler {
 
     log.info("Scheduling method " + method.getName() + " on " + target + " to be run every " + delay
         + " " + timeUnit + " after " + initialDelay + " " + timeUnit);
-    executor.scheduleWithFixedDelay(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          log.debug("Running scheduled method {} on {}", method.getName(), target);
-          method.invoke(target);
-        } catch (Exception e) {
-          log.error("Error invoking scheduled run of method " + method.getName() + " on " + target,
-              e);
-        }
+    executor.scheduleWithFixedDelay(() -> {
+      try {
+        log.debug("Running scheduled method {} on {}", method.getName(), target);
+        method.invoke(target);
+      } catch (Exception e) {
+        log.error("Error invoking scheduled run of method " + method.getName() + " on " + target,
+            e);
       }
     }, initialDelay, delay, timeUnit);
   }

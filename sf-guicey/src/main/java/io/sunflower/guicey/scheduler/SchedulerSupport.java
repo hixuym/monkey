@@ -52,7 +52,7 @@ public class SchedulerSupport {
     public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
       if (scheduler.hasScheduledMethod(type.getRawType())) {
         // Add the listener
-        encounter.register(new ScheduleListener<I>(scheduler));
+        encounter.register(new ScheduleListener<>(scheduler));
       }
     }
   }

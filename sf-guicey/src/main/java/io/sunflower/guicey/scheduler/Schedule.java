@@ -70,5 +70,5 @@ public @interface Schedule {
    */
   String initialDelayProperty() default NO_PROPERTY;
 
-  static String NO_PROPERTY = "_no-property";
+  String NO_PROPERTY = "_no-property";
 }
