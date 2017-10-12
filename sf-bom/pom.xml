@@ -595,15 +595,6 @@
       </dependency>
 
       <!-- Test dependencies -->
-      <!-- Testing -->
-      <!-- devbliss doctester should be removed at some point
-      - superseeded by docterster.org -->
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.5.3</version>
-      </dependency>
-
       <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
