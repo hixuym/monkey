@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
@@ -76,18 +74,7 @@ public class Environment {
 
     this.guiceyEnvironment = new GuiceyEnvironment();
 
-    this.guiceyEnvironment.addModule(new AbstractModule() {
-      @Override
-      protected void configure() {
-        bindConstant().annotatedWith(Names.named("application.name")).to(getName());
-        bind(ObjectMapper.class).toInstance(getObjectMapper());
-        bind(XmlMapper.class).toInstance(getXmlMapper());
-        bind(MetricRegistry.class).toInstance(metrics());
-        bind(HealthCheckRegistry.class).toInstance(healthChecks());
-        bind(Validator.class).toInstance(getValidator());
-        bind(Environment.class).toInstance(Environment.this);
-      }
-    }, new MetricsModule());
+    this.guiceyEnvironment.addModule(new BootModule(this), new MetricsModule());
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 

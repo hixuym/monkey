@@ -22,8 +22,6 @@ public class GuiceyEnvironment {
 
   private final List<Module> moduleLoaded = Lists.newArrayList();
 
-  private final List<String> scanPkgs = Lists.newArrayList();
-
   private Injector injector;
 
   private AtomicBoolean commited = new AtomicBoolean(false);
@@ -40,10 +38,6 @@ public class GuiceyEnvironment {
 
   public void addModule(Module... modules) {
     this.moduleLoaded.addAll(Arrays.asList(modules));
-  }
-
-  public void scanPkgs(String... scanPkgs) {
-    this.scanPkgs.addAll(Arrays.asList(scanPkgs));
   }
 
   public void commit() {
