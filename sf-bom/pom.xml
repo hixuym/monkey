@@ -4,10 +4,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <prerequisites>
-    <maven>3.3.0</maven>
-  </prerequisites>
-
   <parent>
     <groupId>io.sunflower</groupId>
     <artifactId>sf-parent</artifactId>
@@ -27,7 +23,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sunflower.version>${project.version}</sunflower.version>
-    <guava.version>23.0</guava.version>
+    <guava.version>23.1-jre</guava.version>
     <guice.version>4.1.0</guice.version>
     <jackson.version>2.9.1</jackson.version>
     <metrics3.version>3.2.5</metrics3.version>
