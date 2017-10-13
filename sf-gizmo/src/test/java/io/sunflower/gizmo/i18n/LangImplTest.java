@@ -18,15 +18,16 @@ package io.sunflower.gizmo.i18n;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 import io.sunflower.gizmo.utils.GizmoConstant;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

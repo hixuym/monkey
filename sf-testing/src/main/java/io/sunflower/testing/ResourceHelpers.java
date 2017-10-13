@@ -15,8 +15,9 @@
 
 package io.sunflower.testing;
 
-import com.google.common.io.Resources;
 import java.io.File;
+
+import com.google.common.io.Resources;
 
 /**
  * A set of helper methods for working with classpath resources.

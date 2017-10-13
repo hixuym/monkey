@@ -2,6 +2,8 @@ package io.sunflower.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
@@ -10,7 +12,6 @@ import io.sunflower.jackson.DiscoverableSubtypeResolver;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.validation.BaseValidator;
-import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 

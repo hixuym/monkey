@@ -18,6 +18,7 @@ package io.sunflower.gizmo.utils;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
+
 import org.junit.Test;
 
 public class SecretGeneratorTest {

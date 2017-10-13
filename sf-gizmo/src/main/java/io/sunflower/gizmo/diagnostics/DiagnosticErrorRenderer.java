@@ -14,14 +14,6 @@
 
 package io.sunflower.gizmo.diagnostics;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.Cookie;
-import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.Route;
-import io.sunflower.gizmo.exceptions.InternalServerErrorException;
-import io.sunflower.gizmo.utils.ResponseStreams;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -30,13 +22,23 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Cookie;
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.Route;
+import io.sunflower.gizmo.exceptions.InternalServerErrorException;
+import io.sunflower.gizmo.utils.ResponseStreams;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Utility class for rendering <code>DiagnosticError</code> instances as a Result.  Does not rely on any 3rd party
- * rendering library to permit rendering exceptions in the case where a template engine fails!
+ * Utility class for rendering <code>DiagnosticError</code> instances as a Result.  Does not rely on
+ * any 3rd party rendering library to permit rendering exceptions in the case where a template
+ * engine fails!
  *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)

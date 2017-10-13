@@ -17,10 +17,11 @@ package io.sunflower.migrations;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+import java.io.PrintStream;
+
 import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
-import java.io.PrintStream;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;

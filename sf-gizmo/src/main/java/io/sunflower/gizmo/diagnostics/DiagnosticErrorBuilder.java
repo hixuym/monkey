@@ -14,9 +14,10 @@
 
 package io.sunflower.gizmo.diagnostics;
 
-import io.sunflower.gizmo.Result;
 import java.io.File;
 import java.io.IOException;
+
+import io.sunflower.gizmo.Result;
 
 /**
  * Utility class for building <code>DiagnosticError</code> instances.
@@ -222,13 +223,13 @@ public class DiagnosticErrorBuilder {
   }
 
   /**
-   * Calculates the relative path of the source code file of a StackTrace element if its available. Uses the
-   * packageName of the class to create a relative path and appends the "filename" included with the stack trace
-   * element.
+   * Calculates the relative path of the source code file of a StackTrace element if its available.
+   * Uses the packageName of the class to create a relative path and appends the "filename" included
+   * with the stack trace element.
    *
    * @param ste The stack trace element
-   * @return The relative path of the source code file or null if the information wasn't available in the stack trace
-   * element.
+   * @return The relative path of the source code file or null if the information wasn't available
+   * in the stack trace element.
    */
   static public String getSourceCodeRelativePathForStackTraceElement(StackTraceElement ste) {
     String packageName = ste.getClassName();

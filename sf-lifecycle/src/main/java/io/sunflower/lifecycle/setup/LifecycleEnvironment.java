@@ -2,13 +2,14 @@ package io.sunflower.lifecycle.setup;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadFactory;
+
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.Managed;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

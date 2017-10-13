@@ -14,6 +14,9 @@
 
 package io.sunflower.gizmo.bodyparser;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,8 +25,6 @@ import com.google.inject.Singleton;
 import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.exceptions.BadRequestException;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Built in Json body parser.

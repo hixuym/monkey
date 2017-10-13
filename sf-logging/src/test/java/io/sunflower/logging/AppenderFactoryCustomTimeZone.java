@@ -2,13 +2,14 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.TimeZone;
+
 import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.TimeZone;
 import org.junit.Test;
 
 public class AppenderFactoryCustomTimeZone {

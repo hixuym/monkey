@@ -15,6 +15,9 @@
 
 package io.sunflower.client;
 
+import java.util.List;
+import javax.net.ssl.HostnameVerifier;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.httpclient.HttpClientMetricNameStrategies;
 import com.codahale.metrics.httpclient.HttpClientMetricNameStrategy;
@@ -28,8 +31,6 @@ import io.sunflower.client.ssl.TlsConfiguration;
 import io.sunflower.lifecycle.Managed;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
-import java.util.List;
-import javax.net.ssl.HostnameVerifier;
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;

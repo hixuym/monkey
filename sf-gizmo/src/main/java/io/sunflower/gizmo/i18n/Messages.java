@@ -14,17 +14,19 @@
 
 package io.sunflower.gizmo.i18n;
 
+import java.text.MessageFormat;
+import java.util.Optional;
+
 import com.google.inject.ImplementedBy;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
-import java.text.MessageFormat;
-import java.util.Optional;
 
 @ImplementedBy(MessagesImpl.class)
 public interface Messages {
 
   /**
-   * Get a translated string. The language is determined by the provided locale or a suitable fallback.
+   * Get a translated string. The language is determined by the provided locale or a suitable
+   * fallback.
    *
    * values of keys can use the MessageFormat.
    *
@@ -34,14 +36,15 @@ public interface Messages {
    *
    * parameter will then be used to fill {0} with the content.
    *
-   * Note: If you don't want to determine the language yourself please use {@link Messages#get(String, Context,
-   * Optional, Object...)}
+   * Note: If you don't want to determine the language yourself please use {@link
+   * Messages#get(String, Context, Optional, Object...)}
    *
-   * @param key       The key used in your message file (conf/messages.properties)
-   * @param language  The language to get. Can be null - then the default language is returned. It also looks for a
-   *                  fallback. Eg. A request for "en-US" will fallback to "en" if there is no matching language
-   *                  file.
-   * @param parameter Parameters to use in formatting the message of the key (in {@link MessageFormat}).
+   * @param key The key used in your message file (conf/messages.properties)
+   * @param language The language to get. Can be null - then the default language is returned. It
+   * also looks for a fallback. Eg. A request for "en-US" will fallback to "en" if there is no
+   * matching language file.
+   * @param parameter Parameters to use in formatting the message of the key (in {@link
+   * MessageFormat}).
    * @return The matching and formatted value or absent if not found.
    */
   Optional<String> get(String key,
@@ -49,7 +52,8 @@ public interface Messages {
       Object... parameter);
 
   /**
-   * Get a translated string. The language is determined by the provided locale or a suitable fallback.
+   * Get a translated string. The language is determined by the provided locale or a suitable
+   * fallback.
    *
    * values of keys can use the MessageFormat.
    *
@@ -57,10 +61,11 @@ public interface Messages {
    *
    * But in short you can use something like mymessage=my message with a placeholder {0}
    *
-   * @param key       The key used in your message file (conf/messages.properties)
-   * @param context   The context used to determine the language.
-   * @param result    The result used to determine the language.
-   * @param parameter Parameters to use in formatting the message of the key (in {@link MessageFormat}).
+   * @param key The key used in your message file (conf/messages.properties)
+   * @param context The context used to determine the language.
+   * @param result The result used to determine the language.
+   * @param parameter Parameters to use in formatting the message of the key (in {@link
+   * MessageFormat}).
    * @return The matching and formatted value or absent if not found.
    */
   Optional<String> get(String key,
@@ -71,15 +76,17 @@ public interface Messages {
   /**
    * Gets a message for a message key. Returns a defaultValue if not found.
    *
-   * Note: If you don't want to determine the language yourself please use {@link Messages#get(String, Context,
-   * Optional, Object...)}
+   * Note: If you don't want to determine the language yourself please use {@link
+   * Messages#get(String, Context, Optional, Object...)}
    *
-   * @param key            The key used in your message file (conf/messages.properties)
-   * @param defaultMessage A default message that will be used when no matching message can be retrieved.
-   * @param language       The language to get. May be absent - then the default language is returned. It also looks
-   *                       for a fallback. Eg. A request for "en-US" will fallback to "en" if there is no matching
-   *                       language file.
-   * @param params         Parameters to use in formatting the message of the key (in {@link MessageFormat}).
+   * @param key The key used in your message file (conf/messages.properties)
+   * @param defaultMessage A default message that will be used when no matching message can be
+   * retrieved.
+   * @param language The language to get. May be absent - then the default language is returned. It
+   * also looks for a fallback. Eg. A request for "en-US" will fallback to "en" if there is no
+   * matching language file.
+   * @param params Parameters to use in formatting the message of the key (in {@link
+   * MessageFormat}).
    * @return The matching and formatted value (either from messages or the default one).
    */
   String getWithDefault(String key,
@@ -91,11 +98,13 @@ public interface Messages {
   /**
    * Gets a message for a message key. Returns a defaultValue if not found.
    *
-   * @param key            The key used in your message file (conf/messages.properties)
-   * @param defaultMessage A default message that will be used when no matching message can be retrieved.
-   * @param context        The context used to determine the language.
-   * @param result         The result used to determine the language. May be absent
-   * @param params         Parameters to use in formatting the message of the key (in {@link MessageFormat}).
+   * @param key The key used in your message file (conf/messages.properties)
+   * @param defaultMessage A default message that will be used when no matching message can be
+   * retrieved.
+   * @param context The context used to determine the language.
+   * @param result The result used to determine the language. May be absent
+   * @param params Parameters to use in formatting the message of the key (in {@link
+   * MessageFormat}).
    * @return The matching and formatted value (either from messages or the default one).
    */
   String getWithDefault(String key,

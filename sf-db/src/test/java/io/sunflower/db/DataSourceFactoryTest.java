@@ -17,17 +17,18 @@ package io.sunflower.db;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
+
 import com.codahale.metrics.MetricRegistry;
 import io.sunflower.configuration.ResourceConfigurationSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.BaseValidator;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Optional;
 import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
 import org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
 import org.junit.After;

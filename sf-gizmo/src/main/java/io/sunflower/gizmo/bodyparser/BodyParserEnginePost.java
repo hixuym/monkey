@@ -14,6 +14,13 @@
 
 package io.sunflower.gizmo.bodyparser;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -21,12 +28,6 @@ import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.gizmo.params.ParamParsers;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

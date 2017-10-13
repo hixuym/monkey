@@ -13,14 +13,15 @@ package io.sunflower.postoffice.commonsmail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.sunflower.postoffice.Mail;
-import io.sunflower.postoffice.common.MailImpl;
-import io.sunflower.postoffice.common.MailImplTestHelper;
-import io.sunflower.postoffice.common.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.mail.internet.InternetAddress;
+
+import io.sunflower.postoffice.Mail;
+import io.sunflower.postoffice.common.MailImpl;
+import io.sunflower.postoffice.common.MailImplTestHelper;
+import io.sunflower.postoffice.common.Tuple;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.junit.Before;
@@ -76,8 +77,8 @@ public class CommonsMailHelperImplTest {
   }
 
   /**
-   * Note:
-   * - Setting of header parameters not (yet) tested as we cannot get back the headers set easily.
+   * Note: - Setting of header parameters not (yet) tested as we cannot get back the headers set
+   * easily.
    */
   @Test
   public void testDoPopulateMultipartMailWithContent() throws Exception {

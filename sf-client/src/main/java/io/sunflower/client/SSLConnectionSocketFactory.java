@@ -15,7 +15,6 @@
 
 package io.sunflower.client;
 
-import io.sunflower.client.ssl.TlsConfiguration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -23,6 +22,8 @@ import java.security.KeyStore;
 import java.util.List;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+
+import io.sunflower.client.ssl.TlsConfiguration;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;

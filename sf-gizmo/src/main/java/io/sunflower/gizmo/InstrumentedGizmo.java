@@ -15,13 +15,14 @@
 
 package io.sunflower.gizmo;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import io.sunflower.gizmo.exceptions.BadRequestException;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by michael on 17/6/23.

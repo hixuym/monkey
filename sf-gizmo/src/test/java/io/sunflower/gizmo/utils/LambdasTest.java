@@ -20,13 +20,14 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.io.Serializable;
+import java.lang.invoke.SerializedLambda;
+import java.nio.charset.StandardCharsets;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.ResourceMethods;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 public class LambdasTest {

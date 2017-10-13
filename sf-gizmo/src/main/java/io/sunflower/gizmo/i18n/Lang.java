@@ -14,19 +14,20 @@
 
 package io.sunflower.gizmo.i18n;
 
+import java.util.Locale;
+import java.util.Optional;
+
 import com.google.inject.ImplementedBy;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
-import java.util.Locale;
-import java.util.Optional;
 
 @ImplementedBy(LangImpl.class)
 public interface Lang {
 
   /**
-   * Retrieve the current language or null if not set. It will try to determine the language by: 1) Checking if result
-   * contains a forced language 2) Checking if context has a NINJA_LANG cookie with a forced language 3) Getting the
-   * first language from the Accept-Language header
+   * Retrieve the current language or null if not set. It will try to determine the language by: 1)
+   * Checking if result contains a forced language 2) Checking if context has a NINJA_LANG cookie
+   * with a forced language 3) Getting the first language from the Accept-Language header
    *
    * @return The current language (fr, ja, it ...) - may be absent
    */
@@ -44,11 +45,12 @@ public interface Lang {
 
 
   /**
-   * Clears the current language. This will trigger resolving language from request (Accept lang) if not manually
-   * set.
+   * Clears the current language. This will trigger resolving language from request (Accept lang) if
+   * not manually set.
    *
-   * Note: The language is set by a cookie. To delete a cookie the max-age is set to 0. It can therefore be the case
-   * that the lang cookie still exists in the thread. Make sure your module / app handles this properly.
+   * Note: The language is set by a cookie. To delete a cookie the max-age is set to 0. It can
+   * therefore be the case that the lang cookie still exists in the thread. Make sure your module /
+   * app handles this properly.
    *
    * @param result result clear language commands merged into result.
    */
@@ -78,8 +80,8 @@ public interface Lang {
    * The default language is "en".
    *
    * @param language The language to check (en, en-US etc)
-   * @return The Java locale or a default locale based on the first language in your application.languages
-   * configuration.
+   * @return The Java locale or a default locale based on the first language in your
+   * application.languages configuration.
    */
   Locale getLocaleFromStringOrDefault(Optional<String> language);
 

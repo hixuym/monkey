@@ -15,10 +15,11 @@
 
 package io.sunflower.migrations;
 
+import java.util.function.Consumer;
+
 import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
-import java.util.function.Consumer;
 import liquibase.Liquibase;
 import liquibase.change.CheckSum;
 import net.sourceforge.argparse4j.inf.Namespace;

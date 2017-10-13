@@ -13,9 +13,10 @@
  */
 package io.sunflower.gizmo.application;
 
+import java.util.List;
+
 import com.google.inject.ImplementedBy;
 import io.sunflower.gizmo.Filter;
-import java.util.List;
 
 /**
  * Allows to define filters that are applied to every request of your application.

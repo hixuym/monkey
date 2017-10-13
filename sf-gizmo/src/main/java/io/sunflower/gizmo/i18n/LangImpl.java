@@ -14,6 +14,10 @@
 
 package io.sunflower.gizmo.i18n;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
 import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -22,9 +26,6 @@ import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.utils.GizmoConstant;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

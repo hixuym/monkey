@@ -1,7 +1,5 @@
 package io.sunflower.cli;
 
-import io.sunflower.setup.Bootstrap;
-import io.sunflower.util.JarLocation;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -10,6 +8,9 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import io.sunflower.setup.Bootstrap;
+import io.sunflower.util.JarLocation;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.helper.HelpScreenException;
 import net.sourceforge.argparse4j.impl.Arguments;

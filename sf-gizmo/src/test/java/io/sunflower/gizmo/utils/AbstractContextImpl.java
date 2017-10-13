@@ -15,6 +15,12 @@
 
 package io.sunflower.gizmo.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
 import com.google.inject.Injector;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
@@ -24,11 +30,6 @@ import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.uploads.FileItem;
 import io.sunflower.gizmo.validation.Validation;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Used for mocking an AbstractContext in unit tests.

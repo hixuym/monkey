@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.aMapWithSize;
 import static org.junit.Assert.assertThat;
 
 import java.util.Map;
+
 import org.junit.Test;
 
 public class RouteParameterTest {

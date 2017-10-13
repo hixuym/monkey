@@ -14,11 +14,13 @@
 
 package io.sunflower.gizmo.params;
 
-import io.sunflower.gizmo.Context;
 import java.util.Optional;
 
+import io.sunflower.gizmo.Context;
+
 /**
- * Argument extractor that wraps an extractor so that it can handle Optional<...> in controller methods.
+ * Argument extractor that wraps an extractor so that it can handle Optional<...> in controller
+ * methods.
  *
  * For example:
  *

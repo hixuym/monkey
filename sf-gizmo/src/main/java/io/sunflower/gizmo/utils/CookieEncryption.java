@@ -15,9 +15,6 @@
  */
 package io.sunflower.gizmo.utils;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import io.sunflower.gizmo.GizmoConfiguration;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -26,6 +23,10 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import io.sunflower.gizmo.GizmoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

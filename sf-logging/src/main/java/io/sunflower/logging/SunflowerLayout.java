@@ -1,8 +1,9 @@
 package io.sunflower.logging;
 
+import java.util.TimeZone;
+
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
-import java.util.TimeZone;
 
 /**
  * A base layout for Dropwizard. <ul> <li>Disables pattern headers.</li> <li>Prefixes logged

@@ -24,13 +24,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.OutputStream;
+import java.io.Writer;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
 import io.sunflower.gizmo.template.TemplateEngine;
 import io.sunflower.gizmo.template.TemplateEngineManager;
-import java.io.OutputStream;
-import java.io.Writer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

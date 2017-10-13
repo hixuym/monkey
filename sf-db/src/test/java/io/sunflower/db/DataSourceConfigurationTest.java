@@ -17,13 +17,14 @@ package io.sunflower.db;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.util.Optional;
+
 import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.BaseValidator;
-import java.io.File;
-import java.util.Optional;
 import org.junit.Test;
 
 public class DataSourceConfigurationTest {

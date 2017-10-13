@@ -15,10 +15,11 @@
 
 package io.sunflower.db;
 
-import com.codahale.metrics.MetricRegistry;
-import io.sunflower.util.Duration;
 import java.util.Map;
 import java.util.Optional;
+
+import com.codahale.metrics.MetricRegistry;
+import io.sunflower.util.Duration;
 
 /**
  * Interface of a factory that produces JDBC data sources backed by the connection pool.

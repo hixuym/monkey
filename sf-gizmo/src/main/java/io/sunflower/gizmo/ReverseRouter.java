@@ -15,9 +15,6 @@
  */
 package io.sunflower.gizmo;
 
-import io.sunflower.gizmo.ReverseRouter.Builder;
-import io.sunflower.gizmo.utils.LambdaRoute;
-import io.sunflower.gizmo.utils.MethodReference;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
@@ -26,6 +23,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.inject.Inject;
+
+import io.sunflower.gizmo.ReverseRouter.Builder;
+import io.sunflower.gizmo.utils.LambdaRoute;
+import io.sunflower.gizmo.utils.MethodReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

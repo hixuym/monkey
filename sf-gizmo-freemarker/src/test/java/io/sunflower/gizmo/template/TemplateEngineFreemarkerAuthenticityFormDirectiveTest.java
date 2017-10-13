@@ -19,6 +19,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.io.StringWriter;
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import freemarker.core.Environment;
 import freemarker.template.Template;
@@ -27,8 +30,6 @@ import freemarker.template.TemplateModel;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.template.directives.TemplateEngineFreemarkerAuthenticityFormDirective;
-import java.io.StringWriter;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

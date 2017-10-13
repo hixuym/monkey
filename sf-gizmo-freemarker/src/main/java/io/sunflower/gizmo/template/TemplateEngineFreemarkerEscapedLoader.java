@@ -14,26 +14,21 @@
 
 package io.sunflower.gizmo.template;
 
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
-import freemarker.cache.TemplateLoader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
+import freemarker.cache.TemplateLoader;
+
 /**
- * This class html-escapes variables like ${...} in all templates (ftl.html). If
- * you don't want to have something escaped you can use at your own risk:
- * <p>
+ * This class html-escapes variables like ${...} in all templates (ftl.html). If you don't want to
+ * have something escaped you can use at your own risk: <p>
  *
- * <code>
- * <#noescape>${...}</#noescape>
- * </code>
+ * <code> <#noescape>${...}</#noescape> </code>
  *
- * (inside your template).
- * <p>
- * See also http://freemarker.org/docs/ref_directive_escape.html
- *
+ * (inside your template). <p> See also http://freemarker.org/docs/ref_directive_escape.html
  */
 public class TemplateEngineFreemarkerEscapedLoader implements TemplateLoader {
 

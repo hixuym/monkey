@@ -15,11 +15,12 @@
 
 package io.sunflower.postoffice;
 
+import java.util.Optional;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.postoffice.commonsmail.PostofficeCommonsmailImpl;
-import java.util.Optional;
-import javax.validation.constraints.NotNull;
 
 @JsonTypeName("commons-mail")
 public class DefaultPostofficeFactory implements PostofficeFactory {

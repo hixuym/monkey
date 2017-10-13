@@ -14,12 +14,13 @@
 
 package io.sunflower.gizmo;
 
-import com.google.common.collect.Maps;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.common.collect.Maps;
 
 /**
  * A route
@@ -131,8 +132,8 @@ public class Route {
   /**
    * Gets a raw uri like "/{name}/id/*" and returns "/([^/]*)/id/*."
    *
-   * Also handles regular expressions if defined inside routes: For instance "/users/{username: [a-zA-Z][a-zA-Z_0-9]}"
-   * becomes "/users/([a-zA-Z][a-zA-Z_0-9])"
+   * Also handles regular expressions if defined inside routes: For instance "/users/{username:
+   * [a-zA-Z][a-zA-Z_0-9]}" becomes "/users/([a-zA-Z][a-zA-Z_0-9])"
    *
    * @return The converted regex with default matching regex - or the regex specified by the user.
    */

@@ -24,10 +24,11 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
-import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

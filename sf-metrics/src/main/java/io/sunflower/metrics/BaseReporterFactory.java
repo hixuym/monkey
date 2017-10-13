@@ -1,5 +1,12 @@
 package io.sunflower.metrics;
 
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.ScheduledReporter;
@@ -9,12 +16,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.MinDuration;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 
 /**

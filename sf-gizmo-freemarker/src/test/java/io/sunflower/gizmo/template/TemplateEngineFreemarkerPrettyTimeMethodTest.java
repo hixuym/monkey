@@ -16,9 +16,6 @@ package io.sunflower.gizmo.template;
 
 import static org.junit.Assert.assertThat;
 
-import freemarker.template.SimpleDate;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateModel;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -29,6 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import freemarker.template.SimpleDate;
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateModel;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

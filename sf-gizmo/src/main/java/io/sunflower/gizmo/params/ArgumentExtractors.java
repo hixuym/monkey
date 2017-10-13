@@ -14,6 +14,12 @@
 
 package io.sunflower.gizmo.params;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
@@ -21,11 +27,6 @@ import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.uploads.FileItem;
 import io.sunflower.gizmo.validation.Validation;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Built in argument extractors

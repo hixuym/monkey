@@ -1,5 +1,7 @@
 package io.sunflower.logging;
 
+import javax.validation.constraints.Min;
+
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.FileAppender;
@@ -22,7 +24,6 @@ import io.sunflower.logging.layout.LayoutFactory;
 import io.sunflower.util.Size;
 import io.sunflower.validation.MinSize;
 import io.sunflower.validation.ValidationMethod;
-import javax.validation.constraints.Min;
 
 /**
  * An {@link AppenderFactory} implementation which provides an appender that writes events to a

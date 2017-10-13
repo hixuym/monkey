@@ -15,13 +15,6 @@
 
 package io.sunflower.db;
 
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.primitives.Ints;
-import io.sunflower.util.Duration;
-import io.sunflower.validation.MinDuration;
-import io.sunflower.validation.ValidationMethod;
 import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +25,14 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.primitives.Ints;
+import io.sunflower.util.Duration;
+import io.sunflower.validation.MinDuration;
+import io.sunflower.validation.ValidationMethod;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 /**
@@ -70,17 +71,17 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
  * {@code repeatable-read}, or {@code serializable}. </td> </tr> <tr> <td>{@code useFairQueue}</td>
  * <td>{@code true}</td> <td> If {@code true}, calls to {@code getConnection} are handled in a FIFO
  * manner. </td> </tr> <tr> <td>{@code initialSize}</td> <td>10</td> <td> The initial size of the
- * connection pool. May be zero, which will allow you to commit the connection pool without requiring
- * the DB to be up. In the latter case the {@link #minSize} must also be set to zero. </td> </tr>
- * <tr> <td>{@code minSize}</td> <td>10</td> <td> The minimum size of the connection pool. </td>
- * </tr> <tr> <td>{@code maxSize}</td> <td>100</td> <td> The maximum size of the connection pool.
- * </td> </tr> <tr> <td>{@code initializationQuery}</td> <td>none</td> <td> A custom query to be run
- * when a connection is first created. </td> </tr> <tr> <td>{@code logAbandonedConnections}</td>
- * <td>{@code false}</td> <td> If {@code true}, logs stack traces of abandoned connections. </td>
- * </tr> <tr> <td>{@code logValidationErrors}</td> <td>{@code false}</td> <td> If {@code true}, logs
- * errors when connections fail validation. </td> </tr> <tr> <td>{@code maxConnectionAge}</td>
- * <td>none</td> <td> If set, connections which have been open for longer than {@code
- * maxConnectionAge} are closed when returned. </td> </tr> <tr> <td>{@code
+ * connection pool. May be zero, which will allow you to commit the connection pool without
+ * requiring the DB to be up. In the latter case the {@link #minSize} must also be set to zero.
+ * </td> </tr> <tr> <td>{@code minSize}</td> <td>10</td> <td> The minimum size of the connection
+ * pool. </td> </tr> <tr> <td>{@code maxSize}</td> <td>100</td> <td> The maximum size of the
+ * connection pool. </td> </tr> <tr> <td>{@code initializationQuery}</td> <td>none</td> <td> A
+ * custom query to be run when a connection is first created. </td> </tr> <tr> <td>{@code
+ * logAbandonedConnections}</td> <td>{@code false}</td> <td> If {@code true}, logs stack traces of
+ * abandoned connections. </td> </tr> <tr> <td>{@code logValidationErrors}</td> <td>{@code
+ * false}</td> <td> If {@code true}, logs errors when connections fail validation. </td> </tr> <tr>
+ * <td>{@code maxConnectionAge}</td> <td>none</td> <td> If set, connections which have been open for
+ * longer than {@code maxConnectionAge} are closed when returned. </td> </tr> <tr> <td>{@code
  * maxWaitForConnection}</td> <td>30 seconds</td> <td> If a request for a connection is blocked for
  * longer than this period, an exception will be thrown. </td> </tr> <tr> <td>{@code
  * minIdleTime}</td> <td>1 minute</td> <td> The minimum amount of time an connection must sit idle

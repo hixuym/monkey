@@ -23,10 +23,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import java.util.Map;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;

@@ -14,12 +14,6 @@
 
 package io.sunflower.gizmo;
 
-import com.google.common.io.ByteStreams;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import io.sunflower.gizmo.utils.HttpCacheToolkit;
-import io.sunflower.gizmo.utils.MimeTypes;
-import io.sunflower.gizmo.utils.ResponseStreams;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,13 +21,19 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import com.google.common.io.ByteStreams;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import io.sunflower.gizmo.utils.HttpCacheToolkit;
+import io.sunflower.gizmo.utils.MimeTypes;
+import io.sunflower.gizmo.utils.ResponseStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This controller serves public resources under /assets.
- * It is capable of serving static files, webjars or files from a completely
- * different directory on the server.
+ * This controller serves public resources under /assets. It is capable of serving static files,
+ * webjars or files from a completely different directory on the server.
  */
 @Singleton
 public class AssetsResource {
@@ -67,18 +67,12 @@ public class AssetsResource {
   /**
    * Serves resources from the assets directory of your application.
    *
-   * For instance:
-   * route: /robots.txt
-   * A request to /robots.txt will be served from /assets/robots.txt.
+   * For instance: route: /robots.txt A request to /robots.txt will be served from
+   * /assets/robots.txt.
    *
-   * You can also use a path like the following to serve files:
-   * route: /assets/{fileName: .*}
+   * You can also use a path like the following to serve files: route: /assets/{fileName: .*}
    *
-   * matches
-   * /assets/app/app.css
-   * and will return
-   * /assets/app/app.css (from your jar).
-   *
+   * matches /assets/app/app.css and will return /assets/app/app.css (from your jar).
    */
   public Result serveStatic() {
     Object renderable = (Renderable) (context, result) -> {
@@ -93,10 +87,8 @@ public class AssetsResource {
   /**
    * Serves resources from the assets directory of your application.
    *
-   * For instance:
-   * A request to /robots.txt will be served from /assets/robots.txt.
-   * Request to /public/css/app.css will be served from /assets/css/app.css.
-   *
+   * For instance: A request to /robots.txt will be served from /assets/robots.txt. Request to
+   * /public/css/app.css will be served from /assets/css/app.css.
    */
   public Result serveWebJars() {
     Object renderable = new Renderable() {
@@ -156,8 +148,8 @@ public class AssetsResource {
   }
 
   /**
-   * Loads files from assets directory. This is the default directory
-   * of Ninja where to store stuff. Usually in src/main/java/assets/.
+   * Loads files from assets directory. This is the default directory of Ninja where to store stuff.
+   * Usually in src/main/java/assets/.
    */
   private URL getStaticFileFromAssetsDir(String fileName) {
 
@@ -199,10 +191,8 @@ public class AssetsResource {
   }
 
   /**
-   * Loads files from META-INF/resources directory.
-   * This is compatible with Servlet 3.0 specification and allows
-   * to use e.g. webjars project.
-   *
+   * Loads files from META-INF/resources directory. This is compatible with Servlet 3.0
+   * specification and allows to use e.g. webjars project.
    */
   private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
     String finalNameWithoutLeadingSlash

@@ -42,7 +42,7 @@ public class SwissKnife {
   /**
    * Used to check whether a class exists on the classpath.
    *
-   * @param nameWithPackage              for instance com.example.conf.GloablFilters
+   * @param nameWithPackage for instance com.example.conf.GloablFilters
    * @param instanceToGetClassloaderFrom usually "this" if you call this method.
    * @return true if class exists, false if not.
    */

@@ -15,6 +15,12 @@
 
 package io.sunflower.guicey.event.guava;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import javax.inject.Inject;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.reflect.TypeToken;
@@ -24,18 +30,14 @@ import io.sunflower.guicey.event.ApplicationEventDispatcher;
 import io.sunflower.guicey.event.ApplicationEventListener;
 import io.sunflower.guicey.event.ApplicationEventModule;
 import io.sunflower.guicey.event.ApplicationEventRegistration;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import javax.inject.Inject;
 
 public final class GuavaApplicationEventModule extends AbstractModule {
 
   @Override
   protected void configure() {
     install(new ApplicationEventModule());
-    bind(ApplicationEventDispatcher.class).to(GuavaApplicationEventDispatcher.class).asEagerSingleton();
+    bind(ApplicationEventDispatcher.class).to(GuavaApplicationEventDispatcher.class)
+        .asEagerSingleton();
   }
 
   @Override
@@ -91,13 +93,15 @@ public final class GuavaApplicationEventModule extends AbstractModule {
         if (ApplicationEventListener.class.isAssignableFrom(TypeToken.of(type).getRawType())) {
           ParameterizedType ptype = (ParameterizedType) type;
           Class<?> rawType = TypeToken.of(ptype.getActualTypeArguments()[0]).getRawType();
-          GuavaSubscriberProxy proxy = new GuavaSubscriberProxy(eventListener, eventListenerMethod, rawType);
+          GuavaSubscriberProxy proxy = new GuavaSubscriberProxy(eventListener, eventListenerMethod,
+              rawType);
           eventBus.register(proxy);
           return new GuavaEventRegistration(eventBus, proxy);
         }
       }
       //no-op. Could not find anything to register.
-      return () -> {};
+      return () -> {
+      };
     }
 
     private static class GuavaSubscriberProxy {

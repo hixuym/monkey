@@ -1,14 +1,15 @@
 package io.sunflower.gizmo;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.gizmo.utils.Mode;
 import io.sunflower.gizmo.utils.SecretGenerator;
 import io.sunflower.util.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

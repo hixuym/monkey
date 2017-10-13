@@ -4,13 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.cache.CacheBuilderSpec;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Resources;
-import io.sunflower.jackson.Jackson;
-import io.sunflower.validation.BaseValidator;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -23,6 +16,14 @@ import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.cache.CacheBuilderSpec;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Resources;
+import io.sunflower.jackson.Jackson;
+import io.sunflower.validation.BaseValidator;
 import org.assertj.core.data.MapEntry;
 import org.junit.After;
 import org.junit.Before;

@@ -2,11 +2,12 @@ package io.sunflower.configuration;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.io.ByteStreams;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+
+import com.google.common.io.ByteStreams;
 import org.apache.commons.text.StrSubstitutor;
 
 /**

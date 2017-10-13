@@ -15,10 +15,11 @@
 
 package io.sunflower.db;
 
-import com.codahale.metrics.health.HealthCheck;
-import io.sunflower.util.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+
+import com.codahale.metrics.health.HealthCheck;
+import io.sunflower.util.Duration;
 
 public class TimeBoundHealthCheck {
 

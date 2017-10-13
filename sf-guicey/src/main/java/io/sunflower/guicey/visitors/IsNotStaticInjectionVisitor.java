@@ -22,14 +22,15 @@ import com.google.inject.spi.StaticInjectionRequest;
 /**
  * Predicate visitor that returns 'true' if an Element is a requestStaticInjection.
  */
-public class IsNotStaticInjectionVisitor extends DefaultElementVisitor<Boolean> { 
-    @Override
-    protected Boolean visitOther(Element element) {
-        return true;
-    }
+public class IsNotStaticInjectionVisitor extends DefaultElementVisitor<Boolean> {
 
-    @Override 
-    public Boolean visit(StaticInjectionRequest element) { 
-        return false;
-    } 
+  @Override
+  protected Boolean visitOther(Element element) {
+    return true;
+  }
+
+  @Override
+  public Boolean visit(StaticInjectionRequest element) {
+    return false;
+  }
 }

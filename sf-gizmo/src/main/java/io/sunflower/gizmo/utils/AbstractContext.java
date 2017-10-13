@@ -13,6 +13,10 @@
  */
 package io.sunflower.gizmo.utils;
 
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
+
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -28,21 +32,19 @@ import io.sunflower.gizmo.params.ParamParsers;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.validation.Validation;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.UnknownHostException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract Context.Impl that implements features that are not reliant on the concrete Context implementation.  For
- * example, a concrete implementation may have to provide a <code>getHeader()</code> method, but this class could supply
- * a default implementation of <code>getAcceptContentType()</code> since it only needs to fetch a value from
+ * Abstract Context.Impl that implements features that are not reliant on the concrete Context
+ * implementation.  For example, a concrete implementation may have to provide a
+ * <code>getHeader()</code> method, but this class could supply a default implementation of
+ * <code>getAcceptContentType()</code> since it only needs to fetch a value from
  * <code>getHeader()</code>.
  *
- * When adding features to a <code>Context</code> please think about whether it should be fully or partially implemented
- * here or in the concrete implementation.
+ * When adding features to a <code>Context</code> please think about whether it should be fully or
+ * partially implemented here or in the concrete implementation.
  */
 abstract public class AbstractContext implements Context.Impl {
 
@@ -134,7 +136,8 @@ abstract public class AbstractContext implements Context.Impl {
   }
 
   /**
-   * Get the "real" address of the client connection.  Does not take any header (e.g. X-Forwarded-For) into account.
+   * Get the "real" address of the client connection.  Does not take any header (e.g.
+   * X-Forwarded-For) into account.
    *
    * @return The real address of the client connection
    */

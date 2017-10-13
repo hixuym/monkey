@@ -14,6 +14,10 @@
 
 package io.sunflower.gizmo.template.directives;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
+
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
@@ -22,9 +26,6 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.utils.GizmoConstant;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
 
 
 @SuppressWarnings("rawtypes")

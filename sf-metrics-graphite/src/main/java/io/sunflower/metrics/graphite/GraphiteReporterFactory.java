@@ -15,6 +15,8 @@
 
 package io.sunflower.metrics.graphite;
 
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.graphite.Graphite;
@@ -26,7 +28,6 @@ import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.metrics.BaseReporterFactory;
 import io.sunflower.validation.OneOf;
 import io.sunflower.validation.PortRange;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

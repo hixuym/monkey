@@ -17,6 +17,9 @@ package io.sunflower.client.proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import io.sunflower.client.HttpClientConfiguration;
@@ -25,8 +28,6 @@ import io.sunflower.configuration.ConfigurationValidationException;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
-import java.io.File;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

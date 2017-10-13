@@ -1,5 +1,7 @@
 package io.sunflower.logging;
 
+import javax.validation.constraints.NotNull;
+
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
@@ -10,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
-import javax.validation.constraints.NotNull;
 
 /**
  * An {@link AppenderFactory} implementation which provides an appender that writes events to the

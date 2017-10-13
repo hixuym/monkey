@@ -14,6 +14,11 @@
 
 package io.sunflower.gizmo.session;
 
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
@@ -25,10 +30,6 @@ import io.sunflower.gizmo.utils.CookieEncryption;
 import io.sunflower.gizmo.utils.Crypto;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.util.Duration;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

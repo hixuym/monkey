@@ -1,7 +1,8 @@
 package io.sunflower.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.validation.Validator;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public interface ConfigurationFactoryFactory<T> {
 

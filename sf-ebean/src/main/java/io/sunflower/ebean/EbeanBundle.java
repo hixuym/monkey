@@ -19,6 +19,9 @@ import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.any;
 import static com.google.inject.matcher.Matchers.not;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.name.Names;
@@ -31,8 +34,6 @@ import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>,
     DatabaseConfiguration<T> {

@@ -17,11 +17,12 @@ package io.sunflower.metrics.ganglia;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.DiscoverableSubtypeResolver;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
-import java.util.Optional;
 import org.junit.Test;
 
 public class GangliaReporterFactoryTest {

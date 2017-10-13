@@ -2,6 +2,10 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
@@ -21,9 +25,6 @@ import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.filter.FilterFactory;
 import io.sunflower.validation.BaseValidator;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StrSubstitutor;
 import org.assertj.core.data.MapEntry;

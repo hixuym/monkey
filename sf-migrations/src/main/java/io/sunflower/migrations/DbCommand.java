@@ -15,10 +15,11 @@
 
 package io.sunflower.migrations;
 
-import io.sunflower.Configuration;
-import io.sunflower.db.DatabaseConfiguration;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import io.sunflower.Configuration;
+import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;

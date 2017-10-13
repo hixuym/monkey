@@ -21,4 +21,5 @@ package io.sunflower.guicey.event;
  * to events.
  */
 public interface ApplicationEvent {
+
 }

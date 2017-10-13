@@ -14,6 +14,8 @@
 
 package io.sunflower.gizmo.utils;
 
+import javax.inject.Singleton;
+
 import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Renderable;
@@ -22,7 +24,6 @@ import io.sunflower.gizmo.exceptions.BadRequestException;
 import io.sunflower.gizmo.exceptions.GizmoException;
 import io.sunflower.gizmo.template.TemplateEngine;
 import io.sunflower.gizmo.template.TemplateEngineManager;
-import javax.inject.Singleton;
 
 
 @Singleton

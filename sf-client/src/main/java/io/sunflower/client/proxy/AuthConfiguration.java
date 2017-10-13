@@ -15,8 +15,9 @@
 
 package io.sunflower.client.proxy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

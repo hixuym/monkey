@@ -10,10 +10,11 @@
 
 package io.sunflower.postoffice.commonsmail;
 
-import io.sunflower.postoffice.Mail;
-import io.sunflower.postoffice.Postoffice;
 import java.util.Optional;
 import javax.mail.internet.AddressException;
+
+import io.sunflower.postoffice.Mail;
+import io.sunflower.postoffice.Postoffice;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 

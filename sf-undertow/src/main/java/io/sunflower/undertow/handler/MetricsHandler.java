@@ -17,6 +17,11 @@ package io.sunflower.undertow.handler;
 
 import static io.sunflower.undertow.handler.Handlers.param;
 
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,10 +33,6 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class MetricsHandler implements HttpHandler {

@@ -15,13 +15,14 @@
 
 package io.sunflower.ebean;
 
-import io.ebean.PersistBatch;
-import io.ebean.TxIsolation;
-import io.ebean.TxType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import io.ebean.PersistBatch;
+import io.ebean.TxIsolation;
+import io.ebean.TxType;
 
 /**
  * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is

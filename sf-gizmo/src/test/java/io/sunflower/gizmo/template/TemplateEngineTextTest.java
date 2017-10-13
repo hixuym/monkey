@@ -20,13 +20,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.utils.ResponseStreams;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.TreeMap;
+
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Result;
+import io.sunflower.gizmo.utils.ResponseStreams;
 import org.junit.Before;
 import org.junit.Test;
 

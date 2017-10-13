@@ -14,13 +14,6 @@
 
 package io.sunflower.gizmo.i18n;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -30,6 +23,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,8 +103,8 @@ public class MessagesImpl implements Messages {
   }
 
   /**
-   * Attempts to get a message file and sets the file changed reloading strategy on the configuration if the runtime
-   * mode is Dev.
+   * Attempts to get a message file and sets the file changed reloading strategy on the
+   * configuration if the runtime mode is Dev.
    */
   private Map<String, String> loadLanguageConfiguration(String fileOrUrl) {
 
@@ -214,11 +215,13 @@ public class MessagesImpl implements Messages {
   }
 
   /**
-   * Retrieves the matching language file from an arbitrary one or two part locale String ("en-US", or "en" or
-   * "de"...). <p>
+   * Retrieves the matching language file from an arbitrary one or two part locale String ("en-US",
+   * or "en" or "de"...). <p>
    *
-   * @param language A two or one letter language code such as "en-US" or "en" or "en-US,en;q=0.8,de;q=0.6".
-   * @return The matching configuration from the hashmap. Or the default mapping if no one has been found.
+   * @param language A two or one letter language code such as "en-US" or "en" or
+   * "en-US,en;q=0.8,de;q=0.6".
+   * @return The matching configuration from the hashmap. Or the default mapping if no one has been
+   * found.
    */
   private Map<String, String> getLanguageConfigurationForLocale(Optional<String> language) {
 

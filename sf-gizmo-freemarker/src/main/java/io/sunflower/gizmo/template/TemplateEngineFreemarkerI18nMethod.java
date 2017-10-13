@@ -14,6 +14,9 @@
 
 package io.sunflower.gizmo.template;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.Lists;
 import freemarker.ext.beans.StringModel;
 import freemarker.template.SimpleNumber;
@@ -25,8 +28,6 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.i18n.Messages;
 import io.sunflower.gizmo.validation.ConstraintViolation;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

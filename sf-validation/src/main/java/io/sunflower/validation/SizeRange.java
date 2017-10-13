@@ -8,7 +8,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import io.sunflower.util.SizeUnit;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -16,6 +15,8 @@ import javax.validation.Constraint;
 import javax.validation.OverridesAttribute;
 import javax.validation.Payload;
 import javax.validation.ReportAsSingleViolation;
+
+import io.sunflower.util.SizeUnit;
 
 /**
  * The annotated element has to be in the appropriate range. Apply on {@link io.sunflower.util.Size}

@@ -14,9 +14,10 @@
 
 package io.sunflower.gizmo.server;
 
+import javax.validation.constraints.NotNull;
+
 import io.undertow.server.handlers.Cookie;
 import io.undertow.server.handlers.CookieImpl;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

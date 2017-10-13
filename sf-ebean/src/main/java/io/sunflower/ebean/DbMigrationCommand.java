@@ -15,6 +15,8 @@
 
 package io.sunflower.ebean;
 
+import java.util.Collections;
+
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
 import io.ebean.Platform;
@@ -24,7 +26,6 @@ import io.ebean.dbmigration.DbMigration;
 import io.ebean.dbmigration.DbOffline;
 import io.sunflower.cli.Command;
 import io.sunflower.setup.Bootstrap;
-import java.util.Collections;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 

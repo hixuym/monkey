@@ -2,6 +2,9 @@ package io.sunflower.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.UniformReservoir;
@@ -16,8 +19,6 @@ import io.sunflower.validation.valuehandling.GuavaOptionalValidatedValueUnwrappe
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
 import org.junit.Before;

@@ -127,11 +127,6 @@ public class SunflowerAppRule<C extends Configuration> extends ExternalResource 
   protected void after() {
     if (recursiveCallCount.decrementAndGet() == 0) {
       testSupport.after();
-      synchronized (this) {
-//                if (client != null) {
-//                    client.close();
-//                }
-      }
     }
   }
 

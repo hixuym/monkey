@@ -15,13 +15,14 @@
 
 package io.sunflower.ebean;
 
+import java.util.concurrent.ExecutorService;
+
 import com.codahale.metrics.health.HealthCheck;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.ebean.EbeanServer;
 import io.ebean.SqlQuery;
 import io.sunflower.db.TimeBoundHealthCheck;
 import io.sunflower.util.Duration;
-import java.util.concurrent.ExecutorService;
 
 public class EbeanServerHealthCheck extends HealthCheck {
 

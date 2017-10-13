@@ -18,11 +18,12 @@ package io.sunflower.example;
 import static io.sunflower.testing.ResourceHelpers.resourceFilePath;
 import static org.junit.Assert.assertNotNull;
 
+import javax.inject.Inject;
+
 import io.ebean.EbeanServer;
 import io.sunflower.example.core.UserMapper;
 import io.sunflower.testing.ConfigOverride;
 import io.sunflower.testing.junit.SunflowerAppRule;
-import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

@@ -2,10 +2,11 @@ package io.sunflower.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Resources;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Resources;
 import org.junit.Test;
 
 public class UrlConfigurationSourceProviderTest {

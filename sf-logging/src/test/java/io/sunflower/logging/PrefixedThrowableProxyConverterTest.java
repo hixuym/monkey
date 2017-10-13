@@ -2,9 +2,10 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.qos.logback.classic.spi.ThrowableProxy;
 import java.io.IOException;
 import java.util.Collections;
+
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import org.junit.Before;
 import org.junit.Test;
 

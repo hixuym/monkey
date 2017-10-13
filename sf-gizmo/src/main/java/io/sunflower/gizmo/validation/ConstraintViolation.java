@@ -29,10 +29,10 @@ public class ConstraintViolation {
   /**
    * Create a constraint violation
    *
-   * @param messageKey     The message key
-   * @param fieldKey       The field key. May be null.
+   * @param messageKey The message key
+   * @param fieldKey The field key. May be null.
    * @param defaultMessage The default message. May be null.
-   * @param messageParams  The message params
+   * @param messageParams The message params
    */
   public ConstraintViolation(String messageKey,
       String fieldKey,

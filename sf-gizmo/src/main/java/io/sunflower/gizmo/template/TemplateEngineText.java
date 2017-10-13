@@ -14,13 +14,14 @@
 
 package io.sunflower.gizmo.template;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.utils.ResponseStreams;
-import java.io.IOException;
-import java.io.Writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

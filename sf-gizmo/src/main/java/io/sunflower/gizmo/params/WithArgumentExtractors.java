@@ -20,8 +20,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that this annotation should use the given argument extractors Allows to specify more than one argument
- * extractor, see {@link WithArgumentExtractor}
+ * Indicates that this annotation should use the given argument extractors Allows to specify more
+ * than one argument extractor, see {@link WithArgumentExtractor}
  *
  * @author Christian Bourgeois
  */

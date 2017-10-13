@@ -14,9 +14,10 @@
 
 package io.sunflower.gizmo.params;
 
+import java.util.List;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.validation.Validator;
-import java.util.List;
 
 /**
  * Argument extractor that wraps another argument extractor and validates its argument

@@ -2,9 +2,10 @@ package io.sunflower;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import java.io.File;
 import org.junit.Test;
 
 public class ApplicationTest {

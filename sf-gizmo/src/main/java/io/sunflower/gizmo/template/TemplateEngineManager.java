@@ -14,12 +14,13 @@
 
 package io.sunflower.gizmo.template;
 
-import com.google.inject.ImplementedBy;
 import java.util.Set;
 
+import com.google.inject.ImplementedBy;
+
 /**
- * Template engine manager. Has a number of built in template engines, and allows registering custom template engines by
- * registering explicit bindings of things that implement TemplateEngine.
+ * Template engine manager. Has a number of built in template engines, and allows registering custom
+ * template engines by registering explicit bindings of things that implement TemplateEngine.
  */
 @ImplementedBy(TemplateEngineManagerImpl.class)
 public interface TemplateEngineManager {

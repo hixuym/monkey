@@ -2,13 +2,14 @@ package io.sunflower.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.collect.ImmutableList;
-import io.sunflower.util.Size;
-import io.sunflower.util.SizeUnit;
 import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import javax.validation.Validator;
+
+import com.google.common.collect.ImmutableList;
+import io.sunflower.util.Size;
+import io.sunflower.util.SizeUnit;
 import org.junit.Test;
 
 public class SizeValidatorTest {

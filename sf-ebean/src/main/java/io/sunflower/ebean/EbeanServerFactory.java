@@ -15,14 +15,15 @@
 
 package io.sunflower.ebean;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.sunflower.db.ManagedDataSource;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Environment;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

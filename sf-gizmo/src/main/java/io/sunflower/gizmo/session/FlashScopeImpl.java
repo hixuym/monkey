@@ -14,15 +14,16 @@
 
 package io.sunflower.gizmo.session;
 
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.CookieDataCodec;
 import io.sunflower.gizmo.utils.GizmoConstant;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

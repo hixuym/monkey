@@ -16,10 +16,11 @@
 
 package io.sunflower.gizmo.utils;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
-import java.util.Objects;
 
 /**
  * A pojo to be renderd as Json or Xml. Used for instance to display error messages when a route is

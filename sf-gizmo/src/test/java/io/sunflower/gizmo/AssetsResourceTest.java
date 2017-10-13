@@ -21,10 +21,11 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
+
 import io.sunflower.gizmo.utils.HttpCacheToolkit;
 import io.sunflower.gizmo.utils.MimeTypes;
 import io.sunflower.gizmo.utils.ResponseStreams;
-import java.io.ByteArrayOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

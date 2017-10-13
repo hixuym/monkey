@@ -15,15 +15,16 @@
 
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.sunflower.Configuration;
-import io.sunflower.db.DatabaseConfiguration;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
+
+import com.google.common.annotations.VisibleForTesting;
+import io.sunflower.Configuration;
+import io.sunflower.db.DatabaseConfiguration;
 import liquibase.CatalogAndSchema;
 import liquibase.Liquibase;
 import liquibase.database.Database;

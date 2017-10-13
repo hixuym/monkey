@@ -1,5 +1,7 @@
 package io.sunflower.jackson;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
@@ -16,7 +18,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.common.cache.CacheBuilderSpec;
-import java.io.IOException;
 
 public class GuavaExtrasModule extends Module {
 

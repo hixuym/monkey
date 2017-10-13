@@ -27,8 +27,8 @@ public interface Validator<T> {
   /**
    * Validate the given value
    *
-   * @param value   The value, may be null
-   * @param field   The name of the field being validated, if applicable
+   * @param value The value, may be null
+   * @param field The name of the field being validated, if applicable
    * @param context The Gizmo request context
    */
   void validate(T value, String field, Context context);

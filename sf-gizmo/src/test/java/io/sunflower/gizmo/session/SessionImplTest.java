@@ -27,6 +27,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
@@ -37,8 +40,6 @@ import io.sunflower.gizmo.utils.Crypto;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.SecretGenerator;
 import io.sunflower.util.Duration;
-import java.util.Arrays;
-import java.util.Collection;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

@@ -15,9 +15,10 @@
  */
 package io.sunflower.gizmo.utils;
 
-import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
 import java.lang.reflect.Method;
 import java.util.Optional;
+
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
 
 public class LambdaRoute {
 

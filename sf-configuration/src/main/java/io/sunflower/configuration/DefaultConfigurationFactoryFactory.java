@@ -1,8 +1,9 @@
 package io.sunflower.configuration;
 
+import javax.validation.Validator;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.validation.Validator;
 
 public class DefaultConfigurationFactoryFactory<T> implements ConfigurationFactoryFactory<T> {
 

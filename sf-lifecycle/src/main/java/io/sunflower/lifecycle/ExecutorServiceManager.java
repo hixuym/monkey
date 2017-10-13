@@ -1,7 +1,8 @@
 package io.sunflower.lifecycle;
 
-import io.sunflower.util.Duration;
 import java.util.concurrent.ExecutorService;
+
+import io.sunflower.util.Duration;
 
 public class ExecutorServiceManager extends AbstractLifeCycle {
 

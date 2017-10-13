@@ -17,7 +17,8 @@ package io.sunflower.gizmo.exceptions;
 import io.sunflower.gizmo.Result;
 
 /**
- * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and throw it.
+ * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and
+ * throw it.
  *
  * Should signal a html error 400 - bad request (the client sent something strange).
  *

@@ -3,12 +3,13 @@ package io.sunflower.configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-import com.google.common.io.ByteStreams;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+
+import com.google.common.io.ByteStreams;
 import org.apache.commons.text.StrLookup;
 import org.apache.commons.text.StrSubstitutor;
 import org.junit.Test;

@@ -17,6 +17,11 @@ package io.sunflower.gizmo.template;
 
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import ch.qos.logback.core.Appender;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.StringModel;
@@ -28,10 +33,6 @@ import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.i18n.Messages;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.validation.ConstraintViolation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;

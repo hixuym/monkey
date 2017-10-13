@@ -15,15 +15,16 @@
 
 package io.sunflower.ebean;
 
-import io.ebean.BeanState;
-import io.ebean.Model;
-import io.ebean.annotation.CreatedTimestamp;
-import io.ebean.annotation.UpdatedTimestamp;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+
+import io.ebean.BeanState;
+import io.ebean.Model;
+import io.ebean.annotation.CreatedTimestamp;
+import io.ebean.annotation.UpdatedTimestamp;
 
 /**
  * Created by michael on 16/5/28.

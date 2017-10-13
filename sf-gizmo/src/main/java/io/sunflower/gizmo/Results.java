@@ -14,8 +14,9 @@
 
 package io.sunflower.gizmo;
 
-import io.sunflower.gizmo.utils.NoHttpBody;
 import java.util.Optional;
+
+import io.sunflower.gizmo.utils.NoHttpBody;
 
 
 /**
@@ -78,11 +79,12 @@ public class Results {
    *
    * The redirect does NOT need a template and does NOT render a text in the Http body by default.
    *
-   * If you wish to do so please remove the {@link NoHttpBody} that is set as renderable of the Result.
+   * If you wish to do so please remove the {@link NoHttpBody} that is set as renderable of the
+   * Result.
    *
    * @param url The url used as redirect target.
-   * @return A nicely configured result with status code 303 and the url set as Location header. Renders no Http body
-   * by default.
+   * @return A nicely configured result with status code 303 and the url set as Location header.
+   * Renders no Http body by default.
    */
   public static Result redirect(String url) {
 
@@ -98,11 +100,12 @@ public class Results {
    *
    * The redirect does NOT need a template and does NOT render a text in the Http body by default.
    *
-   * If you wish to do so please remove the {@link NoHttpBody} that is set as renderable of the Result.
+   * If you wish to do so please remove the {@link NoHttpBody} that is set as renderable of the
+   * Result.
    *
    * @param url The url used as redirect target.
-   * @return A nicely configured result with status code 307 and the url set as Location header. Renders no Http body
-   * by default.
+   * @return A nicely configured result with status code 307 and the url set as Location header.
+   * Renders no Http body by default.
    */
   public static Result redirectTemporary(String url) {
 

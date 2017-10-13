@@ -1,11 +1,12 @@
 package io.sunflower.validation;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Ordering;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 
 public class ConstraintViolations {
 

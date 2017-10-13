@@ -15,6 +15,11 @@
 
 package io.sunflower.gizmo.server;
 
+import java.util.Collections;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Strings;
@@ -26,10 +31,6 @@ import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
-import java.util.Collections;
-import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @JsonTypeName("gizmo")
 public class GizmoServerFactory extends AbstractGizmoServerFactory {

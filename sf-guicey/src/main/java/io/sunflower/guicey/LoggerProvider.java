@@ -2,6 +2,7 @@ package io.sunflower.guicey;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

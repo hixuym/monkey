@@ -14,20 +14,20 @@
 
 package io.sunflower.gizmo.template;
 
+import java.io.PrintWriter;
+import java.io.Writer;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.core.Environment;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.sunflower.gizmo.GizmoConfiguration;
-import java.io.PrintWriter;
-import java.io.Writer;
 import org.slf4j.Logger;
 
 /**
- * A general exception handler for Freemarker.
- * - Outputs a readable error in test / dev mode.
- * - Outputs a general error message in production.
+ * A general exception handler for Freemarker. - Outputs a readable error in test / dev mode. -
+ * Outputs a general error message in production.
  *
  * @author ra
  */

@@ -15,6 +15,12 @@
 
 package io.sunflower.gizmo.server;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
@@ -33,14 +39,10 @@ import io.undertow.server.handlers.RequestDumpingHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import io.undertow.server.handlers.accesslog.AccessLogReceiver;
 import io.undertow.server.handlers.accesslog.DefaultAccessLogReceiver;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements ServerFactory {
+public abstract class AbstractGizmoServerFactory extends GizmoConfiguration implements
+    ServerFactory {
 
   private final PathHandler adminHandlers = new PathHandler();
 
@@ -52,7 +54,8 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
   @Override
   public final Server build(Environment environment) {
 
-    Injectors.mapOf(environment.injector(), new TypeLiteral<Map<String, HttpHandler>>() {})
+    Injectors.mapOf(environment.injector(), new TypeLiteral<Map<String, HttpHandler>>() {
+    })
         .forEach(adminHandlers::addPrefixPath);
 
     return buildServer(environment);

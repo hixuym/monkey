@@ -34,8 +34,8 @@ public interface GizmoConstant {
   String I18N_SYSTEM_FORBIDDEN_REQUEST_TEXT_DEFAULT = "Oops. That''s forbidden and all we know.";
 
   /**
-   * A cookie that helps Gizmo to set a default language. Usually resolves to a cookie called NINJA_LANG. The cookie
-   * then looks like: "NINJA_LANG=en"
+   * A cookie that helps Gizmo to set a default language. Usually resolves to a cookie called
+   * NINJA_LANG. The cookie then looks like: "NINJA_LANG=en"
    */
   String LANG_COOKIE_SUFFIX = "_LANG";
 

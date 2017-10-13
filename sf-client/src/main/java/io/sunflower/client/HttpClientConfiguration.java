@@ -15,16 +15,17 @@
 
 package io.sunflower.client;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.sunflower.client.proxy.ProxyConfiguration;
-import io.sunflower.client.ssl.TlsConfiguration;
-import io.sunflower.util.Duration;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.sunflower.client.proxy.ProxyConfiguration;
+import io.sunflower.client.ssl.TlsConfiguration;
+import io.sunflower.util.Duration;
 import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 
 /**

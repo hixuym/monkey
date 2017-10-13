@@ -14,12 +14,13 @@
 
 package io.sunflower.gizmo.utils;
 
+import java.util.Date;
+import java.util.Optional;
+
 import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
-import java.util.Date;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,11 +1,12 @@
 package io.sunflower.metrics;
 
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 class RegexStringMatchingStrategy implements StringMatchingStrategy {
 

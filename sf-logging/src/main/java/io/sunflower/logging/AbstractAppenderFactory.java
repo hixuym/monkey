@@ -2,6 +2,12 @@ package io.sunflower.logging;
 
 import static com.google.common.base.Strings.nullToEmpty;
 
+import java.util.List;
+import java.util.TimeZone;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
@@ -16,11 +22,6 @@ import com.google.common.collect.ImmutableList;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.filter.FilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
-import java.util.List;
-import java.util.TimeZone;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 /**
  * A base implementation of {@link AppenderFactory}.

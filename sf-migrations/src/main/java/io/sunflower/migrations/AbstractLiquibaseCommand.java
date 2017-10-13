@@ -15,6 +15,8 @@
 
 package io.sunflower.migrations;
 
+import java.sql.SQLException;
+
 import com.codahale.metrics.MetricRegistry;
 import io.sunflower.Configuration;
 import io.sunflower.cli.ConfiguredCommand;
@@ -22,7 +24,6 @@ import io.sunflower.db.DatabaseConfiguration;
 import io.sunflower.db.ManagedDataSource;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
-import java.sql.SQLException;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;

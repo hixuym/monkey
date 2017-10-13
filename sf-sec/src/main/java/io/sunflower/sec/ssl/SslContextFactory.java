@@ -15,8 +15,6 @@
 
 package io.sunflower.sec.ssl;
 
-import io.sunflower.sec.CertificateUtils;
-import io.sunflower.sec.CertificateValidator;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -69,6 +67,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509TrustManager;
+
+import io.sunflower.sec.CertificateUtils;
+import io.sunflower.sec.CertificateValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

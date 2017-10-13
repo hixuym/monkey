@@ -15,8 +15,9 @@
 
 package io.sunflower.migrations;
 
-import io.sunflower.db.DataSourceFactory;
 import java.util.UUID;
+
+import io.sunflower.db.DataSourceFactory;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.Subparser;
 

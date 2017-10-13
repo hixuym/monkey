@@ -2,13 +2,14 @@ package io.sunflower.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.collect.ImmutableList;
-import io.sunflower.util.Duration;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 import javax.validation.Validator;
+
+import com.google.common.collect.ImmutableList;
+import io.sunflower.util.Duration;
 import org.junit.Test;
 
 public class DurationValidatorTest {

@@ -28,6 +28,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import io.sunflower.gizmo.ContentTypes;
 import io.sunflower.gizmo.Context;
@@ -42,8 +45,6 @@ import io.sunflower.gizmo.params.ParamParsers;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.validation.Validation;
-import java.util.HashSet;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

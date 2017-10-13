@@ -18,8 +18,9 @@ package io.sunflower.db;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-import com.codahale.metrics.MetricRegistry;
 import java.sql.SQLFeatureNotSupportedException;
+
+import com.codahale.metrics.MetricRegistry;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.junit.Test;
 

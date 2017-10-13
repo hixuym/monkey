@@ -25,8 +25,8 @@ import com.google.inject.spi.TypeListener;
 /**
  * Support for scheduling using annotations
  *
- * @since 1.0.0
  * @author James Roper
+ * @since 1.0.0
  */
 public class SchedulerSupport {
 

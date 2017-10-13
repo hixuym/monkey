@@ -14,9 +14,10 @@
  */
 package com.example.conf;
 
+import java.util.List;
+
 import io.sunflower.gizmo.Filter;
 import io.sunflower.gizmo.application.ApplicationFilters;
-import java.util.List;
 
 // Used in some testcases...
 public class Filters implements ApplicationFilters {

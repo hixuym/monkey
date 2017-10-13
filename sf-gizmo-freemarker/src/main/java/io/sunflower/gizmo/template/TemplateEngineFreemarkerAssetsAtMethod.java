@@ -14,6 +14,9 @@
 
 package io.sunflower.gizmo.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
@@ -21,8 +24,6 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import io.sunflower.gizmo.AssetsResource;
 import io.sunflower.gizmo.Router;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class TemplateEngineFreemarkerAssetsAtMethod implements

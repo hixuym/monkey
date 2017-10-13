@@ -18,6 +18,9 @@ package io.sunflower.gizmo.bodyparser;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -30,8 +33,6 @@ import io.sunflower.gizmo.i18n.Lang;
 import io.sunflower.gizmo.i18n.LangImpl;
 import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.guicey.LoggerProvider;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Test;
 import org.slf4j.Logger;
 

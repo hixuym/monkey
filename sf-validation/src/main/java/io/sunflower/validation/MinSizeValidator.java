@@ -1,9 +1,10 @@
 package io.sunflower.validation;
 
-import io.sunflower.util.Size;
-import io.sunflower.util.SizeUnit;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import io.sunflower.util.Size;
+import io.sunflower.util.SizeUnit;
 
 /**
  * Check that a {@link Size} being validated is greater than or equal to the minimum value

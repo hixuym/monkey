@@ -2,6 +2,11 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.validation.Validator;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -22,10 +27,6 @@ import io.sunflower.logging.layout.SunflowerLayoutFactory;
 import io.sunflower.util.Size;
 import io.sunflower.validation.BaseValidator;
 import io.sunflower.validation.ConstraintViolations;
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import javax.validation.Validator;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

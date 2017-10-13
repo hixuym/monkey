@@ -23,14 +23,14 @@ public interface Router {
    * Get the route for the given method and URI
    *
    * @param httpMethod The method
-   * @param uri        The URI
+   * @param uri The URI
    * @return The route
    */
   Route getRouteFor(String httpMethod, String uri);
 
   /**
-   * Compile all the routes that have been registered with the router. This should be called once, during
-   * initialization, before the application starts serving requests.
+   * Compile all the routes that have been registered with the router. This should be called once,
+   * during initialization, before the application starts serving requests.
    */
   void compileRoutes();
 

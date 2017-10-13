@@ -15,14 +15,15 @@
 
 package io.sunflower.guicey;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import java.util.Map;
-import java.util.Set;
 
 public class Injectors {
 

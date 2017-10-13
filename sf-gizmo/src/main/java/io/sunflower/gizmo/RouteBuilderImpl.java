@@ -14,14 +14,6 @@
 
 package io.sunflower.gizmo;
 
-import com.google.common.collect.Lists;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
-import com.google.inject.util.Providers;
-import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
-import io.sunflower.gizmo.application.ApplicationFilters;
-import io.sunflower.gizmo.params.ResourceMethodInvoker;
-import io.sunflower.gizmo.utils.LambdaRoute;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -30,6 +22,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
+
+import com.google.common.collect.Lists;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.google.inject.util.Providers;
+import io.sunflower.gizmo.ResourceMethods.ResourceMethod;
+import io.sunflower.gizmo.application.ApplicationFilters;
+import io.sunflower.gizmo.params.ResourceMethodInvoker;
+import io.sunflower.gizmo.utils.LambdaRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,7 +155,7 @@ public class RouteBuilderImpl implements RouteBuilder {
    *
    * We are reloading when there are changes. So this is almost as good as compile time checking.
    *
-   * @param controllerClass  The controller class
+   * @param controllerClass The controller class
    * @param controllerMethod The method
    * @return The actual method
    */

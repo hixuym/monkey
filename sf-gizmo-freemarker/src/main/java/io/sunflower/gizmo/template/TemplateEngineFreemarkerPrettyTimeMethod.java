@@ -14,14 +14,15 @@
 
 package io.sunflower.gizmo.template;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import freemarker.template.SimpleDate;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,6 @@ import org.slf4j.LoggerFactory;
  * PrettyTime integration for Ninja-FreeMarker.
  *
  * @author James Moger
- *
  */
 public class TemplateEngineFreemarkerPrettyTimeMethod implements
     TemplateMethodModelEx {

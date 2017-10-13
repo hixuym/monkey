@@ -22,13 +22,14 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.Map;
+
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import io.sunflower.gizmo.params.Param;
 import io.sunflower.gizmo.params.ParamParsers;
 import io.sunflower.gizmo.validation.ValidationImpl;
-import java.util.Collections;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -18,11 +18,12 @@ package io.sunflower.gizmo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.collect.Maps;
-import io.sunflower.gizmo.utils.ResponseStreams;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.common.collect.Maps;
+import io.sunflower.gizmo.utils.ResponseStreams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

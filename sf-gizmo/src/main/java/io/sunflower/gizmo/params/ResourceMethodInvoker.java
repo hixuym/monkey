@@ -14,13 +14,6 @@
 
 package io.sunflower.gizmo.params;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.exceptions.BadRequestException;
-import io.sunflower.gizmo.exceptions.RoutingException;
-import io.sunflower.gizmo.validation.Validator;
-import io.sunflower.gizmo.validation.WithValidator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -30,6 +23,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.exceptions.BadRequestException;
+import io.sunflower.gizmo.exceptions.RoutingException;
+import io.sunflower.gizmo.validation.Validator;
+import io.sunflower.gizmo.validation.WithValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,14 +82,14 @@ public class ResourceMethodInvoker {
   }
 
   /**
-   * Builds an invoker for a functional method.  Understands what parameters to guicey and extract based on type and
-   * annotations.
+   * Builds an invoker for a functional method.  Understands what parameters to guicey and extract
+   * based on type and annotations.
    *
-   * @param functionalMethod     The method to be invoked
-   * @param implementationMethod The method to use for determining what actual parameters and annotations to use for
-   *                             each argument.  Useful when type/lambda erasure makes the functional interface not
-   *                             reliable for reflecting.
-   * @param injector             The guice getInjector
+   * @param functionalMethod The method to be invoked
+   * @param implementationMethod The method to use for determining what actual parameters and
+   * annotations to use for each argument.  Useful when type/lambda erasure makes the functional
+   * interface not reliable for reflecting.
+   * @param injector The guice getInjector
    * @return An invoker
    */
   public static ResourceMethodInvoker build(
@@ -368,12 +369,12 @@ public class ResourceMethodInvoker {
   }
 
   /**
-   * Just a little helper that makes it possible to handle things like myControllerMethod(@Param("param1")
-   * Optional<String> myValue)
+   * Just a little helper that makes it possible to handle things like
+   * myControllerMethod(@Param("param1") Optional<String> myValue)
    *
-   * It investigates the type parameter and allows to remember whether a type was wrapped in an Optional or not. It
-   * stores the "real" type of the parameter that the extractor should extract (String and not Optional in example
-   * above).
+   * It investigates the type parameter and allows to remember whether a type was wrapped in an
+   * Optional or not. It stores the "real" type of the parameter that the extractor should extract
+   * (String and not Optional in example above).
    */
   private static class MethodParameter {
 

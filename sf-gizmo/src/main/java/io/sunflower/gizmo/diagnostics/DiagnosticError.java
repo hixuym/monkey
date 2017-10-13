@@ -14,15 +14,16 @@
 
 package io.sunflower.gizmo.diagnostics;
 
-import io.sunflower.gizmo.Context;
-import io.sunflower.gizmo.Renderable;
-import io.sunflower.gizmo.Result;
 import java.net.URI;
 import java.util.List;
 
+import io.sunflower.gizmo.Context;
+import io.sunflower.gizmo.Renderable;
+import io.sunflower.gizmo.Result;
+
 /**
- * Represents an application error/exception that includes extra information in order to diagnose it. Knows how to
- * render itself as the renderable inside a <code>Result</code>.
+ * Represents an application error/exception that includes extra information in order to diagnose
+ * it. Knows how to render itself as the renderable inside a <code>Result</code>.
  *
  * @author Joe Lauer (https://twitter.com/jjlauer)
  * @author Fizzed, Inc. (http://fizzed.com)

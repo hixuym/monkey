@@ -18,8 +18,7 @@ import java.util.Map;
  *
  * It is modeled after org.apache.commons.mail.Email.
  *
- * But it allows us not to use org.apache.commons.mail.Email at all, use
- * Javamail or anything else.
+ * But it allows us not to use org.apache.commons.mail.Email at all, use Javamail or anything else.
  *
  * @author rbauer
  */
@@ -30,10 +29,7 @@ public interface Mail {
   String getSubject();
 
   /**
-   * In general email addresses could look like:
-   * Joe Jocker <joe.jocker@me.com>
-   * or
-   * joe@joe.com.
+   * In general email addresses could look like: Joe Jocker <joe.jocker@me.com> or joe@joe.com.
    *
    * Make sure your implementation and / or your mailer can handle these.
    */
@@ -42,10 +38,7 @@ public interface Mail {
   Collection<String> getTos();
 
   /**
-   * In general email addresses could look like:
-   * Joe Jocker <joe.jocker@me.com>
-   * or
-   * joe@joe.com.
+   * In general email addresses could look like: Joe Jocker <joe.jocker@me.com> or joe@joe.com.
    *
    * Make sure your implementation and / or your mailer can handle these.
    */
@@ -54,10 +47,7 @@ public interface Mail {
   String getFrom();
 
   /**
-   * In general email addresses could look like:
-   * Joe Jocker <joe.jocker@me.com>
-   * or
-   * joe@joe.com.
+   * In general email addresses could look like: Joe Jocker <joe.jocker@me.com> or joe@joe.com.
    *
    * Make sure your implementation and / or your mailer can handle these.
    */
@@ -66,10 +56,7 @@ public interface Mail {
   Collection<String> getReplyTo();
 
   /**
-   * In general email addresses could look like:
-   * Joe Jocker <joe.jocker@me.com>
-   * or
-   * joe@joe.com.
+   * In general email addresses could look like: Joe Jocker <joe.jocker@me.com> or joe@joe.com.
    *
    * Make sure your implementation and / or your mailer can handle these.
    */
@@ -78,10 +65,7 @@ public interface Mail {
   Collection<String> getCcs();
 
   /**
-   * In general email addresses could look like:
-   * Joe Jocker <joe.jocker@me.com>
-   * or
-   * joe@joe.com.
+   * In general email addresses could look like: Joe Jocker <joe.jocker@me.com> or joe@joe.com.
    *
    * Make sure your implementation and / or your mailer can handle these.
    */

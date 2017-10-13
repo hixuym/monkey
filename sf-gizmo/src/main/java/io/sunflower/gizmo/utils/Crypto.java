@@ -14,13 +14,14 @@
 
 package io.sunflower.gizmo.utils;
 
+import java.nio.charset.StandardCharsets;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 import com.google.common.io.BaseEncoding;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.gizmo.GizmoConfiguration;
-import java.nio.charset.StandardCharsets;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 @Singleton
 public class Crypto {

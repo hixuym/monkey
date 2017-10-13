@@ -13,6 +13,10 @@
  */
 package io.sunflower.gizmo.template;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.regex.Pattern;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.common.base.Strings;
@@ -22,20 +26,18 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.utils.ResponseStreams;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JSONP engine. Outputs the given result as JSONP output: Javascript callback with data as a parameter. Contains JSONP
- * validation regular expression to test the validness of the JSONP callback. The valid callbacks are simple functions
- * like myJsFunction or simple object path looking like: something1.something2.something3 . This is a subset of rules
- * from the following article:
+ * JSONP engine. Outputs the given result as JSONP output: Javascript callback with data as a
+ * parameter. Contains JSONP validation regular expression to test the validness of the JSONP
+ * callback. The valid callbacks are simple functions like myJsFunction or simple object path
+ * looking like: something1.something2.something3 . This is a subset of rules from the following
+ * article:
  *
- * @see <a href="http://tav.espians.com/sanitising-jsonp-callback-identifiers-for-security.html">Sanitizing JSONP
- * callbacks</a>
+ * @see <a href="http://tav.espians.com/sanitising-jsonp-callback-identifiers-for-security.html">Sanitizing
+ * JSONP callbacks</a>
  */
 @Singleton
 public class TemplateEngineJsonP implements TemplateEngine {
