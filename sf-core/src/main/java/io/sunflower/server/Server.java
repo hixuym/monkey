@@ -32,7 +32,7 @@ public abstract class Server extends ContainerLifeCycle {
   public Server(Environment environment) {
     this.environment = environment;
     environment.lifecycle().attach(this);
-    this.injector = environment.guicey().getInjector();
+    this.injector = environment.injector();
   }
 
   @Override

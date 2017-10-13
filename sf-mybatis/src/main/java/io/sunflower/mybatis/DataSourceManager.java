@@ -18,11 +18,11 @@ package io.sunflower.mybatis;
 import io.sunflower.db.ManagedDataSource;
 import io.sunflower.lifecycle.Managed;
 
-public class SqlSessionFactoryManager implements Managed {
+public class DataSourceManager implements Managed {
 
   private final ManagedDataSource dataSource;
 
-  public SqlSessionFactoryManager(ManagedDataSource dataSource) {
+  public DataSourceManager(ManagedDataSource dataSource) {
     this.dataSource = dataSource;
   }
 

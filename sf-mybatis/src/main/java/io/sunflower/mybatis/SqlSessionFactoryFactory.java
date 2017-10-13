@@ -54,6 +54,9 @@ public class SqlSessionFactoryFactory {
       List<Class<?>> mappers,
       String name) {
     final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), name);
+
+    environment.lifecycle().manage(new DataSourceManager(dataSource));
+
     return build(bundle, environment, dbConfig, dataSource, mappers, name);
   }
 

@@ -15,6 +15,13 @@
 
 package io.sunflower.guicey;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -23,17 +30,10 @@ import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementVisitor;
 import com.google.inject.spi.Elements;
 import com.google.inject.util.Modules;
-import io.sunflower.guicey.spi.InjectorCreator;
 import io.sunflower.guicey.spi.ModuleTransformer;
 import io.sunflower.guicey.visitors.IsNotStaticInjectionVisitor;
 import io.sunflower.guicey.visitors.KeyTracingVisitor;
 import io.sunflower.guicey.visitors.WarnOfStaticInjectionVisitor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,37 +178,11 @@ public class InjectorBuilder {
     return Elements.getElements(Stage.TOOL, module);
   }
 
-  /**
-   * Create the getInjector in the specified stage using the specified InjectorCreator strategy.  The
-   * InjectorCreator will most likely perform additional error handling on top of the call to {@link
-   * Guice#createInjector}.
-   *
-   * @param stage Stage in which the getInjector is running.  It is recommended to run in
-   * Stage.DEVELOPEMENT since it treats all singletons as lazy as opposed to defaulting to eager
-   * instantiation which could result in instantiating unwanted classes.
-   */
-  public <I extends Injector> I createInjector(Stage stage, InjectorCreator<I> creator) {
-    return creator.createInjector(stage, module);
-  }
-
-  /**
-   * @see {@link InjectorBuilder#createInjector(Stage, InjectorCreator)}
-   */
-  public <I extends Injector> I createInjector(InjectorCreator<I> creator) {
-    return creator.createInjector(LAZY_SINGLETONS_STAGE, module);
-  }
-
-  /**
-   * @see {@link InjectorBuilder#createInjector(Stage, InjectorCreator)}
-   */
   public Injector createInjector(Stage stage) {
-    return createInjector(stage, new SimpleInjectorCreator());
+    return Guice.createInjector(stage, module);
   }
 
-  /**
-   * @see {@link InjectorBuilder#createInjector(Stage, InjectorCreator)}
-   */
   public Injector createInjector() {
-    return createInjector(LAZY_SINGLETONS_STAGE, new SimpleInjectorCreator());
+    return Guice.createInjector(LAZY_SINGLETONS_STAGE, module);
   }
 }

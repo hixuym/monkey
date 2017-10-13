@@ -2,7 +2,7 @@ package io.sunflower.undertow.handler;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
-import io.sunflower.metrics.Timed;
+import io.sunflower.guicey.metrics.Timed;
 import java.io.PrintWriter;
 
 /**

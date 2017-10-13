@@ -14,6 +14,16 @@
 
 package io.sunflower.gizmo.template;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import javax.inject.Singleton;
+
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -39,15 +49,6 @@ import io.sunflower.gizmo.template.directives.TemplateEngineFreemarkerAuthentici
 import io.sunflower.gizmo.template.directives.TemplateEngineFreemarkerAuthenticityTokenDirective;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.gizmo.utils.ResponseStreams;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import javax.inject.Singleton;
 import org.slf4j.Logger;
 
 @Singleton
@@ -81,7 +82,6 @@ public class TemplateEngineFreemarker implements TemplateEngine {
       Logger logger,
       GizmoConfiguration configuration,
       TemplateEngineHelper templateEngineHelper,
-      TemplateEngineManager templateEngineManager,
       TemplateEngineFreemarkerReverseRouteMethod templateEngineFreemarkerReverseRouteMethod,
       TemplateEngineFreemarkerAssetsAtMethod templateEngineFreemarkerAssetsAtMethod,
       TemplateEngineFreemarkerWebJarsAtMethod templateEngineFreemarkerWebJarsAtMethod)
@@ -360,9 +360,10 @@ public class TemplateEngineFreemarker implements TemplateEngine {
   }
 
   /**
-   * Allows to modify the FreeMarker configuration. According to the FreeMarker documentation, the configuration will
-   * be thread-safe once all settings have been set via a safe publication technique. Therefore, consider modifying
-   * this configuration only within the configure() method of your application Module singleton.
+   * Allows to modify the FreeMarker configuration. According to the FreeMarker documentation, the
+   * configuration will be thread-safe once all settings have been set via a safe publication
+   * technique. Therefore, consider modifying this configuration only within the configure() method
+   * of your application Module singleton.
    *
    * @return the freemarker configuration object
    */

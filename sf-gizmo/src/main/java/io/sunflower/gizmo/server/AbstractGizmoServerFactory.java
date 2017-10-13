@@ -52,7 +52,7 @@ public abstract class AbstractGizmoServerFactory extends GizmoConfiguration impl
   @Override
   public final Server build(Environment environment) {
 
-    Injectors.mapOf(environment.guicey().getInjector(), new TypeLiteral<Map<String, HttpHandler>>() {})
+    Injectors.mapOf(environment.injector(), new TypeLiteral<Map<String, HttpHandler>>() {})
         .forEach(adminHandlers::addPrefixPath);
 
     return buildServer(environment);

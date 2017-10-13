@@ -74,7 +74,7 @@ public class GizmoServerFactory extends AbstractGizmoServerFactory {
     logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
 
     HttpHandler applicationHandler = addAccessLogWrapper("app", environment,
-        createApplicationHandler(environment.guicey().getInjector()));
+        createApplicationHandler(environment.injector()));
 
     HttpHandler adminHandler = addAccessLogWrapper("admin", environment, createAdminHandler());
 

@@ -34,12 +34,8 @@ import org.mockito.Mockito;
 
 public class InjectorBuilderTest {
 
-
   @Test
   public void testLifecycleInjectorEvents() {
-    final AtomicBoolean injectCalled = new AtomicBoolean(false);
-    final AtomicBoolean afterInjectorCalled = new AtomicBoolean(false);
-
     InjectorBuilder
         .fromModule(new AbstractModule() {
           @Override
@@ -47,9 +43,6 @@ public class InjectorBuilderTest {
           }
         })
         .createInjector();
-
-//    Assert.assertTrue(injectCalled.get());
-//    Assert.assertTrue(afterInjectorCalled.get());
   }
 
   @Before
