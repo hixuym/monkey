@@ -31,8 +31,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public abstract class MybatisBundle<T extends Configuration> implements ConfiguredBundle<T>,
-    DatabaseConfiguration<T> {
+public abstract class MybatisBundle<T extends Configuration>
+    implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
   static final String DEFAULT_NAME = "mybatis";
 
@@ -105,6 +105,6 @@ public abstract class MybatisBundle<T extends Configuration> implements Configur
   public void initialize(Bootstrap<?> bootstrap) {
   }
 
-  protected void configure(org.apache.ibatis.session.Configuration config) {
+  protected void configure(org.apache.ibatis.session.Configuration cfg) {
   }
 }
