@@ -15,6 +15,8 @@
 
 package io.sunflower.gizmo.server;
 
+import javax.inject.Singleton;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import io.sunflower.Configuration;
@@ -36,14 +38,12 @@ import io.sunflower.gizmo.template.TemplateEngineXml;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.HandlerModule;
-import javax.inject.Singleton;
 
 public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
   @Override
   public void run(T configuration, Environment environment) throws Exception {
-
-    environment.guicey().addModule(new AbstractModule() {
+    environment.guicey().install(new AbstractModule() {
       @Override
       protected void configure() {
         if (configuration.getServerFactory() instanceof GizmoConfiguration) {
@@ -66,11 +66,10 @@ public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>
         bind(TemplateEngineText.class);
 
         bind(Context.class).to(UndertowContext.class);
-
-        //
-        install(new HandlerModule(environment));
       }
     });
+
+    environment.guicey().install(new HandlerModule(environment));
   }
 
   @Override

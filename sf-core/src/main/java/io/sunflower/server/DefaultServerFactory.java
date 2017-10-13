@@ -23,7 +23,15 @@ public class DefaultServerFactory implements ServerFactory {
 
   @Override
   public Server build(Environment environment) {
-    return new Server() {
+    return new Server(environment) {
+
+      @Override
+      protected void boot() throws Exception {
+      }
+
+      @Override
+      protected void shutdown() throws Exception {
+      }
     };
   }
 

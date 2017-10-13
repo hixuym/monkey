@@ -248,7 +248,7 @@ public class ReverseRouter implements WithResourceMethod<Builder> {
           buffer.append(rawUri.substring(lastIndex, rp.getIndex()));
           // append value
           buffer.append(value);
-          // the next index to start from
+          // the next index to commit from
           lastIndex = rp.getIndex() + rp.getToken().length();
         }
       }

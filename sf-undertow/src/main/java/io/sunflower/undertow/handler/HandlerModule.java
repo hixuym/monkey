@@ -22,10 +22,10 @@ import io.undertow.server.HttpHandler;
 
 public class HandlerModule extends AbstractModule {
 
-  private final Environment environment;
+  private final TaskHandler taskHandler;
 
   public HandlerModule(Environment environment) {
-    this.environment = environment;
+    this.taskHandler = new TaskHandler(environment);
   }
 
   @Override
@@ -33,8 +33,6 @@ public class HandlerModule extends AbstractModule {
     // admin handlers;
     MapBinder<String, HttpHandler> mapBinder = MapBinder
         .newMapBinder(binder(), String.class, HttpHandler.class);
-
-    TaskHandler taskHandler = new TaskHandler(environment);
 
     mapBinder.addBinding("tasks").toInstance(taskHandler);
     mapBinder.addBinding("healthcheck").to(HealthChecksHandler.class);

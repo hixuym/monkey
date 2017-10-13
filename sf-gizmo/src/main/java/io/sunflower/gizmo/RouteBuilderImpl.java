@@ -205,7 +205,7 @@ public class RouteBuilderImpl implements RouteBuilder {
   /**
    * Build the route.
    *
-   * @param injector The injector to build the route with
+   * @param injector The getInjector to build the route with
    * @return The built route
    */
   public Route buildRoute(Injector injector) {

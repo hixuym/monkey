@@ -24,6 +24,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import javax.inject.Singleton;
+
 import freemarker.template.Configuration;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.GizmoConfiguration;
@@ -36,13 +44,6 @@ import io.sunflower.gizmo.i18n.Messages;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.utils.ResponseStreams;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import javax.inject.Singleton;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,9 +64,6 @@ public class TemplateEngineFreemarkerTest {
 
   @Mock
   TemplateEngineHelper templateEngineHelper;
-
-  @Mock
-  TemplateEngineManager templateEngineManager;
 
   @Mock
   TemplateEngineFreemarkerReverseRouteMethod templateEngineFreemarkerReverseRouteMethod;
@@ -105,7 +103,6 @@ public class TemplateEngineFreemarkerTest {
         logger,
         configuration,
         templateEngineHelper,
-        templateEngineManager,
         templateEngineFreemarkerReverseRouteMethod,
         templateEngineFreemarkerAssetsAtMethod,
         templateEngineFreemarkerWebJarsAtMethod);

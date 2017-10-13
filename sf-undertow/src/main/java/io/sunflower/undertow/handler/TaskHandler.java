@@ -45,7 +45,7 @@ public class TaskHandler implements HttpHandler {
       @Override
       public void lifeCycleStarting(LifeCycle event) {
 
-        Injectors.instanceOf(environment.guicey().injector(), Task.class)
+        Injectors.instanceOf(environment.injector(), Task.class)
             .forEach(TaskHandler.this::add);
 
         logTasks();

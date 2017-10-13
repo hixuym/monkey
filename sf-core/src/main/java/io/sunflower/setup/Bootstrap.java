@@ -2,6 +2,11 @@ package io.sunflower.setup;
 
 import static java.util.Objects.requireNonNull;
 
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.ValidatorFactory;
+
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
@@ -27,13 +32,9 @@ import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.ValidatorFactory;
 
 /**
- * The pre-start application environment, containing everything required to bootstrap a Dropwizard
+ * The pre-commit application environment, containing everything required to bootstrap a Dropwizard
  * command.
  *
  * @param <T> the configuration type
@@ -79,7 +80,7 @@ public class Bootstrap<T extends Configuration> {
   }
 
   /**
-   * Registers the JVM metrics to the metric registry and start to report the registry metrics via
+   * Registers the JVM metrics to the metric registry and commit to report the registry metrics via
    * JMX.
    */
   public void registerMetrics() {

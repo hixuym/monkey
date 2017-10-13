@@ -2,6 +2,12 @@ package io.sunflower.setup;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.SortedMap;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import javax.validation.Validator;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.health.HealthCheck;
@@ -14,16 +20,11 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.Injector;
 import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
-import io.sunflower.metrics.MetricsModule;
-import java.util.SortedMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ public class Environment {
 
     this.guiceyEnvironment = new GuiceyEnvironment();
 
-    this.guiceyEnvironment.addModule(new BootModule(this), new MetricsModule());
+    this.guiceyEnvironment.install(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -173,7 +174,11 @@ public class Environment {
   }
 
   public GuiceyEnvironment guicey() {
-    return this.guiceyEnvironment;
+    return guiceyEnvironment;
+  }
+
+  public Injector injector() {
+    return guiceyEnvironment.getInjector();
   }
 
   /**

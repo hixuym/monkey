@@ -46,11 +46,12 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
         return configuration.getDataSourceFactory();
       }
     });
+
   }
 
   @Override
   public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
-    environment.guicey().addModule(new AbstractModule() {
+    environment.guicey().install(new AbstractModule() {
       @Override
       protected void configure() {
         bind(ApplicationRoutes.class).to(Routes.class);

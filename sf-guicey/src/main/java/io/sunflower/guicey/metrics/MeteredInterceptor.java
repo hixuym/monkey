@@ -1,61 +1,50 @@
 /*
- * Copyright (C) 2012-2017 the original author or authors.
- *
+ * Copyright (C) 2017. the original author or authors.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
-package io.sunflower.metrics;
+package io.sunflower.guicey.metrics;
 
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-/**
- * @author ra
- */
-class TimedInterceptor implements MethodInterceptor {
 
-  private final Provider<MetricRegistry> metricRegistry;
+class MeteredInterceptor implements MethodInterceptor {
+
+  final private Provider<MetricRegistry> metricRegistry;
 
   @Inject
-  public TimedInterceptor(Provider<MetricRegistry> metricRegistry) {
+  public MeteredInterceptor(Provider<MetricRegistry> metricRegistry) {
     this.metricRegistry = metricRegistry;
   }
 
   @Override
   public Object invoke(MethodInvocation invocation) throws Throwable {
 
-    String timerName = invocation.getMethod().getAnnotation(Timed.class).value();
-
+    String timerName = invocation.getMethod().getAnnotation(Metered.class).value();
     if (timerName.isEmpty()) {
       timerName = MetricRegistry
           .name(invocation.getThis().getClass().getSuperclass(), invocation.getMethod().getName());
     }
 
-    Timer.Context timerContext
-        = metricRegistry.get()
-        .timer(timerName)
-        .time();
+    Meter meter = metricRegistry.get().meter(timerName);
+    meter.mark();
 
-    try {
-      return invocation.proceed();
-    } finally {
-      timerContext.stop();
-      timerContext.close();
-    }
+    return invocation.proceed();
   }
 
 }

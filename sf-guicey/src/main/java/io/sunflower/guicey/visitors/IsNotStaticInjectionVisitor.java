@@ -13,26 +13,23 @@
  * limitations under the License.
  */
 
-package io.sunflower.mybatis;
+package io.sunflower.guicey.visitors;
 
-import io.sunflower.db.ManagedDataSource;
-import io.sunflower.lifecycle.Managed;
+import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.StaticInjectionRequest;
 
-public class SqlSessionFactoryManager implements Managed {
+/**
+ * Predicate visitor that returns 'true' if an Element is a requestStaticInjection.
+ */
+public class IsNotStaticInjectionVisitor extends DefaultElementVisitor<Boolean> { 
+    @Override
+    protected Boolean visitOther(Element element) {
+        return true;
+    }
 
-  private final ManagedDataSource dataSource;
-
-  public SqlSessionFactoryManager(ManagedDataSource dataSource) {
-    this.dataSource = dataSource;
-  }
-
-  @Override
-  public void start() throws Exception {
-    dataSource.start();
-  }
-
-  @Override
-  public void stop() throws Exception {
-    dataSource.stop();
-  }
+    @Override 
+    public Boolean visit(StaticInjectionRequest element) { 
+        return false;
+    } 
 }

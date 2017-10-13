@@ -70,7 +70,7 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
  * {@code repeatable-read}, or {@code serializable}. </td> </tr> <tr> <td>{@code useFairQueue}</td>
  * <td>{@code true}</td> <td> If {@code true}, calls to {@code getConnection} are handled in a FIFO
  * manner. </td> </tr> <tr> <td>{@code initialSize}</td> <td>10</td> <td> The initial size of the
- * connection pool. May be zero, which will allow you to start the connection pool without requiring
+ * connection pool. May be zero, which will allow you to commit the connection pool without requiring
  * the DB to be up. In the latter case the {@link #minSize} must also be set to zero. </td> </tr>
  * <tr> <td>{@code minSize}</td> <td>10</td> <td> The minimum size of the connection pool. </td>
  * </tr> <tr> <td>{@code maxSize}</td> <td>100</td> <td> The maximum size of the connection pool.

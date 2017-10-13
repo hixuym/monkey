@@ -14,54 +14,35 @@
 
 package io.sunflower.gizmo.server;
 
-import com.google.inject.Injector;
-import io.sunflower.gizmo.Gizmo;
+import java.util.List;
+import javax.net.ssl.SSLContext;
+
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.undertow.Undertow;
-import java.util.List;
-import javax.net.ssl.SSLContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * sunflower standalone based on Undertow.
  */
 public class GizmoServer extends Server {
 
-  private Logger logger = LoggerFactory.getLogger(GizmoServer.class);
-
-  private final Environment environment;
-
   private Undertow undertow;
-  private boolean undertowStarted;                      // undertow fails on stop() if start() never called
+  private boolean undertowStarted;                      // undertow fails on stop() if commit() never called
 
   protected SSLContext sslContext;
 
-  private Gizmo gizmo;
-
-  private final Injector injector;
-
   public GizmoServer(Environment environment, Undertow undertow) {
+    super(environment);
     this.undertow = undertow;
-    this.environment = environment;
-    this.injector = environment.guicey().injector();
-    this.gizmo = injector.getInstance(Gizmo.class);
   }
 
   @Override
-  public void doStart() throws Exception {
-
-    super.doStart();
-
+  public void boot() throws Exception {
     this.initRoutes();
-
-    this.gizmo.onFrameworkStart();
-
     String version = undertow.getClass().getPackage().getImplementationVersion();
-    logger.info("Trying to start undertow v{}", version);
+    logger.info("Trying to commit undertow v{}", version);
     this.undertow.start();
     undertowStarted = true;
     logger.info("Started undertow v{}", version);
@@ -77,11 +58,7 @@ public class GizmoServer extends Server {
   }
 
   @Override
-  public void doStop() throws Exception {
-    super.doStop();
-
-    this.gizmo.onFrameworkShutdown();
-
+  public void shutdown() throws Exception {
     if (this.undertow != null && undertowStarted) {
       logger.info("Trying to stop undertow.");
       this.undertow.stop();

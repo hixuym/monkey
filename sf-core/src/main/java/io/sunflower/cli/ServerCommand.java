@@ -37,7 +37,7 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
   private final Class<T> configurationClass;
 
   public ServerCommand(Application<T> application) {
-    this(application, "server", "Runs the Sunflower application as an HTTP server");
+    this(application, "server", "Runs the Sunflower application as server");
   }
 
   /**
@@ -53,22 +53,20 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
     this.configurationClass = application.getConfigurationClass();
   }
 
-  /*
-       * Since we don't subclass ServerCommand, we need a concrete reference to the configuration
-       * class.
-       */
+  /**
+   * Since we don't subclass ServerCommand, we need a concrete reference to the configuration
+   * class.
+   */
   @Override
   protected Class<T> getConfigurationClass() {
     return configurationClass;
   }
 
   @Override
-  protected void run(Environment environment, Namespace namespace, T configuration)
-      throws Exception {
+  protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
     final Server server = configuration.getServerFactory().build(environment);
 
     try {
-      environment.lifecycle().attach(server);
       server.addLifeCycleListener(new LifeCycleListener());
       cleanupAsynchronously();
       server.start();
@@ -81,7 +79,7 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
         }
       }));
     } catch (Exception e) {
-      LOGGER.error("Unable to start server, shutting down", e);
+      LOGGER.error("Unable to commit server, shutting down", e);
       try {
         server.stop();
       } catch (Exception e1) {
