@@ -15,10 +15,11 @@
 
 package io.sunflower.testing;
 
-import com.google.common.io.Resources;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import com.google.common.io.Resources;
 
 /**
  * A set of helper method for fixture files.

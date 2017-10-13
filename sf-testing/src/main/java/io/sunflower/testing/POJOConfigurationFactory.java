@@ -15,11 +15,12 @@
 
 package io.sunflower.testing;
 
+import java.io.File;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import io.sunflower.Configuration;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
-import java.io.File;
 
 public class POJOConfigurationFactory<C extends Configuration>
     extends YamlConfigurationFactory<C> {

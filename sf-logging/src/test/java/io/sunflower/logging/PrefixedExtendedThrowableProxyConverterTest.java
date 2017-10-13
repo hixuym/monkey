@@ -2,9 +2,10 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.qos.logback.classic.spi.ThrowableProxy;
 import java.io.IOException;
 import java.util.Collections;
+
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,6 +24,6 @@ public class PrefixedExtendedThrowableProxyConverterTest {
   public void prefixesExceptionsWithExclamationMarks() throws Exception {
     assertThat(converter.throwableProxyToString(proxy))
         .startsWith(String.format("! java.io.IOException: noo%n" +
-            "! at io.sunflower.logging.PrefixedExtendedThrowableProxyConverterTest.<init>(PrefixedExtendedThrowableProxyConverterTest.java:14)%n"));
+            "! at io.sunflower.logging.PrefixedExtendedThrowableProxyConverterTest.<init>(PrefixedExtendedThrowableProxyConverterTest.java:15)%n"));
   }
 }

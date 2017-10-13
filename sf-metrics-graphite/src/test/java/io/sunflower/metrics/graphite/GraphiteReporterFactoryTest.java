@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.Optional;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
@@ -27,7 +29,6 @@ import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.DiscoverableSubtypeResolver;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
-import java.util.Optional;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

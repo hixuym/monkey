@@ -15,10 +15,11 @@
 
 package io.sunflower.ebean;
 
+import java.lang.reflect.Method;
+
 import io.ebean.TxScope;
 import io.ebeaninternal.api.HelpScopeTrans;
 import io.ebeaninternal.api.ScopeTrans;
-import java.lang.reflect.Method;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 

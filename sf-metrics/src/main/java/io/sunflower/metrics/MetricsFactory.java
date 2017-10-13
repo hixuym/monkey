@@ -1,13 +1,14 @@
 package io.sunflower.metrics;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.util.Duration;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

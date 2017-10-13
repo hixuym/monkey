@@ -2,12 +2,13 @@ package io.sunflower;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.jackson.Jackson;
-import io.sunflower.logging.AppenderFactory;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sunflower.jackson.Jackson;
+import io.sunflower.logging.AppenderFactory;
 import org.junit.Test;
 
 public class ConfigurationTest {

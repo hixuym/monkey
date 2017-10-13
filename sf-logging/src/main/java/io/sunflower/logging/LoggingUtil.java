@@ -1,10 +1,11 @@
 package io.sunflower.logging;
 
-import ch.qos.logback.classic.LoggerContext;
-import io.sunflower.util.Duration;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.concurrent.GuardedBy;
+
+import ch.qos.logback.classic.LoggerContext;
+import io.sunflower.util.Duration;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;

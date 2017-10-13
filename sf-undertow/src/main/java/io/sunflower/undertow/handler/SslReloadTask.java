@@ -15,10 +15,11 @@
 
 package io.sunflower.undertow.handler;
 
+import java.io.PrintWriter;
+
 import com.google.common.collect.ImmutableMultimap;
 import io.sunflower.sec.ssl.SslContextFactory;
 import io.sunflower.undertow.SslReload;
-import java.io.PrintWriter;
 
 /**
  * A task that will refresh all ssl factories with up to date certificate information

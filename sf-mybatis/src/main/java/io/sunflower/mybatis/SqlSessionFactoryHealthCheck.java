@@ -15,13 +15,14 @@
 
 package io.sunflower.mybatis;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.concurrent.ExecutorService;
+
 import com.codahale.metrics.health.HealthCheck;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.sunflower.db.TimeBoundHealthCheck;
 import io.sunflower.util.Duration;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.concurrent.ExecutorService;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 

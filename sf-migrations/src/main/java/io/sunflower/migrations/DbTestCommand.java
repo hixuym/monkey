@@ -15,10 +15,11 @@
 
 package io.sunflower.migrations;
 
+import java.util.List;
+
 import com.google.common.base.Joiner;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
-import java.util.List;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;

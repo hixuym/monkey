@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assume.assumeThat;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import javax.validation.Validator;
+
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 

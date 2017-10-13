@@ -9,6 +9,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 import org.junit.Test;

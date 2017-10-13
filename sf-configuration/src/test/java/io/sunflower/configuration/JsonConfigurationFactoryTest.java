@@ -2,11 +2,12 @@ package io.sunflower.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.jackson.Jackson;
-import java.io.File;
-import java.io.IOException;
 import org.junit.Test;
 
 public class JsonConfigurationFactoryTest extends BaseConfigurationFactoryTest {

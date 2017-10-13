@@ -1,12 +1,13 @@
 package io.sunflower.example.resources;
 
+import javax.inject.Inject;
+
 import io.ebean.EbeanServer;
 import io.sunflower.ebean.Transactional;
 import io.sunflower.example.core.User;
 import io.sunflower.example.core.UserMapper;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.Results;
-import javax.inject.Inject;
 
 public class ApplicationResource {
 

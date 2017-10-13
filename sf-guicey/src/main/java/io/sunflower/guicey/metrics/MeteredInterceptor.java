@@ -15,10 +15,11 @@
 
 package io.sunflower.guicey.metrics;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 

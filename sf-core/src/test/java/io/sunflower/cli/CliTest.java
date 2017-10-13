@@ -11,15 +11,16 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.util.Locale;
+import java.util.Optional;
+
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.JarLocation;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.util.Locale;
-import java.util.Optional;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;

@@ -1,5 +1,13 @@
 package io.sunflower.logging;
 
+import java.lang.management.ManagementFactory;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.net.SyslogAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -10,13 +18,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
-import java.lang.management.ManagementFactory;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 /**
  * An {@link AppenderFactory} implementation which provides an appender that sends events to a

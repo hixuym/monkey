@@ -1,9 +1,10 @@
 package io.sunflower.undertow.handler;
 
+import java.io.PrintWriter;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
 import io.sunflower.guicey.metrics.Timed;
-import java.io.PrintWriter;
 
 /**
  * Performs a full JVM garbage collection (probably).

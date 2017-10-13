@@ -1,11 +1,12 @@
 package io.sunflower.logging;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.google.common.collect.ImmutableList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Individual {@link Logger} configuration

@@ -15,6 +15,9 @@
 
 package io.sunflower.guicey;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.spi.Element;
@@ -22,9 +25,6 @@ import io.sunflower.guicey.visitors.BindingTracingVisitor;
 import io.sunflower.guicey.visitors.KeyTracingVisitor;
 import io.sunflower.guicey.visitors.ModuleSourceTracingVisitor;
 import io.sunflower.guicey.visitors.WarnOfToInstanceInjectionVisitor;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;

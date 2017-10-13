@@ -1,5 +1,8 @@
 package io.sunflower;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import io.sunflower.logging.DefaultLoggingFactory;
@@ -7,8 +10,6 @@ import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
 import io.sunflower.server.DefaultServerFactory;
 import io.sunflower.server.ServerFactory;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * An object representation of the YAML configuration file. Extend this with your own configuration

@@ -1,9 +1,10 @@
 package io.sunflower.configuration;
 
-import com.google.common.collect.ImmutableSet;
-import io.sunflower.validation.ConstraintViolations;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
+
+import com.google.common.collect.ImmutableSet;
+import io.sunflower.validation.ConstraintViolations;
 
 /**
  * An exception thrown where there is an error validating a configuration object.

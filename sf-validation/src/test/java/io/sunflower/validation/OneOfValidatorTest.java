@@ -4,11 +4,12 @@ import static io.sunflower.validation.ConstraintViolations.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import javax.validation.Validator;
+
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 public class OneOfValidatorTest {

@@ -15,11 +15,12 @@
 
 package io.sunflower.undertow.handler;
 
-import com.codahale.metrics.jvm.ThreadDump;
-import com.google.common.collect.ImmutableMultimap;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
+
+import com.codahale.metrics.jvm.ThreadDump;
+import com.google.common.collect.ImmutableMultimap;
 
 public class ThreadDumpTask extends Task {
 

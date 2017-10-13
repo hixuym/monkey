@@ -15,9 +15,10 @@
 
 package io.sunflower.example.core;
 
-import io.sunflower.ebean.BaseModel;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import io.sunflower.ebean.BaseModel;
 
 @Entity
 @Table(name = "tb_user")

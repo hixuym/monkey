@@ -15,6 +15,11 @@
 
 package io.sunflower.metrics.ganglia;
 
+import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.ganglia.GangliaReporter;
@@ -24,10 +29,6 @@ import info.ganglia.gmetric4j.gmetric.GMetric;
 import io.sunflower.metrics.BaseReporterFactory;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.MinDuration;
-import java.io.IOException;
-import java.util.Optional;
-import java.util.UUID;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 

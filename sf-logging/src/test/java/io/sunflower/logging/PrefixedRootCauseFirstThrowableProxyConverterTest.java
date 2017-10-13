@@ -2,13 +2,14 @@ package io.sunflower.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.qos.logback.classic.spi.ThrowableProxy;
-import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import ch.qos.logback.classic.spi.ThrowableProxy;
+import com.google.common.base.Splitter;
 import org.junit.Before;
 import org.junit.Test;
 

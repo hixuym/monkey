@@ -1,12 +1,13 @@
 package io.sunflower.metrics;
 
+import java.io.File;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.io.File;
-import javax.validation.constraints.NotNull;
 
 /**
  * A factory for configuring and building {@link CsvReporter} instances.

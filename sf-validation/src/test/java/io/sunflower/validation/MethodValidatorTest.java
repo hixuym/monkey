@@ -2,9 +2,10 @@ package io.sunflower.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.collect.ImmutableList;
 import javax.validation.Valid;
 import javax.validation.Validator;
+
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 @SuppressWarnings({"FieldMayBeFinal", "MethodMayBeStatic", "UnusedDeclaration"})

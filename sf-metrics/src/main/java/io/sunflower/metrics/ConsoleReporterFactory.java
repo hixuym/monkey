@@ -1,13 +1,14 @@
 package io.sunflower.metrics;
 
+import java.io.PrintStream;
+import java.util.TimeZone;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.io.PrintStream;
-import java.util.TimeZone;
-import javax.validation.constraints.NotNull;
 
 /**
  * A factory for configuring and building {@link ConsoleReporter} instances.

@@ -10,11 +10,12 @@
 
 package io.sunflower.postoffice.common;
 
-import io.sunflower.postoffice.Mail;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.sunflower.postoffice.Mail;
 
 /**
  * Simple implementation of Mail.

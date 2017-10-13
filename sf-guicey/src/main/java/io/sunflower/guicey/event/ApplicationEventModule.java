@@ -15,6 +15,12 @@
 
 package io.sunflower.guicey.event;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.inject.Provider;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
@@ -23,11 +29,6 @@ import com.google.inject.spi.ProvisionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import io.sunflower.guicey.event.guava.GuavaApplicationEventModule;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,9 +108,11 @@ public final class ApplicationEventModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    Provider<ApplicationEventDispatcher> dispatcherProvider = binder().getProvider(ApplicationEventDispatcher.class);
+    Provider<ApplicationEventDispatcher> dispatcherProvider = binder()
+        .getProvider(ApplicationEventDispatcher.class);
     bindListener(Matchers.any(), new ApplicationEventSubscribingTypeListener(dispatcherProvider));
-    bindListener(Matchers.any(), new ApplicationEventSubscribingProvisionListener(dispatcherProvider));
+    bindListener(Matchers.any(),
+        new ApplicationEventSubscribingProvisionListener(dispatcherProvider));
   }
 
   @Override

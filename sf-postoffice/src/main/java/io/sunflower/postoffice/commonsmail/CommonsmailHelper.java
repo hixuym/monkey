@@ -10,12 +10,13 @@
 
 package io.sunflower.postoffice.commonsmail;
 
-import io.sunflower.postoffice.Mail;
-import io.sunflower.postoffice.common.Tuple;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.mail.internet.AddressException;
+
+import io.sunflower.postoffice.Mail;
+import io.sunflower.postoffice.common.Tuple;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
@@ -25,8 +26,8 @@ public interface CommonsmailHelper {
       throws AddressException, EmailException;
 
   /**
-   * Creates a MultiPartEmail. Selects the correct implementation
-   * regarding html (MultiPartEmail) and/or txt content or both.
+   * Creates a MultiPartEmail. Selects the correct implementation regarding html (MultiPartEmail)
+   * and/or txt content or both.
    *
    * Populates the mutlipart email accordingly with the txt / html content.
    */

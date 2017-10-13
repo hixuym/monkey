@@ -18,13 +18,14 @@ package io.sunflower.testing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.sunflower.cli.Cli;
-import io.sunflower.setup.Bootstrap;
-import io.sunflower.util.JarLocation;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Optional;
+
+import io.sunflower.cli.Cli;
+import io.sunflower.setup.Bootstrap;
+import io.sunflower.util.JarLocation;
 import org.junit.After;
 import org.junit.Before;
 

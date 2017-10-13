@@ -2,11 +2,12 @@ package io.sunflower.jackson;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 

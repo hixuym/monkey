@@ -17,10 +17,11 @@ package io.sunflower.db;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
-import com.codahale.metrics.Gauge;
-import com.codahale.metrics.MetricRegistry;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
+
+import com.codahale.metrics.Gauge;
+import com.codahale.metrics.MetricRegistry;
 import org.apache.tomcat.jdbc.pool.ConnectionPool;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
 import org.apache.tomcat.jdbc.pool.PoolConfiguration;

@@ -1,8 +1,9 @@
 package io.sunflower.metrics;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Locale;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A base {@link ReporterFactory} for configuring metric reporters with formatting options.

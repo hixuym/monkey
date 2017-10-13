@@ -15,12 +15,13 @@
 
 package io.sunflower.client.ssl;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Strings;
-import io.sunflower.validation.ValidationMethod;
 import java.io.File;
 import java.util.List;
 import javax.annotation.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Strings;
+import io.sunflower.validation.ValidationMethod;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class TlsConfiguration {

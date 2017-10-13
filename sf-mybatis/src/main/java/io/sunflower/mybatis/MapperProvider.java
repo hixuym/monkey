@@ -15,9 +15,10 @@
 
 package io.sunflower.mybatis;
 
-import com.google.common.base.Objects;
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import com.google.common.base.Objects;
 import org.apache.ibatis.session.SqlSessionManager;
 
 public class MapperProvider<T> implements Provider<T> {

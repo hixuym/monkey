@@ -15,14 +15,15 @@
 
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
-import io.sunflower.Configuration;
-import io.sunflower.db.DatabaseConfiguration;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
+import io.sunflower.Configuration;
+import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;

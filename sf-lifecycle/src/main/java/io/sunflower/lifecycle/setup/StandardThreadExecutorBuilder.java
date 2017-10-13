@@ -15,10 +15,11 @@
 
 package io.sunflower.lifecycle.setup;
 
+import java.util.concurrent.ThreadFactory;
+
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.sunflower.lifecycle.ExecutorServiceManager;
 import io.sunflower.util.Duration;
-import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

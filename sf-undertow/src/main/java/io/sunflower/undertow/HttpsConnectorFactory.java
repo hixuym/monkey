@@ -1,5 +1,13 @@
 package io.sunflower.undertow;
 
+import java.net.URI;
+import java.security.KeyStore;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
 import ch.qos.logback.classic.Level;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -13,13 +21,6 @@ import io.sunflower.undertow.handler.SslReloadTask;
 import io.sunflower.undertow.handler.TaskHandler;
 import io.sunflower.validation.ValidationMethod;
 import io.undertow.Undertow;
-import java.net.URI;
-import java.security.KeyStore;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

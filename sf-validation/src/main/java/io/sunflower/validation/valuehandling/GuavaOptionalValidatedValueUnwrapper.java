@@ -1,9 +1,10 @@
 package io.sunflower.validation.valuehandling;
 
+import java.lang.reflect.Type;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import java.lang.reflect.Type;
 import org.hibernate.validator.spi.valuehandling.ValidatedValueUnwrapper;
 
 /**

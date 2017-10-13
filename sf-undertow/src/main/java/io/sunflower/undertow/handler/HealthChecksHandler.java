@@ -15,16 +15,20 @@
 
 package io.sunflower.undertow.handler;
 
+import java.util.Map;
+import java.util.SortedMap;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.codahale.metrics.health.HealthCheck;
+import com.codahale.metrics.json.HealthCheckModule;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.common.util.concurrent.MoreExecutors;
 import io.sunflower.setup.Environment;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
-import java.util.Map;
-import java.util.SortedMap;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class HealthChecksHandler implements HttpHandler {
@@ -42,7 +46,9 @@ public class HealthChecksHandler implements HttpHandler {
   @Override
   public void handleRequest(HttpServerExchange exchange) throws Exception {
 
-    final SortedMap<String, HealthCheck.Result> results = environment.runHealthChecks();
+    final SortedMap<String, HealthCheck.Result> results =
+        environment.healthChecks().runHealthChecks(MoreExecutors.newDirectExecutorService());
+
     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
     exchange.getResponseHeaders().put(Headers.CACHE_CONTROL, CACHE_CONTROL);
 
@@ -56,7 +62,12 @@ public class HealthChecksHandler implements HttpHandler {
       }
     }
 
-    exchange.getResponseSender().send(environment.healthCheckWriter().writeValueAsString(results));
+    exchange.getResponseSender().send(getWriter().writeValueAsString(results));
+  }
+
+  private ObjectWriter getWriter() {
+    return environment.getObjectMapper().registerModule(new HealthCheckModule())
+        .writerWithDefaultPrettyPrinter();
   }
 
   private static boolean isAllHealthy(Map<String, HealthCheck.Result> results) {

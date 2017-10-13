@@ -1,9 +1,5 @@
 package io.sunflower.configuration;
 
-import com.fasterxml.jackson.core.JsonLocation;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.Mark;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +10,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonLocation;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.Mark;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 /**

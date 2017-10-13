@@ -15,13 +15,14 @@
 
 package io.sunflower.client.proxy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.sunflower.validation.OneOf;
-import io.sunflower.validation.PortRange;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.sunflower.validation.OneOf;
+import io.sunflower.validation.PortRange;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

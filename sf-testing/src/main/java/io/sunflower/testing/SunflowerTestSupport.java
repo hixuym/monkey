@@ -17,6 +17,14 @@ package io.sunflower.testing;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -34,13 +42,6 @@ import io.sunflower.lifecycle.Managed;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import javax.annotation.Nullable;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**

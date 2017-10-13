@@ -16,11 +16,11 @@
 package io.sunflower.guicey.event;
 
 /**
- * Interface to unregistering a subscriber to events. Returned from {@link ApplicationEventDispatcher} 
- * whenever a received is programmatically registered. 
+ * Interface to unregistering a subscriber to events. Returned from {@link
+ * ApplicationEventDispatcher} whenever a received is programmatically registered.
  */
 public interface ApplicationEventRegistration {
-    
-    void unregister();
+
+  void unregister();
 
 }

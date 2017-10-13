@@ -15,6 +15,8 @@
 
 package io.sunflower.mybatis;
 
+import java.util.List;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import io.sunflower.Configuration;
@@ -24,14 +26,13 @@ import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public abstract class MybatisBundle<T extends Configuration> implements ConfiguredBundle<T>,
-    DatabaseConfiguration<T> {
+public abstract class MybatisBundle<T extends Configuration>
+    implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
   static final String DEFAULT_NAME = "mybatis";
 
@@ -104,6 +105,6 @@ public abstract class MybatisBundle<T extends Configuration> implements Configur
   public void initialize(Bootstrap<?> bootstrap) {
   }
 
-  protected void configure(org.apache.ibatis.session.Configuration config) {
+  protected void configure(org.apache.ibatis.session.Configuration cfg) {
   }
 }

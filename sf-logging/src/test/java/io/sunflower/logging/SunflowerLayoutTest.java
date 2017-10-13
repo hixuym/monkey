@@ -3,8 +3,9 @@ package io.sunflower.logging;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import ch.qos.logback.classic.LoggerContext;
 import java.util.TimeZone;
+
+import ch.qos.logback.classic.LoggerContext;
 import org.junit.Test;
 
 public class SunflowerLayoutTest {

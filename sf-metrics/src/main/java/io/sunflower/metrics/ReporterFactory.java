@@ -1,11 +1,12 @@
 package io.sunflower.metrics;
 
+import java.util.Optional;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.util.Duration;
-import java.util.Optional;
 
 /**
  * A service provider interface for creating metrics {@link ScheduledReporter reporters}.

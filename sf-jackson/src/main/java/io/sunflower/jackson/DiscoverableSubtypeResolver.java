@@ -1,7 +1,5 @@
 package io.sunflower.jackson;
 
-import com.fasterxml.jackson.databind.jsontype.impl.StdSubtypeResolver;
-import com.google.common.collect.ImmutableList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import javax.annotation.Nullable;
+
+import com.fasterxml.jackson.databind.jsontype.impl.StdSubtypeResolver;
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

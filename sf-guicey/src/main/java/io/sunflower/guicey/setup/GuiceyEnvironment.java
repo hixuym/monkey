@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.sunflower.guicey.InjectorBuilder;
 import io.sunflower.guicey.LoggerProvider;
+import io.sunflower.guicey.advise.AdvisableAnnotatedMethodScanner;
 import io.sunflower.guicey.event.guava.GuavaApplicationEventModule;
 import io.sunflower.guicey.lifecycle.LifecycleSupport;
 import io.sunflower.guicey.metrics.MetricsModule;
@@ -51,6 +52,7 @@ public class GuiceyEnvironment {
         SchedulerSupport.getModule(),
         new GuavaApplicationEventModule(),
         new MetricsModule(),
+        AdvisableAnnotatedMethodScanner.asModule(),
         new AbstractModule() {
           @Override
           protected void configure() {

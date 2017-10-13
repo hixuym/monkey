@@ -1,9 +1,10 @@
 package io.sunflower.example;
 
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.Configuration;
 import io.sunflower.db.DataSourceFactory;
-import javax.validation.Valid;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

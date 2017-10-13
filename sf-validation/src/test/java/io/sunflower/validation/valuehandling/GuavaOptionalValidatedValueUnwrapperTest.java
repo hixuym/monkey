@@ -2,13 +2,14 @@ package io.sunflower.validation.valuehandling;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.base.Optional;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import com.google.common.base.Optional;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 import org.junit.Test;

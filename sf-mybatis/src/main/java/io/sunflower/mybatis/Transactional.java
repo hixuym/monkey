@@ -18,6 +18,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
@@ -62,8 +63,8 @@ public @interface Transactional {
    * Flag to indicate the auto commit policy.
    *
    * @return false by default, user defined otherwise.
-   * @deprecated Users that intend auto commit can achieve it by simply not using {@literal
    * @Transactional}
+   * @deprecated Users that intend auto commit can achieve it by simply not using {@literal
    */
   @Deprecated
   boolean autoCommit() default false;

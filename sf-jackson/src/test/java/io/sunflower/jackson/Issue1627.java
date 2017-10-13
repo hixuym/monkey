@@ -1,7 +1,8 @@
 package io.sunflower.jackson;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Issue1627 {
 

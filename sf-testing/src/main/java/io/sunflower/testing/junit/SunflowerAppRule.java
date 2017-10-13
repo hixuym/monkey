@@ -15,32 +15,31 @@
 
 package io.sunflower.testing.junit;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.cli.Command;
 import io.sunflower.cli.ServerCommand;
 import io.sunflower.client.HttpClientBuilder;
-import io.sunflower.client.HttpClientConfiguration;
 import io.sunflower.lifecycle.Managed;
 import io.sunflower.setup.Environment;
 import io.sunflower.testing.ConfigOverride;
 import io.sunflower.testing.SunflowerTestSupport;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import javax.annotation.Nullable;
 import org.apache.http.client.HttpClient;
 import org.junit.rules.ExternalResource;
 
 public class SunflowerAppRule<C extends Configuration> extends ExternalResource {
 
-  private static final int DEFAULT_CONNECT_TIMEOUT_MS = 1000;
-  private static final int DEFAULT_READ_TIMEOUT_MS = 5000;
-
   private final SunflowerTestSupport<C> testSupport;
 
   private final AtomicInteger recursiveCallCount = new AtomicInteger(0);
+
+  private HttpClient client;
 
   public SunflowerAppRule(Class<? extends Application<C>> applicationClass) {
     this(applicationClass, (String) null);
@@ -128,11 +127,6 @@ public class SunflowerAppRule<C extends Configuration> extends ExternalResource 
   protected void after() {
     if (recursiveCallCount.decrementAndGet() == 0) {
       testSupport.after();
-      synchronized (this) {
-//                if (client != null) {
-//                    client.close();
-//                }
-      }
     }
   }
 
@@ -177,13 +171,25 @@ public class SunflowerAppRule<C extends Configuration> extends ExternalResource 
     testSupport.getInjector().injectMembers(test);
   }
 
-  public HttpClient client(HttpClientConfiguration configuration) {
-    if (configuration == null) {
-      configuration = new HttpClientConfiguration();
+  /**
+   * Returns a new HTTP Client for performing HTTP requests against the tested Sunflower server. The
+   * client can be reused across different tests and automatically closed along with the server. The
+   * client can be augmented by overriding the {@link #clientBuilder()} method.
+   *
+   * @return a new {@link HttpClient} managed by the rule.
+   */
+  public HttpClient client() {
+    synchronized (this) {
+      if (client == null) {
+        client = clientBuilder().build(getApplication().getName());
+      }
+
+      return client;
     }
-    return new HttpClientBuilder(getEnvironment())
-        .using(configuration)
-        .build(getApplication().getName());
+  }
+
+  protected HttpClientBuilder clientBuilder() {
+    return new HttpClientBuilder(getEnvironment());
   }
 
 }

@@ -1,9 +1,10 @@
 package io.sunflower.validation;
 
-import io.sunflower.util.Duration;
 import java.util.concurrent.TimeUnit;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import io.sunflower.util.Duration;
 
 /**
  * Check that a {@link Duration} being validated is greater than or equal to the minimum value

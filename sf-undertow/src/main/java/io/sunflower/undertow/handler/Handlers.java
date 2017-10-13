@@ -15,12 +15,13 @@
 
 package io.sunflower.undertow.handler;
 
+import java.util.Deque;
+
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.BlockingHandler;
 import io.undertow.server.handlers.form.EagerFormParsingHandler;
 import io.undertow.server.handlers.form.FormParserFactory;
-import java.util.Deque;
 
 public abstract class Handlers {
 

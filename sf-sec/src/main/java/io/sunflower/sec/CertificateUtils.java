@@ -15,13 +15,14 @@
 
 package io.sunflower.sec;
 
-import io.sunflower.util.URIs;
 import java.io.InputStream;
 import java.net.URI;
 import java.security.KeyStore;
 import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Collection;
+
+import io.sunflower.util.URIs;
 
 public class CertificateUtils {
 

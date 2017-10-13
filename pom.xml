@@ -35,6 +35,7 @@
     <junit.version>4.12</junit.version>
     <mockito.version>2.7.22</mockito.version>
     <assertj.version>3.6.2</assertj.version>
+    <slf4j.version>1.7.25</slf4j.version>
   </properties>
 
   <modules>
@@ -55,8 +56,6 @@
     <module>sf-example</module>
     <module>sf-extension</module>
     <module>sf-client</module>
-    <module>sf-gizmo</module>
-    <module>sf-gizmo-freemarker</module>
     <module>sf-db</module>
     <module>sf-ebean</module>
     <module>sf-migrations</module>
@@ -238,6 +237,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
@@ -259,6 +263,10 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

@@ -8,12 +8,13 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import io.sunflower.util.SizeUnit;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
+
+import io.sunflower.util.SizeUnit;
 
 /**
  * The annotated element must be a {@link io.sunflower.util.Size} whose value must be less than or

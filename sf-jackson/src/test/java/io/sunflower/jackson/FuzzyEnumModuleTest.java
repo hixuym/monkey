@@ -3,13 +3,14 @@ package io.sunflower.jackson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
+import java.sql.ClientInfoStatus;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.sql.ClientInfoStatus;
-import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 

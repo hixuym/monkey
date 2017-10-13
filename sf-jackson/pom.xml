@@ -28,10 +28,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.sunflower</groupId>
       <artifactId>sf-util</artifactId>
     </dependency>
@@ -79,10 +75,6 @@
       <artifactId>woodstox-core</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
   </dependencies>
 
 </project>

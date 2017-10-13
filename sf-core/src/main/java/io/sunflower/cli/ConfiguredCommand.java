@@ -1,5 +1,8 @@
 package io.sunflower.cli;
 
+import java.io.IOException;
+import javax.validation.Validator;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
 import io.sunflower.Configuration;
@@ -9,8 +12,6 @@ import io.sunflower.configuration.ConfigurationFactoryFactory;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.util.Generics;
-import java.io.IOException;
-import javax.validation.Validator;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;

@@ -15,13 +15,14 @@
 
 package io.sunflower.setup;
 
+import javax.validation.Validator;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import javax.validation.Validator;
 
 /**
  * BootModule

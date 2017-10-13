@@ -29,8 +29,9 @@
   <dependencies>
     <dependency>
       <groupId>io.sunflower</groupId>
-      <artifactId>sf-gizmo</artifactId>
+      <artifactId>sf-gizmo-core</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.sunflower</groupId>
       <artifactId>sf-gizmo-freemarker</artifactId>
@@ -62,11 +63,13 @@
       <artifactId>jquery</artifactId>
       <version>2.1.3</version>
     </dependency>
+
     <dependency>
       <groupId>io.ebean</groupId>
       <artifactId>ebean-querybean</artifactId>
       <version>10.3.1</version>
     </dependency>
+
     <dependency>
       <groupId>io.ebean</groupId>
       <artifactId>querybean-generator</artifactId>

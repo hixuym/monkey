@@ -3,9 +3,10 @@ package io.sunflower.logging;
 import static io.sunflower.logging.PrefixedThrowableProxyConverter.PATTERN;
 import static io.sunflower.logging.PrefixedThrowableProxyConverter.PREFIX;
 
+import java.util.regex.Pattern;
+
 import ch.qos.logback.classic.pattern.RootCauseFirstThrowableProxyConverter;
 import ch.qos.logback.classic.spi.IThrowableProxy;
-import java.util.regex.Pattern;
 
 /**
  * A {@link RootCauseFirstThrowableProxyConverter} that prefixes stack traces with {@code !}.

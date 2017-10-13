@@ -1,11 +1,12 @@
 package io.sunflower.validation;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+
 import io.sunflower.validation.valuehandling.GuavaOptionalValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 

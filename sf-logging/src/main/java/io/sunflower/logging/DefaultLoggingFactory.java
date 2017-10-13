@@ -2,6 +2,23 @@ package io.sunflower.logging;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.locks.ReentrantLock;
+import javax.annotation.Nullable;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -32,22 +49,6 @@ import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.filter.ThresholdLevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;
-import java.io.PrintStream;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.concurrent.locks.ReentrantLock;
-import javax.annotation.Nullable;
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @JsonTypeName("default")
 public class DefaultLoggingFactory implements LoggingFactory {
