@@ -18,7 +18,6 @@ import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.collect.ImmutableList;
 import io.sunflower.Application;
 import io.sunflower.Bundle;
@@ -47,7 +46,6 @@ public class Bootstrap<T extends Configuration> {
   private final List<Command> commands;
 
   private ObjectMapper objectMapper;
-  private XmlMapper xmlMapper;
 
   private MetricRegistry metricRegistry;
   private ConfigurationSourceProvider configurationSourceProvider;
@@ -66,7 +64,6 @@ public class Bootstrap<T extends Configuration> {
   public Bootstrap(Application<T> application) {
     this.application = application;
     this.objectMapper = Jackson.newObjectMapper();
-    this.xmlMapper = Jackson.newXmlMapper();
 
     this.bundles = new ArrayList<>();
     this.configuredBundles = new ArrayList<>();
@@ -178,14 +175,6 @@ public class Bootstrap<T extends Configuration> {
    */
   public ObjectMapper getObjectMapper() {
     return objectMapper;
-  }
-
-  public XmlMapper getXmlMapper() {
-    return xmlMapper;
-  }
-
-  public void setXmlMapper(XmlMapper xmlMapper) {
-    this.xmlMapper = xmlMapper;
   }
 
   /**
