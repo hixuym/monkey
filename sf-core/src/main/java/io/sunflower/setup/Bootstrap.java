@@ -33,7 +33,7 @@ import java.util.List;
 import javax.validation.ValidatorFactory;
 
 /**
- * The pre-start application environment, containing everything required to bootstrap a Dropwizard
+ * The pre-commit application environment, containing everything required to bootstrap a Dropwizard
  * command.
  *
  * @param <T> the configuration type
@@ -79,7 +79,7 @@ public class Bootstrap<T extends Configuration> {
   }
 
   /**
-   * Registers the JVM metrics to the metric registry and start to report the registry metrics via
+   * Registers the JVM metrics to the metric registry and commit to report the registry metrics via
    * JMX.
    */
   public void registerMetrics() {

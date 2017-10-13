@@ -13,29 +13,18 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.visitors;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.StaticInjectionRequest;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
-
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
+/**
+ * Visitor that log a warning for any use of requestStaticInjection
+ */
+public class WarnOfStaticInjectionVisitor extends DefaultElementVisitor<String> { 
+    @Override 
+    public String visit(StaticInjectionRequest element) { 
+        return String.format("Static injection is fragile! Please fix %s at %s",  
+          element.getType().getName(), element.getSource()); 
+    } 
 }

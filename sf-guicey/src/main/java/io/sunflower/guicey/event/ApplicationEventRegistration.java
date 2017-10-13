@@ -13,29 +13,14 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.event;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+/**
+ * Interface to unregistering a subscriber to events. Returned from {@link ApplicationEventDispatcher} 
+ * whenever a received is programmatically registered. 
+ */
+public interface ApplicationEventRegistration {
+    
+    void unregister();
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
-
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
 }

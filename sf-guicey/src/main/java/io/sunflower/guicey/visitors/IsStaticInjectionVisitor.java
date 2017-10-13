@@ -13,29 +13,23 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.visitors;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.StaticInjectionRequest;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
+/**
+ * Predicate visitor that returns 'true' if an Element is a requestStaticInjection.
+ */
+public class IsStaticInjectionVisitor extends DefaultElementVisitor<Boolean> { 
+    @Override
+    protected Boolean visitOther(Element element) {
+        return false;
+    }
 
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
+    @Override 
+    public Boolean visit(StaticInjectionRequest element) { 
+        return true;
+    } 
 }

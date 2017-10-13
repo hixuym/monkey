@@ -15,8 +15,42 @@
 
 package io.sunflower.server;
 
+import com.google.inject.Injector;
+import io.sunflower.guicey.lifecycle.LifecycleManager;
 import io.sunflower.lifecycle.ContainerLifeCycle;
+import io.sunflower.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Server extends ContainerLifeCycle {
+
+  protected Logger logger = LoggerFactory.getLogger(getClass());
+
+  protected Environment environment;
+  protected Injector injector;
+
+  public Server(Environment environment) {
+    this.environment = environment;
+    environment.lifecycle().attach(this);
+    this.injector = environment.guicey().getInjector();
+  }
+
+  @Override
+  protected final void doStart() throws Exception {
+    injector.getInstance(LifecycleManager.class).start();
+    super.doStart();
+    boot();
+  }
+
+  @Override
+  protected final void doStop() throws Exception {
+    injector.getInstance(LifecycleManager.class).stop();
+    super.doStop();
+    shutdown();
+  }
+
+  protected abstract void boot() throws Exception;
+
+  protected abstract void shutdown() throws Exception;
 
 }

@@ -13,29 +13,14 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.visitors;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.ProvisionListenerBinding;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
-
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
+public class ProvisionListenerTracingVisitor extends DefaultElementVisitor<String> { 
+    public String visit(ProvisionListenerBinding binding) {
+        return String.format("Provision listener %s matching %s at %s",  
+            binding.getListeners(), binding.getBindingMatcher(), binding.getSource()); 
+    }
 }

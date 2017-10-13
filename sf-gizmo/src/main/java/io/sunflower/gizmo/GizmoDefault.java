@@ -14,10 +14,10 @@
 
 package io.sunflower.gizmo;
 
-import io.sunflower.gizmo.utils.ResultHandler;
-import io.sunflower.guicey.lifecycle.LifecycleManager;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import io.sunflower.gizmo.utils.ResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +25,6 @@ import org.slf4j.LoggerFactory;
 public class GizmoDefault implements Gizmo {
 
   private static final Logger logger = LoggerFactory.getLogger(GizmoDefault.class);
-
-  @Inject
-  protected LifecycleManager lifecycleManager;
 
   @Inject
   protected Router router;
@@ -81,15 +78,5 @@ public class GizmoDefault implements Gizmo {
       logger.error("Unable to handle result. That's really really fishy.",
           exceptionCausingRenderError);
     }
-  }
-
-  @Override
-  public void onFrameworkStart() {
-    lifecycleManager.start();
-  }
-
-  @Override
-  public void onFrameworkShutdown() {
-    lifecycleManager.stop();
   }
 }

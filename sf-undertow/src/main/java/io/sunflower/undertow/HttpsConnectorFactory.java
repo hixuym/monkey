@@ -367,7 +367,7 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
 
     environment.lifecycle().addLifeCycleListener(logSslInfoOnStart(sslContextFactory));
 
-    TaskHandler taskHandler = environment.guicey().injector().getInstance(TaskHandler.class);
+    TaskHandler taskHandler = environment.guicey().getInjector().getInstance(TaskHandler.class);
 
     taskHandler.add(new SslReloadTask(sslReload));
 

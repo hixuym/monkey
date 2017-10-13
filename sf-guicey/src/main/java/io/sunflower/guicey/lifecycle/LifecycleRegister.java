@@ -45,7 +45,7 @@ class LifecycleRegister {
     List<Target> toStart = new ArrayList<Target>(this.startables);
     started.set(true);
     startables.clear();
-    // Sort the beans to start
+    // Sort the beans to commit
     Collections.sort(toStart);
     // Start them
     for (Target target : toStart) {

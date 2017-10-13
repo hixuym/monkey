@@ -13,29 +13,12 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.event;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
-
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
-
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
+/**
+ * Marker interface for application events to be published to subscribed consumers. See {@link
+ * ApplicationEventDispatcher} and {@link EventListener} for examples of publishing and subscribing
+ * to events.
+ */
+public interface ApplicationEvent {
 }

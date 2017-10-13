@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
- * A test support class for starting and stopping your application at the start and end of a test
+ * A test support class for starting and stopping your application at the commit and end of a test
  * class. <p> By default, the {@link Application} will be constructed using reflection to invoke the
  * nullary constructor. If your application does not provide a public nullary constructor, you will
  * need to override the {@link #newApplication()} method to provide your application instance(s).
@@ -121,7 +121,7 @@ public class SunflowerTestSupport<C extends Configuration> {
    * @param configuration Pre-constructed configuration object caller provides; will not be
    * manipulated in any way, no overriding
    * @param commandInstantiator The {@link Function} used to instantiate the {@link Command} used to
-   * start the Application
+   * commit the Application
    * @since 1.1.0
    */
   public SunflowerTestSupport(Class<? extends Application<C>> applicationClass,
@@ -201,7 +201,7 @@ public class SunflowerTestSupport<C extends Configuration> {
             try {
               listener.onRun(configuration, environment, SunflowerTestSupport.this);
             } catch (Exception ex) {
-              throw new RuntimeException("Error running app rule start listener", ex);
+              throw new RuntimeException("Error running app rule commit listener", ex);
             }
           }
         }
@@ -272,7 +272,7 @@ public class SunflowerTestSupport<C extends Configuration> {
   }
 
   public Injector getInjector() {
-    return environment.guicey().injector();
+    return environment.guicey().getInjector();
   }
 
   @SuppressWarnings("unchecked")

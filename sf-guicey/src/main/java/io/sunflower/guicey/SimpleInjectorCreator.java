@@ -13,29 +13,18 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.Stage;
+import io.sunflower.guicey.spi.InjectorCreator;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
+public class SimpleInjectorCreator implements InjectorCreator<Injector> {
+    @Override
+    public Injector createInjector(Stage stage, Module module) {
+        return Guice.createInjector(stage, module);
+    }
 
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
 }

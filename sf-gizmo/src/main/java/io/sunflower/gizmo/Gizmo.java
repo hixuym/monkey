@@ -25,21 +25,11 @@ public interface Gizmo {
   void onRouteRequest(Context.Impl context);
 
   /**
-   * Invoked when the framework starts. Usually inits stuff like the scheduler and so on.
-   */
-  void onFrameworkStart();
-
-  /**
-   * Invoked when the server hosting Gizmo is being stopped. Usually shuts down the guice injector and stopps all
-   * services.
-   */
-  void onFrameworkShutdown();
-
-  /**
-   * Should be used to render an error. Any errors should be catched and not reported in any way to the request.
+   * Should be used to render an error. Any errors should be catched and not reported in any way to
+   * the request.
    *
-   * For instance if your application catches a sever internal computation error use this method and its
-   * implementations to render out an error html page.
+   * For instance if your application catches a sever internal computation error use this method and
+   * its implementations to render out an error html page.
    */
   void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context);
 

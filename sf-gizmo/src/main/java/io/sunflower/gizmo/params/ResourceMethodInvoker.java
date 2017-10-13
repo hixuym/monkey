@@ -88,7 +88,7 @@ public class ResourceMethodInvoker {
    * @param implementationMethod The method to use for determining what actual parameters and annotations to use for
    *                             each argument.  Useful when type/lambda erasure makes the functional interface not
    *                             reliable for reflecting.
-   * @param injector             The guice injector
+   * @param injector             The guice getInjector
    * @return An invoker
    */
   public static ResourceMethodInvoker build(
@@ -316,7 +316,7 @@ public class ResourceMethodInvoker {
         throw new RoutingException(e);
       }
     }
-    // Complex case, use Guice.  Create a child injector with the annotation in it.
+    // Complex case, use Guice.  Create a child getInjector with the annotation in it.
     return injector.createChildInjector(new AbstractModule() {
       @Override
       protected void configure() {

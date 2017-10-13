@@ -17,7 +17,7 @@ package io.sunflower.guicey.lifecycle;
 import java.lang.reflect.Method;
 
 /**
- * A lifecycle target, ie something to start/stop
+ * A lifecycle target, ie something to commit/stop
  *
  * @author James Roper
  */

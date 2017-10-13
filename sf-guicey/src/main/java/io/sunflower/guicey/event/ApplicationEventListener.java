@@ -13,29 +13,15 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.event;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+/***
+ * Interface for receiving to events of a given type. Can be registered explicitly
+ * via {@link ApplicationEventDispatcher#registerListener(ApplicationEventListener)} 
+ * or implicitly in Guice by detecting by all bindings for instances of {@link ApplicationEvent} 
+ * */
+public interface ApplicationEventListener<T extends ApplicationEvent> {
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
+    void onEvent(T event);
 
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
 }

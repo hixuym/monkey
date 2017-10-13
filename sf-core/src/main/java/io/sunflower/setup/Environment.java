@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import io.sunflower.guicey.setup.GuiceyEnvironment;
+import io.sunflower.guicey.setup.GuiceyBootstrap;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
@@ -42,7 +42,7 @@ public class Environment {
   private Validator validator;
 
   private final LifecycleEnvironment lifecycleEnvironment;
-  private final GuiceyEnvironment guiceyEnvironment;
+  private final GuiceyBootstrap guiceyBootstrap;
 
   private final ExecutorService healthCheckExecutorService;
   private final ClassLoader classLoader;
@@ -72,9 +72,9 @@ public class Environment {
     this.validator = validator;
     this.classLoader = classLoader;
 
-    this.guiceyEnvironment = new GuiceyEnvironment();
+    this.guiceyBootstrap = new GuiceyBootstrap();
 
-    this.guiceyEnvironment.addModule(new BootModule(this), new MetricsModule());
+    this.guiceyBootstrap.addModule(new BootModule(this), new MetricsModule());
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -172,8 +172,8 @@ public class Environment {
     return metricRegistry;
   }
 
-  public GuiceyEnvironment guicey() {
-    return this.guiceyEnvironment;
+  public GuiceyBootstrap guicey() {
+    return this.guiceyBootstrap;
   }
 
   /**

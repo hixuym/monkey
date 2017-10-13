@@ -13,29 +13,14 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
+package io.sunflower.guicey.spi;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import com.google.inject.Module;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
-
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
-
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
+/**
+ * Mapping function from one module to another.  A transformer could perform operations
+ * such as logging, removing dependencies or auto-generating bindings.
+ */
+public interface ModuleTransformer {
+    Module transform(Module module);
 }
