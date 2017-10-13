@@ -195,15 +195,6 @@ public class Environment {
     return healthCheckRegistry;
   }
 
-  public SortedMap<String, HealthCheck.Result> runHealthChecks() {
-    return healthCheckRegistry.runHealthChecks(MoreExecutors.newDirectExecutorService());
-  }
-
-  public ObjectWriter healthCheckWriter() {
-    return objectMapper.registerModule(new HealthCheckModule())
-        .writerWithDefaultPrettyPrinter();
-  }
-
   private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
 
   private void logHealthChecks() {
