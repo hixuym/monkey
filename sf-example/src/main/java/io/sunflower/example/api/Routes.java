@@ -16,6 +16,7 @@
 package io.sunflower.example.api;
 
 import io.sunflower.example.resources.ApplicationResource;
+import io.sunflower.example.resources.ApplicationWsResource;
 import io.sunflower.gizmo.AssetsResource;
 import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.application.ApplicationRoutes;
@@ -28,6 +29,8 @@ public class Routes implements ApplicationRoutes {
     router.GET().route("/").with(ApplicationResource::index);
     router.GET().route("/hello_world.json").with(ApplicationResource::helloWorldJson);
     router.GET().route("/user_count.json").with(ApplicationResource::userCount);
+
+    router.WS().route("/ws").with(ApplicationWsResource::handshake);
 
     ///////////////////////////////////////////////////////////////////////
     // Assets (pictures / javascript)

@@ -26,7 +26,6 @@ public class YamlConfigurationFactory<T> extends BaseConfigurationFactory<T> {
       Validator validator,
       ObjectMapper objectMapper,
       String propertyPrefix) {
-    super(new YAMLFactory(), YAMLFactory.FORMAT_NAME_YAML, klass, validator, objectMapper,
-        propertyPrefix);
+    super(new YAMLFactory(), YAMLFactory.FORMAT_NAME_YAML, klass, validator, objectMapper, propertyPrefix);
   }
 }

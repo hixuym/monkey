@@ -905,6 +905,12 @@
 
       <dependency>
         <groupId>io.sunflower</groupId>
+        <artifactId>sf-gizmo-websocket</artifactId>
+        <version>${gizmo.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.sunflower</groupId>
         <artifactId>sf-gizmo-xml</artifactId>
         <version>${gizmo.version}</version>
       </dependency>
