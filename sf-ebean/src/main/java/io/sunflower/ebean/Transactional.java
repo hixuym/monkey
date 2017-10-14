@@ -20,9 +20,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.ebean.PersistBatch;
-import io.ebean.TxIsolation;
-import io.ebean.TxType;
+import io.ebean.annotation.PersistBatch;
+import io.ebean.annotation.TxIsolation;
+import io.ebean.annotation.TxType;
 
 /**
  * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is
@@ -102,6 +102,11 @@ public @interface Transactional {
    * currently be ignored (you could argue that it should throw an exception). </p>
    */
   TxIsolation isolation() default TxIsolation.DEFAULT;
+
+  /**
+   * Set this to false if the JDBC batch should not be automatically flushed when a query is executed.
+   */
+  boolean flushOnQuery() default true;
 
   /**
    * Set this to true if the transaction should be only contain queries.

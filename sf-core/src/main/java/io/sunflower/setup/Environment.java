@@ -13,7 +13,6 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.health.SharedHealthCheckRegistries;
 import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import io.sunflower.guicey.setup.GuiceyEnvironment;
@@ -33,7 +32,6 @@ public class Environment {
   private final HealthCheckRegistry healthCheckRegistry;
 
   private final ObjectMapper objectMapper;
-  private final XmlMapper xmlMapper;
 
   private Validator validator;
 
@@ -51,14 +49,12 @@ public class Environment {
    */
   public Environment(String name,
       ObjectMapper objectMapper,
-      XmlMapper xmlMapper,
       Validator validator,
       MetricRegistry metricRegistry,
       ClassLoader classLoader,
       HealthCheckRegistry healthCheckRegistry) {
     this.name = name;
     this.objectMapper = objectMapper;
-    this.xmlMapper = xmlMapper;
 
     this.metricRegistry = metricRegistry;
     this.healthCheckRegistry = healthCheckRegistry;
@@ -69,6 +65,9 @@ public class Environment {
     this.classLoader = classLoader;
 
     this.guiceyEnvironment = new GuiceyEnvironment();
+
+    guiceyEnvironment.enableLifecycle();
+    guiceyEnvironment.enableMetrics();
 
     this.guiceyEnvironment.install(new BootModule(this));
 
@@ -107,11 +106,10 @@ public class Environment {
    */
   public Environment(String name,
       ObjectMapper objectMapper,
-      XmlMapper xmlMapper,
       Validator validator,
       MetricRegistry metricRegistry,
       ClassLoader classLoader) {
-    this(name, objectMapper, xmlMapper, validator, metricRegistry, classLoader,
+    this(name, objectMapper, validator, metricRegistry, classLoader,
         new HealthCheckRegistry());
   }
 
@@ -134,10 +132,6 @@ public class Environment {
    */
   public ObjectMapper getObjectMapper() {
     return objectMapper;
-  }
-
-  public XmlMapper getXmlMapper() {
-    return xmlMapper;
   }
 
   /**
