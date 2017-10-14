@@ -75,9 +75,8 @@
 
   <scm>
     <url>https://github.com/hixuym/sunflower</url>
-    <connection>scm:git:file://localhost/Volumes/DT/git-repos/sf.git</connection>
-    <developerConnection>scm:git:file://localhost/Volumes/DT/git-repos/sf.git
-    </developerConnection>
+    <connection>scm:git:git@github.com:hixuym/sunflower.git</connection>
+    <developerConnection>scm:git:git@github.com:hixuym/sunflower.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
