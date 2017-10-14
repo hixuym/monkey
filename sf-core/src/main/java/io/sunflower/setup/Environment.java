@@ -66,6 +66,9 @@ public class Environment {
 
     this.guiceyEnvironment = new GuiceyEnvironment();
 
+    guiceyEnvironment.enableLifecycle();
+    guiceyEnvironment.enableMetrics();
+
     this.guiceyEnvironment.install(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();

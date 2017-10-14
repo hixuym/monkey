@@ -46,20 +46,41 @@ public class GuiceyEnvironment {
 
   private boolean commited = false;
 
+  private boolean scheduleEnabled = false;
+  private boolean eventEnabled = false;
+  private boolean adviseEnabled = false;
+  private boolean metricsEnabled = false;
+  private boolean lifecycleEnabled = false;
+
   public GuiceyEnvironment() {
     System.setProperty("file.encoding", "utf-8");
-    install(LifecycleSupport.getModule(),
-        SchedulerSupport.getModule(),
-        new GuavaApplicationEventModule(),
-        new MetricsModule(),
-        AdvisableAnnotatedMethodScanner.asModule(),
-        new AbstractModule() {
-          @Override
-          protected void configure() {
-            binder().disableCircularProxies();
-            bind(Logger.class).toProvider(LoggerProvider.class);
-          }
-        });
+    install(new AbstractModule() {
+      @Override
+      protected void configure() {
+        binder().disableCircularProxies();
+        bind(Logger.class).toProvider(LoggerProvider.class);
+      }
+    });
+  }
+
+  public void enableLifecycle() {
+    this.lifecycleEnabled = true;
+  }
+
+  public void enableMetrics() {
+    this.metricsEnabled = true;
+  }
+
+  public void enableEvent() {
+    this.eventEnabled = true;
+  }
+
+  public void enableAdvise() {
+    this.adviseEnabled = true;
+  }
+
+  public void enableScheduler() {
+    this.scheduleEnabled = true;
   }
 
   public void install(Module... modules) {
@@ -82,6 +103,26 @@ public class GuiceyEnvironment {
     checkNotCommited();
 
     Stopwatch sw = Stopwatch.createStarted();
+
+    if (scheduleEnabled) {
+      install(SchedulerSupport.getModule());
+    }
+
+    if (eventEnabled) {
+      install(new GuavaApplicationEventModule());
+    }
+
+    if (adviseEnabled) {
+      install(AdvisableAnnotatedMethodScanner.asModule());
+    }
+
+    if (lifecycleEnabled) {
+      install(LifecycleSupport.getModule());
+    }
+
+    if (metricsEnabled) {
+      install(new MetricsModule());
+    }
 
     InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);
 
