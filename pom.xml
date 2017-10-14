@@ -53,7 +53,6 @@
     <module>sf-guicey</module>
     <module>sf-lifecycle</module>
     <module>sf-undertow</module>
-    <module>sf-example</module>
     <module>sf-extension</module>
     <module>sf-client</module>
     <module>sf-db</module>
