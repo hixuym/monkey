@@ -19,11 +19,11 @@ import java.util.Collections;
 
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
-import io.ebean.Platform;
+import io.ebean.annotation.Platform;
 import io.ebean.config.DbMigrationConfig;
 import io.ebean.config.ServerConfig;
 import io.ebean.dbmigration.DbMigration;
-import io.ebean.dbmigration.DbOffline;
+import io.ebeaninternal.dbmigration.DbOffline;
 import io.sunflower.cli.Command;
 import io.sunflower.setup.Bootstrap;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -87,7 +87,9 @@ public class DbMigrationCommand extends Command {
 
       EbeanServer server = EbeanServerFactory.create(serverConfig);
 
-      DbMigration dbMigration = new DbMigration(server);
+      DbMigration dbMigration = DbMigration.create();
+
+      dbMigration.setServer(server);
 
       dbMigration.setPathToResources(namespace.getString("output"));
 

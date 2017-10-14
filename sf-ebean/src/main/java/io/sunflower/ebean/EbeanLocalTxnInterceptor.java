@@ -45,6 +45,7 @@ public class EbeanLocalTxnInterceptor implements MethodInterceptor {
     txScope.setBatchOnCascade(transactional.batchOnCascade());
     txScope.setBatchSize(transactional.batchSize());
     txScope.setServerName(transactional.serverName());
+    txScope.setFlushOnQuery(transactional.flushOnQuery());
 
     if (!transactional.getGeneratedKeys()) {
       txScope.setSkipGeneratedKeys();
