@@ -60,6 +60,7 @@
     <module>sf-sec</module>
     <module>sf-postoffice</module>
     <module>sf-testing</module>
+    <module>sf-example</module>
   </modules>
 
   <licenses>
