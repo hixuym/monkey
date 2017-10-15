@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (C) 2017. the original author or authors.
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~        http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~  distributed under the License is distributed on an "AS IS" BASIS,
-  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <FindBugsFilter>
-  <Match>
-    <Class name="~.*\.*Test"/>
-  </Match>
-  <Match>
-    <Package name="~org\.openjdk\.jmh.*"/>
-  </Match>
+    <!-- we're *supposed* to manually GC there -->
+    <Match>
+        <Class name="io.dropwizard.servlets.tasks.GarbageCollectionTask"/>
+        <Method name="execute"/>
+        <Bug pattern="DM_GC"/>
+    </Match>
+
+    <!-- kind of hard to use exit codes without System.exit -->
+    <Match>
+        <Class name="io.dropwizard.Application"/>
+        <Method name="onFatalError"/>
+        <Bug pattern="DM_EXIT"/>
+    </Match>
+
+    <!-- serialization is boring -->
+    <Match>
+        <Bug code="Se"/>
+        <Class name="io.dropwizard.servlets.tasks.TaskServlet"/>
+    </Match>
+    <Match>
+        <Bug code="Se"/>
+        <Class name="io.dropwizard.servlets.assets.AssetServlet"/>
+    </Match>
+
+    <!-- pretty sure this is a bug in FindBugs -->
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"/>
+        <Class name="io.dropwizard.configuration.ConfigurationFactory"/>
+    </Match>
+
+    <!-- exclude the generated code by JMH from the analysis -->
+    <Match>
+       <Package name="~io\.dropwizard\.benchmarks\..*\.generated"/>
+    </Match>
+
+    <Match>
+        <Package name="~org\.openjdk\.jmh.*"/>
+    </Match>
 </FindBugsFilter>

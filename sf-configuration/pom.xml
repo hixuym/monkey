@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.sunflower</groupId>
-    <artifactId>sf-parent</artifactId>
+    <artifactId>sf-framework</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -11,18 +11,6 @@
   <artifactId>sf-configuration</artifactId>
 
   <name>Sunflower Configuration Module</name>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.sunflower</groupId>
-    <artifactId>sf-parent</artifactId>
+    <artifactId>sf-framework</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -11,18 +11,6 @@
   <artifactId>sf-jackson</artifactId>
 
   <name>Sunflower Jackson Module</name>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -62,5 +50,26 @@
       <artifactId>jackson-module-afterburner</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-testCompile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <compilerArgument>-parameters</compilerArgument>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
