@@ -76,8 +76,6 @@ public class AdminTaskManager implements HttpHandler {
 
       exchange.getResponseSender().send(stringWriter.toString());
 
-      return;
-
     } else if (tasks.containsKey(exchange.getRelativePath())) {
 //            exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
       doPost(exchange);
