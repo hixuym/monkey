@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 import io.sunflower.logging.DefaultLoggingFactory;
 import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
-import io.sunflower.server.DefaultServerFactory;
+import io.sunflower.server.NoopsServerFactory;
 import io.sunflower.server.ServerFactory;
 
 /**
@@ -63,7 +63,7 @@ public class Configuration {
 
   @Valid
   @NotNull
-  private ServerFactory serverFactory = new DefaultServerFactory();
+  private ServerFactory serverFactory = new NoopsServerFactory();
 
   @Valid
   private LoggingFactory logging;

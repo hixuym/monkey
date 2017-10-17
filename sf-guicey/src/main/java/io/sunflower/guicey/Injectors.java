@@ -15,6 +15,7 @@
 
 package io.sunflower.guicey;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,8 +46,16 @@ public class Injectors {
     return injector.getInstance(Key.get(typeLiteral));
   }
 
+  public static <K, V> Map<K, V> mapOf(Injector injector, TypeLiteral<Map<K, V>> typeLiteral, Class<? extends Annotation> annotation) {
+    return injector.getInstance(Key.get(typeLiteral, annotation));
+  }
+
   public static <T> Set<T> setOf(Injector injector, TypeLiteral<Set<T>> typeLiteral) {
     return injector.getInstance(Key.get(typeLiteral));
+  }
+
+  public static <T> Set<T> setOf(Injector injector, TypeLiteral<Set<T>> typeLiteral, Class<? extends Annotation> annotation) {
+    return injector.getInstance(Key.get(typeLiteral, annotation));
   }
 
 }

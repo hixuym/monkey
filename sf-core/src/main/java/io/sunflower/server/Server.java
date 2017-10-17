@@ -15,6 +15,7 @@
 
 package io.sunflower.server;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import io.sunflower.guicey.lifecycle.LifecycleManager;
 import io.sunflower.lifecycle.ContainerLifeCycle;
@@ -22,12 +23,16 @@ import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ *
+ */
 public abstract class Server extends ContainerLifeCycle {
 
   protected Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected Environment environment;
-  protected Injector injector;
+  private Environment environment;
+  private Injector injector;
 
   public Server(Environment environment) {
     this.environment = environment;
@@ -37,20 +42,37 @@ public abstract class Server extends ContainerLifeCycle {
 
   @Override
   protected final void doStart() throws Exception {
+    Stopwatch sw = Stopwatch.createStarted();
     injector.getInstance(LifecycleManager.class).start();
     super.doStart();
-    boot();
+    this.boot();
+    sw.stop();
+    if (logger.isInfoEnabled()) {
+      logger.info(environment.getName() + " started in {}", sw);
+    }
   }
 
   @Override
   protected final void doStop() throws Exception {
+    Stopwatch sw = Stopwatch.createStarted();
     injector.getInstance(LifecycleManager.class).stop();
     super.doStop();
-    shutdown();
+    this.shutdown();
+    sw.stop();
+    if (logger.isInfoEnabled()) {
+      logger.info(environment.getName() + " stoped in {}", sw);
+    }
   }
 
   protected abstract void boot() throws Exception;
 
   protected abstract void shutdown() throws Exception;
 
+  public Environment getEnvironment() {
+    return environment;
+  }
+
+  public Injector getInjector() {
+    return injector;
+  }
 }

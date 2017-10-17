@@ -6,7 +6,7 @@ import io.sunflower.setup.Environment;
 import io.undertow.Undertow;
 
 /**
- * A factory for creating Jetty {@link Undertow.ListenerBuilder}s.
+ * A factory for creating Undertow {@link Undertow.ListenerBuilder}s.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface ConnectorFactory extends Discoverable {

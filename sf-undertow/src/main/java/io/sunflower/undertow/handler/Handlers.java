@@ -17,6 +17,7 @@ package io.sunflower.undertow.handler;
 
 import java.util.Deque;
 
+import io.undertow.server.HandlerWrapper;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.BlockingHandler;
@@ -25,18 +26,15 @@ import io.undertow.server.handlers.form.FormParserFactory;
 
 public abstract class Handlers {
 
-  public static HttpHandler blocking(HttpHandler httpHandler) {
-
-    HttpHandler h = httpHandler;
-
+  public static HandlerWrapper BLOCKING_WRAPPER = handler -> {
+    HttpHandler h = handler;
     // then eagerly parse form data (which is then included as an attachment)
     FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
     formParserFactoryBuilder.setDefaultCharset("utf-8");
     h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
-
     // then requests MUST be blocking for IO to function
     return new BlockingHandler(h);
-  }
+  };
 
   public static String param(HttpServerExchange exchange, String name) {
     Deque<String> vals = exchange.getQueryParameters().get(name);

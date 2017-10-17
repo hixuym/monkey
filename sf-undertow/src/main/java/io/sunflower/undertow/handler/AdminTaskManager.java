@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.inject.Inject;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.net.MediaType;
@@ -28,17 +30,19 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by michael on 17/9/1.
  */
-public class TaskHandler implements HttpHandler {
+public class AdminTaskManager implements HttpHandler {
 
   private static final long serialVersionUID = 7404713218661358124L;
-  private static final Logger LOGGER = LoggerFactory.getLogger(TaskHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AdminTaskManager.class);
   private final ConcurrentMap<String, Task> tasks;
+
   private final ConcurrentMap<Task, TaskExecutor> taskExecutors;
 
   /**
-   * Creates a new TaskHandler.
+   * Creates a new AdminTaskManager.
    */
-  public TaskHandler(Environment environment) {
+  @Inject
+  public AdminTaskManager(Environment environment) {
     this.tasks = new ConcurrentHashMap<>();
     this.taskExecutors = new ConcurrentHashMap<>();
 
@@ -47,7 +51,7 @@ public class TaskHandler implements HttpHandler {
       public void lifeCycleStarting(LifeCycle event) {
 
         Injectors.instanceOf(environment.injector(), Task.class)
-            .forEach(TaskHandler.this::add);
+            .forEach(AdminTaskManager.this::add);
 
         logTasks();
       }

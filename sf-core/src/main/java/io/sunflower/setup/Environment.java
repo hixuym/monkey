@@ -17,8 +17,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
+import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
+import io.sunflower.server.Server;
+import io.sunflower.server.ServerLifecycleListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +72,7 @@ public class Environment {
     guiceyEnvironment.enableLifecycle();
     guiceyEnvironment.enableMetrics();
 
-    this.guiceyEnvironment.install(new BootModule(this));
+    this.guiceyEnvironment.registry(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -182,6 +185,17 @@ public class Environment {
    */
   public HealthCheckRegistry healthChecks() {
     return healthCheckRegistry;
+  }
+
+  public void addServerLifecycleListener(final ServerLifecycleListener lifecycleListener) {
+    lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycleListener() {
+      @Override
+      public void lifeCycleStarted(LifeCycle event) {
+        if (event instanceof Server) {
+          lifecycleListener.serverStarted((Server) event);
+        }
+      }
+    });
   }
 
   private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
