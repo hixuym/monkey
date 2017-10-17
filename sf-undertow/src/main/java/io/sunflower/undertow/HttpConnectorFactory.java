@@ -29,6 +29,18 @@ public class HttpConnectorFactory implements ConnectorFactory {
 
   private String bindHost = null;
 
+  private boolean useProxyProtocol = false;
+
+  @JsonProperty
+  public boolean isUseProxyProtocol() {
+    return useProxyProtocol;
+  }
+
+  @JsonProperty
+  public void setUseProxyProtocol(boolean useProxyProtocol) {
+    this.useProxyProtocol = useProxyProtocol;
+  }
+
   @JsonProperty
   public int getPort() {
     return port;
@@ -57,6 +69,7 @@ public class HttpConnectorFactory implements ConnectorFactory {
     builder.setType(Undertow.ListenerType.HTTP);
     builder.setHost(bindHost);
     builder.setPort(port);
+    builder.setUseProxyProtocol(useProxyProtocol);
 
     return builder;
   }

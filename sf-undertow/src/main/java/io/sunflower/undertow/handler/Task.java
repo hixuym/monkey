@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMultimap;
 /**
  * An arbitrary administrative task which can be performed via the admin interface.
  *
- * @see TaskHandler
+ * @see AdminTaskManager
  */
 public abstract class Task {
 

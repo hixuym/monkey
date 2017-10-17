@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.sunflower.guicey.InjectorBuilder;
 import io.sunflower.guicey.LoggerProvider;
+import io.sunflower.guicey.ModulesEx;
 import io.sunflower.guicey.advise.AdvisableAnnotatedMethodScanner;
 import io.sunflower.guicey.event.guava.GuavaApplicationEventModule;
 import io.sunflower.guicey.lifecycle.LifecycleSupport;
@@ -54,7 +55,7 @@ public class GuiceyEnvironment {
 
   public GuiceyEnvironment() {
     System.setProperty("file.encoding", "utf-8");
-    install(new AbstractModule() {
+    registry(new AbstractModule() {
       @Override
       protected void configure() {
         binder().disableCircularProxies();
@@ -83,9 +84,19 @@ public class GuiceyEnvironment {
     this.scheduleEnabled = true;
   }
 
-  public void install(Module... modules) {
+  public void registry(Module... modules) {
     checkNotCommited();
     this.moduleLoaded.addAll(Arrays.asList(modules));
+  }
+
+  public <T> void registry(final T object) {
+    checkNotCommited();
+    registry(ModulesEx.fromInstance(object));
+  }
+
+  public <T> void registry(final Class<T> tClass) {
+    checkNotCommited();
+    registry(ModulesEx.fromEagerSingleton(tClass));
   }
 
   public void override(Module... modules) {
@@ -105,23 +116,23 @@ public class GuiceyEnvironment {
     Stopwatch sw = Stopwatch.createStarted();
 
     if (scheduleEnabled) {
-      install(SchedulerSupport.getModule());
+      registry(SchedulerSupport.getModule());
     }
 
     if (eventEnabled) {
-      install(new GuavaApplicationEventModule());
+      registry(new GuavaApplicationEventModule());
     }
 
     if (adviseEnabled) {
-      install(AdvisableAnnotatedMethodScanner.asModule());
+      registry(AdvisableAnnotatedMethodScanner.asModule());
     }
 
     if (lifecycleEnabled) {
-      install(LifecycleSupport.getModule());
+      registry(LifecycleSupport.getModule());
     }
 
     if (metricsEnabled) {
-      install(new MetricsModule());
+      registry(new MetricsModule());
     }
 
     InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);

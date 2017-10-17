@@ -84,7 +84,7 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
 
     this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
 
-    environment.guicey().install((binder) -> {
+    environment.guicey().registry((binder) -> {
       if (isDefault()) {
         binder.bind(EbeanServer.class).toInstance(ebeanServer);
       } else {

@@ -15,27 +15,15 @@
 
 package io.sunflower.server;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.setup.Environment;
+import java.util.EventListener;
 
-@JsonTypeName("default")
-public class DefaultServerFactory implements ServerFactory {
+/**
+ * ServerLifecycleListener
+ *
+ * @author michael created on 17/10/17 13:34
+ */
+public interface ServerLifecycleListener extends EventListener {
 
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
+  void serverStarted(Server server);
 
-      @Override
-      protected void boot() throws Exception {
-      }
-
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
-
-  @Override
-  public void configure(Environment environment) {
-  }
 }

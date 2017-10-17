@@ -27,7 +27,7 @@ import com.google.inject.name.Names;
  * BootModule
  *
  * @author michael
- * @date 17/10/12 11:13
+ * created on 17/10/12 11:13
  */
 public class BootModule extends AbstractModule {
 

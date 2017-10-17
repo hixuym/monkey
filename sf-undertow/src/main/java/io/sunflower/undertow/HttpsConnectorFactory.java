@@ -17,8 +17,8 @@ import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.sec.ssl.SslContextFactory;
 import io.sunflower.setup.Environment;
+import io.sunflower.undertow.handler.AdminTaskManager;
 import io.sunflower.undertow.handler.SslReloadTask;
-import io.sunflower.undertow.handler.TaskHandler;
 import io.sunflower.validation.ValidationMethod;
 import io.undertow.Undertow;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -345,8 +345,6 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
         !Strings.isNullOrEmpty(keyStorePassword);
   }
 
-  private SSLContext sslContext;
-
   @Override
   public Undertow.ListenerBuilder build(Environment environment) {
 
@@ -355,6 +353,7 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
     builder.setPort(getPort());
     builder.setHost(getBindHost());
     builder.setType(Undertow.ListenerType.HTTPS);
+    builder.setUseProxyProtocol(isUseProxyProtocol());
 
     final SslContextFactory sslContextFactory = new SslContextFactory();
 
@@ -368,9 +367,9 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
 
     environment.lifecycle().addLifeCycleListener(logSslInfoOnStart(sslContextFactory));
 
-    TaskHandler taskHandler = environment.injector().getInstance(TaskHandler.class);
+    AdminTaskManager adminTaskManager = environment.injector().getInstance(AdminTaskManager.class);
 
-    taskHandler.add(new SslReloadTask(sslReload));
+    adminTaskManager.add(new SslReloadTask(sslReload));
 
     // workaround for chrome issue w/ JVM and self-signed certs triggering
     // an IOException that can safely be ignored
@@ -379,7 +378,7 @@ public class HttpsConnectorFactory extends HttpConnectorFactory {
         .getLogger("io.undertow.request.io");
     root.setLevel(Level.WARN);
 
-    this.sslContext = sslContextFactory.getSslContext();
+    SSLContext sslContext = sslContextFactory.getSslContext();
 
     builder.setSslContext(sslContext);
 

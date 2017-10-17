@@ -15,6 +15,8 @@
 
 package io.sunflower.server;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
@@ -22,7 +24,7 @@ import io.sunflower.setup.Environment;
 /**
  * A factory for building {@link Server} instances for Dropwizard applications.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultServerFactory.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = NoopsServerFactory.class)
 public interface ServerFactory extends Discoverable {
 
   /**
@@ -39,4 +41,10 @@ public interface ServerFactory extends Discoverable {
    * @param environment the application's environment
    */
   void configure(Environment environment);
+
+  /**
+   * extra server configuration properties.
+   * @return Map<String, String>
+   */
+  Map<String, String> getServerProperties();
 }

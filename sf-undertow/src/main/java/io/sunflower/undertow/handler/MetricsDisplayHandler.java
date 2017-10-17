@@ -35,7 +35,7 @@ import io.undertow.util.HttpString;
 import io.undertow.util.StatusCodes;
 
 @Singleton
-public class MetricsHandler implements HttpHandler {
+public class MetricsDisplayHandler implements HttpHandler {
 
   private static final String CONTENT_TYPE = "application/json";
 
@@ -51,7 +51,7 @@ public class MetricsHandler implements HttpHandler {
   private transient MetricRegistry registry;
 
   @Inject
-  public MetricsHandler(Environment environment) {
+  public MetricsDisplayHandler(Environment environment) {
     this.environment = environment;
     this.registry = environment.metrics();
   }
