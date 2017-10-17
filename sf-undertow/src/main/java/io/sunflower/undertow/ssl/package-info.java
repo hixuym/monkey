@@ -16,5 +16,5 @@
 /**
  * Common SSL Utility Classes
  */
-package io.sunflower.sec.ssl;
+package io.sunflower.undertow.ssl;
 

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.sec.ssl;
+package io.sunflower.undertow.ssl;
 
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;

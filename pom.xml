@@ -175,12 +175,6 @@
 
       <dependency>
         <groupId>io.sunflower</groupId>
-        <artifactId>sf-sec</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>io.sunflower</groupId>
         <artifactId>sf-postoffice</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -217,7 +211,6 @@
     <module>sf-ebean</module>
     <module>sf-migrations</module>
     <module>sf-mybatis</module>
-    <module>sf-sec</module>
     <module>sf-postoffice</module>
     <module>sf-testing</module>
   </modules>

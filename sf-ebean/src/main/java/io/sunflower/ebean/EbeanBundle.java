@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.name.Names;
 import io.ebean.EbeanServer;
@@ -84,25 +85,28 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
 
     this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
 
-    environment.guicey().registry((binder) -> {
-      if (isDefault()) {
-        binder.bind(EbeanServer.class).toInstance(ebeanServer);
-      } else {
-        binder.bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
+    environment.guicey().registry(new AbstractModule() {
+      @Override
+      protected void configure() {
+        if (isDefault()) {
+          bind(EbeanServer.class).toInstance(ebeanServer);
+        } else {
+          bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
+        }
+
+        // class-level @Txn
+        EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
+
+        bindInterceptor(any(),
+            not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
+            txnInterceptor);
+        // Intercept classes annotated with Transactional, but avoid "double"
+        // interception when a mathod is also annotated inside an annotated
+        // class.
+        bindInterceptor(annotatedWith(Transactional.class),
+            not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
+            txnInterceptor);
       }
-
-      // class-level @Txn
-      EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
-
-      binder.bindInterceptor(any(),
-          not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
-          txnInterceptor);
-      // Intercept classes annotated with Transactional, but avoid "double"
-      // interception when a mathod is also annotated inside an annotated
-      // class.
-      binder.bindInterceptor(annotatedWith(Transactional.class),
-          not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
-          txnInterceptor);
     });
 
     environment.healthChecks().register(name(),

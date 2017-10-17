@@ -143,7 +143,7 @@ public class StandardThreadExecutor extends ThreadPoolExecutor {
 class ExecutorQueue extends LinkedTransferQueue<Runnable> {
 
   private static final long serialVersionUID = -265236426751004839L;
-  StandardThreadExecutor threadPoolExecutor;
+  private transient StandardThreadExecutor threadPoolExecutor;
 
   public ExecutorQueue() {
     super();

@@ -17,7 +17,7 @@ package io.sunflower.undertow;
 
 import java.util.function.Consumer;
 
-import io.sunflower.sec.ssl.SslContextFactory;
+import io.sunflower.undertow.ssl.SslContextFactory;
 
 /**
  * Provides the ability to modify an existing ssl factory with new configuration options.

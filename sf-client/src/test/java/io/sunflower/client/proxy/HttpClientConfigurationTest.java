@@ -40,7 +40,7 @@ public class HttpClientConfigurationTest {
   private void load(String configLocation) throws Exception {
     configuration = new YamlConfigurationFactory<>(HttpClientConfiguration.class,
         BaseValidator.newValidator(),
-        objectMapper, "dw")
+        objectMapper, "sf")
         .build(new File(Resources.getResource(configLocation).toURI()));
   }
 

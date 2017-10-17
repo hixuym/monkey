@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.sec;
+package io.sunflower.undertow.ssl;
 
 import java.io.InputStream;
 import java.net.URI;
