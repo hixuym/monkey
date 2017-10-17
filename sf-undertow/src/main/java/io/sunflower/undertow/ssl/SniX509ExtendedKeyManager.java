@@ -21,6 +21,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import javax.net.ssl.SNIMatcher;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSession;
@@ -102,7 +103,7 @@ public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
 
     String alias = chooseServerAlias(keyType, issuers,
         sslSocket.getSSLParameters().getSNIMatchers(), sslSocket.getHandshakeSession());
-    if (alias == NO_MATCHERS) {
+    if (Objects.equals(alias, NO_MATCHERS)) {
       alias = _delegate.chooseServerAlias(keyType, issuers, socket);
     }
     if (LOG.isDebugEnabled()) {

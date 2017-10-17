@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
 
 public class SslContextFactory {
 
-  public final static TrustManager[] TRUST_ALL_CERTS = new X509TrustManager[]{
+   private final static TrustManager[] TRUST_ALL_CERTS = new X509TrustManager[]{
       new X509TrustManager() {
         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
           return new java.security.cert.X509Certificate[]{};
@@ -1451,7 +1451,7 @@ public class SslContextFactory {
         _trustStoreResource);
   }
 
-  class Factory {
+  static class Factory {
 
     private final KeyStore _keyStore;
     private final KeyStore _trustStore;

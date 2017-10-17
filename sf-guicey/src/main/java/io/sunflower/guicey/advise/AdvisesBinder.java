@@ -148,10 +148,10 @@ public abstract class AdvisesBinder {
     
     @SuppressWarnings("unchecked")
     static <T> Key<UnaryOperator<T>> getAdviceKeyForNewItem(Binder binder, Key<T> key, int order) {
-        binder = binder.skipSources(AdvisesBinder.class);
+        binder.skipSources(AdvisesBinder.class);
         String elementName = key.hasAttributes() ? key.getAnnotation().toString() : "";
-        @SuppressWarnings("unused")
-        Annotation annotation = key.getAnnotation();
+//        @SuppressWarnings("unused")
+//        Annotation annotation = key.getAnnotation();
         
         Type adviceType = Types.newParameterizedType(UnaryOperator.class, key.getTypeLiteral().getType());
         return (Key<UnaryOperator<T>>) Key.get(adviceType, new AdviceElementImpl(elementName, AdviceElement.Type.ADVICE, order));

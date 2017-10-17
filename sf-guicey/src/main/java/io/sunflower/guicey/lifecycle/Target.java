@@ -16,10 +16,10 @@ package io.sunflower.guicey.lifecycle;
 
 import java.lang.reflect.Method;
 
+import com.google.common.base.Objects;
+
 /**
- * A lifecycle target, ie something to commit/stop
- *
- * @author James Roper
+ * A lifecycle target, ie something to start/stop
  */
 class Target implements Comparable<Target> {
 
@@ -43,6 +43,16 @@ class Target implements Comparable<Target> {
 
   public int getOrder() {
     return order;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(order);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj != null && obj instanceof Target && Objects.equal(order, ((Target) obj).order);
   }
 
   @Override

@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Register of lifecycle classes
  *
- * @author James Roper
  */
 @Singleton
 class LifecycleRegister {
@@ -41,12 +40,12 @@ class LifecycleRegister {
 
   public void start() {
     if (started.get()) {
-      throw new FailedStartException("Ninja service is already started!");
+      throw new FailedStartException("service is already started!");
     }
-    List<Target> toStart = new ArrayList<Target>(this.startables);
+    List<Target> toStart = new ArrayList<>(this.startables);
     started.set(true);
     startables.clear();
-    // Sort the beans to commit
+    // Sort the beans to start
     Collections.sort(toStart);
     // Start them
     for (Target target : toStart) {
@@ -56,9 +55,9 @@ class LifecycleRegister {
 
   public void stop() {
     if (!started.get()) {
-      throw new FailedDisposeException("Ninja service is not started!");
+      throw new FailedDisposeException("service is not started!");
     }
-    List<Target> toDispose = new ArrayList<Target>(this.disposables);
+    List<Target> toDispose = new ArrayList<>(this.disposables);
     started.set(false);
     disposables.clear();
     // Sort the beans to dispose
@@ -79,8 +78,8 @@ class LifecycleRegister {
   public void registerStartable(Target target) {
     if (started.get()) {
       log.warn(
-          "Startable instantiated after the application has been started: " + target.getTarget()
-              .toString());
+          "Startable instantiated after the application has been started: "
+              + target.getTarget().toString());
       invokeTarget(target);
     } else {
       startables.add(target);

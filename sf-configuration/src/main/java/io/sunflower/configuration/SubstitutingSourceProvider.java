@@ -11,8 +11,8 @@ import com.google.common.io.ByteStreams;
 import org.apache.commons.text.StrSubstitutor;
 
 /**
- * A delegating {@link ConfigurationSourceProvider} which replaces variables in the underlying
- * configuration source according to the rules of a custom {@link org.apache.commons.lang3.text.StrSubstitutor}.
+ * A delegating {@see ConfigurationSourceProvider} which replaces variables in the underlying
+ * configuration source according to the rules of a custom {@see org.apache.commons.lang3.text.StrSubstitutor}.
  */
 public class SubstitutingSourceProvider implements ConfigurationSourceProvider {
 

@@ -48,6 +48,6 @@ public class ThreadDumpTask extends Task {
 
     threadDump.dump(out);
 
-    output.println(out.toString());
+    output.println(out.toString("utf-8"));
   }
 }

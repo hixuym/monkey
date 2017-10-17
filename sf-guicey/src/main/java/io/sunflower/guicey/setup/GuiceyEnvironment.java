@@ -89,9 +89,18 @@ public class GuiceyEnvironment {
     this.moduleLoaded.addAll(Arrays.asList(modules));
   }
 
+  public void registry(Module module) {
+    checkNotCommited();
+    this.moduleLoaded.add(module);
+  }
+
   public <T> void registry(final T object) {
     checkNotCommited();
-    registry(ModulesEx.fromInstance(object));
+    if (object instanceof Module) {
+      registry((Module) object);
+    } else {
+      registry(ModulesEx.fromInstance(object));
+    }
   }
 
   public <T> void registry(final Class<T> tClass) {
