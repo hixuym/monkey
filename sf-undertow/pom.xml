@@ -22,10 +22,6 @@
       <artifactId>sf-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.sunflower</groupId>
-      <artifactId>sf-sec</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-json</artifactId>
     </dependency>
