@@ -16,6 +16,7 @@
 package io.sunflower.lifecycle.setup;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.sunflower.lifecycle.ExecutorServiceManager;
@@ -32,6 +33,7 @@ public class StandardThreadExecutorBuilder {
   private int minWorkerThread;
   private int maxWorkerThread;
   private int workerQueueSize;
+  private Duration keepAliveTime = Duration.minutes(1);
   private ThreadFactory threadFactory;
   private Duration shutdownTime;
 
@@ -70,6 +72,11 @@ public class StandardThreadExecutorBuilder {
     return this;
   }
 
+  public StandardThreadExecutorBuilder maxIdleTime(Duration keepAliveTime) {
+    this.keepAliveTime = keepAliveTime;
+    return this;
+  }
+
   public StandardThreadExecutorBuilder threadFacotry(ThreadFactory threadFactory) {
     this.threadFactory = threadFactory;
     return this;
@@ -78,6 +85,7 @@ public class StandardThreadExecutorBuilder {
   public StandardThreadExecutor build() {
 
     StandardThreadExecutor executor = new StandardThreadExecutor(minWorkerThread, maxWorkerThread,
+        keepAliveTime.toSeconds(), TimeUnit.SECONDS,
         workerQueueSize, threadFactory);
 
     environment.manage(new ExecutorServiceManager(executor, shutdownTime, nameFormat));

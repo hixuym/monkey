@@ -59,46 +59,49 @@ public class UndertowServer extends Server {
   }
 
   protected void logListenerInfo(ListenerInfo info) {
-    logger.info("Undertow listen at:" + info.getProtcol() + "://" + info.getAddress().toString());
+    logger.info("Undertow listen at:" + info.getProtcol() + ":/" + info.getAddress().toString());
   }
 
   protected void registryMetrics(ListenerInfo info) {
 
-    MetricRegistry registry = getEnvironment().metrics();
-
-    String name = MetricRegistry.name("undertow", info.getProtcol(), info.getAddress().toString());
-
     final ConnectorStatistics statistics = info.getConnectorStatistics();
 
-    registry.register(name + "requestCount",
-        (Gauge) statistics::getRequestCount);
+    if (statistics != null) {
+      MetricRegistry registry = getEnvironment().metrics();
 
-    registry.register(name + "errorCount",
-        (Gauge) statistics::getErrorCount);
+      String name = MetricRegistry
+          .name("undertow", info.getProtcol(), info.getAddress().toString());
 
-    registry.register(name + "activeRequests",
-        (Gauge) statistics::getActiveRequests);
+      registry.register(name + "requestCount",
+          (Gauge) statistics::getRequestCount);
 
-    registry.register(name + "maxActiveRequests",
-        (Gauge) statistics::getMaxActiveRequests);
+      registry.register(name + "errorCount",
+          (Gauge) statistics::getErrorCount);
 
-    registry.register(name + "activeConnections",
-        (Gauge) statistics::getActiveConnections);
+      registry.register(name + "activeRequests",
+          (Gauge) statistics::getActiveRequests);
 
-    registry.register(name + "maxActiveConnections",
-        (Gauge) statistics::getMaxActiveConnections);
+      registry.register(name + "maxActiveRequests",
+          (Gauge) statistics::getMaxActiveRequests);
 
-    registry.register(name + "bytesReceived",
-        (Gauge) statistics::getBytesReceived);
+      registry.register(name + "activeConnections",
+          (Gauge) statistics::getActiveConnections);
 
-    registry.register(name + "bytesSent",
-        (Gauge) statistics::getBytesSent);
+      registry.register(name + "maxActiveConnections",
+          (Gauge) statistics::getMaxActiveConnections);
 
-    registry.register(name + "processingTime",
-        (Gauge) statistics::getProcessingTime);
+      registry.register(name + "bytesReceived",
+          (Gauge) statistics::getBytesReceived);
 
-    registry.register(name + "maxProcessingTime",
-        (Gauge) statistics::getMaxProcessingTime);
+      registry.register(name + "bytesSent",
+          (Gauge) statistics::getBytesSent);
+
+      registry.register(name + "processingTime",
+          (Gauge) statistics::getProcessingTime);
+
+      registry.register(name + "maxProcessingTime",
+          (Gauge) statistics::getMaxProcessingTime);
+    }
   }
 
   @Override

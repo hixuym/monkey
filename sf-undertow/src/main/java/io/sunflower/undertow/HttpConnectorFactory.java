@@ -27,7 +27,7 @@ public class HttpConnectorFactory implements ConnectorFactory {
   @PortRange
   private int port = 8080;
 
-  private String bindHost = null;
+  private String bindHost;
 
   private boolean useProxyProtocol = false;
 

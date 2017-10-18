@@ -9,7 +9,6 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
 import javax.inject.Inject;
 
 import com.google.common.base.Strings;
@@ -77,8 +76,8 @@ public class AdminTaskManager implements HttpHandler {
       exchange.getResponseSender().send(stringWriter.toString());
 
     } else if (tasks.containsKey(exchange.getRelativePath())) {
-//            exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
-      doPost(exchange);
+      exchange.setStatusCode(StatusCodes.METHOD_NOT_ALLOWED);
+      exchange.endExchange();
     } else {
       exchange.setStatusCode(StatusCodes.NOT_FOUND);
       exchange.endExchange();

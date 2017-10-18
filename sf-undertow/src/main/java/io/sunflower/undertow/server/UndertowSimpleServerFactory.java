@@ -15,6 +15,10 @@
 
 package io.sunflower.undertow.server;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.server.Server;
@@ -61,6 +65,21 @@ public class UndertowSimpleServerFactory extends AbstractServerFactory {
     this.adminContextPath = adminContextPath;
   }
 
+  @NotNull
+  private Map<String, String> serverProperties = new LinkedHashMap<>(20);
+
+  @JsonProperty("properties")
+  @Override
+  public Map<String, String> getServerProperties() {
+    serverProperties.put("sf.undertowContextPath", getApplicationContextPath());
+    return serverProperties;
+  }
+
+  @JsonProperty("properties")
+  public void setServerProperties(Map<String, String> properties) {
+    this.serverProperties = properties;
+  }
+
   @JsonProperty
   public ConnectorFactory getConnector() {
     return connector;
@@ -75,8 +94,9 @@ public class UndertowSimpleServerFactory extends AbstractServerFactory {
   protected Server constract(Environment env) {
 
     Undertow.Builder undertowBuilder = Undertow.builder()
-        // NOTE: should ninja not use equals chars within its cookie values?
-        .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true);
+        // NOTE: should not use equals chars within its cookie values?
+        .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
+        .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
 
     logger.info("Undertow h2 protocol (undertow.http2 = {})", false);
 

@@ -17,23 +17,23 @@ package io.sunflower.undertow.server;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
+import com.codahale.metrics.Gauge;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.TypeLiteral;
 import io.sunflower.guicey.Injectors;
+import io.sunflower.lifecycle.setup.StandardThreadExecutor;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.AdminHandlers;
 import io.sunflower.undertow.AppHandlers;
+import io.sunflower.util.Duration;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
@@ -63,13 +63,11 @@ public abstract class AbstractServerFactory implements ServerFactory {
 
     Injectors.mapOf(environment.injector(),
         new TypeLiteral<Map<String, HttpHandler>>() {
-        }, AdminHandlers.class)
-        .forEach(adminHandlers::addPrefixPath);
+        }, AdminHandlers.class).forEach(adminHandlers::addPrefixPath);
 
     Injectors.mapOf(environment.injector(),
         new TypeLiteral<Map<String, HttpHandler>>() {
-        }, AppHandlers.class)
-        .forEach(appHandlers::addPrefixPath);
+        }, AppHandlers.class).forEach(appHandlers::addPrefixPath);
 
     return constract(environment);
   }
@@ -78,39 +76,80 @@ public abstract class AbstractServerFactory implements ServerFactory {
 
   @Override
   public void configure(Environment environment) {
+    StandardThreadExecutor executor = environment.lifecycle()
+        .standardThreadExecutor("undertowWorkerTask-pool-%d")
+        .maxWorkerThread(maxWorkerThreads)
+        .minWorkerThread(minWorkerThreads)
+        .workerQueueSize(workerQueueSize)
+        .maxIdleTime(maxIdleTime)
+        .build();
+
+    environment.metrics().register("undertow.workerTaskPool.submittedTasksCount", (Gauge) executor::getSubmittedTasksCount);
+    environment.metrics().register("undertow.workerTaskPool.maxSubmittedTaskCount", (Gauge) executor::getMaxSubmittedTaskCount);
+
+    environment.guicey().registry(executor);
   }
 
-  @Min(10)
-  private int workerThreads = Math.max(Runtime.getRuntime().availableProcessors(), 2) * 10;
-
+  private boolean statsEnabled = false;
 
   // access log enabled when accessLogFormat configured.
   private String accessLogFormat;
   private boolean accessLogRotate = true;
   private String accessLogPath = "./logs";
 
-  @JsonProperty
-  public int getWorkerThreads() {
-    return workerThreads;
-  }
+  private int minWorkerThreads = 10;
+  private int maxWorkerThreads = 200;
+  private int workerQueueSize = 2000;
+  private Duration maxIdleTime = Duration.minutes(1);
 
   @JsonProperty
-  public void setWorkerThreads(int workerThreads) {
-    this.workerThreads = workerThreads;
+  public Duration getMaxIdleTime() {
+    return maxIdleTime;
   }
 
-  @NotNull
-  private Map<String, String> serverProperties = new LinkedHashMap<>(20);
-
-  @JsonProperty("properties")
-  @Override
-  public Map<String, String> getServerProperties() {
-    return serverProperties;
+  @JsonProperty
+  public void setMaxIdleTime(Duration maxIdleTime) {
+    this.maxIdleTime = maxIdleTime;
   }
 
-  @JsonProperty("properties")
-  public void setServerProperties(Map<String, String> properties) {
-    this.serverProperties = properties;
+  @JsonProperty
+  public int getMinWorkerThreads() {
+    return minWorkerThreads;
+  }
+
+  @JsonProperty
+  public void setMinWorkerThreads(int minWorkerThreads) {
+    this.minWorkerThreads = minWorkerThreads;
+  }
+
+  @JsonProperty
+  public int getMaxWorkerThreads() {
+    return maxWorkerThreads;
+  }
+
+  @JsonProperty
+  public void setMaxWorkerThreads(int maxWorkerThreads) {
+    this.maxWorkerThreads = maxWorkerThreads;
+  }
+
+  @JsonProperty
+  public int getWorkerQueueSize() {
+    return workerQueueSize;
+  }
+
+  @JsonProperty
+  public void setWorkerQueueSize(int workerQueueSize) {
+    this.workerQueueSize = workerQueueSize;
+  }
+
+  @JsonProperty
+  public boolean isStatsEnabled() {
+    return statsEnabled;
+  }
+
+  @JsonProperty
+  public void setStatsEnabled(boolean statsEnabled) {
+    this.statsEnabled = statsEnabled;
   }
 
   @JsonProperty

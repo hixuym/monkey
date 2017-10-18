@@ -48,7 +48,7 @@ public abstract class Server extends ContainerLifeCycle {
     this.boot();
     sw.stop();
     if (logger.isInfoEnabled()) {
-      logger.info(environment.getName() + " started in {}", sw);
+      logger.info("server started in {}", sw);
     }
   }
 
@@ -60,7 +60,7 @@ public abstract class Server extends ContainerLifeCycle {
     this.shutdown();
     sw.stop();
     if (logger.isInfoEnabled()) {
-      logger.info(environment.getName() + " stoped in {}", sw);
+      logger.info("server stoped in {}", sw);
     }
   }
 

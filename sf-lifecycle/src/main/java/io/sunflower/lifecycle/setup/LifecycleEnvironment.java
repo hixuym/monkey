@@ -64,6 +64,14 @@ public class LifecycleEnvironment {
     managedObjects.add(requireNonNull(managed));
   }
 
+  public StandardThreadExecutorBuilder standardThreadExecutor(String nameFormat) {
+    return new StandardThreadExecutorBuilder(this, nameFormat);
+  }
+
+  public StandardThreadExecutorBuilder standardThreadExecutor(String nameFormat, ThreadFactory factory) {
+    return new StandardThreadExecutorBuilder(this, nameFormat);
+  }
+
   public ExecutorServiceBuilder executorService(String nameFormat) {
     return new ExecutorServiceBuilder(this, nameFormat);
   }

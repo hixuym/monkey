@@ -1,6 +1,7 @@
 package io.sunflower;
 
 import ch.qos.logback.classic.Level;
+import com.google.common.base.Stopwatch;
 import io.sunflower.cli.CheckCommand;
 import io.sunflower.cli.Cli;
 import io.sunflower.cli.ServerCommand;
@@ -95,6 +96,8 @@ public abstract class Application<T extends Configuration> {
    * @throws Exception if something goes wrong
    */
   public void run(String... arguments) throws Exception {
+    Stopwatch sw = Stopwatch.createStarted();
+
     showSplashScreenViaLogger();
 
     final Bootstrap<T> bootstrap = new Bootstrap<>(this);
@@ -110,6 +113,9 @@ public abstract class Application<T extends Configuration> {
       // only exit if there's an error running the command
       onFatalError();
     }
+    sw.stop();
+
+    logger.info(getName() + " started in {}", sw);
   }
 
   /**

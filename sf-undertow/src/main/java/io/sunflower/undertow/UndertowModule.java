@@ -15,11 +15,10 @@
 
 package io.sunflower.undertow;
 
-import static io.sunflower.undertow.handler.Handlers.BLOCKING_WRAPPER;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import javax.inject.Provider;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -42,14 +41,14 @@ import io.undertow.server.HttpHandler;
  */
 public class UndertowModule extends AbstractModule {
 
-  private final Environment environment;
-
-  private final Map<String, HttpHandler> adminHandlers = Maps.newHashMap();
-  private final Map<String, HttpHandler> appHandlers = Maps.newHashMap();
+  private final Map<String, Class<? extends Provider<HttpHandler>>> adminHandlers = Maps
+      .newHashMap();
+  private final Map<String, Class<? extends Provider<HttpHandler>>> appHandlers = Maps.newHashMap();
   private final Set<Class<? extends Task>> taskSet = Sets.newHashSet();
+  private final AdminTaskManager taskManager;
 
   public UndertowModule(Environment environment) {
-    this.environment = environment;
+    this.taskManager = new AdminTaskManager(environment);
     registryTask(LogConfigurationTask.class);
     registryTask(GarbageCollectionTask.class);
     registryTask(ThreadDumpTask.class);
@@ -61,12 +60,10 @@ public class UndertowModule extends AbstractModule {
     MapBinder<String, HttpHandler> adminMapBinder = MapBinder
         .newMapBinder(binder(), String.class, HttpHandler.class, AdminHandlers.class);
 
-    for (Map.Entry<String, HttpHandler> e : adminHandlers.entrySet()) {
+    for (Map.Entry<String, Class<? extends Provider<HttpHandler>>> e : adminHandlers.entrySet()) {
       requestInjection(e.getValue());
-      adminMapBinder.addBinding(e.getKey()).toInstance(e.getValue());
+      adminMapBinder.addBinding(e.getKey()).toProvider(e.getValue());
     }
-
-    AdminTaskManager taskManager = new AdminTaskManager(environment);
 
     bind(AdminTaskManager.class).toInstance(taskManager);
 
@@ -77,9 +74,9 @@ public class UndertowModule extends AbstractModule {
     MapBinder<String, HttpHandler> appMapBinder =
         MapBinder.newMapBinder(binder(), String.class, HttpHandler.class, AppHandlers.class);
 
-    for (Map.Entry<String, HttpHandler> e : appHandlers.entrySet()) {
+    for (Map.Entry<String, Class<? extends Provider<HttpHandler>>> e : appHandlers.entrySet()) {
       requestInjection(e.getValue());
-      appMapBinder.addBinding(e.getKey()).toInstance(e.getValue());
+      appMapBinder.addBinding(e.getKey()).toProvider(e.getValue());
     }
 
     taskSet.forEach(this::bind);
@@ -89,31 +86,17 @@ public class UndertowModule extends AbstractModule {
     this.taskSet.add(task);
   }
 
-  public void registryAdminHandler(String path, HttpHandler httpHandler) {
-    registryAdminHandler(path, httpHandler, false);
-  }
-
-  public void registryApplicationHandler(String path, HttpHandler httpHandler) {
-    registryApplicationHandler(path, httpHandler, false);
-  }
-
-  public void registryAdminHandler(String path, HttpHandler httpHandler, boolean blocking) {
+  public void registryAdminHandler(String path,
+      Class<? extends Provider<HttpHandler>> httpHandler) {
     Objects.requireNonNull(path);
     Objects.requireNonNull(httpHandler);
-    if (blocking) {
-      this.adminHandlers.put(path, BLOCKING_WRAPPER.wrap(httpHandler));
-    } else {
-      this.adminHandlers.put(path, httpHandler);
-    }
+    this.adminHandlers.put(path, httpHandler);
   }
 
-  public void registryApplicationHandler(String path, HttpHandler httpHandler, boolean blocking) {
+  public void registryApplicationHandler(String path,
+      Class<? extends Provider<HttpHandler>> httpHandler) {
     Objects.requireNonNull(path);
     Objects.requireNonNull(httpHandler);
-    if (blocking) {
-      this.appHandlers.put(path, BLOCKING_WRAPPER.wrap(httpHandler));
-    } else {
-      this.appHandlers.put(path, httpHandler);
-    }
+    this.appHandlers.put(path, httpHandler);
   }
 }
