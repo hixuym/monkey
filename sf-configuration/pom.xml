@@ -10,7 +10,7 @@
 
   <artifactId>sf-configuration</artifactId>
 
-  <name>Sunflower Configuration Module</name>
+  <name>sunflower configuration module</name>
 
   <dependencies>
     <dependency>

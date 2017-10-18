@@ -10,7 +10,7 @@
 
   <artifactId>sf-guicey</artifactId>
 
-  <name>Sunflower Guicey Dependency Injection Module</name>
+  <name>sunflower guicey dependency injection module</name>
 
   <dependencies>
     <dependency>

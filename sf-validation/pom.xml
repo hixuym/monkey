@@ -10,7 +10,7 @@
 
   <artifactId>sf-validation</artifactId>
 
-  <name>Sunflower Validation Module</name>
+  <name>sunflower validation module</name>
 
   <dependencies>
     <dependency>

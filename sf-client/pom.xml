@@ -10,7 +10,7 @@
 
   <artifactId>sf-client</artifactId>
 
-  <name>Sunflower Http Client Module</name>
+  <name>sunflower http client module</name>
   
   <dependencies>
     <dependency>

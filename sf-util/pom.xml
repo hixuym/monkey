@@ -10,7 +10,7 @@
 
   <artifactId>sf-util</artifactId>
 
-  <name>Sunflower Util Module</name>
+  <name>sunflower util module</name>
 
   <dependencies>
     <dependency>

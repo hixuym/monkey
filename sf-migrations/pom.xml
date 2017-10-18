@@ -10,7 +10,7 @@
 
   <artifactId>sf-migrations</artifactId>
 
-  <name>Sunflower Database Migrations Module</name>
+  <name>sunflower database migrations module</name>
 
   <dependencies>
     <dependency>

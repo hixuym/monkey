@@ -10,7 +10,7 @@
 
   <artifactId>sf-db</artifactId>
 
-  <name>Sunflower Database Module</name>
+  <name>sunflower database module</name>
 
   <dependencies>
     <dependency>

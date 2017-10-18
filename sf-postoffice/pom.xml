@@ -10,7 +10,7 @@
 
   <artifactId>sf-postoffice</artifactId>
 
-  <name>Sunflower Mail Postoffice Module</name>
+  <name>sunflower postoffice module</name>
 
   <dependencies>
     <dependency>

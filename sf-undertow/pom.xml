@@ -10,7 +10,7 @@
 
   <artifactId>sf-undertow</artifactId>
 
-  <name>Sunflower Undertow Module</name>
+  <name>sunflower undertow http server module</name>
 
   <dependencies>
     <dependency>

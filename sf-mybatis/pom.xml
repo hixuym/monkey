@@ -10,7 +10,7 @@
 
   <artifactId>sf-mybatis</artifactId>
 
-  <name>Sunflower Mybatis Module</name>
+  <name>sunflower mybatis module</name>
 
   <dependencies>
     <dependency>

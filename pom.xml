@@ -10,12 +10,11 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>io.sunflower</groupId>
   <artifactId>sf-framework</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Sunflower Framework Project</name>
+  <name>sunflower framework projects</name>
 
   <url>${sunflower.url}</url>
 

@@ -10,7 +10,7 @@
 
   <artifactId>sf-jackson</artifactId>
 
-  <name>Sunflower Jackson Module</name>
+  <name>sunflower jackson module</name>
 
   <dependencies>
     <dependency>

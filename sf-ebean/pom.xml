@@ -10,7 +10,7 @@
 
   <artifactId>sf-ebean</artifactId>
 
-  <name>Sunflower Ebean Module</name>
+  <name>sunflower ebean module</name>
 
   <dependencies>
     <dependency>

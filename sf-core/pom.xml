@@ -10,7 +10,7 @@
 
   <artifactId>sf-core</artifactId>
 
-  <name>Sunflower Core Module</name>
+  <name>sunflower core module</name>
 
   <dependencies>
     <dependency>

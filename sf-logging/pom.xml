@@ -10,7 +10,7 @@
 
   <artifactId>sf-logging</artifactId>
 
-  <name>Sunflower Logging Module</name>
+  <name>sunflower logging module</name>
 
   <dependencies>
     <!-- logging -->

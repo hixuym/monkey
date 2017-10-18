@@ -10,7 +10,7 @@
 
   <artifactId>sf-metrics-ganglia</artifactId>
 
-  <name>Sunflower Metrics Ganglia Module</name>
+  <name>sunflower metrics ganglia module</name>
 
   <dependencies>
     <dependency>
