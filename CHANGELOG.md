@@ -1,5 +1,9 @@
 Sunflower Framework
 ======================================
+1.1.1
+  
+  - add sf basic archetypes
+  
 1.1.0 - 2017-10-18
 
   - sf-sec move to sf-undertow
