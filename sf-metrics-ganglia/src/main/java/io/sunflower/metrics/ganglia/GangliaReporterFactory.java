@@ -35,17 +35,56 @@ import org.hibernate.validator.constraints.Range;
 /**
  * A factory for {@link GangliaReporter} instances.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>host</td> <td>localhost</td> <td>The hostname (or group) of the Ganglia server(s)
- * to report to.</td> </tr> <tr> <td>port</td> <td>8649</td> <td>The port of the Ganglia server(s)
- * to report to.</td> </tr> <tr> <td>mode</td> <td>unicast</td> <td>The UDP addressing mode to
- * announce the metrics with. One of {@code unicast} or {@code multicast}.</td> </tr> <tr>
- * <td>ttl</td> <td>1</td> <td>The time-to-live of the UDP packets for the announced metrics.</td>
- * </tr> <tr> <td>uuid</td> <td><i>None</i></td> <td>The UUID to tag announced metrics with.</td>
- * </tr> <tr> <td>spoof</td> <td><i>None</i></td> <td>The hostname and port to use instead of this
- * nodes for the announced metrics. In the format {@code hostname:port}.</td> </tr> <tr>
- * <td>tmax</td> <td>60</td> <td>The tmax value to annouce metrics with.</td> </tr> <tr>
- * <td>dmax</td> <td>0</td> <td>The dmax value to announce metrics with.</td> </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>host</td>
+ *         <td>localhost</td>
+ *         <td>The hostname (or group) of the Ganglia server(s) to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>port</td>
+ *         <td>8649</td>
+ *         <td>The port of the Ganglia server(s) to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>mode</td>
+ *         <td>unicast</td>
+ *         <td>The UDP addressing mode to announce the metrics with. One of {@code unicast} or
+ *         {@code multicast}.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>ttl</td>
+ *         <td>1</td>
+ *         <td>The time-to-live of the UDP packets for the announced metrics.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>uuid</td>
+ *         <td><i>None</i></td>
+ *         <td>The UUID to tag announced metrics with.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>spoof</td>
+ *         <td><i>None</i></td>
+ *         <td>The hostname and port to use instead of this nodes for the announced metrics. In the
+ *         format {@code hostname:port}.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>tmax</td>
+ *         <td>60</td>
+ *         <td>The tmax value to annouce metrics with.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>dmax</td>
+ *         <td>0</td>
+ *         <td>The dmax value to announce metrics with.</td>
+ *     </tr>
+ * </table>
  */
 @JsonTypeName("ganglia")
 public class GangliaReporterFactory extends BaseReporterFactory {

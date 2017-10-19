@@ -23,18 +23,49 @@ import io.sunflower.logging.layout.LayoutFactory;
  * An {@link AppenderFactory} implementation which provides an appender that sends events to a
  * syslog server.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>{@code host}</td> <td>{@code localhost}</td> <td>The hostname of the syslog
- * server.</td> </tr> <tr> <td>{@code port}</td> <td>{@code 514}</td> <td>The port on which the
- * syslog server is listening.</td> </tr> <tr> <td>{@code facility}</td> <td>{@code local0}</td>
- * <td> The syslog facility to use. Can be either {@code auth}, {@code authpriv}, {@code daemon},
- * {@code cron}, {@code ftp}, {@code lpr}, {@code kern}, {@code mail}, {@code news}, {@code syslog},
- * {@code user}, {@code uucp}, {@code local0}, {@code local1}, {@code local2}, {@code local3},
- * {@code local4}, {@code local5}, {@code local6}, or {@code local7}. </td> </tr> <tr> <td>{@code
- * threshold}</td> <td>{@code ALL}</td> <td>The lowest level of events to write to the file.</td>
- * </tr> <tr> <td>{@code logFormat}</td> <td>the default format</td> <td> The Logback pattern with
- * which events will be formatted. See <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the
- * Logback documentation</a> for details. </td> </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code host}</td>
+ *         <td>{@code localhost}</td>
+ *         <td>The hostname of the syslog server.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code port}</td>
+ *         <td>{@code 514}</td>
+ *         <td>The port on which the syslog server is listening.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code facility}</td>
+ *         <td>{@code local0}</td>
+ *         <td>
+ *             The syslog facility to use. Can be either {@code auth}, {@code authpriv},
+ *             {@code daemon}, {@code cron}, {@code ftp}, {@code lpr}, {@code kern}, {@code mail},
+ *             {@code news}, {@code syslog}, {@code user}, {@code uucp}, {@code local0},
+ *             {@code local1}, {@code local2}, {@code local3}, {@code local4}, {@code local5},
+ *             {@code local6}, or {@code local7}.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code threshold}</td>
+ *         <td>{@code ALL}</td>
+ *         <td>The lowest level of events to write to the file.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logFormat}</td>
+ *         <td>the default format</td>
+ *         <td>
+ *             The Logback pattern with which events will be formatted. See
+ *             <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
+ *             for details.
+ *         </td>
+ *     </tr>
+ * </table>
  *
  * @see AbstractAppenderFactory
  */

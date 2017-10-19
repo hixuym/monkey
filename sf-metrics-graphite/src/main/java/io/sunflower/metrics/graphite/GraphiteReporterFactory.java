@@ -33,12 +33,35 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * A factory for {@link GraphiteReporter} instances.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>host</td> <td>localhost</td> <td>The hostname of the Graphite server to report
- * to.</td> </tr> <tr> <td>port</td> <td>2003</td> <td>The port of the Graphite server to report
- * to.</td> </tr> <tr> <td>prefix</td> <td><i>None</i></td> <td>The prefix for Metric key names to
- * report to Graphite.</td> </tr> <tr> <td>transport</td> <td><i>tcp</i></td> <td>The transport used
- * to report to Graphite. One of {@code tcp} or {@code udp}.</td> </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>host</td>
+ *         <td>localhost</td>
+ *         <td>The hostname of the Graphite server to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>port</td>
+ *         <td>2003</td>
+ *         <td>The port of the Graphite server to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>prefix</td>
+ *         <td><i>None</i></td>
+ *         <td>The prefix for Metric key names to report to Graphite.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>transport</td>
+ *         <td><i>tcp</i></td>
+ *         <td>The transport used to report to Graphite. One of {@code tcp} or
+ *         {@code udp}.</td>
+ *     </tr>
+ * </table>
  */
 @JsonTypeName("graphite")
 public class GraphiteReporterFactory extends BaseReporterFactory {

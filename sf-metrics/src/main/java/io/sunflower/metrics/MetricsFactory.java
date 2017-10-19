@@ -18,10 +18,24 @@ import org.slf4j.LoggerFactory;
  * Configures an optional list of {@link com.codahale.metrics.ScheduledReporter reporters} with a
  * default {@link #frequency}.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>frequency</td> <td>1 minute</td> <td>The frequency to report metrics. Overridable
- * per-reporter.</td> </tr> <tr> <td>reporters</td> <td>No reporters.</td> <td>A list of {@link
- * ReporterFactory reporters} to report metrics.</td> </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>frequency</td>
+ *         <td>1 minute</td>
+ *         <td>The frequency to report metrics. Overridable per-reporter.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>reporters</td>
+ *         <td>No reporters.</td>
+ *         <td>A list of {@link ReporterFactory reporters} to report metrics.</td>
+ *     </tr>
+ * </table>
  */
 public class MetricsFactory {
 

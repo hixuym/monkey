@@ -14,19 +14,48 @@ import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
 
 /**
- * An {@link AppenderFactory} implementation which provides an appender that writes events to the
- * console.
+ * An {@link AppenderFactory} implementation which provides an appender that writes events to the console.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>{@code type}</td> <td><b>REQUIRED</b></td> <td>The appender type. Must be {@code
- * console}.</td> </tr> <tr> <td>{@code threshold}</td> <td>{@code ALL}</td> <td>The lowest level of
- * events to print to the console.</td> </tr> <tr> <td>{@code timeZone}</td> <td>{@code UTC}</td>
- * <td>The time zone to which event timestamps will be converted.</td> </tr> <tr> <td>{@code
- * target}</td> <td>{@code stdout}</td> <td> The name of the standard stream to which events will be
- * written. Can be {@code stdout} or {@code stderr}. </td> </tr> <tr> <td>{@code logFormat}</td>
- * <td>the default format</td> <td> The Logback pattern with which events will be formatted. See <a
- * href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a> for
- * details. </td> </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code type}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>The appender type. Must be {@code console}.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code threshold}</td>
+ *         <td>{@code ALL}</td>
+ *         <td>The lowest level of events to print to the console.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code timeZone}</td>
+ *         <td>{@code UTC}</td>
+ *         <td>The time zone to which event timestamps will be converted.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code target}</td>
+ *         <td>{@code stdout}</td>
+ *         <td>
+ *             The name of the standard stream to which events will be written.
+ *             Can be {@code stdout} or {@code stderr}.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logFormat}</td>
+ *         <td>the default format</td>
+ *         <td>
+ *             The Logback pattern with which events will be formatted. See
+ *             <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
+ *             for details.
+ *         </td>
+ *     </tr>
+ * </table>
  *
  * @see AbstractAppenderFactory
  */

@@ -27,6 +27,187 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Builds HTTPS connectors (HTTP over TLS/SSL).
+ * <p/>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code keyStorePath}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>
+ *             The path to the Java key store which contains the host certificate and private key.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code keyStorePassword}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>
+ *             The password used to access the key store.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code keyStoreType}</td>
+ *         <td>{@code JKS}</td>
+ *         <td>
+ *             The type of key store (usually {@code JKS}, {@code PKCS12}, {@code JCEKS},
+ *             {@code Windows-MY}, or {@code Windows-ROOT}).
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code keyStoreProvider}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             The JCE provider to use to access the key store.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code trustStorePath}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             The path to the Java key store which contains the CA certificates used to establish
+ *             trust.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code trustStorePassword}</td>
+ *         <td>(none)</td>
+ *         <td>The password used to access the trust store.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code trustStoreType}</td>
+ *         <td>{@code JKS}</td>
+ *         <td>
+ *             The type of trust store (usually {@code JKS}, {@code PKCS12}, {@code JCEKS},
+ *             {@code Windows-MY}, or {@code Windows-ROOT}).
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code trustStoreProvider}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             The JCE provider to use to access the trust store.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code keyManagerPassword}</td>
+ *         <td>(none)</td>
+ *         <td>The password, if any, for the key manager.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code needClientAuth}</td>
+ *         <td>(none)</td>
+ *         <td>Whether or not client authentication is required.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code wantClientAuth}</td>
+ *         <td>(none)</td>
+ *         <td>Whether or not client authentication is requested.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code certAlias}</td>
+ *         <td>(none)</td>
+ *         <td>The alias of the certificate to use.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code crlPath}</td>
+ *         <td>(none)</td>
+ *         <td>The path to the file which contains the Certificate Revocation List.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code enableCRLDP}</td>
+ *         <td>false</td>
+ *         <td>Whether or not CRL Distribution Points (CRLDP) support is enabled.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code enableOCSP}</td>
+ *         <td>false</td>
+ *         <td>Whether or not On-Line Certificate Status Protocol (OCSP) support is enabled.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code maxCertPathLength}</td>
+ *         <td>(unlimited)</td>
+ *         <td>The maximum certification path length.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code ocspResponderUrl}</td>
+ *         <td>(none)</td>
+ *         <td>The location of the OCSP responder.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code jceProvider}</td>
+ *         <td>(none)</td>
+ *         <td>The name of the JCE provider to use for cryptographic support.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validateCerts}</td>
+ *         <td>false</td>
+ *         <td>
+ *             Whether or not to validate TLS certificates before starting. If enabled, Dropwizard
+ *             will refuse to start with expired or otherwise invalid certificates. This option will
+ *             cause unconditional failure in Dropwizard 1.x until a new validation mechanism can be
+ *             implemented.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validatePeers}</td>
+ *         <td>false</td>
+ *         <td>
+ *             Whether or not to validate TLS peer certificates. This option will
+ *             cause unconditional failure in Dropwizard 1.x until a new validation mechanism can be
+ *             implemented.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code supportedProtocols}</td>
+ *         <td>JVM default</td>
+ *         <td>
+ *             A list of protocols (e.g., {@code SSLv3}, {@code TLSv1}) which are supported. All
+ *             other protocols will be refused.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code excludedProtocols}</td>
+ *         <td>Jetty's default</td>
+ *         <td>
+ *             A list of protocols (e.g., {@code SSLv3}, {@code TLSv1}) which are excluded. These
+ *             protocols will be refused.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code supportedCipherSuites}</td>
+ *         <td>JVM default</td>
+ *         <td>
+ *             A list of cipher suites (e.g., {@code TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256}) which
+ *             are supported. All other cipher suites will be refused
+ *         </td>
+ *    </tr>
+ *    <tr>
+ *         <td>{@code excludedCipherSuites}</td>
+ *         <td>Jetty's default</td>
+ *         <td>
+ *             A list of cipher suites (e.g., {@code TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256}) which
+ *             are excluded. These cipher suites will be refused.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code allowRenegotiation}</td>
+ *         <td>true</td>
+ *         <td>Whether or not TLS renegotiation is allowed.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code endpointIdentificationAlgorithm}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             Which endpoint identification algorithm, if any, to use during the TLS handshake.
+ *         </td>
+ *     </tr>
+ * </table>
+ * <p/>
+ * For more configuration parameters, see {@link HttpConnectorFactory}.
  *
  * @see HttpConnectorFactory
  */

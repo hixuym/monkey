@@ -10,14 +10,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
+
 /**
  * A {@link ReporterFactory} for {@link Slf4jReporter} instances.
  * <p/>
- * <b>Configuration Parameters:</b> <table> <tr> <td>Name</td> <td>Default</td> <td>Description</td>
- * </tr> <tr> <td>logger</td> <td>metrics</td> <td>The name of the logger to write metrics to.</td>
- * </tr> <tr> <td>markerName</td> <td>(none)</td> <td>The name of the marker to mark logged metrics
- * with.</td> </tr> <tr> <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
- * </tr> </table>
+ * <b>Configuration Parameters:</b>
+ * <table>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>logger</td>
+ *         <td>metrics</td>
+ *         <td>The name of the logger to write metrics to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>markerName</td>
+ *         <td>(none)</td>
+ *         <td>The name of the marker to mark logged metrics with.</td>
+ *     </tr>
+ *     <tr>
+ *         <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
+ *     </tr>
+ * </table>
  */
 @JsonTypeName("log")
 public class Slf4jReporterFactory extends BaseReporterFactory {
