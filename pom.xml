@@ -212,6 +212,7 @@
     <module>sf-mybatis</module>
     <module>sf-postoffice</module>
     <module>sf-testing</module>
+    <module>sf-archetypes</module>
   </modules>
 
 </project>
