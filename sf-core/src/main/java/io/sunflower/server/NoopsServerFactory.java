@@ -20,9 +20,13 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonTypeName("noops")
 public class NoopsServerFactory implements ServerFactory {
+
+  private static Logger logger = LoggerFactory.getLogger(NoopsServerFactory.class);
 
   @Override
   public Server build(Environment environment) {
@@ -30,6 +34,7 @@ public class NoopsServerFactory implements ServerFactory {
 
       @Override
       protected void boot() throws Exception {
+        logger.info("do nothing, configure your real server type at " + getEnvironment().getName() + ".yml");
       }
 
       @Override
