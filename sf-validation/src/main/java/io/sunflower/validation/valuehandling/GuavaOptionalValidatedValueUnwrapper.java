@@ -11,6 +11,7 @@ import org.hibernate.validator.spi.valuehandling.ValidatedValueUnwrapper;
  * A {@link ValidatedValueUnwrapper} for Guava's {@link Optional}.
  *
  * Extracts the value contained by the {@link Optional} for validation, or produces {@code null}.
+ * @author michael
  */
 public class GuavaOptionalValidatedValueUnwrapper extends ValidatedValueUnwrapper<Optional<?>> {
 

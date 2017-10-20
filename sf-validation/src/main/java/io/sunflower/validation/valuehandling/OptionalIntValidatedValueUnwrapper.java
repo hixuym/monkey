@@ -10,6 +10,7 @@ import org.hibernate.validator.spi.valuehandling.ValidatedValueUnwrapper;
  *
  * Extracts the value contained by the {@link OptionalInt} for validation, or produces {@code
  * null}.
+ * @author michael
  */
 public class OptionalIntValidatedValueUnwrapper extends ValidatedValueUnwrapper<OptionalInt> {
 

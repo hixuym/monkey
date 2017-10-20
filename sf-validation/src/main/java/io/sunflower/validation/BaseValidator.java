@@ -10,6 +10,9 @@ import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 
+/**
+ * @author michael
+ */
 public class BaseValidator {
 
   private BaseValidator() { /* singleton */ }

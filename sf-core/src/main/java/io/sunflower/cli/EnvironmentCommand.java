@@ -33,7 +33,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
       throws Exception {
     final Environment environment = new Environment(bootstrap.getApplication().getName(),
         bootstrap.getObjectMapper(),
-        bootstrap.getValidatorFactory().getValidator(),
+        bootstrap.getValidatorFactory(),
         bootstrap.getMetricRegistry(),
         bootstrap.getClassLoader(),
         bootstrap.getHealthCheckRegistry());

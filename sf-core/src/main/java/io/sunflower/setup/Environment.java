@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
@@ -19,6 +20,7 @@ import io.sunflower.guicey.setup.GuiceyEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
+import io.sunflower.lifecycle.Managed;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerLifecycleListener;
@@ -27,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A sunflower application's environment.
+ *
+ * @author michael
  */
 public class Environment {
 
@@ -36,7 +40,7 @@ public class Environment {
 
   private final ObjectMapper objectMapper;
 
-  private Validator validator;
+  private ValidatorFactory validatorFactory;
 
   private final LifecycleEnvironment lifecycleEnvironment;
   private final GuiceyEnvironment guiceyEnvironment;
@@ -52,7 +56,7 @@ public class Environment {
    */
   public Environment(String name,
       ObjectMapper objectMapper,
-      Validator validator,
+      ValidatorFactory validatorFactory,
       MetricRegistry metricRegistry,
       ClassLoader classLoader,
       HealthCheckRegistry healthCheckRegistry) {
@@ -64,7 +68,7 @@ public class Environment {
 
     this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
 
-    this.validator = validator;
+    this.validatorFactory = validatorFactory;
     this.classLoader = classLoader;
 
     this.guiceyEnvironment = new GuiceyEnvironment();
@@ -75,6 +79,13 @@ public class Environment {
     this.guiceyEnvironment.registry(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
+
+    this.lifecycleEnvironment.manage(new Managed() {
+      @Override
+      public void stop() throws Exception {
+        validatorFactory.close();
+      }
+    });
 
     lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
       @Override
@@ -109,10 +120,10 @@ public class Environment {
    */
   public Environment(String name,
       ObjectMapper objectMapper,
-      Validator validator,
+      ValidatorFactory validatorFactory,
       MetricRegistry metricRegistry,
       ClassLoader classLoader) {
-    this(name, objectMapper, validator, metricRegistry, classLoader,
+    this(name, objectMapper, validatorFactory, metricRegistry, classLoader,
         new HealthCheckRegistry());
   }
 
@@ -147,15 +158,15 @@ public class Environment {
   /**
    * Returns the application's {@link Validator}.
    */
-  public Validator getValidator() {
-    return validator;
+  public ValidatorFactory getValidatorFactory() {
+    return validatorFactory;
   }
 
   /**
    * Sets the application's {@link Validator}.
    */
-  public void setValidator(Validator validator) {
-    this.validator = requireNonNull(validator);
+  public void setValidatorFactory(ValidatorFactory validator) {
+    this.validatorFactory = requireNonNull(validator);
   }
 
   /**

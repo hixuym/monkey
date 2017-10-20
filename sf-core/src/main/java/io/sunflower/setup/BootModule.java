@@ -16,6 +16,7 @@
 package io.sunflower.setup;
 
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
@@ -43,7 +44,9 @@ public class BootModule extends AbstractModule {
     bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
     bind(MetricRegistry.class).toInstance(environment.metrics());
     bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
-    bind(Validator.class).toInstance(environment.getValidator());
+    ValidatorFactory validatorFactory = environment.getValidatorFactory();
+    bind(Validator.class).toInstance(validatorFactory.getValidator());
+    bind(ValidatorFactory.class).toInstance(validatorFactory);
     bind(Environment.class).toInstance(environment);
   }
 }

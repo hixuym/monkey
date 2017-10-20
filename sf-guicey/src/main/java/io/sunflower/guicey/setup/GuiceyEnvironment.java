@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Stage;
 import io.sunflower.guicey.InjectorBuilder;
 import io.sunflower.guicey.LoggerProvider;
 import io.sunflower.guicey.ModulesEx;
@@ -157,7 +158,7 @@ public class GuiceyEnvironment {
     builder.warnOfStaticInjections()
         .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
-    this.injector = builder.createInjector();
+    this.injector = builder.createInjector(Stage.PRODUCTION);
 
     sw.stop();
 

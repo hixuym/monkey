@@ -27,7 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by michael on 17/9/1.
+ *
+ * @author michael
+ * @date 17/9/1
  */
 public class AdminTaskManager implements HttpHandler {
 
@@ -111,15 +113,18 @@ public class AdminTaskManager implements HttpHandler {
     }
   }
 
+  private static final String GET = "GET";
+  private static final String POST = "POST";
+
   @Override
   public void handleRequest(HttpServerExchange exchange) throws Exception {
     HttpString method = exchange.getRequestMethod();
 
-    if ("GET".equalsIgnoreCase(method.toString())) {
+    if (GET.equalsIgnoreCase(method.toString())) {
       doGet(exchange);
     }
 
-    if ("POST".equalsIgnoreCase(method.toString())) {
+    if (POST.equalsIgnoreCase(method.toString())) {
       doPost(exchange);
     }
   }
