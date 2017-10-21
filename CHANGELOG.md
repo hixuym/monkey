@@ -1,6 +1,6 @@
 Sunflower Framework
 ======================================
-1.1.1
+1.2.0
   
   - add sf basic archetypes
   - add ValidatorFactory to Environment instead of Validator
