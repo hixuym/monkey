@@ -5,6 +5,7 @@ Sunflower Framework
   - add sf basic archetypes
   - add ValidatorFactory to Environment instead of Validator
   - guice created use production stage
+  - add javadoc to configuration
   
 1.1.0 - 2017-10-18
 
