@@ -33,7 +33,7 @@ public abstract class UndertowBundle<T extends Configuration> implements Configu
 
     configure(configuration, environment, undertowModule);
 
-    environment.guicey().registry(undertowModule);
+    environment.guicey().register(undertowModule);
   }
 
   @Override

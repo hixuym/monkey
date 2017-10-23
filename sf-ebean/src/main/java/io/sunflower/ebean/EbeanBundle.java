@@ -85,7 +85,7 @@ public abstract class EbeanBundle<T extends Configuration> implements Configured
 
     this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
 
-    environment.guicey().registry(new AbstractModule() {
+    environment.guicey().register(new AbstractModule() {
       @Override
       protected void configure() {
         if (isDefault()) {

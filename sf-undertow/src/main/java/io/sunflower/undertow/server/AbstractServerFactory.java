@@ -72,7 +72,12 @@ public abstract class AbstractServerFactory implements ServerFactory {
     return constract(environment);
   }
 
-  protected abstract Server constract(Environment env);
+  /**
+   * build the server
+   * @param environment
+   * @return
+   */
+  protected abstract Server constract(Environment environment);
 
   @Override
   public void configure(Environment environment) {
@@ -87,12 +92,14 @@ public abstract class AbstractServerFactory implements ServerFactory {
     environment.metrics().register("undertow.workerTaskPool.submittedTasksCount", (Gauge) executor::getSubmittedTasksCount);
     environment.metrics().register("undertow.workerTaskPool.maxSubmittedTaskCount", (Gauge) executor::getMaxSubmittedTaskCount);
 
-    environment.guicey().registry(executor);
+    environment.guicey().register(executor);
   }
 
   private boolean statsEnabled = false;
 
-  // access log enabled when accessLogFormat configured.
+  /**
+   * access log enabled when accessLogFormat configured.
+   */
   private String accessLogFormat;
   private boolean accessLogRotate = true;
   private String accessLogPath = "./logs";

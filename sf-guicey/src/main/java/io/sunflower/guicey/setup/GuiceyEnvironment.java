@@ -56,7 +56,7 @@ public class GuiceyEnvironment {
 
   public GuiceyEnvironment() {
     System.setProperty("file.encoding", "utf-8");
-    registry(new AbstractModule() {
+    register(new AbstractModule() {
       @Override
       protected void configure() {
         binder().disableCircularProxies();
@@ -85,28 +85,28 @@ public class GuiceyEnvironment {
     this.scheduleEnabled = true;
   }
 
-  public void registry(Module... modules) {
+  public void register(Module... modules) {
     checkNotCommited();
     this.moduleLoaded.addAll(Arrays.asList(modules));
   }
 
-  public void registry(Module module) {
+  public void register(Module module) {
     checkNotCommited();
     this.moduleLoaded.add(module);
   }
 
-  public <T> void registry(final T object) {
+  public <T> void register(final T object) {
     checkNotCommited();
     if (object instanceof Module) {
-      registry((Module) object);
+      register((Module) object);
     } else {
-      registry(ModulesEx.fromInstance(object));
+      register(ModulesEx.fromInstance(object));
     }
   }
 
-  public <T> void registry(final Class<T> tClass) {
+  public <T> void register(final Class<T> tClass) {
     checkNotCommited();
-    registry(ModulesEx.fromEagerSingleton(tClass));
+    register(ModulesEx.fromEagerSingleton(tClass));
   }
 
   public void override(Module... modules) {
@@ -126,23 +126,23 @@ public class GuiceyEnvironment {
     Stopwatch sw = Stopwatch.createStarted();
 
     if (scheduleEnabled) {
-      registry(SchedulerSupport.getModule());
+      register(SchedulerSupport.getModule());
     }
 
     if (eventEnabled) {
-      registry(new GuavaApplicationEventModule());
+      register(new GuavaApplicationEventModule());
     }
 
     if (adviseEnabled) {
-      registry(AdvisableAnnotatedMethodScanner.asModule());
+      register(AdvisableAnnotatedMethodScanner.asModule());
     }
 
     if (lifecycleEnabled) {
-      registry(LifecycleSupport.getModule());
+      register(LifecycleSupport.getModule());
     }
 
     if (metricsEnabled) {
-      registry(new MetricsModule());
+      register(new MetricsModule());
     }
 
     InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);

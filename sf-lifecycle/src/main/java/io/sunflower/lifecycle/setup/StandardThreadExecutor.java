@@ -40,15 +40,26 @@ import java.util.concurrent.atomic.LongAdder;
  * 						      	比较适合于业务处理需要远程资源的场景
  *
  * </pre>
+ * @author michael
  */
 public class StandardThreadExecutor extends ThreadPoolExecutor {
 
   public static final int DEFAULT_MIN_THREADS = 20;
   public static final int DEFAULT_MAX_THREADS = 200;
-  public static final int DEFAULT_MAX_IDLE_TIME = 60 * 1000; // 1 minutes
+  /**
+   * 1 minutes
+   */
+  public static final int DEFAULT_MAX_IDLE_TIME = 60 * 1000;
 
-  protected LongAdder submittedTasksCount;    // 正在处理的任务数
-  private int maxSubmittedTaskCount;                // 最大允许同时处理的任务数
+  /**
+   * 正在处理的任务数
+   */
+  protected LongAdder submittedTasksCount;
+
+  /**
+   * 最大允许同时处理的任务数
+   */
+  private int maxSubmittedTaskCount;
 
   public StandardThreadExecutor() {
     this(DEFAULT_MIN_THREADS, DEFAULT_MAX_THREADS);
@@ -80,14 +91,12 @@ public class StandardThreadExecutor extends ThreadPoolExecutor {
 
   public StandardThreadExecutor(int coreThreads, int maxThreads, long keepAliveTime, TimeUnit unit,
       int queueCapacity, ThreadFactory threadFactory) {
-    this(coreThreads, maxThreads, keepAliveTime, unit, queueCapacity, threadFactory,
-        new AbortPolicy());
+    this(coreThreads, maxThreads, keepAliveTime, unit, queueCapacity, threadFactory, new AbortPolicy());
   }
 
   public StandardThreadExecutor(int coreThreads, int maxThreads, long keepAliveTime, TimeUnit unit,
       int queueCapacity, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-    super(coreThreads, maxThreads, keepAliveTime, unit, new ExecutorQueue(), threadFactory,
-        handler);
+    super(coreThreads, maxThreads, keepAliveTime, unit, new ExecutorQueue(), threadFactory, handler);
     ((ExecutorQueue) getQueue()).setStandardThreadExecutor(this);
 
     submittedTasksCount = new LongAdder();
@@ -96,6 +105,7 @@ public class StandardThreadExecutor extends ThreadPoolExecutor {
     maxSubmittedTaskCount = queueCapacity + maxThreads;
   }
 
+  @Override
   public void execute(Runnable command) {
     int count = submittedTasksCount.intValue();
 
@@ -128,6 +138,7 @@ public class StandardThreadExecutor extends ThreadPoolExecutor {
     return maxSubmittedTaskCount;
   }
 
+  @Override
   protected void afterExecute(Runnable r, Throwable t) {
     submittedTasksCount.decrement();
   }
@@ -153,7 +164,9 @@ class ExecutorQueue extends LinkedTransferQueue<Runnable> {
     this.threadPoolExecutor = threadPoolExecutor;
   }
 
-  // 注：代码来源于 tomcat
+  /**
+   * 注：代码来源于 tomcat
+    */
   public boolean force(Runnable o) {
     if (threadPoolExecutor.isShutdown()) {
       throw new RejectedExecutionException(
@@ -163,7 +176,12 @@ class ExecutorQueue extends LinkedTransferQueue<Runnable> {
     return super.offer(o);
   }
 
-  // 注：tomcat的代码进行一些小变更
+  /**
+   * 注：tomcat的代码进行一些小变更
+   * @param o
+   * @return
+   */
+  @Override
   public boolean offer(Runnable o) {
     int poolSize = threadPoolExecutor.getPoolSize();
 
@@ -171,16 +189,19 @@ class ExecutorQueue extends LinkedTransferQueue<Runnable> {
     if (poolSize == threadPoolExecutor.getMaximumPoolSize()) {
       return super.offer(o);
     }
+
     // we have idle threads, just add it to the queue
     // note that we don't use getActiveCount(), see BZ 49730
     if (threadPoolExecutor.getSubmittedTasksCount() <= poolSize) {
       return super.offer(o);
     }
+
     // if we have less threads than maximum force creation of a new
     // thread
     if (poolSize < threadPoolExecutor.getMaximumPoolSize()) {
       return false;
     }
+
     // if we reached here, we need to add it to the queue
     return super.offer(o);
   }

@@ -53,7 +53,7 @@ import java.util.function.UnaryOperator;
         
         @Override
         protected void configure() {
-            registry(AdvisableAnnotatedMethodScanner.asModule());
+            register(AdvisableAnnotatedMethodScanner.asModule());
             
             AdvisesBinder.bind(binder(), LIST_TYPE_LITERAL).toInstance(new ArrayList{@literal <}{@literal >}());
             AdvisesBinder.bindAdvice(binder(), LIST_TYPE_LITERAL, 0).to(AdviseList.class);

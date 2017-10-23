@@ -77,7 +77,7 @@ public class Bootstrap<T extends Configuration> {
   }
 
   /**
-   * Registers the JVM metrics to the metric registry and commit to report the registry metrics via
+   * Registers the JVM metrics to the metric register and commit to report the register metrics via
    * JMX.
    */
   public void registerMetrics() {
@@ -219,9 +219,9 @@ public class Bootstrap<T extends Configuration> {
   }
 
   /**
-   * Sets a custom registry for the application metrics.
+   * Sets a custom register for the application metrics.
    *
-   * @param metricRegistry a custom metric registry
+   * @param metricRegistry a custom metric register
    */
   public void setMetricRegistry(MetricRegistry metricRegistry) {
     this.metricRegistry = metricRegistry;
@@ -248,7 +248,7 @@ public class Bootstrap<T extends Configuration> {
   }
 
   /**
-   * returns the health check registry
+   * returns the health check register
    */
   public HealthCheckRegistry getHealthCheckRegistry() {
     return healthCheckRegistry;

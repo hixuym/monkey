@@ -76,7 +76,7 @@ public class Environment {
     guiceyEnvironment.enableLifecycle();
     guiceyEnvironment.enableMetrics();
 
-    this.guiceyEnvironment.registry(new BootModule(this));
+    this.guiceyEnvironment.register(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -116,7 +116,7 @@ public class Environment {
   }
 
   /**
-   * Creates an environment with default health check registry
+   * Creates an environment with default health check register
    */
   public Environment(String name,
       ObjectMapper objectMapper,

@@ -15,7 +15,9 @@
 
 package io.sunflower.lifecycle.setup;
 
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -24,6 +26,9 @@ import io.sunflower.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class StandardThreadExecutorBuilder {
 
   private static Logger log = LoggerFactory.getLogger(StandardThreadExecutorBuilder.class);
@@ -36,6 +41,7 @@ public class StandardThreadExecutorBuilder {
   private Duration keepAliveTime = Duration.minutes(1);
   private ThreadFactory threadFactory;
   private Duration shutdownTime;
+  private RejectedExecutionHandler rejectedExecutionHandler;
 
   public StandardThreadExecutorBuilder(LifecycleEnvironment environment, String nameFormat,
       ThreadFactory factory) {
@@ -46,6 +52,7 @@ public class StandardThreadExecutorBuilder {
     this.workerQueueSize = 1000;
     this.threadFactory = factory;
     this.shutdownTime = Duration.seconds(5);
+    this.rejectedExecutionHandler = new AbortPolicy();
   }
 
   public StandardThreadExecutorBuilder(LifecycleEnvironment environment, String nameFormat) {
@@ -82,11 +89,16 @@ public class StandardThreadExecutorBuilder {
     return this;
   }
 
+  public StandardThreadExecutorBuilder rejectedExecutionHandler(RejectedExecutionHandler rejectedExecutionHandler) {
+    this.rejectedExecutionHandler = rejectedExecutionHandler;
+    return this;
+  }
+
   public StandardThreadExecutor build() {
 
     StandardThreadExecutor executor = new StandardThreadExecutor(minWorkerThread, maxWorkerThread,
         keepAliveTime.toSeconds(), TimeUnit.SECONDS,
-        workerQueueSize, threadFactory);
+        workerQueueSize, threadFactory, rejectedExecutionHandler);
 
     environment.manage(new ExecutorServiceManager(executor, shutdownTime, nameFormat));
 
