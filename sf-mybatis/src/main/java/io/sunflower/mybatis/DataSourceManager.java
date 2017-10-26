@@ -18,6 +18,9 @@ package io.sunflower.mybatis;
 import io.sunflower.db.ManagedDataSource;
 import io.sunflower.lifecycle.Managed;
 
+/**
+ * @author michael
+ */
 public class DataSourceManager implements Managed {
 
   private final ManagedDataSource dataSource;

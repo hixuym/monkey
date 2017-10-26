@@ -18,6 +18,9 @@ package io.sunflower.guicey;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 
+/**
+ * @author michael
+ */
 public final class ModulesEx {
 
   private static final Module EMPTY_MODULE = new AbstractModule() {

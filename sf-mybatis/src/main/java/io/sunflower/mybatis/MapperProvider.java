@@ -21,6 +21,9 @@ import javax.inject.Provider;
 import com.google.common.base.Objects;
 import org.apache.ibatis.session.SqlSessionManager;
 
+/**
+ * @author michael
+ */
 public class MapperProvider<T> implements Provider<T> {
 
   private final Class<T> mapperType;

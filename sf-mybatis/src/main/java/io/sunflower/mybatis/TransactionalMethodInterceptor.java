@@ -30,6 +30,7 @@ import org.apache.ibatis.session.SqlSessionManager;
 
 /**
  * Method interceptor for {@link Transactional} annotation.
+ * @author michael
  */
 public final class TransactionalMethodInterceptor implements MethodInterceptor {
 

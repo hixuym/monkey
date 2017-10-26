@@ -26,6 +26,9 @@ import io.sunflower.util.Duration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+/**
+ * @author michael
+ */
 public class SqlSessionFactoryHealthCheck extends HealthCheck {
 
   private final SqlSessionFactory sqlSessionFactory;

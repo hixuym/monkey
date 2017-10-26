@@ -23,6 +23,9 @@ import javax.inject.Singleton;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
+/**
+ * @author michael
+ */
 @Singleton
 public final class SqlSessionManagerProvider implements Provider<SqlSessionManager> {
 

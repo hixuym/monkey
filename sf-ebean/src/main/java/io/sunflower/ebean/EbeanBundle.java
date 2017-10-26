@@ -36,6 +36,9 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.util.Duration;
 
+/**
+ * @author michael
+ */
 public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>,
     DatabaseConfiguration<T> {
 

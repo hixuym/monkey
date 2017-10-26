@@ -22,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.postoffice.commonsmail.PostofficeCommonsmailImpl;
 
+/**
+ * @author michael
+ */
 @JsonTypeName("commons-mail")
 public class DefaultPostofficeFactory implements PostofficeFactory {
 

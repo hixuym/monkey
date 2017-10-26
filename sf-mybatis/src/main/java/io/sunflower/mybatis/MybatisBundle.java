@@ -31,6 +31,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+/**
+ * @author michael
+ */
 public abstract class MybatisBundle<T extends Configuration>
     implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 

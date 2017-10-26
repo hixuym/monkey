@@ -29,6 +29,10 @@ import io.sunflower.setup.Bootstrap;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+/**
+ *
+ * @author michael
+ */
 public class DbMigrationCommand extends Command {
 
   public DbMigrationCommand() {

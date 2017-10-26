@@ -24,13 +24,14 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * Created by michael on 16/12/7.
+ *
+ * @author michael
+ * @date 16/12/7
  */
 public class EbeanLocalTxnInterceptor implements MethodInterceptor {
 
   @Transactional
   private static class Internal {
-
   }
 
   @Override

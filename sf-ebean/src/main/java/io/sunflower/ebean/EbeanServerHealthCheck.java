@@ -24,6 +24,9 @@ import io.ebean.SqlQuery;
 import io.sunflower.db.TimeBoundHealthCheck;
 import io.sunflower.util.Duration;
 
+/**
+ * @author michael
+ */
 public class EbeanServerHealthCheck extends HealthCheck {
 
   private final EbeanServer ebeanServer;

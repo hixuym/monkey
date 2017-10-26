@@ -90,17 +90,6 @@ public class InjectorBuilder {
   }
 
   /**
-   * Add additional bindings to the module tracked by the DSL
-   */
-  public InjectorBuilder combineWith(Module... modules) {
-    List<Module> m = new ArrayList<>();
-    m.add(module);
-    m.addAll(Arrays.asList(modules));
-    this.module = Modules.combine(m);
-    return this;
-  }
-
-  /**
    * Iterate through all elements of the current module and pass the output of the ElementVisitor to
    * the provided consumer.  'null' responses from the visitor are ignored.
    *

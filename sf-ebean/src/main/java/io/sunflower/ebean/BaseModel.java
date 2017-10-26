@@ -27,7 +27,8 @@ import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.UpdatedTimestamp;
 
 /**
- * Created by michael on 16/5/28.
+ * @author michael
+ * @date 16/5/28
  */
 @MappedSuperclass
 public class BaseModel extends Model implements Serializable {
@@ -102,7 +103,9 @@ public class BaseModel extends Model implements Serializable {
     this.whenUpdated = whenUpdated;
   }
 
-  // 未持久化的临时对象
+  /**
+   * 未持久化的临时对象
+   */
   public boolean isNew() {
     return db().getBeanState(this).isNew();
   }

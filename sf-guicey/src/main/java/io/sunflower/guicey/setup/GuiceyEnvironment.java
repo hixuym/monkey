@@ -46,7 +46,6 @@ public class GuiceyEnvironment {
 
   private final List<Module> moduleLoaded = Lists.newArrayList();
   private final List<Module> overrideModules = Lists.newArrayList();
-  private final List<Module> combineWithModules = Lists.newArrayList();
 
   private Injector injector;
 
@@ -120,11 +119,6 @@ public class GuiceyEnvironment {
     this.overrideModules.addAll(Arrays.asList(modules));
   }
 
-  public void combineWith(Module... modules) {
-    checkNotCommited();
-    this.combineWithModules.addAll(Arrays.asList(modules));
-  }
-
   public void addInjectorProcessor(InjectorProcessor processor) {
     this.injectorProcessors.add(processor);
   }
@@ -159,10 +153,6 @@ public class GuiceyEnvironment {
 
     if (!overrideModules.isEmpty()) {
       builder.overrideWith(overrideModules);
-    }
-
-    if (!combineWithModules.isEmpty()) {
-      builder.combineWith(combineWithModules.toArray(new Module[]{}));
     }
 
     builder.warnOfStaticInjections()

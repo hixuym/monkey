@@ -20,6 +20,11 @@ package io.sunflower.postoffice;
  */
 public interface Postoffice {
 
+  /**
+   * send mail
+   * @param mail
+   * @throws Exception
+   */
   void send(Mail mail) throws Exception;
 
 }

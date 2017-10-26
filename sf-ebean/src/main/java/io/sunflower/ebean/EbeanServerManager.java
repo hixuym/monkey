@@ -19,6 +19,9 @@ import io.ebeaninternal.server.lib.ShutdownManager;
 import io.sunflower.db.ManagedDataSource;
 import io.sunflower.lifecycle.Managed;
 
+/**
+ * @author michael
+ */
 public class EbeanServerManager implements Managed {
 
   private final ManagedDataSource dataSource;

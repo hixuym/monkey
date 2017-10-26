@@ -18,9 +18,16 @@ package io.sunflower.postoffice;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.jackson.Discoverable;
 
+/**
+ * @author michael
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = MockPostofficeFactory.class)
 public interface PostofficeFactory extends Discoverable {
 
+  /**
+   * postoffice to send mail.
+   * @return
+   */
   Postoffice build();
 
 }
