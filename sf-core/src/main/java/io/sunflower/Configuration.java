@@ -57,6 +57,7 @@ import io.sunflower.server.ServerFactory;
  * your application whose {@code getName()} method will return {@code "Random Person"} and whose
  * {@code getAge()} method will return {@code 43}.
  *
+ * @author michael
  * @see <a href="http://www.yaml.org/YAML_for_ruby.html">YAML Cookbook</a>
  */
 public class Configuration {

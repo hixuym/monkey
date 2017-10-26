@@ -24,6 +24,9 @@ import io.undertow.server.handlers.BlockingHandler;
 import io.undertow.server.handlers.form.EagerFormParsingHandler;
 import io.undertow.server.handlers.form.FormParserFactory;
 
+/**
+ * @author michael
+ */
 public abstract class Handlers {
 
   public static HandlerWrapper BLOCKING_WRAPPER = handler -> {

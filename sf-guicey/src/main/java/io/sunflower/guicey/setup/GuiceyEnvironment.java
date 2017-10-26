@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import io.sunflower.guicey.InjectorBuilder;
+import io.sunflower.guicey.InjectorProcessor;
 import io.sunflower.guicey.LoggerProvider;
 import io.sunflower.guicey.ModulesEx;
 import io.sunflower.guicey.advise.AdvisableAnnotatedMethodScanner;
@@ -36,6 +37,9 @@ import io.sunflower.guicey.visitors.BindingTracingVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class GuiceyEnvironment {
 
   private static Logger LOG = LoggerFactory.getLogger(GuiceyEnvironment.class);
@@ -53,6 +57,8 @@ public class GuiceyEnvironment {
   private boolean adviseEnabled = false;
   private boolean metricsEnabled = false;
   private boolean lifecycleEnabled = false;
+
+  private List<InjectorProcessor> injectorProcessors = Lists.newArrayList();
 
   public GuiceyEnvironment() {
     System.setProperty("file.encoding", "utf-8");
@@ -119,6 +125,10 @@ public class GuiceyEnvironment {
     this.combineWithModules.addAll(Arrays.asList(modules));
   }
 
+  public void addInjectorProcessor(InjectorProcessor processor) {
+    this.injectorProcessors.add(processor);
+  }
+
   public void commit() {
 
     checkNotCommited();
@@ -159,6 +169,8 @@ public class GuiceyEnvironment {
         .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
     this.injector = builder.createInjector(Stage.PRODUCTION);
+
+    injectorProcessors.forEach(it -> it.process(injector));
 
     sw.stop();
 

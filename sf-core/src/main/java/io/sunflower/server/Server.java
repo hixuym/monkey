@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author michael
- *
  */
 public abstract class Server extends ContainerLifeCycle {
 
@@ -38,6 +37,14 @@ public abstract class Server extends ContainerLifeCycle {
     this.environment = environment;
     environment.lifecycle().attach(this);
     this.injector = environment.injector();
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        this.stop();
+      } catch (Exception e) {
+        logger.warn("Failure during stop server", e);
+      }
+    }));
   }
 
   @Override
@@ -64,8 +71,16 @@ public abstract class Server extends ContainerLifeCycle {
     }
   }
 
+  /**
+   * boot the real server
+   * @throws Exception
+   */
   protected abstract void boot() throws Exception;
 
+  /**
+   * shutdown the real server
+   * @throws Exception
+   */
   protected abstract void shutdown() throws Exception;
 
   public Environment getEnvironment() {

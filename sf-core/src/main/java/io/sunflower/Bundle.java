@@ -5,6 +5,7 @@ import io.sunflower.setup.Environment;
 
 /**
  * A reusable bundle of functionality, used to define blocks of application behavior.
+ * @author michael
  */
 public interface Bundle {
 

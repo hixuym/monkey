@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  * into an instance of a {@link Configuration} subclass, which is then validated. If the
  * configuration is valid, the command is run.
  *
+ * @author michael
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  * @see Configuration
  */

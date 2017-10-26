@@ -24,7 +24,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.lifecycle.setup.StandardThreadExecutor;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.ConnectorFactory;

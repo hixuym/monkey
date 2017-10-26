@@ -36,6 +36,7 @@ import io.sunflower.validation.BaseValidator;
  * The pre-commit application environment, containing everything required to bootstrap a Dropwizard
  * command.
  *
+ * @author michael
  * @param <T> the configuration type
  */
 public class Bootstrap<T extends Configuration> {

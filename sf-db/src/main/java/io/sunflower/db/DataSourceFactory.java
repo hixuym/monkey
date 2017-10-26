@@ -309,6 +309,7 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
  *         </td>
  *     </tr>
  * </table>
+ * @author michael
  */
 public class DataSourceFactory implements PooledDataSourceFactory {
 

@@ -23,6 +23,9 @@ import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 @JsonTypeName("noops")
 public class NoopsServerFactory implements ServerFactory {
 

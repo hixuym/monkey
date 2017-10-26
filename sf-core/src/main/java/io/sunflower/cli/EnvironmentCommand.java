@@ -9,6 +9,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 /**
  * A command which executes with a configured {@link Environment}.
  *
+ * @author michael
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  * @see Configuration
  */
@@ -48,6 +49,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
     application.run(configuration, environment);
 
     environment.guicey().commit();
+
     run(environment, namespace, configuration);
   }
 

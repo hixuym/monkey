@@ -16,14 +16,14 @@
 package io.sunflower.server;
 
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
 
 /**
- * A factory for building {@link Server} instances for Dropwizard applications.
+ * A factory for building {@link Server} instances for sunflower applications.
+ * @author michael
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = NoopsServerFactory.class)
 public interface ServerFactory extends Discoverable {

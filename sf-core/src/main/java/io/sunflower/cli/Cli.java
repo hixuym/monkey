@@ -23,11 +23,14 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 /**
  * The command-line runner for Dropwizard application.
+ * @author michael
  */
 public class Cli {
 
   private static final String COMMAND_NAME_ATTR = "command";
-  // assume -h if no arguments are given
+  /**
+   * assume -h if no arguments are given
+    */
   private static final String[][] HELP = {{}, {"-h"}, {"--help"}};
   private static final String[][] VERSION = {{"-v"}, {"--version"}};
 

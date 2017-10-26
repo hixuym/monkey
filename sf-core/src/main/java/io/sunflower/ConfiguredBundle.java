@@ -7,6 +7,7 @@ import io.sunflower.setup.Environment;
  * A reusable bundle of functionality, used to define blocks of application behavior that are
  * conditional on configuration parameters.
  *
+ * @author michael
  * @param <T> the required configuration interface
  */
 public interface ConfiguredBundle<T> {

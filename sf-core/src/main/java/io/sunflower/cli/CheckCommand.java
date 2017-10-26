@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Parses and validates the application's configuration.
  *
+ * @author michael
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  */
 public class CheckCommand<T extends Configuration> extends ConfiguredCommand<T> {

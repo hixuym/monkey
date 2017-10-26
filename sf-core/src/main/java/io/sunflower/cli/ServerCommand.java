@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Runs a application as an HTTP server.
  *
+ * @author michael
  * @param <T> the {@link Configuration} subclass which is loaded from the configuration file
  */
 public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T> {
@@ -71,14 +72,6 @@ public class ServerCommand<T extends Configuration> extends EnvironmentCommand<T
       server.addLifeCycleListener(new LifeCycleListener());
       cleanupAsynchronously();
       server.start();
-
-      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-        try {
-          server.stop();
-        } catch (Exception e) {
-          LOGGER.warn("Failure during stop server", e);
-        }
-      }));
     } catch (Exception e) {
       LOGGER.error("Unable to start server, shutting down", e);
       try {
