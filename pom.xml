@@ -98,7 +98,7 @@
 
       <dependency>
         <groupId>io.sunflower</groupId>
-        <artifactId>sf-guicey</artifactId>
+        <artifactId>sf-guice</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -201,7 +201,7 @@
     <module>sf-metrics-ganglia</module>
     <module>sf-metrics-graphite</module>
     <module>sf-core</module>
-    <module>sf-guicey</module>
+    <module>sf-guice</module>
     <module>sf-lifecycle</module>
     <module>sf-undertow</module>
     <module>sf-extension</module>

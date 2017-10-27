@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
-import io.sunflower.guicey.metrics.Timed;
+import io.sunflower.guice.metrics.Timed;
 
 /**
  * Performs a full JVM garbage collection (probably).

@@ -48,7 +48,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
     application.run(configuration, environment);
 
-    environment.guicey().commit();
+    environment.guice().commit();
 
     run(environment, namespace, configuration);
   }

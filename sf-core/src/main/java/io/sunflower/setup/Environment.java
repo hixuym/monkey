@@ -16,7 +16,7 @@ import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
-import io.sunflower.guicey.setup.GuiceyEnvironment;
+import io.sunflower.guice.setup.GuiceEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
@@ -43,7 +43,7 @@ public class Environment {
   private ValidatorFactory validatorFactory;
 
   private final LifecycleEnvironment lifecycleEnvironment;
-  private final GuiceyEnvironment guiceyEnvironment;
+  private final GuiceEnvironment guiceEnvironment;
 
   private final ExecutorService healthCheckExecutorService;
   private final ClassLoader classLoader;
@@ -71,12 +71,12 @@ public class Environment {
     this.validatorFactory = validatorFactory;
     this.classLoader = classLoader;
 
-    this.guiceyEnvironment = new GuiceyEnvironment();
+    this.guiceEnvironment = new GuiceEnvironment();
 
-    guiceyEnvironment.enableLifecycle();
-    guiceyEnvironment.enableMetrics();
+    guiceEnvironment.enableLifecycle();
+    guiceEnvironment.enableMetrics();
 
-    this.guiceyEnvironment.register(new BootModule(this));
+    this.guiceEnvironment.register(new BootModule(this));
 
     this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -176,12 +176,12 @@ public class Environment {
     return metricRegistry;
   }
 
-  public GuiceyEnvironment guicey() {
-    return guiceyEnvironment;
+  public GuiceEnvironment guice() {
+    return guiceEnvironment;
   }
 
   public Injector injector() {
-    return guiceyEnvironment.getInjector();
+    return guiceEnvironment.getInjector();
   }
 
   /**

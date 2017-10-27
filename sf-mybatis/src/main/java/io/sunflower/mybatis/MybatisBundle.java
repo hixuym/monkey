@@ -94,7 +94,7 @@ public abstract class MybatisBundle<T extends Configuration>
             mappers,
             name());
 
-    environment.guicey().register(new MybatisModule(sqlSessionFactory, mappers));
+    environment.guice().register(new MybatisModule(sqlSessionFactory, mappers));
 
     environment.healthChecks().register(name(), new SqlSessionFactoryHealthCheck(
         environment.getHealthCheckExecutorService(),

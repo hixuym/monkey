@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.TypeLiteral;
-import io.sunflower.guicey.Injectors;
+import io.sunflower.guice.Injectors;
 import io.sunflower.lifecycle.setup.StandardThreadExecutor;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
@@ -92,7 +92,7 @@ public abstract class AbstractServerFactory implements ServerFactory {
     environment.metrics().register("undertow.workerTaskPool.submittedTasksCount", (Gauge) executor::getSubmittedTasksCount);
     environment.metrics().register("undertow.workerTaskPool.maxSubmittedTaskCount", (Gauge) executor::getMaxSubmittedTaskCount);
 
-    environment.guicey().register(executor);
+    environment.guice().register(executor);
   }
 
   private boolean statsEnabled = false;

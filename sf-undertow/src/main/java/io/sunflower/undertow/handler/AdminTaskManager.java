@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.net.MediaType;
-import io.sunflower.guicey.Injectors;
+import io.sunflower.guice.Injectors;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.setup.Environment;
