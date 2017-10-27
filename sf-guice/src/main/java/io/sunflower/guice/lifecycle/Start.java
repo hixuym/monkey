@@ -39,9 +39,9 @@ public @interface Start {
    * ordering system they wish, the following convention is recommended:
    * <p/>
    * 10 - Services that connect to resources and do not depend on other services, for example,
-   * database connections 20-80 - Services that depend on resources, but don't actually commit the
-   * app doing its core functions 90 - Services that commit the app doing its core functions, for
-   * example, listen on queues, listen for HTTP, commit scheduled services
+   * database connections 20-80 - Services that depend on resources, but don't actually start the
+   * app doing its core functions 90 - Services that start the app doing its core functions, for
+   * example, listen on queues, listen for HTTP, start scheduled services
    *
    * @return The order, the least being started first, the greatest being started last
    */

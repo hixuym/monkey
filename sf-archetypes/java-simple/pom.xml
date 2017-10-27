@@ -41,9 +41,9 @@
   <build>
     <!-- verify the archetype with invoker -->
     <plugins>
-      <plugin>
-        <artifactId>maven-invoker-plugin</artifactId>
-      </plugin>
+      <!--<plugin>-->
+        <!--<artifactId>maven-invoker-plugin</artifactId>-->
+      <!--</plugin>-->
     </plugins>
 
     <!-- enable filtering on the POM so we can inject variables -->

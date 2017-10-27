@@ -39,8 +39,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
         bootstrap.getClassLoader(),
         bootstrap.getHealthCheckRegistry());
 
-    configuration.getMetricsFactory()
-        .configure(environment.lifecycle(), bootstrap.getMetricRegistry());
+    configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
 
     configuration.getServerFactory().configure(environment);
 
@@ -48,7 +47,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
     application.run(configuration, environment);
 
-    environment.guice().commit();
+    environment.guice().setup();
 
     run(environment, namespace, configuration);
   }

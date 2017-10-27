@@ -49,7 +49,7 @@ public class GuiceEnvironment {
 
   private Injector injector;
 
-  private boolean commited = false;
+  private boolean setuped = false;
 
   private boolean scheduleEnabled = false;
   private boolean eventEnabled = false;
@@ -91,17 +91,17 @@ public class GuiceEnvironment {
   }
 
   public void register(Module... modules) {
-    checkNotCommited();
+    checkNotSetuped();
     this.moduleLoaded.addAll(Arrays.asList(modules));
   }
 
   public void register(Module module) {
-    checkNotCommited();
+    checkNotSetuped();
     this.moduleLoaded.add(module);
   }
 
   public <T> void register(final T object) {
-    checkNotCommited();
+    checkNotSetuped();
     if (object instanceof Module) {
       register((Module) object);
     } else {
@@ -110,12 +110,12 @@ public class GuiceEnvironment {
   }
 
   public <T> void register(final Class<T> tClass) {
-    checkNotCommited();
+    checkNotSetuped();
     register(ModulesEx.fromEagerSingleton(tClass));
   }
 
   public void override(Module... modules) {
-    checkNotCommited();
+    checkNotSetuped();
     this.overrideModules.addAll(Arrays.asList(modules));
   }
 
@@ -123,9 +123,9 @@ public class GuiceEnvironment {
     this.injectorProcessors.add(processor);
   }
 
-  public void commit() {
+  public void setup() {
 
-    checkNotCommited();
+    checkNotSetuped();
 
     Stopwatch sw = Stopwatch.createStarted();
 
@@ -168,19 +168,19 @@ public class GuiceEnvironment {
       LOG.debug("Guice Injector create time: {}", sw);
     }
 
-    this.commited = true;
+    this.setuped = true;
   }
 
   public Injector getInjector() {
     if (this.injector == null) {
-      throw new IllegalStateException("commit the guice environment first.");
+      throw new IllegalStateException("setup the guice environment first.");
     }
     return injector;
   }
 
-  private void checkNotCommited() {
-    if (commited) {
-      throw new IllegalStateException("guice already commited.");
+  private void checkNotSetuped() {
+    if (setuped) {
+      throw new IllegalStateException("guice already setuped.");
     }
   }
 }

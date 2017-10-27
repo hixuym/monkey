@@ -35,7 +35,7 @@
     </dependency>
     <dependency>
       <groupId>io.sunflower</groupId>
-      <artifactId>sf-guicey</artifactId>
+      <artifactId>sf-guice</artifactId>
     </dependency>
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
