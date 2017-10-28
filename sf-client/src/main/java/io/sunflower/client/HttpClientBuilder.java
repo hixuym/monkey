@@ -66,6 +66,7 @@ import java.util.List;
  * A convenience class for building {@link HttpClient} instances. <p> Among other things, <ul>
  * <li>Disables stale connection checks by default</li> <li>Disables Nagle's algorithm</li>
  * <li>Disables cookie management by default</li> </ul> </p>
+ * @author michael
  */
 public class HttpClientBuilder {
 

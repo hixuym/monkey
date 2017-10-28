@@ -37,6 +37,7 @@ import java.util.TimeZone;
  * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 @JsonTypeName("console")
 public class ConsoleReporterFactory extends BaseFormattedReporterFactory {

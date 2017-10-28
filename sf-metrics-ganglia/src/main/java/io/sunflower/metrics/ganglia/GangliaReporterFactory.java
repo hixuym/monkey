@@ -85,6 +85,7 @@ import java.util.UUID;
  * <td>The dmax value to announce metrics with.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 @JsonTypeName("ganglia")
 public class GangliaReporterFactory extends BaseReporterFactory {

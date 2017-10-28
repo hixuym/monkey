@@ -35,6 +35,7 @@ import org.slf4j.MarkerFactory;
  * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 @JsonTypeName("log")
 public class Slf4jReporterFactory extends BaseReporterFactory {

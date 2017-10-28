@@ -36,6 +36,7 @@ import javax.validation.constraints.NotNull;
  * <td>A list of {@link ReporterFactory reporters} to report metrics.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 public class MetricsFactory {
 

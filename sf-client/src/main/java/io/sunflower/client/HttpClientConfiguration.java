@@ -30,6 +30,7 @@ import java.util.Optional;
 
 /**
  * The configuration class used by {@link HttpClientBuilder}.
+ * @author michael
  */
 public class HttpClientConfiguration {
 

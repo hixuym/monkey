@@ -62,6 +62,7 @@ import javax.validation.constraints.NotNull;
  * {@code udp}.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 @JsonTypeName("graphite")
 public class GraphiteReporterFactory extends BaseReporterFactory {
