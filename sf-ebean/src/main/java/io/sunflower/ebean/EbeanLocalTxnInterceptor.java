@@ -15,82 +15,81 @@
 
 package io.sunflower.ebean;
 
-import java.lang.reflect.Method;
-
 import io.ebean.TxScope;
 import io.ebeaninternal.api.HelpScopeTrans;
 import io.ebeaninternal.api.ScopeTrans;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import java.lang.reflect.Method;
+
 /**
- *
  * @author michael
  * @date 16/12/7
  */
 public class EbeanLocalTxnInterceptor implements MethodInterceptor {
 
-  @Transactional
-  private static class Internal {
-  }
-
-  @Override
-  public Object invoke(MethodInvocation invocation) throws Throwable {
-
-    Transactional transactional = readTransactionMetadata(invocation);
-
-    TxScope txScope = new TxScope();
-    txScope.setType(transactional.type());
-    txScope.setIsolation(transactional.isolation());
-    txScope.setBatch(transactional.batch());
-    txScope.setBatchOnCascade(transactional.batchOnCascade());
-    txScope.setBatchSize(transactional.batchSize());
-    txScope.setServerName(transactional.serverName());
-    txScope.setFlushOnQuery(transactional.flushOnQuery());
-
-    if (!transactional.getGeneratedKeys()) {
-      txScope.setSkipGeneratedKeys();
+    @Transactional
+    private static class Internal {
     }
 
-    txScope.setReadOnly(transactional.readOnly());
-    txScope.setNoRollbackFor(transactional.noRollbackFor());
-    txScope.setRollbackFor(transactional.rollbackFor());
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
 
-    ScopeTrans scopeTrans = HelpScopeTrans.createScopeTrans(txScope);
+        Transactional transactional = readTransactionMetadata(invocation);
 
-    Object result;
+        TxScope txScope = new TxScope();
+        txScope.setType(transactional.type());
+        txScope.setIsolation(transactional.isolation());
+        txScope.setBatch(transactional.batch());
+        txScope.setBatchOnCascade(transactional.batchOnCascade());
+        txScope.setBatchSize(transactional.batchSize());
+        txScope.setServerName(transactional.serverName());
+        txScope.setFlushOnQuery(transactional.flushOnQuery());
 
-    try {
-      result = invocation.proceed();
-    } catch (Error e) {
-      throw scopeTrans.caughtError(e);
-    } catch (RuntimeException e) {
-      throw scopeTrans.caughtThrowable(e);
-    } finally {
-      scopeTrans.onFinally();
+        if (!transactional.getGeneratedKeys()) {
+            txScope.setSkipGeneratedKeys();
+        }
+
+        txScope.setReadOnly(transactional.readOnly());
+        txScope.setNoRollbackFor(transactional.noRollbackFor());
+        txScope.setRollbackFor(transactional.rollbackFor());
+
+        ScopeTrans scopeTrans = HelpScopeTrans.createScopeTrans(txScope);
+
+        Object result;
+
+        try {
+            result = invocation.proceed();
+        } catch (Error e) {
+            throw scopeTrans.caughtError(e);
+        } catch (RuntimeException e) {
+            throw scopeTrans.caughtThrowable(e);
+        } finally {
+            scopeTrans.onFinally();
+        }
+
+        return result;
     }
 
-    return result;
-  }
+    private Transactional readTransactionMetadata(MethodInvocation methodInvocation) {
+        Transactional transactional;
 
-  private Transactional readTransactionMetadata(MethodInvocation methodInvocation) {
-    Transactional transactional;
+        Method method = methodInvocation.getMethod();
+        Class<?> targetClass = methodInvocation.getThis().getClass();
 
-    Method method = methodInvocation.getMethod();
-    Class<?> targetClass = methodInvocation.getThis().getClass();
+        transactional = method.getAnnotation(Transactional.class);
+        if (null == transactional) {
+            // If none on method, try the class.
+            transactional = targetClass.getAnnotation(Transactional.class);
+        }
 
-    transactional = method.getAnnotation(Transactional.class);
-    if (null == transactional) {
-      // If none on method, try the class.
-      transactional = targetClass.getAnnotation(Transactional.class);
+        if (null == transactional) {
+            // If there is no transactional annotation present, use the default
+            transactional = Internal.class.getAnnotation(Transactional.class);
+        }
+
+        return transactional;
     }
-
-    if (null == transactional) {
-      // If there is no transactional annotation present, use the default
-      transactional = Internal.class.getAnnotation(Transactional.class);
-    }
-
-    return transactional;
-  }
 
 }

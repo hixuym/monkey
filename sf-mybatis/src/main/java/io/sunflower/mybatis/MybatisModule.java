@@ -15,13 +15,6 @@
 
 package io.sunflower.mybatis;
 
-import static com.google.inject.matcher.Matchers.annotatedWith;
-import static com.google.inject.matcher.Matchers.any;
-import static com.google.inject.matcher.Matchers.not;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.matcher.AbstractMatcher;
@@ -29,63 +22,68 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static com.google.inject.matcher.Matchers.*;
+
 /**
  * @author michael
  */
 public class MybatisModule extends AbstractModule {
 
-  private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
+    private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
+        @Override
+        public boolean matches(Method method) {
+            return method.getDeclaringClass() == Object.class;
+        }
+    };
+
+    private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
+        @Override
+        public boolean matches(Method method) {
+            return method.isSynthetic();
+        }
+    };
+
+    private final SqlSessionFactory sqlSessionFactory;
+
+    private final List<Class<?>> mappers;
+
+    public MybatisModule(SqlSessionFactory sqlSessionFactory, List<Class<?>> mappers) {
+        this.sqlSessionFactory = sqlSessionFactory;
+        this.mappers = mappers;
+    }
+
     @Override
-    public boolean matches(Method method) {
-      return method.getDeclaringClass() == Object.class;
-    }
-  };
+    protected void configure() {
+        bind(SqlSessionFactory.class).toInstance(sqlSessionFactory);
+        // sql session manager
+        bind(SqlSessionManager.class).toProvider(SqlSessionManagerProvider.class).in(Scopes.SINGLETON);
+        bind(SqlSession.class).to(SqlSessionManager.class).in(Scopes.SINGLETON);
 
-  private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
-    @Override
-    public boolean matches(Method method) {
-      return method.isSynthetic();
-    }
-  };
+        for (Class<?> mapper : mappers) {
+            bind(mapper).toProvider(new MapperProvider(mapper));
+        }
 
-  private final SqlSessionFactory sqlSessionFactory;
-
-  private final List<Class<?>> mappers;
-
-  public MybatisModule(SqlSessionFactory sqlSessionFactory, List<Class<?>> mappers) {
-    this.sqlSessionFactory = sqlSessionFactory;
-    this.mappers = mappers;
-  }
-
-  @Override
-  protected void configure() {
-    bind(SqlSessionFactory.class).toInstance(sqlSessionFactory);
-    // sql session manager
-    bind(SqlSessionManager.class).toProvider(SqlSessionManagerProvider.class).in(Scopes.SINGLETON);
-    bind(SqlSession.class).to(SqlSessionManager.class).in(Scopes.SINGLETON);
-
-    for (Class<?> mapper : mappers) {
-      bind(mapper).toProvider(new MapperProvider(mapper));
+        bindTransactionInterceptors();
     }
 
-    bindTransactionInterceptors();
-  }
-
-  /**
-   * bind transactional interceptors.
-   */
-  private void bindTransactionInterceptors() {
-    // transactional interceptor
-    TransactionalMethodInterceptor interceptor = new TransactionalMethodInterceptor();
-    requestInjection(interceptor);
-    bindInterceptor(any(),
-        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
-        interceptor);
-    // Intercept classes annotated with Transactional, but avoid "double"
-    // interception when a mathod is also annotated inside an annotated
-    // class.
-    bindInterceptor(annotatedWith(Transactional.class),
-        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
-        interceptor);
-  }
+    /**
+     * bind transactional interceptors.
+     */
+    private void bindTransactionInterceptors() {
+        // transactional interceptor
+        TransactionalMethodInterceptor interceptor = new TransactionalMethodInterceptor();
+        requestInjection(interceptor);
+        bindInterceptor(any(),
+                not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
+                interceptor);
+        // Intercept classes annotated with Transactional, but avoid "double"
+        // interception when a mathod is also annotated inside an annotated
+        // class.
+        bindInterceptor(annotatedWith(Transactional.class),
+                not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
+                interceptor);
+    }
 }

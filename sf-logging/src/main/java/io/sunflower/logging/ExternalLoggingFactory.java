@@ -10,15 +10,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("external")
 public class ExternalLoggingFactory implements LoggingFactory {
 
-  @Override
-  public void configure(MetricRegistry metricRegistry, String name) {
-  }
+    @Override
+    public void configure(MetricRegistry metricRegistry, String name) {
+    }
 
-  @Override
-  public void stop() {
-  }
+    @Override
+    public void stop() {
+    }
 
-  @Override
-  public void reset() {
-  }
+    @Override
+    public void reset() {
+    }
 }

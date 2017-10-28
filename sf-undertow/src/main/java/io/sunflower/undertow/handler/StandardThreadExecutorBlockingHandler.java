@@ -26,22 +26,22 @@ import io.undertow.server.HttpServerExchange;
  */
 public class StandardThreadExecutorBlockingHandler implements HttpHandler {
 
-  private final StandardThreadExecutor executor;
-  private final HttpHandler handler;
+    private final StandardThreadExecutor executor;
+    private final HttpHandler handler;
 
-  public StandardThreadExecutorBlockingHandler(
-      StandardThreadExecutor executor, HttpHandler handler) {
-    this.executor = executor;
-    this.handler = handler;
-  }
-
-  @Override
-  public void handleRequest(HttpServerExchange exchange) throws Exception {
-    exchange.startBlocking();
-    if (exchange.isInIoThread()) {
-      exchange.dispatch(executor, handler);
-    } else {
-      handler.handleRequest(exchange);
+    public StandardThreadExecutorBlockingHandler(
+            StandardThreadExecutor executor, HttpHandler handler) {
+        this.executor = executor;
+        this.handler = handler;
     }
-  }
+
+    @Override
+    public void handleRequest(HttpServerExchange exchange) throws Exception {
+        exchange.startBlocking();
+        if (exchange.isInIoThread()) {
+            exchange.dispatch(executor, handler);
+        } else {
+            handler.handleRequest(exchange);
+        }
+    }
 }

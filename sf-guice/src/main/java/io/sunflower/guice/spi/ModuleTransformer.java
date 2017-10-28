@@ -23,5 +23,5 @@ import com.google.inject.Module;
  */
 public interface ModuleTransformer {
 
-  Module transform(Module module);
+    Module transform(Module module);
 }

@@ -21,6 +21,6 @@ package io.sunflower.guice.event;
  */
 public interface ApplicationEventRegistration {
 
-  void unregister();
+    void unregister();
 
 }

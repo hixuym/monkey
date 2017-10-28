@@ -21,16 +21,16 @@ import io.sunflower.guice.InjectorBuilder;
 
 /**
  * Visitor for logging only the Key for each {@code Element} binding
- *
+ * <p>
  * To use with {@link InjectorBuilder}
- *
+ * <p>
  * <code> InjectorBuilder .fromModule(new MyApplicationModule) .forEachElement(new
  * BindingTracingVisitor()) .createInjector(); </code>
  */
 public class KeyTracingVisitor extends DefaultElementVisitor<String> {
 
-  @Override
-  public <T> String visit(Binding<T> binding) {
-    return binding.getKey().toString();
-  }
+    @Override
+    public <T> String visit(Binding<T> binding) {
+        return binding.getKey().toString();
+    }
 }

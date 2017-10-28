@@ -24,10 +24,11 @@ import com.google.inject.Injector;
  */
 public interface InjectorProcessor {
 
-  /**
-   * post process injector, maybe found binding to register to other framework.
-   * @param injector
-   */
-  void process(Injector injector);
+    /**
+     * post process injector, maybe found binding to register to other framework.
+     *
+     * @param injector
+     */
+    void process(Injector injector);
 
 }

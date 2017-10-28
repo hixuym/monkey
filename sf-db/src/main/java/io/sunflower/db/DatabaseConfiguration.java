@@ -19,5 +19,5 @@ import io.sunflower.Configuration;
 
 public interface DatabaseConfiguration<T extends Configuration> {
 
-  PooledDataSourceFactory getDataSourceFactory(T configuration);
+    PooledDataSourceFactory getDataSourceFactory(T configuration);
 }

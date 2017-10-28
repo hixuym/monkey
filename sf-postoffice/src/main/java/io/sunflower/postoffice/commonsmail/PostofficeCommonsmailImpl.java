@@ -10,54 +10,54 @@
 
 package io.sunflower.postoffice.commonsmail;
 
-import java.util.Optional;
-import javax.mail.internet.AddressException;
-
 import io.sunflower.postoffice.Mail;
 import io.sunflower.postoffice.Postoffice;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
+import javax.mail.internet.AddressException;
+import java.util.Optional;
+
 public class PostofficeCommonsmailImpl implements Postoffice {
 
-  private final CommonsmailHelper commonsmailHelper;
+    private final CommonsmailHelper commonsmailHelper;
 
-  private final String smtpHost;
-  private final int smtpPort;
-  private final boolean smtpSsl;
-  private final Optional<String> smtpUser;
-  private final Optional<String> smtpPassword;
-  private final boolean smtpDebug;
+    private final String smtpHost;
+    private final int smtpPort;
+    private final boolean smtpSsl;
+    private final Optional<String> smtpUser;
+    private final Optional<String> smtpPassword;
+    private final boolean smtpDebug;
 
 
-  // May be used for test
-  public PostofficeCommonsmailImpl(String smtpHost,
-      int smtpPort, boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
-      boolean smtpDebug) {
-    this.commonsmailHelper = new CommonsmailHelperImpl();
-    this.smtpHost = smtpHost;
-    this.smtpPort = smtpPort;
-    this.smtpSsl = smtpSsl;
-    this.smtpUser = smtpUser;
-    this.smtpPassword = smtpPassword;
-    this.smtpDebug = smtpDebug;
-  }
+    // May be used for test
+    public PostofficeCommonsmailImpl(String smtpHost,
+                                     int smtpPort, boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
+                                     boolean smtpDebug) {
+        this.commonsmailHelper = new CommonsmailHelperImpl();
+        this.smtpHost = smtpHost;
+        this.smtpPort = smtpPort;
+        this.smtpSsl = smtpSsl;
+        this.smtpUser = smtpUser;
+        this.smtpPassword = smtpPassword;
+        this.smtpDebug = smtpDebug;
+    }
 
-  @Override
-  public void send(Mail mail) throws EmailException, AddressException {
+    @Override
+    public void send(Mail mail) throws EmailException, AddressException {
 
-    // create a correct multipart email based on html / txt content:
-    MultiPartEmail multiPartEmail = commonsmailHelper.createMultiPartEmailWithContent(mail);
+        // create a correct multipart email based on html / txt content:
+        MultiPartEmail multiPartEmail = commonsmailHelper.createMultiPartEmailWithContent(mail);
 
-    // fill the from, to, bcc, css and all other fields:
-    commonsmailHelper.doPopulateMultipartMailWithContent(multiPartEmail, mail);
+        // fill the from, to, bcc, css and all other fields:
+        commonsmailHelper.doPopulateMultipartMailWithContent(multiPartEmail, mail);
 
-    // set server parameters so we can send the MultiPartEmail:
-    commonsmailHelper.doSetServerParameter(multiPartEmail, smtpHost, smtpPort, smtpSsl,
-        smtpUser, smtpPassword, smtpDebug);
+        // set server parameters so we can send the MultiPartEmail:
+        commonsmailHelper.doSetServerParameter(multiPartEmail, smtpHost, smtpPort, smtpSsl,
+                smtpUser, smtpPassword, smtpDebug);
 
-    // And send it:
-    multiPartEmail.send();
-  }
+        // And send it:
+        multiPartEmail.send();
+    }
 
 }

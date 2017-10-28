@@ -5,24 +5,24 @@ package io.sunflower.extension;
  */
 public class ExtensionLoaderException extends RuntimeException {
 
-  public ExtensionLoaderException() {
-    super();
-  }
+    public ExtensionLoaderException() {
+        super();
+    }
 
-  public ExtensionLoaderException(String message) {
-    super(message);
-  }
+    public ExtensionLoaderException(String message) {
+        super(message);
+    }
 
-  public ExtensionLoaderException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public ExtensionLoaderException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public ExtensionLoaderException(Throwable cause) {
-    super(cause);
-  }
+    public ExtensionLoaderException(Throwable cause) {
+        super(cause);
+    }
 
-  protected ExtensionLoaderException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+    protected ExtensionLoaderException(String message, Throwable cause, boolean enableSuppression,
+                                       boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

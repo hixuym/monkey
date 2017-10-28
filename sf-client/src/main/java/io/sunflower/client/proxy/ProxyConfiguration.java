@@ -15,15 +15,15 @@
 
 package io.sunflower.client.proxy;
 
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.validation.OneOf;
 import io.sunflower.validation.PortRange;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.annotation.Nullable;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Configuration of access to a remote host through a proxy server
@@ -42,85 +42,85 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class ProxyConfiguration {
 
-  @NotEmpty
-  private String host;
+    @NotEmpty
+    private String host;
 
-  @PortRange(min = -1)
-  private Integer port = -1;
+    @PortRange(min = -1)
+    private Integer port = -1;
 
-  @OneOf(value = {"http", "https"}, ignoreCase = true)
-  private String scheme = "http";
+    @OneOf(value = {"http", "https"}, ignoreCase = true)
+    private String scheme = "http";
 
-  @Valid
-  @Nullable
-  private AuthConfiguration auth;
+    @Valid
+    @Nullable
+    private AuthConfiguration auth;
 
-  @Nullable
-  private List<String> nonProxyHosts;
+    @Nullable
+    private List<String> nonProxyHosts;
 
-  public ProxyConfiguration() {
-  }
+    public ProxyConfiguration() {
+    }
 
-  public ProxyConfiguration(@NotNull String host) {
-    this.host = host;
-  }
+    public ProxyConfiguration(@NotNull String host) {
+        this.host = host;
+    }
 
-  public ProxyConfiguration(@NotNull String host, int port) {
-    this(host);
-    this.port = port;
-  }
+    public ProxyConfiguration(@NotNull String host, int port) {
+        this(host);
+        this.port = port;
+    }
 
-  public ProxyConfiguration(@NotNull String host, int port, String scheme, AuthConfiguration auth) {
-    this(host, port);
-    this.scheme = scheme;
-    this.auth = auth;
-  }
+    public ProxyConfiguration(@NotNull String host, int port, String scheme, AuthConfiguration auth) {
+        this(host, port);
+        this.scheme = scheme;
+        this.auth = auth;
+    }
 
-  @JsonProperty
-  public String getHost() {
-    return host;
-  }
+    @JsonProperty
+    public String getHost() {
+        return host;
+    }
 
-  @JsonProperty
-  public void setHost(String host) {
-    this.host = host;
-  }
+    @JsonProperty
+    public void setHost(String host) {
+        this.host = host;
+    }
 
-  @JsonProperty
-  public Integer getPort() {
-    return port;
-  }
+    @JsonProperty
+    public Integer getPort() {
+        return port;
+    }
 
-  @JsonProperty
-  public void setPort(Integer port) {
-    this.port = port;
-  }
+    @JsonProperty
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 
-  @JsonProperty
-  public String getScheme() {
-    return scheme;
-  }
+    @JsonProperty
+    public String getScheme() {
+        return scheme;
+    }
 
-  @JsonProperty
-  public void setScheme(String scheme) {
-    this.scheme = scheme;
-  }
+    @JsonProperty
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
 
-  @JsonProperty
-  public List<String> getNonProxyHosts() {
-    return nonProxyHosts;
-  }
+    @JsonProperty
+    public List<String> getNonProxyHosts() {
+        return nonProxyHosts;
+    }
 
-  @JsonProperty
-  public void setNonProxyHosts(List<String> nonProxyHosts) {
-    this.nonProxyHosts = nonProxyHosts;
-  }
+    @JsonProperty
+    public void setNonProxyHosts(List<String> nonProxyHosts) {
+        this.nonProxyHosts = nonProxyHosts;
+    }
 
-  public AuthConfiguration getAuth() {
-    return auth;
-  }
+    public AuthConfiguration getAuth() {
+        return auth;
+    }
 
-  public void setAuth(AuthConfiguration auth) {
-    this.auth = auth;
-  }
+    public void setAuth(AuthConfiguration auth) {
+        this.auth = auth;
+    }
 }

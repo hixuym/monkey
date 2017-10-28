@@ -24,10 +24,11 @@ import io.sunflower.jackson.Discoverable;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = MockPostofficeFactory.class)
 public interface PostofficeFactory extends Discoverable {
 
-  /**
-   * postoffice to send mail.
-   * @return
-   */
-  Postoffice build();
+    /**
+     * postoffice to send mail.
+     *
+     * @return
+     */
+    Postoffice build();
 
 }

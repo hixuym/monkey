@@ -12,65 +12,65 @@ import io.undertow.Undertow;
 @JsonTypeName("http")
 public class HttpConnectorFactory implements ConnectorFactory {
 
-  public static ConnectorFactory application() {
-    final HttpConnectorFactory factory = new HttpConnectorFactory();
-    factory.port = 8080;
-    return factory;
-  }
+    public static ConnectorFactory application() {
+        final HttpConnectorFactory factory = new HttpConnectorFactory();
+        factory.port = 8080;
+        return factory;
+    }
 
-  public static ConnectorFactory admin() {
-    final HttpConnectorFactory factory = new HttpConnectorFactory();
-    factory.port = 8081;
-    return factory;
-  }
+    public static ConnectorFactory admin() {
+        final HttpConnectorFactory factory = new HttpConnectorFactory();
+        factory.port = 8081;
+        return factory;
+    }
 
-  @PortRange
-  private int port = 8080;
+    @PortRange
+    private int port = 8080;
 
-  private String bindHost;
+    private String bindHost;
 
-  private boolean useProxyProtocol = false;
+    private boolean useProxyProtocol = false;
 
-  @JsonProperty
-  public boolean isUseProxyProtocol() {
-    return useProxyProtocol;
-  }
+    @JsonProperty
+    public boolean isUseProxyProtocol() {
+        return useProxyProtocol;
+    }
 
-  @JsonProperty
-  public void setUseProxyProtocol(boolean useProxyProtocol) {
-    this.useProxyProtocol = useProxyProtocol;
-  }
+    @JsonProperty
+    public void setUseProxyProtocol(boolean useProxyProtocol) {
+        this.useProxyProtocol = useProxyProtocol;
+    }
 
-  @JsonProperty
-  public int getPort() {
-    return port;
-  }
+    @JsonProperty
+    public int getPort() {
+        return port;
+    }
 
-  @JsonProperty
-  public void setPort(int port) {
-    this.port = port;
-  }
+    @JsonProperty
+    public void setPort(int port) {
+        this.port = port;
+    }
 
-  @JsonProperty
-  public String getBindHost() {
-    return bindHost;
-  }
+    @JsonProperty
+    public String getBindHost() {
+        return bindHost;
+    }
 
-  @JsonProperty
-  public void setBindHost(String bindHost) {
-    this.bindHost = bindHost;
-  }
+    @JsonProperty
+    public void setBindHost(String bindHost) {
+        this.bindHost = bindHost;
+    }
 
-  @Override
-  public Undertow.ListenerBuilder build(Environment environment) {
+    @Override
+    public Undertow.ListenerBuilder build(Environment environment) {
 
-    Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
+        Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
 
-    builder.setType(Undertow.ListenerType.HTTP);
-    builder.setHost(bindHost);
-    builder.setPort(port);
-    builder.setUseProxyProtocol(useProxyProtocol);
+        builder.setType(Undertow.ListenerType.HTTP);
+        builder.setHost(bindHost);
+        builder.setPort(port);
+        builder.setUseProxyProtocol(useProxyProtocol);
 
-    return builder;
-  }
+        return builder;
+    }
 }

@@ -15,13 +15,13 @@
 
 package io.sunflower.undertow;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * AppHandlers
@@ -29,7 +29,7 @@ import com.google.inject.BindingAnnotation;
  * @author michael created on 17/10/17 11:16
  */
 @Retention(RUNTIME)
-@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @BindingAnnotation
 public @interface AppHandlers {
 

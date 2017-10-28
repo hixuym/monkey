@@ -32,7 +32,7 @@
 
     <!-- exclude the generated code by JMH from the analysis -->
     <Match>
-       <Package name="~io\.dropwizard\.benchmarks\..*\.generated"/>
+        <Package name="~io\.dropwizard\.benchmarks\..*\.generated"/>
     </Match>
 
     <Match>

@@ -24,13 +24,13 @@ import com.google.inject.spi.StaticInjectionRequest;
  */
 public class IsNotStaticInjectionVisitor extends DefaultElementVisitor<Boolean> {
 
-  @Override
-  protected Boolean visitOther(Element element) {
-    return true;
-  }
+    @Override
+    protected Boolean visitOther(Element element) {
+        return true;
+    }
 
-  @Override
-  public Boolean visit(StaticInjectionRequest element) {
-    return false;
-  }
+    @Override
+    public Boolean visit(StaticInjectionRequest element) {
+        return false;
+    }
 }

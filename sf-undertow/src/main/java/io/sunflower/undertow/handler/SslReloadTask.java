@@ -15,34 +15,34 @@
 
 package io.sunflower.undertow.handler;
 
-import java.io.PrintWriter;
-
 import com.google.common.collect.ImmutableMultimap;
 import io.sunflower.undertow.SslReload;
 import io.sunflower.undertow.ssl.SslContextFactory;
+
+import java.io.PrintWriter;
 
 /**
  * A task that will refresh all ssl factories with up to date certificate information
  */
 public class SslReloadTask extends Task {
 
-  private final SslReload reloader;
+    private final SslReload reloader;
 
-  public SslReloadTask(SslReload reloader) {
-    super("reload-ssl");
-    this.reloader = reloader;
-  }
+    public SslReloadTask(SslReload reloader) {
+        super("reload-ssl");
+        this.reloader = reloader;
+    }
 
-  @Override
-  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
-      throws Exception {
-    // Iterate through all the reloaders first to ensure valid configuration
-    reloader.reload(new SslContextFactory());
+    @Override
+    public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
+            throws Exception {
+        // Iterate through all the reloaders first to ensure valid configuration
+        reloader.reload(new SslContextFactory());
 
-    // Now we know that configuration is valid, reload for real
-    reloader.reload();
+        // Now we know that configuration is valid, reload for real
+        reloader.reload();
 
-    output.write("Reloaded certificate configuration\n");
-  }
+        output.write("Reloaded certificate configuration\n");
+    }
 }
 

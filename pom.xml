@@ -1,218 +1,219 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.sunflower</groupId>
-    <artifactId>sunflower</artifactId>
-    <version>1</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-
-  <artifactId>sf-framework</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-
-  <name>sunflower framework projects</name>
-
-  <url>${sunflower.url}</url>
-
-  <description>
-    Sunflower Framework Project.
-  </description>
-
-  <scm>
-    <url>https://github.com/hixuym/sf-framework</url>
-    <connection>scm:git:git@github.com:hixuym/sf-framework.git</connection>
-    <developerConnection>scm:git:git@github.com:hixuym/sf-framework.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/hixuym/sf-framework/issues/</url>
-  </issueManagement>
-
-  <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/hixuym/sf-framework/</url>
-  </ciManagement>
-
-  <properties>
-    <sunflower.url>http://www.sunflower.io/${project.version}</sunflower.url>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
-    <maven.site.deploy.skip>true</maven.site.deploy.skip>
-    <junit.version>4.12</junit.version>
-    <mockito.version>2.7.22</mockito.version>
-    <assertj.version>3.6.2</assertj.version>
-    <slf4j.version>1.7.25</slf4j.version>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
+    <parent>
         <groupId>io.sunflower</groupId>
-        <artifactId>sf-bom</artifactId>
-        <version>${sf-bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+        <artifactId>sunflower</artifactId>
+        <version>1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-util</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <artifactId>sf-framework</artifactId>
+    <version>1.3.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-jackson</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <name>sunflower framework projects</name>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-validation</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <url>${sunflower.url}</url>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-configuration</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <description>
+        Sunflower Framework Project.
+    </description>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-logging</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <scm>
+        <url>https://github.com/hixuym/sf-framework</url>
+        <connection>scm:git:git@github.com:hixuym/sf-framework.git</connection>
+        <developerConnection>scm:git:git@github.com:hixuym/sf-framework.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-guice</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/hixuym/sf-framework/issues/</url>
+    </issueManagement>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-lifecycle</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/hixuym/sf-framework/</url>
+    </ciManagement>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-cache</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <properties>
+        <sunflower.url>http://www.sunflower.io/${project.version}</sunflower.url>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
+        <maven.site.deploy.skip>true</maven.site.deploy.skip>
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.7.22</mockito.version>
+        <assertj.version>3.6.2</assertj.version>
+        <slf4j.version>1.7.25</slf4j.version>
+    </properties>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-testing</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-bom</artifactId>
+                <version>${sf-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-metrics</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-metrics-ganglia</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-metrics-graphite</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-jackson</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-undertow</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-reflect</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-extension</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-configuration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-db</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-logging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-ebean</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-guice</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-migrations</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-lifecycle</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-postoffice</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-client</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-mybatis</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-  <modules>
-    <module>sf-logging</module>
-    <module>sf-configuration</module>
-    <module>sf-jackson</module>
-    <module>sf-util</module>
-    <module>sf-reflect</module>
-    <module>sf-validation</module>
-    <module>sf-metrics</module>
-    <module>sf-metrics-ganglia</module>
-    <module>sf-metrics-graphite</module>
-    <module>sf-core</module>
-    <module>sf-guice</module>
-    <module>sf-lifecycle</module>
-    <module>sf-undertow</module>
-    <module>sf-extension</module>
-    <module>sf-client</module>
-    <module>sf-db</module>
-    <module>sf-ebean</module>
-    <module>sf-migrations</module>
-    <module>sf-mybatis</module>
-    <module>sf-postoffice</module>
-    <module>sf-testing</module>
-    <module>sf-archetypes</module>
-  </modules>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-testing</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-metrics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-metrics-ganglia</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-metrics-graphite</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-undertow</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-reflect</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ebean</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-migrations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-postoffice</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>sf-logging</module>
+        <module>sf-configuration</module>
+        <module>sf-jackson</module>
+        <module>sf-util</module>
+        <module>sf-reflect</module>
+        <module>sf-validation</module>
+        <module>sf-metrics</module>
+        <module>sf-metrics-ganglia</module>
+        <module>sf-metrics-graphite</module>
+        <module>sf-core</module>
+        <module>sf-guice</module>
+        <module>sf-lifecycle</module>
+        <module>sf-undertow</module>
+        <module>sf-extension</module>
+        <module>sf-client</module>
+        <module>sf-db</module>
+        <module>sf-ebean</module>
+        <module>sf-migrations</module>
+        <module>sf-mybatis</module>
+        <module>sf-postoffice</module>
+        <module>sf-testing</module>
+        <module>sf-archetypes</module>
+    </modules>
 
 </project>

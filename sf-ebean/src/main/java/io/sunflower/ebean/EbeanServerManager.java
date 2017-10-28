@@ -24,20 +24,20 @@ import io.sunflower.lifecycle.Managed;
  */
 public class EbeanServerManager implements Managed {
 
-  private final ManagedDataSource dataSource;
+    private final ManagedDataSource dataSource;
 
-  public EbeanServerManager(ManagedDataSource dataSource) {
-    this.dataSource = dataSource;
-  }
+    public EbeanServerManager(ManagedDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
-  @Override
-  public void start() throws Exception {
-    this.dataSource.start();
-  }
+    @Override
+    public void start() throws Exception {
+        this.dataSource.start();
+    }
 
-  @Override
-  public void stop() throws Exception {
-    this.dataSource.stop();
-    ShutdownManager.shutdown();
-  }
+    @Override
+    public void stop() throws Exception {
+        this.dataSource.stop();
+        ShutdownManager.shutdown();
+    }
 }

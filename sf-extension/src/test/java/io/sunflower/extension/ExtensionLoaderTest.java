@@ -24,67 +24,67 @@ import org.junit.Test;
  */
 public class ExtensionLoaderTest extends TestCase {
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  @Test
-  public void testExtensionNormal() {
-    // 单例模式下只会构造一次实例
-    Assert.assertEquals(1,
-        ExtensionLoader.of(SpiTestInterface.class).getExtension("spitest").spiHello());
-    Assert.assertEquals(1,
-        ExtensionLoader.of(SpiTestInterface.class).getExtension("spitest").spiHello());
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
+    public void testExtensionNormal() {
+        // 单例模式下只会构造一次实例
+        Assert.assertEquals(1,
+                ExtensionLoader.of(SpiTestInterface.class).getExtension("spitest").spiHello());
+        Assert.assertEquals(1,
+                ExtensionLoader.of(SpiTestInterface.class).getExtension("spitest").spiHello());
 
-    // 多例模式下在每次获取的时候进行实例化
-    Assert.assertEquals(1,
-        ExtensionLoader.of(SpiPrototypeInterface.class).getExtension("spiPrototypeTest")
-            .spiHello());
-    Assert.assertEquals(2,
-        ExtensionLoader.of(SpiPrototypeInterface.class).getExtension("spiPrototypeTest")
-            .spiHello());
+        // 多例模式下在每次获取的时候进行实例化
+        Assert.assertEquals(1,
+                ExtensionLoader.of(SpiPrototypeInterface.class).getExtension("spiPrototypeTest")
+                        .spiHello());
+        Assert.assertEquals(2,
+                ExtensionLoader.of(SpiPrototypeInterface.class).getExtension("spiPrototypeTest")
+                        .spiHello());
 
-    // 手动添加实现类
-    Assert
-        .assertEquals(1, ExtensionLoader.of(SpiPrototypeInterface.class).getExtensions("").size());
-    ExtensionLoader loader = ExtensionLoader.of(SpiPrototypeInterface.class);
-    loader.addExtensionClass(SpiPrototypeTestImpl2.class);
+        // 手动添加实现类
+        Assert
+                .assertEquals(1, ExtensionLoader.of(SpiPrototypeInterface.class).getExtensions("").size());
+        ExtensionLoader loader = ExtensionLoader.of(SpiPrototypeInterface.class);
+        loader.addExtensionClass(SpiPrototypeTestImpl2.class);
 
-    // 返回所有实现类
-    ExtensionLoader.initExtensionLoader(SpiPrototypeInterface.class);
-    Assert.assertEquals(1, ExtensionLoader.of(SpiTestInterface.class).getExtensions("").size());
-    Assert
-        .assertEquals(2, ExtensionLoader.of(SpiPrototypeInterface.class).getExtensions("").size());
+        // 返回所有实现类
+        ExtensionLoader.initExtensionLoader(SpiPrototypeInterface.class);
+        Assert.assertEquals(1, ExtensionLoader.of(SpiTestInterface.class).getExtensions("").size());
+        Assert
+                .assertEquals(2, ExtensionLoader.of(SpiPrototypeInterface.class).getExtensions("").size());
 
-  }
-
-  @Test
-  public void testExtensionAbNormal() {
-
-    // 没有注解spi的接口无法进行扩展
-    try {
-      ExtensionLoader.of(NotSpiInterface.class);
-      Assert.assertTrue(false);
-    } catch (Exception e) {
-      Assert.assertTrue(e.getMessage().contains("without @Spi annotation"));
     }
 
-    // 非接口无法进行扩展
-    try {
-      ExtensionLoader.of(SpiTestImpl.class);
-      Assert.assertTrue(false);
-    } catch (Exception e) {
-      Assert.assertTrue(e.getMessage().contains("is not interface"));
+    @Test
+    public void testExtensionAbNormal() {
+
+        // 没有注解spi的接口无法进行扩展
+        try {
+            ExtensionLoader.of(NotSpiInterface.class);
+            Assert.assertTrue(false);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("without @Spi annotation"));
+        }
+
+        // 非接口无法进行扩展
+        try {
+            ExtensionLoader.of(SpiTestImpl.class);
+            Assert.assertTrue(false);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("is not interface"));
+        }
+
+        Assert.assertNull(ExtensionLoader.of(SpiWithoutImpl.class).getExtension("default"));
     }
 
-    Assert.assertNull(ExtensionLoader.of(SpiWithoutImpl.class).getExtension("default"));
-  }
+    // not spi
+    public interface NotSpiInterface {
 
-  // not spi
-  public interface NotSpiInterface {
+    }
 
-  }
+    // not impl
+    @Spi
+    public interface SpiWithoutImpl {
 
-  // not impl
-  @Spi
-  public interface SpiWithoutImpl {
-
-  }
+    }
 }

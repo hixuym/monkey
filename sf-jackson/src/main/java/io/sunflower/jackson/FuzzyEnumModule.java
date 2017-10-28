@@ -1,26 +1,20 @@
 package io.sunflower.jackson;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.Deserializers;
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import io.sunflower.util.Enums;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.deser.Deserializers;
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
-import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
-import io.sunflower.util.Enums;
 
 /**
  * A module for deserializing enums that is more permissive than the default.
@@ -31,83 +25,83 @@ import io.sunflower.util.Enums;
  */
 public class FuzzyEnumModule extends Module {
 
-  private static class PermissiveEnumDeserializer extends StdScalarDeserializer<Enum<?>> {
+    private static class PermissiveEnumDeserializer extends StdScalarDeserializer<Enum<?>> {
 
-    private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-    private final Enum<?>[] constants;
-    private final List<String> acceptedValues;
+        private final Enum<?>[] constants;
+        private final List<String> acceptedValues;
 
-    @SuppressWarnings("unchecked")
-    protected PermissiveEnumDeserializer(Class<Enum<?>> clazz) {
-      super(clazz);
-      this.constants = ((Class<Enum<?>>) handledType()).getEnumConstants();
-      this.acceptedValues = new ArrayList<>();
-      for (Enum<?> constant : constants) {
-        acceptedValues.add(constant.name());
-      }
+        @SuppressWarnings("unchecked")
+        protected PermissiveEnumDeserializer(Class<Enum<?>> clazz) {
+            super(clazz);
+            this.constants = ((Class<Enum<?>>) handledType()).getEnumConstants();
+            this.acceptedValues = new ArrayList<>();
+            for (Enum<?> constant : constants) {
+                acceptedValues.add(constant.name());
+            }
+        }
+
+        @Override
+        public Enum<?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+            Enum<?> constant = Enums.fromStringFuzzy(jp.getText(), constants);
+            if (constant != null) {
+                return constant;
+            }
+            throw ctxt.mappingException(jp.getText() + " was not one of " + acceptedValues);
+        }
+    }
+
+    private static class PermissiveEnumDeserializers extends Deserializers.Base {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public JsonDeserializer<?> findEnumDeserializer(Class<?> type,
+                                                        DeserializationConfig config,
+                                                        BeanDescription desc) throws JsonMappingException {
+            // If the user configured to use `toString` method to deserialize enums
+            if (config.hasDeserializationFeatures(
+                    DeserializationFeature.READ_ENUMS_USING_TO_STRING.getMask())) {
+                return null;
+            }
+
+            // If there is a JsonCreator annotation we should use that instead of the PermissiveEnumDeserializer
+            final Collection<AnnotatedMethod> factoryMethods = desc.getFactoryMethods();
+            if (factoryMethods != null) {
+                for (AnnotatedMethod am : factoryMethods) {
+                    if (am.hasAnnotation(JsonCreator.class)) {
+                        return null;
+                    }
+                }
+            }
+
+            // If any enum choice is annotated with an annotation from jackson, defer to
+            // Jackson to do the deserialization
+            for (Field field : type.getFields()) {
+                for (Annotation annotation : field.getAnnotations()) {
+                    final String packageName = annotation.annotationType().getPackage().getName();
+                    if (packageName.equals("com.fasterxml.jackson.annotation")) {
+                        return null;
+                    }
+                }
+            }
+
+            return new PermissiveEnumDeserializer((Class<Enum<?>>) type);
+        }
     }
 
     @Override
-    public Enum<?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-      Enum<?> constant = Enums.fromStringFuzzy(jp.getText(), constants);
-      if (constant != null) {
-        return constant;
-      }
-      throw ctxt.mappingException(jp.getText() + " was not one of " + acceptedValues);
+    public String getModuleName() {
+        return "permissive-enums";
     }
-  }
-
-  private static class PermissiveEnumDeserializers extends Deserializers.Base {
 
     @Override
-    @SuppressWarnings("unchecked")
-    public JsonDeserializer<?> findEnumDeserializer(Class<?> type,
-        DeserializationConfig config,
-        BeanDescription desc) throws JsonMappingException {
-      // If the user configured to use `toString` method to deserialize enums
-      if (config.hasDeserializationFeatures(
-          DeserializationFeature.READ_ENUMS_USING_TO_STRING.getMask())) {
-        return null;
-      }
-
-      // If there is a JsonCreator annotation we should use that instead of the PermissiveEnumDeserializer
-      final Collection<AnnotatedMethod> factoryMethods = desc.getFactoryMethods();
-      if (factoryMethods != null) {
-        for (AnnotatedMethod am : factoryMethods) {
-          if (am.hasAnnotation(JsonCreator.class)) {
-            return null;
-          }
-        }
-      }
-
-      // If any enum choice is annotated with an annotation from jackson, defer to
-      // Jackson to do the deserialization
-      for (Field field : type.getFields()) {
-        for (Annotation annotation : field.getAnnotations()) {
-          final String packageName = annotation.annotationType().getPackage().getName();
-          if (packageName.equals("com.fasterxml.jackson.annotation")) {
-            return null;
-          }
-        }
-      }
-
-      return new PermissiveEnumDeserializer((Class<Enum<?>>) type);
+    public Version version() {
+        return Version.unknownVersion();
     }
-  }
 
-  @Override
-  public String getModuleName() {
-    return "permissive-enums";
-  }
-
-  @Override
-  public Version version() {
-    return Version.unknownVersion();
-  }
-
-  @Override
-  public void setupModule(final SetupContext context) {
-    context.addDeserializers(new PermissiveEnumDeserializers());
-  }
+    @Override
+    public void setupModule(final SetupContext context) {
+        context.addDeserializers(new PermissiveEnumDeserializers());
+    }
 }

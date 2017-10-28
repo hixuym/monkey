@@ -11,22 +11,22 @@ import ch.qos.logback.core.spi.FilterReply;
  * @param <E> The type of log event
  */
 public class NullLevelFilterFactory<E extends DeferredProcessingAware> implements
-    LevelFilterFactory<E> {
+        LevelFilterFactory<E> {
 
-  /**
-   * Creates a {@link Filter} that will always defer to the next Filter in the chain, if any.
-   *
-   * @param threshold the parameter is ignored
-   * @return a {@link Filter} with a {@link Filter#decide(Object)} method that will always return
-   * {@link FilterReply#NEUTRAL}.
-   */
-  @Override
-  public Filter<E> build(Level threshold) {
-    return new Filter<E>() {
-      @Override
-      public FilterReply decide(E event) {
-        return FilterReply.NEUTRAL;
-      }
-    };
-  }
+    /**
+     * Creates a {@link Filter} that will always defer to the next Filter in the chain, if any.
+     *
+     * @param threshold the parameter is ignored
+     * @return a {@link Filter} with a {@link Filter#decide(Object)} method that will always return
+     * {@link FilterReply#NEUTRAL}.
+     */
+    @Override
+    public Filter<E> build(Level threshold) {
+        return new Filter<E>() {
+            @Override
+            public FilterReply decide(E event) {
+                return FilterReply.NEUTRAL;
+            }
+        };
+    }
 }

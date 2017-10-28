@@ -15,43 +15,43 @@
 
 package io.sunflower.guice.metrics;
 
-import static com.google.inject.matcher.Matchers.annotatedWith;
-import static com.google.inject.matcher.Matchers.any;
-
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.AbstractModule;
+
+import static com.google.inject.matcher.Matchers.annotatedWith;
+import static com.google.inject.matcher.Matchers.any;
 
 /**
  * Module for Metrics
  */
 public class MetricsModule extends AbstractModule {
 
-  @Override
-  protected void configure() {
-    TimedInterceptor timedInterceptor
-        = new TimedInterceptor(getProvider(MetricRegistry.class));
+    @Override
+    protected void configure() {
+        TimedInterceptor timedInterceptor
+                = new TimedInterceptor(getProvider(MetricRegistry.class));
 
-    bindInterceptor(
-        any(),
-        annotatedWith(Timed.class),
-        timedInterceptor);
+        bindInterceptor(
+                any(),
+                annotatedWith(Timed.class),
+                timedInterceptor);
 
-    MeteredInterceptor meteredInterceptor
-        = new MeteredInterceptor(getProvider(MetricRegistry.class));
+        MeteredInterceptor meteredInterceptor
+                = new MeteredInterceptor(getProvider(MetricRegistry.class));
 
-    bindInterceptor(
-        any(),
-        annotatedWith(Metered.class),
-        meteredInterceptor);
+        bindInterceptor(
+                any(),
+                annotatedWith(Metered.class),
+                meteredInterceptor);
 
-    CountedInterceptor countedInterceptor
-        = new CountedInterceptor(getProvider(MetricRegistry.class));
+        CountedInterceptor countedInterceptor
+                = new CountedInterceptor(getProvider(MetricRegistry.class));
 
-    bindInterceptor(
-        any(),
-        annotatedWith(Counted.class),
-        countedInterceptor);
+        bindInterceptor(
+                any(),
+                annotatedWith(Counted.class),
+                countedInterceptor);
 
-  }
+    }
 
 }

@@ -5,16 +5,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class ConstraintPerson {
 
-  @NotEmpty
-  private String name;
+    @NotEmpty
+    private String name;
 
-  @JsonProperty
-  public String getName() {
-    return name;
-  }
+    @JsonProperty
+    public String getName() {
+        return name;
+    }
 
-  @JsonProperty
-  public void setName(String name) {
-    this.name = name;
-  }
+    @JsonProperty
+    public void setName(String name) {
+        this.name = name;
+    }
 }

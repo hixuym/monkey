@@ -15,10 +15,6 @@
 
 package io.sunflower.undertow.server;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.server.Server;
@@ -30,6 +26,10 @@ import io.undertow.UndertowOptions;
 import io.undertow.server.handlers.PathHandler;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * UndertowSimpleServerFactory
  *
@@ -38,83 +38,83 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("undertow-simple")
 public class UndertowSimpleServerFactory extends AbstractServerFactory {
 
-  private ConnectorFactory connector = HttpConnectorFactory.application();
+    private ConnectorFactory connector = HttpConnectorFactory.application();
 
-  @NotEmpty
-  private String applicationContextPath = "/app";
-  @NotEmpty
-  private String adminContextPath = "/admin";
+    @NotEmpty
+    private String applicationContextPath = "/app";
+    @NotEmpty
+    private String adminContextPath = "/admin";
 
-  @JsonProperty
-  public String getApplicationContextPath() {
-    return applicationContextPath;
-  }
+    @JsonProperty
+    public String getApplicationContextPath() {
+        return applicationContextPath;
+    }
 
-  @JsonProperty
-  public void setApplicationContextPath(String applicationContextPath) {
-    this.applicationContextPath = applicationContextPath;
-  }
+    @JsonProperty
+    public void setApplicationContextPath(String applicationContextPath) {
+        this.applicationContextPath = applicationContextPath;
+    }
 
-  @JsonProperty
-  public String getAdminContextPath() {
-    return adminContextPath;
-  }
+    @JsonProperty
+    public String getAdminContextPath() {
+        return adminContextPath;
+    }
 
-  @JsonProperty
-  public void setAdminContextPath(String adminContextPath) {
-    this.adminContextPath = adminContextPath;
-  }
+    @JsonProperty
+    public void setAdminContextPath(String adminContextPath) {
+        this.adminContextPath = adminContextPath;
+    }
 
-  @NotNull
-  private Map<String, String> serverProperties = new LinkedHashMap<>(20);
+    @NotNull
+    private Map<String, String> serverProperties = new LinkedHashMap<>(20);
 
-  @JsonProperty("properties")
-  @Override
-  public Map<String, String> getServerProperties() {
-    serverProperties.put("sf.undertowContextPath", getApplicationContextPath());
-    return serverProperties;
-  }
+    @JsonProperty("properties")
+    @Override
+    public Map<String, String> getServerProperties() {
+        serverProperties.put("sf.undertowContextPath", getApplicationContextPath());
+        return serverProperties;
+    }
 
-  @JsonProperty("properties")
-  public void setServerProperties(Map<String, String> properties) {
-    this.serverProperties = properties;
-  }
+    @JsonProperty("properties")
+    public void setServerProperties(Map<String, String> properties) {
+        this.serverProperties = properties;
+    }
 
-  @JsonProperty
-  public ConnectorFactory getConnector() {
-    return connector;
-  }
+    @JsonProperty
+    public ConnectorFactory getConnector() {
+        return connector;
+    }
 
-  @JsonProperty
-  public void setConnector(ConnectorFactory connector) {
-    this.connector = connector;
-  }
+    @JsonProperty
+    public void setConnector(ConnectorFactory connector) {
+        this.connector = connector;
+    }
 
-  @Override
-  protected Server constract(Environment env) {
+    @Override
+    protected Server constract(Environment env) {
 
-    Undertow.Builder undertowBuilder = Undertow.builder()
-        // NOTE: should not use equals chars within its cookie values?
-        .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
-        .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
+        Undertow.Builder undertowBuilder = Undertow.builder()
+                // NOTE: should not use equals chars within its cookie values?
+                .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
+                .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
 
-    logger.info("Undertow h2 protocol (undertow.http2 = {})", false);
+        logger.info("Undertow h2 protocol (undertow.http2 = {})", false);
 
-    Undertow.ListenerBuilder listenerBuilder = getConnector().build(env);
+        Undertow.ListenerBuilder listenerBuilder = getConnector().build(env);
 
-    PathHandler rootHandler = new PathHandler();
+        PathHandler rootHandler = new PathHandler();
 
-    rootHandler.addPrefixPath(getApplicationContextPath(), appHandlers);
-    rootHandler.addPrefixPath(getAdminContextPath(), adminHandlers);
+        rootHandler.addPrefixPath(getApplicationContextPath(), appHandlers);
+        rootHandler.addPrefixPath(getAdminContextPath(), adminHandlers);
 
-    listenerBuilder.setRootHandler(addAccessLogWrapper("access", env, rootHandler));
+        listenerBuilder.setRootHandler(addAccessLogWrapper("access", env, rootHandler));
 
-    undertowBuilder.addListener(listenerBuilder);
+        undertowBuilder.addListener(listenerBuilder);
 
-    return new UndertowServer(env, undertowBuilder.build());
-  }
+        return new UndertowServer(env, undertowBuilder.build());
+    }
 
-  @Override
-  public void configure(Environment environment) {
-  }
+    @Override
+    public void configure(Environment environment) {
+    }
 }

@@ -15,8 +15,6 @@
 
 package io.sunflower.guice.spi;
 
-import java.util.List;
-
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.spi.Element;
@@ -24,16 +22,18 @@ import com.google.inject.spi.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class BindingLoggingModuleTransformer implements ModuleListTransformer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BindingLoggingModuleTransformer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BindingLoggingModuleTransformer.class);
 
-  @Override
-  public List<Module> transform(List<Module> modules) {
-    for (Element binding : Elements.getElements(Stage.TOOL, modules)) {
-      LOG.debug("Binding : {}", binding);
+    @Override
+    public List<Module> transform(List<Module> modules) {
+        for (Element binding : Elements.getElements(Stage.TOOL, modules)) {
+            LOG.debug("Binding : {}", binding);
+        }
+
+        return modules;
     }
-
-    return modules;
-  }
 }

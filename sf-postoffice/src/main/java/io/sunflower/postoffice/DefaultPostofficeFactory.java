@@ -15,12 +15,12 @@
 
 package io.sunflower.postoffice;
 
-import java.util.Optional;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.postoffice.commonsmail.PostofficeCommonsmailImpl;
+
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
  * @author michael
@@ -28,84 +28,84 @@ import io.sunflower.postoffice.commonsmail.PostofficeCommonsmailImpl;
 @JsonTypeName("commons-mail")
 public class DefaultPostofficeFactory implements PostofficeFactory {
 
-  @NotNull
-  private String smtpHost;
-  @NotNull
-  private int smtpPort;
-  private boolean smtpSsl;
-  private Optional<String> smtpUser;
-  private Optional<String> smtpPassword;
-  private boolean smtpDebug = false;
+    @NotNull
+    private String smtpHost;
+    @NotNull
+    private int smtpPort;
+    private boolean smtpSsl;
+    private Optional<String> smtpUser;
+    private Optional<String> smtpPassword;
+    private boolean smtpDebug = false;
 
-  @Override
-  public Postoffice build() {
-    return new PostofficeCommonsmailImpl(
-        getSmtpHost(),
-        getSmtpPort(),
-        isSmtpSsl(),
-        getSmtpUser(),
-        getSmtpPassword(),
-        isSmtpDebug()
-    );
-  }
+    @Override
+    public Postoffice build() {
+        return new PostofficeCommonsmailImpl(
+                getSmtpHost(),
+                getSmtpPort(),
+                isSmtpSsl(),
+                getSmtpUser(),
+                getSmtpPassword(),
+                isSmtpDebug()
+        );
+    }
 
-  @JsonProperty
-  public String getSmtpHost() {
-    return smtpHost;
-  }
+    @JsonProperty
+    public String getSmtpHost() {
+        return smtpHost;
+    }
 
-  @JsonProperty
-  public void setSmtpHost(String smtpHost) {
-    this.smtpHost = smtpHost;
-  }
+    @JsonProperty
+    public void setSmtpHost(String smtpHost) {
+        this.smtpHost = smtpHost;
+    }
 
-  @JsonProperty
-  public int getSmtpPort() {
-    return smtpPort;
-  }
+    @JsonProperty
+    public int getSmtpPort() {
+        return smtpPort;
+    }
 
-  @JsonProperty
-  public void setSmtpPort(int smtpPort) {
-    this.smtpPort = smtpPort;
-  }
+    @JsonProperty
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
+    }
 
-  @JsonProperty
-  public boolean isSmtpSsl() {
-    return smtpSsl;
-  }
+    @JsonProperty
+    public boolean isSmtpSsl() {
+        return smtpSsl;
+    }
 
-  @JsonProperty
-  public void setSmtpSsl(boolean smtpSsl) {
-    this.smtpSsl = smtpSsl;
-  }
+    @JsonProperty
+    public void setSmtpSsl(boolean smtpSsl) {
+        this.smtpSsl = smtpSsl;
+    }
 
-  @JsonProperty
-  public Optional<String> getSmtpUser() {
-    return smtpUser;
-  }
+    @JsonProperty
+    public Optional<String> getSmtpUser() {
+        return smtpUser;
+    }
 
-  @JsonProperty
-  public void setSmtpUser(Optional<String> smtpUser) {
-    this.smtpUser = smtpUser;
-  }
+    @JsonProperty
+    public void setSmtpUser(Optional<String> smtpUser) {
+        this.smtpUser = smtpUser;
+    }
 
-  @JsonProperty
-  public Optional<String> getSmtpPassword() {
-    return smtpPassword;
-  }
+    @JsonProperty
+    public Optional<String> getSmtpPassword() {
+        return smtpPassword;
+    }
 
-  @JsonProperty
-  public void setSmtpPassword(Optional<String> smtpPassword) {
-    this.smtpPassword = smtpPassword;
-  }
+    @JsonProperty
+    public void setSmtpPassword(Optional<String> smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
 
-  @JsonProperty
-  public boolean isSmtpDebug() {
-    return smtpDebug;
-  }
+    @JsonProperty
+    public boolean isSmtpDebug() {
+        return smtpDebug;
+    }
 
-  @JsonProperty
-  public void setSmtpDebug(boolean smtpDebug) {
-    this.smtpDebug = smtpDebug;
-  }
+    @JsonProperty
+    public void setSmtpDebug(boolean smtpDebug) {
+        this.smtpDebug = smtpDebug;
+    }
 }

@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.sunflower</groupId>
-    <artifactId>sf-framework</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.sunflower</groupId>
+        <artifactId>sf-framework</artifactId>
+        <version>1.3.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <artifactId>sf-postoffice</artifactId>
+    <artifactId>sf-postoffice</artifactId>
 
-  <name>sunflower postoffice module</name>
+    <name>sunflower postoffice module</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.sunflower</groupId>
-      <artifactId>sf-configuration</artifactId>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-configuration</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-email</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>com.icegreen</groupId>
-      <artifactId>greenmail</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

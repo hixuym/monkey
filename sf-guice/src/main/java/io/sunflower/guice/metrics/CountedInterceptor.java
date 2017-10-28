@@ -15,48 +15,48 @@
 
 package io.sunflower.guice.metrics;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author James Moger
  */
 class CountedInterceptor implements MethodInterceptor {
 
-  private final Provider<MetricRegistry> metricRegistry;
+    private final Provider<MetricRegistry> metricRegistry;
 
-  @Inject
-  public CountedInterceptor(Provider<MetricRegistry> metricRegistry) {
-    this.metricRegistry = metricRegistry;
-  }
-
-  @Override
-  public Object invoke(MethodInvocation invocation) throws Throwable {
-
-    Counted counted = invocation.getMethod().getAnnotation(Counted.class);
-    String counterName = counted.value();
-
-    if (counterName.isEmpty()) {
-      counterName = MetricRegistry.name(invocation.getThis().getClass()
-          .getSuperclass(), invocation.getMethod().getName());
+    @Inject
+    public CountedInterceptor(Provider<MetricRegistry> metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
-    Counter counter = metricRegistry.get().counter(counterName);
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
 
-    counter.inc();
+        Counted counted = invocation.getMethod().getAnnotation(Counted.class);
+        String counterName = counted.value();
 
-    try {
-      return invocation.proceed();
-    } finally {
-      if (counted.active()) {
-        counter.dec();
-      }
+        if (counterName.isEmpty()) {
+            counterName = MetricRegistry.name(invocation.getThis().getClass()
+                    .getSuperclass(), invocation.getMethod().getName());
+        }
+
+        Counter counter = metricRegistry.get().counter(counterName);
+
+        counter.inc();
+
+        try {
+            return invocation.proceed();
+        } finally {
+            if (counted.active()) {
+                counter.dec();
+            }
+        }
     }
-  }
 
 }

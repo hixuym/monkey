@@ -21,5 +21,5 @@ package io.sunflower.extension;
 @Spi(scope = Scope.PROTOTYPE)
 public interface SpiPrototypeInterface {
 
-  long spiHello();
+    long spiHello();
 }

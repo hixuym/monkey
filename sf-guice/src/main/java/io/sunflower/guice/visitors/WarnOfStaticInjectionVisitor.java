@@ -23,9 +23,9 @@ import com.google.inject.spi.StaticInjectionRequest;
  */
 public class WarnOfStaticInjectionVisitor extends DefaultElementVisitor<String> {
 
-  @Override
-  public String visit(StaticInjectionRequest element) {
-    return String.format("Static injection is fragile! Please fix %s at %s",
-        element.getType().getName(), element.getSource());
-  }
+    @Override
+    public String visit(StaticInjectionRequest element) {
+        return String.format("Static injection is fragile! Please fix %s at %s",
+                element.getType().getName(), element.getSource());
+    }
 }

@@ -22,6 +22,6 @@ package io.sunflower.guice.event;
  * */
 public interface ApplicationEventListener<T extends ApplicationEvent> {
 
-  void onEvent(T event);
+    void onEvent(T event);
 
 }

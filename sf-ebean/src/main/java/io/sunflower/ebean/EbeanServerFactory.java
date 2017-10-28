@@ -15,10 +15,6 @@
 
 package io.sunflower.ebean;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.sunflower.db.ManagedDataSource;
@@ -27,60 +23,64 @@ import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * @author michael
  */
 public class EbeanServerFactory {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EbeanServerFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EbeanServerFactory.class);
 
-  public EbeanServer build(EbeanBundle<?> bundle,
-      Environment environment,
-      PooledDataSourceFactory dbConfig,
-      List<String> scanPkgs) {
-    return build(bundle, environment, dbConfig, scanPkgs, EbeanBundle.DEFAULT_NAME);
-  }
-
-  public EbeanServer build(EbeanBundle<?> bundle,
-      Environment environment,
-      PooledDataSourceFactory dbConfig,
-      List<String> scanPkgs,
-      String name) {
-    final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), name);
-    return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
-  }
-
-  public EbeanServer build(EbeanBundle<?> bundle,
-      Environment environment,
-      PooledDataSourceFactory dbConfig,
-      ManagedDataSource dataSource,
-      List<String> scanPkgs,
-      String name) {
-
-    ServerConfig serverConfig = new ServerConfig();
-
-    Properties properties = new Properties();
-
-    for (Map.Entry<String, String> e : dbConfig.getProperties().entrySet()) {
-      properties.setProperty(e.getKey(), e.getValue());
+    public EbeanServer build(EbeanBundle<?> bundle,
+                             Environment environment,
+                             PooledDataSourceFactory dbConfig,
+                             List<String> scanPkgs) {
+        return build(bundle, environment, dbConfig, scanPkgs, EbeanBundle.DEFAULT_NAME);
     }
 
-    serverConfig.setPackages(scanPkgs);
+    public EbeanServer build(EbeanBundle<?> bundle,
+                             Environment environment,
+                             PooledDataSourceFactory dbConfig,
+                             List<String> scanPkgs,
+                             String name) {
+        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), name);
+        return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
+    }
 
-    serverConfig.loadFromProperties(properties);
+    public EbeanServer build(EbeanBundle<?> bundle,
+                             Environment environment,
+                             PooledDataSourceFactory dbConfig,
+                             ManagedDataSource dataSource,
+                             List<String> scanPkgs,
+                             String name) {
 
-    serverConfig.setName(name);
-    serverConfig.setDataSource(dataSource);
-    serverConfig.setDefaultServer(bundle.isDefault());
-    serverConfig.setRegister(true);
+        ServerConfig serverConfig = new ServerConfig();
 
-    bundle.configure(serverConfig);
+        Properties properties = new Properties();
 
-    EbeanServer ebeanServer = io.ebean.EbeanServerFactory.create(serverConfig);
+        for (Map.Entry<String, String> e : dbConfig.getProperties().entrySet()) {
+            properties.setProperty(e.getKey(), e.getValue());
+        }
 
-    environment.lifecycle().manage(new EbeanServerManager(dataSource));
+        serverConfig.setPackages(scanPkgs);
 
-    return ebeanServer;
-  }
+        serverConfig.loadFromProperties(properties);
+
+        serverConfig.setName(name);
+        serverConfig.setDataSource(dataSource);
+        serverConfig.setDefaultServer(bundle.isDefault());
+        serverConfig.setRegister(true);
+
+        bundle.configure(serverConfig);
+
+        EbeanServer ebeanServer = io.ebean.EbeanServerFactory.create(serverConfig);
+
+        environment.lifecycle().manage(new EbeanServerManager(dataSource));
+
+        return ebeanServer;
+    }
 
 }

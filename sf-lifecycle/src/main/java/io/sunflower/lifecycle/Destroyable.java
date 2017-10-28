@@ -5,5 +5,5 @@ package io.sunflower.lifecycle;
  */
 public interface Destroyable {
 
-  void destroy();
+    void destroy();
 }

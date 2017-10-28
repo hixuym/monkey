@@ -15,37 +15,37 @@
 
 package io.sunflower.guice.metrics;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 
 class MeteredInterceptor implements MethodInterceptor {
 
-  final private Provider<MetricRegistry> metricRegistry;
+    final private Provider<MetricRegistry> metricRegistry;
 
-  @Inject
-  public MeteredInterceptor(Provider<MetricRegistry> metricRegistry) {
-    this.metricRegistry = metricRegistry;
-  }
-
-  @Override
-  public Object invoke(MethodInvocation invocation) throws Throwable {
-
-    String timerName = invocation.getMethod().getAnnotation(Metered.class).value();
-    if (timerName.isEmpty()) {
-      timerName = MetricRegistry
-          .name(invocation.getThis().getClass().getSuperclass(), invocation.getMethod().getName());
+    @Inject
+    public MeteredInterceptor(Provider<MetricRegistry> metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
-    Meter meter = metricRegistry.get().meter(timerName);
-    meter.mark();
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
 
-    return invocation.proceed();
-  }
+        String timerName = invocation.getMethod().getAnnotation(Metered.class).value();
+        if (timerName.isEmpty()) {
+            timerName = MetricRegistry
+                    .name(invocation.getThis().getClass().getSuperclass(), invocation.getMethod().getName());
+        }
+
+        Meter meter = metricRegistry.get().meter(timerName);
+        meter.mark();
+
+        return invocation.proceed();
+    }
 
 }

@@ -24,20 +24,20 @@ import io.sunflower.logging.layout.LayoutFactory;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface AppenderFactory<E extends DeferredProcessingAware> extends Discoverable {
 
-  /**
-   * Given a Logback context, an application name, a layout, a levelFilterFactory, and an
-   * asyncAppenderFactory build a new appender.
-   *
-   * @param context the Logback context
-   * @param applicationName the application name
-   * @param layoutFactory the factory for the layout for logging
-   * @param levelFilterFactory the factory for the level filter
-   * @param asyncAppenderFactory the factory for the async appender
-   * @return a new, started {@link Appender}
-   */
-  Appender<E> build(LoggerContext context,
-      String applicationName,
-      LayoutFactory<E> layoutFactory,
-      LevelFilterFactory<E> levelFilterFactory,
-      AsyncAppenderFactory<E> asyncAppenderFactory);
+    /**
+     * Given a Logback context, an application name, a layout, a levelFilterFactory, and an
+     * asyncAppenderFactory build a new appender.
+     *
+     * @param context              the Logback context
+     * @param applicationName      the application name
+     * @param layoutFactory        the factory for the layout for logging
+     * @param levelFilterFactory   the factory for the level filter
+     * @param asyncAppenderFactory the factory for the async appender
+     * @return a new, started {@link Appender}
+     */
+    Appender<E> build(LoggerContext context,
+                      String applicationName,
+                      LayoutFactory<E> layoutFactory,
+                      LevelFilterFactory<E> levelFilterFactory,
+                      AsyncAppenderFactory<E> asyncAppenderFactory);
 }

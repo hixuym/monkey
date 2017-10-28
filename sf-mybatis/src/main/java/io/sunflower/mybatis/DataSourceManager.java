@@ -23,19 +23,19 @@ import io.sunflower.lifecycle.Managed;
  */
 public class DataSourceManager implements Managed {
 
-  private final ManagedDataSource dataSource;
+    private final ManagedDataSource dataSource;
 
-  public DataSourceManager(ManagedDataSource dataSource) {
-    this.dataSource = dataSource;
-  }
+    public DataSourceManager(ManagedDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
-  @Override
-  public void start() throws Exception {
-    dataSource.start();
-  }
+    @Override
+    public void start() throws Exception {
+        dataSource.start();
+    }
 
-  @Override
-  public void stop() throws Exception {
-    dataSource.stop();
-  }
+    @Override
+    public void stop() throws Exception {
+        dataSource.stop();
+    }
 }

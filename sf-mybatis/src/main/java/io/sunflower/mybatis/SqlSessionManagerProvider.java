@@ -14,14 +14,14 @@
  */
 package io.sunflower.mybatis;
 
-import static org.apache.ibatis.session.SqlSessionManager.newInstance;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionManager;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionManager;
+import static org.apache.ibatis.session.SqlSessionManager.newInstance;
 
 /**
  * @author michael
@@ -29,29 +29,29 @@ import org.apache.ibatis.session.SqlSessionManager;
 @Singleton
 public final class SqlSessionManagerProvider implements Provider<SqlSessionManager> {
 
-  private SqlSessionManager sqlSessionManager;
+    private SqlSessionManager sqlSessionManager;
 
-  /**
-   * @since 1.0.1
-   */
-  public SqlSessionManagerProvider() {
-    // do nothing
-  }
+    /**
+     * @since 1.0.1
+     */
+    public SqlSessionManagerProvider() {
+        // do nothing
+    }
 
-  /**
-   * Creates the new sql session manager.
-   *
-   * @param sqlSessionFactory the sql session factory
-   * @since 1.0.1
-   */
-  @Inject
-  public void createNewSqlSessionManager(SqlSessionFactory sqlSessionFactory) {
-    this.sqlSessionManager = newInstance(sqlSessionFactory);
-  }
+    /**
+     * Creates the new sql session manager.
+     *
+     * @param sqlSessionFactory the sql session factory
+     * @since 1.0.1
+     */
+    @Inject
+    public void createNewSqlSessionManager(SqlSessionFactory sqlSessionFactory) {
+        this.sqlSessionManager = newInstance(sqlSessionFactory);
+    }
 
-  @Override
-  public SqlSessionManager get() {
-    return sqlSessionManager;
-  }
+    @Override
+    public SqlSessionManager get() {
+        return sqlSessionManager;
+    }
 
 }

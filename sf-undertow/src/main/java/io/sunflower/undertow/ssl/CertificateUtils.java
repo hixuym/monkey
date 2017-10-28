@@ -15,6 +15,8 @@
 
 package io.sunflower.undertow.ssl;
 
+import io.sunflower.util.URIs;
+
 import java.io.InputStream;
 import java.net.URI;
 import java.security.KeyStore;
@@ -22,47 +24,45 @@ import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Collection;
 
-import io.sunflower.util.URIs;
-
 public class CertificateUtils {
 
-  /* ------------------------------------------------------------ */
-  public static KeyStore getKeyStore(URI store, String storeType, String storeProvider,
-      String storePassword) throws Exception {
-    KeyStore keystore = null;
+    /* ------------------------------------------------------------ */
+    public static KeyStore getKeyStore(URI store, String storeType, String storeProvider,
+                                       String storePassword) throws Exception {
+        KeyStore keystore = null;
 
-    if (store != null) {
-      if (storeProvider != null) {
-        keystore = KeyStore.getInstance(storeType, storeProvider);
-      } else {
-        keystore = KeyStore.getInstance(storeType);
-      }
+        if (store != null) {
+            if (storeProvider != null) {
+                keystore = KeyStore.getInstance(storeType, storeProvider);
+            } else {
+                keystore = KeyStore.getInstance(storeType);
+            }
 
-      try (InputStream inStream = URIs.openStream(store)) {
-        keystore.load(inStream, storePassword == null ? null : storePassword.toCharArray());
-      }
-    }
-
-    return keystore;
-  }
-
-  /* ------------------------------------------------------------ */
-  public static Collection<? extends CRL> loadCRL(URI crlPath) throws Exception {
-    Collection<? extends CRL> crlList = null;
-
-    if (crlPath != null) {
-      InputStream in = null;
-      try {
-        in = URIs.openStream(crlPath);
-        crlList = CertificateFactory.getInstance("X.509").generateCRLs(in);
-      } finally {
-        if (in != null) {
-          in.close();
+            try (InputStream inStream = URIs.openStream(store)) {
+                keystore.load(inStream, storePassword == null ? null : storePassword.toCharArray());
+            }
         }
-      }
+
+        return keystore;
     }
 
-    return crlList;
-  }
+    /* ------------------------------------------------------------ */
+    public static Collection<? extends CRL> loadCRL(URI crlPath) throws Exception {
+        Collection<? extends CRL> crlList = null;
+
+        if (crlPath != null) {
+            InputStream in = null;
+            try {
+                in = URIs.openStream(crlPath);
+                crlList = CertificateFactory.getInstance("X.509").generateCRLs(in);
+            } finally {
+                if (in != null) {
+                    in.close();
+                }
+            }
+        }
+
+        return crlList;
+    }
 
 }

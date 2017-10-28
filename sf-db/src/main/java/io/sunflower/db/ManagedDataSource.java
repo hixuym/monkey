@@ -15,9 +15,9 @@
 
 package io.sunflower.db;
 
-import javax.sql.DataSource;
-
 import io.sunflower.lifecycle.Managed;
+
+import javax.sql.DataSource;
 
 public interface ManagedDataSource extends DataSource, Managed {
 

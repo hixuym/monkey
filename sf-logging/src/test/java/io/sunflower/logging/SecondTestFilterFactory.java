@@ -9,13 +9,13 @@ import io.sunflower.logging.filter.FilterFactory;
 @JsonTypeName("second-test-filter-factory")
 public class SecondTestFilterFactory implements FilterFactory<ILoggingEvent> {
 
-  @Override
-  public Filter<ILoggingEvent> build() {
-    return new Filter<ILoggingEvent>() {
-      @Override
-      public FilterReply decide(ILoggingEvent event) {
-        return FilterReply.NEUTRAL;
-      }
-    };
-  }
+    @Override
+    public Filter<ILoggingEvent> build() {
+        return new Filter<ILoggingEvent>() {
+            @Override
+            public FilterReply decide(ILoggingEvent event) {
+                return FilterReply.NEUTRAL;
+            }
+        };
+    }
 }

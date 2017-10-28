@@ -27,18 +27,18 @@ import io.sunflower.setup.Environment;
  */
 public abstract class UndertowBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-  @Override
-  public final void run(T configuration, Environment environment) throws Exception {
-    UndertowModule undertowModule = new UndertowModule(environment);
+    @Override
+    public final void run(T configuration, Environment environment) throws Exception {
+        UndertowModule undertowModule = new UndertowModule(environment);
 
-    configure(configuration, environment, undertowModule);
+        configure(configuration, environment, undertowModule);
 
-    environment.guice().register(undertowModule);
-  }
+        environment.guice().register(undertowModule);
+    }
 
-  @Override
-  public void initialize(Bootstrap<?> bootstrap) {
-  }
+    @Override
+    public void initialize(Bootstrap<?> bootstrap) {
+    }
 
-  protected abstract void configure(T configuration, Environment environment, UndertowModule undertowModule);
+    protected abstract void configure(T configuration, Environment environment, UndertowModule undertowModule);
 }

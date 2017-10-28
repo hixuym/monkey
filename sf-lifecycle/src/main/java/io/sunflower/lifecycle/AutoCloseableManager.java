@@ -6,7 +6,7 @@ package io.sunflower.lifecycle;
  * that of the application’s HTTP server. After the server has stopped (and after its graceful
  * shutdown period) the {@link #stop()} method is called, which will trigger the call to {@link
  * AutoCloseable#close()}
- *
+ * <p>
  * <p>Usage :</p>
  * <pre>
  * {@code
@@ -18,22 +18,22 @@ package io.sunflower.lifecycle;
  */
 public class AutoCloseableManager extends AbstractLifeCycle {
 
-  private final AutoCloseable autoCloseable;
+    private final AutoCloseable autoCloseable;
 
-  /**
-   * @param autoCloseable instance to close when the HTTP server stops.
-   */
-  public AutoCloseableManager(final AutoCloseable autoCloseable) {
-    this.autoCloseable = autoCloseable;
-  }
+    /**
+     * @param autoCloseable instance to close when the HTTP server stops.
+     */
+    public AutoCloseableManager(final AutoCloseable autoCloseable) {
+        this.autoCloseable = autoCloseable;
+    }
 
-  /**
-   * Calls {@link AutoCloseable#close()} given in the {@link AutoCloseableManager(AutoCloseable)}
-   *
-   * @throws Exception propagates {@link AutoCloseable#close()} exception
-   */
-  @Override
-  public void doStop() throws Exception {
-    this.autoCloseable.close();
-  }
+    /**
+     * Calls {@link AutoCloseable#close()} given in the {@link AutoCloseableManager(AutoCloseable)}
+     *
+     * @throws Exception propagates {@link AutoCloseable#close()} exception
+     */
+    @Override
+    public void doStop() throws Exception {
+        this.autoCloseable.close();
+    }
 }

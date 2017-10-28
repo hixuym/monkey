@@ -10,36 +10,36 @@
 
 package io.sunflower.postoffice.commonsmail;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import javax.mail.internet.AddressException;
-
 import io.sunflower.postoffice.Mail;
 import io.sunflower.postoffice.common.Tuple;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
+import javax.mail.internet.AddressException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 public interface CommonsmailHelper {
 
-  void doPopulateMultipartMailWithContent(MultiPartEmail multiPartEmail, Mail mail)
-      throws AddressException, EmailException;
+    void doPopulateMultipartMailWithContent(MultiPartEmail multiPartEmail, Mail mail)
+            throws AddressException, EmailException;
 
-  /**
-   * Creates a MultiPartEmail. Selects the correct implementation regarding html (MultiPartEmail)
-   * and/or txt content or both.
-   *
-   * Populates the mutlipart email accordingly with the txt / html content.
-   */
-  MultiPartEmail createMultiPartEmailWithContent(Mail mail) throws EmailException;
+    /**
+     * Creates a MultiPartEmail. Selects the correct implementation regarding html (MultiPartEmail)
+     * and/or txt content or both.
+     * <p>
+     * Populates the mutlipart email accordingly with the txt / html content.
+     */
+    MultiPartEmail createMultiPartEmailWithContent(Mail mail) throws EmailException;
 
-  void doSetServerParameter(MultiPartEmail multiPartEmail, String smtpHost,
-      Integer smtpPort, Boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
-      Boolean smtpDebug);
+    void doSetServerParameter(MultiPartEmail multiPartEmail, String smtpHost,
+                              Integer smtpPort, Boolean smtpSsl, Optional<String> smtpUser, Optional<String> smtpPassword,
+                              Boolean smtpDebug);
 
-  List<Tuple<String, String>> createListOfAddresses(Collection<String> emails)
-      throws AddressException;
+    List<Tuple<String, String>> createListOfAddresses(Collection<String> emails)
+            throws AddressException;
 
-  Tuple<String, String> createValidEmailFromString(String email) throws AddressException;
+    Tuple<String, String> createValidEmailFromString(String email) throws AddressException;
 
 }

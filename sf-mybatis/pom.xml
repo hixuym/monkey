@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.sunflower</groupId>
-    <artifactId>sf-framework</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.sunflower</groupId>
+        <artifactId>sf-framework</artifactId>
+        <version>1.3.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <artifactId>sf-mybatis</artifactId>
+    <artifactId>sf-mybatis</artifactId>
 
-  <name>sunflower mybatis module</name>
+    <name>sunflower mybatis module</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.sunflower</groupId>
-      <artifactId>sf-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.sunflower</groupId>
-      <artifactId>sf-db</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mybatis</groupId>
-      <artifactId>mybatis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.pagehelper</groupId>
-      <artifactId>pagehelper</artifactId>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-db</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

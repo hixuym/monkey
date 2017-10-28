@@ -6,13 +6,13 @@ import io.sunflower.setup.Environment;
 
 public class ${name}Application extends Application<${name}Configuration> {
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args)throws Exception {
         new ${name}Application().run(args);
     }
 
     @Override
     public String getName() {
-        return "${name}";
+        return"${name}";
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ${name}Application extends Application<${name}Configuration> {
     }
 
     @Override
-    public void run(final ${name}Configuration configuration, final Environment environment) {
+    public void run(final ${name}Configuration configuration,final Environment environment) {
         // TODO: implement application
     }
 

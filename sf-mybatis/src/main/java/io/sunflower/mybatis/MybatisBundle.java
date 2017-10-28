@@ -15,8 +15,6 @@
 
 package io.sunflower.mybatis;
 
-import java.util.List;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import io.sunflower.Configuration;
@@ -31,83 +29,85 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.ResolverUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.util.List;
+
 /**
  * @author michael
  */
 public abstract class MybatisBundle<T extends Configuration>
-    implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
+        implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
-  static final String DEFAULT_NAME = "mybatis";
+    static final String DEFAULT_NAME = "mybatis";
 
-  private final SqlSessionFactoryFactory sqlSessionFactoryFactory;
+    private final SqlSessionFactoryFactory sqlSessionFactoryFactory;
 
-  private final String[] scanPkgs;
+    private final String[] scanPkgs;
 
-  protected MybatisBundle(String... scanPkgs) {
-    this(new SqlSessionFactoryFactory(), scanPkgs);
-  }
-
-  protected MybatisBundle(SqlSessionFactoryFactory sqlSessionFactoryFactory, String... scanPkgs) {
-    this.scanPkgs = scanPkgs;
-    this.sqlSessionFactoryFactory = sqlSessionFactoryFactory;
-  }
-
-  protected String name() {
-    return DEFAULT_NAME;
-  }
-
-  @Override
-  public void run(T configuration, Environment environment) throws Exception {
-    PooledDataSourceFactory dataSourceFactory = getDataSourceFactory(configuration);
-
-    ImmutableList.Builder<Class<?>> builder = new ImmutableList.Builder<>();
-
-    ResolverUtil util = new ResolverUtil();
-
-    util.setClassLoader(environment.classLoader());
-
-    ResolverUtil.Test isMapper = new ResolverUtil.AnnotatedWith(Mapper.class);
-
-    for (String pkg : scanPkgs) {
-      util.find(isMapper, pkg);
+    protected MybatisBundle(String... scanPkgs) {
+        this(new SqlSessionFactoryFactory(), scanPkgs);
     }
 
-    String pkgs = dataSourceFactory.getProperties().get("search.packages");
-
-    if (StringUtils.isNotEmpty(pkgs)) {
-
-      List<String> scanPkgs = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(pkgs);
-
-      for (String pkg : scanPkgs) {
-        util.find(isMapper, pkg);
-      }
+    protected MybatisBundle(SqlSessionFactoryFactory sqlSessionFactoryFactory, String... scanPkgs) {
+        this.scanPkgs = scanPkgs;
+        this.sqlSessionFactoryFactory = sqlSessionFactoryFactory;
     }
 
-    builder.addAll(util.getClasses());
+    protected String name() {
+        return DEFAULT_NAME;
+    }
 
-    List<Class<?>> mappers = builder.build();
+    @Override
+    public void run(T configuration, Environment environment) throws Exception {
+        PooledDataSourceFactory dataSourceFactory = getDataSourceFactory(configuration);
 
-    SqlSessionFactory sqlSessionFactory =
-        sqlSessionFactoryFactory.build(this,
-            environment,
-            dataSourceFactory,
-            mappers,
-            name());
+        ImmutableList.Builder<Class<?>> builder = new ImmutableList.Builder<>();
 
-    environment.guice().register(new MybatisModule(sqlSessionFactory, mappers));
+        ResolverUtil util = new ResolverUtil();
 
-    environment.healthChecks().register(name(), new SqlSessionFactoryHealthCheck(
-        environment.getHealthCheckExecutorService(),
-        dataSourceFactory.getValidationQueryTimeout().orElse(Duration.seconds(5)),
-        sqlSessionFactory,
-        dataSourceFactory.getValidationQuery()
-    ));
-  }
+        util.setClassLoader(environment.classLoader());
 
-  @Override
-  public void initialize(Bootstrap<?> bootstrap) {
-  }
+        ResolverUtil.Test isMapper = new ResolverUtil.AnnotatedWith(Mapper.class);
 
-  protected void configure(org.apache.ibatis.session.Configuration cfg) {
-  }
+        for (String pkg : scanPkgs) {
+            util.find(isMapper, pkg);
+        }
+
+        String pkgs = dataSourceFactory.getProperties().get("search.packages");
+
+        if (StringUtils.isNotEmpty(pkgs)) {
+
+            List<String> scanPkgs = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(pkgs);
+
+            for (String pkg : scanPkgs) {
+                util.find(isMapper, pkg);
+            }
+        }
+
+        builder.addAll(util.getClasses());
+
+        List<Class<?>> mappers = builder.build();
+
+        SqlSessionFactory sqlSessionFactory =
+                sqlSessionFactoryFactory.build(this,
+                        environment,
+                        dataSourceFactory,
+                        mappers,
+                        name());
+
+        environment.guice().register(new MybatisModule(sqlSessionFactory, mappers));
+
+        environment.healthChecks().register(name(), new SqlSessionFactoryHealthCheck(
+                environment.getHealthCheckExecutorService(),
+                dataSourceFactory.getValidationQueryTimeout().orElse(Duration.seconds(5)),
+                sqlSessionFactory,
+                dataSourceFactory.getValidationQuery()
+        ));
+    }
+
+    @Override
+    public void initialize(Bootstrap<?> bootstrap) {
+    }
+
+    protected void configure(org.apache.ibatis.session.Configuration cfg) {
+    }
 }

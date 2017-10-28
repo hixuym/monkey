@@ -22,23 +22,23 @@ import java.net.URL;
 
 public abstract class URIs {
 
-  static private final String URI_SCHEME_CLASSPATH = "classpath";
+    static private final String URI_SCHEME_CLASSPATH = "classpath";
 
-  public static InputStream openStream(URI uri) throws IOException {
-    if (uri.getScheme().equals(URI_SCHEME_CLASSPATH)) {
-      String resourceName = uri.getPath();
+    public static InputStream openStream(URI uri) throws IOException {
+        if (uri.getScheme().equals(URI_SCHEME_CLASSPATH)) {
+            String resourceName = uri.getPath();
 
-      InputStream stream = URIs.class.getResourceAsStream(resourceName);
+            InputStream stream = URIs.class.getResourceAsStream(resourceName);
 
-      if (stream == null) {
-        throw new IOException("Resource '" + resourceName + "' not found on classpath");
-      }
+            if (stream == null) {
+                throw new IOException("Resource '" + resourceName + "' not found on classpath");
+            }
 
-      return stream;
-    } else {
-      URL url = uri.toURL();
+            return stream;
+        } else {
+            URL url = uri.toURL();
 
-      return url.openStream();
+            return url.openStream();
+        }
     }
-  }
 }

@@ -15,46 +15,46 @@
 
 package io.sunflower.mybatis;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import com.google.common.base.Objects;
 import org.apache.ibatis.session.SqlSessionManager;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author michael
  */
 public class MapperProvider<T> implements Provider<T> {
 
-  private final Class<T> mapperType;
+    private final Class<T> mapperType;
 
-  @Inject
-  private SqlSessionManager sqlSessionManager;
+    @Inject
+    private SqlSessionManager sqlSessionManager;
 
-  public MapperProvider(Class<T> mapperType) {
-    this.mapperType = mapperType;
-  }
-
-  public void setSqlSessionManager(SqlSessionManager sqlSessionManager) {
-    this.sqlSessionManager = sqlSessionManager;
-  }
-
-  @Override
-  public T get() {
-    return this.sqlSessionManager.getMapper(mapperType);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(this.mapperType);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
+    public MapperProvider(Class<T> mapperType) {
+        this.mapperType = mapperType;
     }
-    MapperProvider other = (MapperProvider) obj;
-    return Objects.equal(this.mapperType, other.mapperType);
-  }
+
+    public void setSqlSessionManager(SqlSessionManager sqlSessionManager) {
+        this.sqlSessionManager = sqlSessionManager;
+    }
+
+    @Override
+    public T get() {
+        return this.sqlSessionManager.getMapper(mapperType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.mapperType);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        MapperProvider other = (MapperProvider) obj;
+        return Objects.equal(this.mapperType, other.mapperType);
+    }
 }

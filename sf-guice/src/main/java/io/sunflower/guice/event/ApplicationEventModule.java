@@ -15,12 +15,6 @@
 
 package io.sunflower.guice.event;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.inject.Provider;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
@@ -32,101 +26,107 @@ import io.sunflower.guice.event.guava.GuavaApplicationEventModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Provider;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Adds support for passing {@link ApplicationEvent}s. Default (Guava-based) implementation can be
  * found in {@link GuavaApplicationEventModule}
- *
+ * <p>
  * See {@link EventListener} and {@link ApplicationEventDispatcher} for usage.
  */
 public final class ApplicationEventModule extends AbstractModule {
 
-  private static class ApplicationEventSubscribingTypeListener implements TypeListener {
+    private static class ApplicationEventSubscribingTypeListener implements TypeListener {
 
-    private static final Logger LOG = LoggerFactory
-        .getLogger(ApplicationEventSubscribingTypeListener.class);
-    private final Provider<ApplicationEventDispatcher> dispatcherProvider;
+        private static final Logger LOG = LoggerFactory
+                .getLogger(ApplicationEventSubscribingTypeListener.class);
+        private final Provider<ApplicationEventDispatcher> dispatcherProvider;
 
-    public ApplicationEventSubscribingTypeListener(
-        Provider<ApplicationEventDispatcher> dispatcherProvider) {
-      this.dispatcherProvider = dispatcherProvider;
-    }
-
-    @Override
-    public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-      final Class<?> clazz = type.getRawType();
-      final List<Method> handlerMethods = getAllDeclaredHandlerMethods(clazz);
-      if (!handlerMethods.isEmpty()) {
-        encounter.register((InjectionListener<Object>) injectee -> {
-          for (final Method handlerMethod : handlerMethods) {
-            dispatcherProvider.get().registerListener(injectee, handlerMethod,
-                (Class<? extends ApplicationEvent>) handlerMethod.getParameterTypes()[0]);
-          }
-        });
-      }
-    }
-
-    private List<Method> getAllDeclaredHandlerMethods(Class<?> clazz) {
-      final List<Method> handlerMethods = new ArrayList<>();
-      while (clazz != null && !Collection.class.isAssignableFrom(clazz) && !clazz.isArray()) {
-        for (final Method handlerMethod : clazz.getDeclaredMethods()) {
-          if (handlerMethod.isAnnotationPresent(EventListener.class)) {
-            if (handlerMethod.getReturnType().equals(Void.TYPE)
-                && handlerMethod.getParameterTypes().length == 1
-                && ApplicationEvent.class.isAssignableFrom(handlerMethod.getParameterTypes()[0])) {
-              handlerMethods.add(handlerMethod);
-            } else {
-              throw new IllegalArgumentException(
-                  "@EventListener " + clazz.getName() + "." + handlerMethod.getName()
-                      + "skipped. Methods must be public, void, and accept exactly"
-                      + " one argument extending com.netflix.governator.event.ApplicationEvent.");
-            }
-          }
+        public ApplicationEventSubscribingTypeListener(
+                Provider<ApplicationEventDispatcher> dispatcherProvider) {
+            this.dispatcherProvider = dispatcherProvider;
         }
-        clazz = clazz.getSuperclass();
-      }
-      return handlerMethods;
+
+        @Override
+        public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
+            final Class<?> clazz = type.getRawType();
+            final List<Method> handlerMethods = getAllDeclaredHandlerMethods(clazz);
+            if (!handlerMethods.isEmpty()) {
+                encounter.register((InjectionListener<Object>) injectee -> {
+                    for (final Method handlerMethod : handlerMethods) {
+                        dispatcherProvider.get().registerListener(injectee, handlerMethod,
+                                (Class<? extends ApplicationEvent>) handlerMethod.getParameterTypes()[0]);
+                    }
+                });
+            }
+        }
+
+        private List<Method> getAllDeclaredHandlerMethods(Class<?> clazz) {
+            final List<Method> handlerMethods = new ArrayList<>();
+            while (clazz != null && !Collection.class.isAssignableFrom(clazz) && !clazz.isArray()) {
+                for (final Method handlerMethod : clazz.getDeclaredMethods()) {
+                    if (handlerMethod.isAnnotationPresent(EventListener.class)) {
+                        if (handlerMethod.getReturnType().equals(Void.TYPE)
+                                && handlerMethod.getParameterTypes().length == 1
+                                && ApplicationEvent.class.isAssignableFrom(handlerMethod.getParameterTypes()[0])) {
+                            handlerMethods.add(handlerMethod);
+                        } else {
+                            throw new IllegalArgumentException(
+                                    "@EventListener " + clazz.getName() + "." + handlerMethod.getName()
+                                            + "skipped. Methods must be public, void, and accept exactly"
+                                            + " one argument extending com.netflix.governator.event.ApplicationEvent.");
+                        }
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
+            return handlerMethods;
+        }
     }
-  }
 
-  private static class ApplicationEventSubscribingProvisionListener implements ProvisionListener {
+    private static class ApplicationEventSubscribingProvisionListener implements ProvisionListener {
 
-    private final Provider<ApplicationEventDispatcher> dispatcherProvider;
+        private final Provider<ApplicationEventDispatcher> dispatcherProvider;
 
-    public ApplicationEventSubscribingProvisionListener(
-        Provider<ApplicationEventDispatcher> dispatcherProvider) {
-      this.dispatcherProvider = dispatcherProvider;
+        public ApplicationEventSubscribingProvisionListener(
+                Provider<ApplicationEventDispatcher> dispatcherProvider) {
+            this.dispatcherProvider = dispatcherProvider;
+        }
+
+        @Override
+        public <T> void onProvision(ProvisionInvocation<T> provision) {
+            T provisioned = provision.provision();
+            if (provisioned != null && provisioned instanceof ApplicationEventListener) {
+                dispatcherProvider.get().registerListener((ApplicationEventListener) provisioned);
+            }
+        }
     }
 
     @Override
-    public <T> void onProvision(ProvisionInvocation<T> provision) {
-      T provisioned = provision.provision();
-      if (provisioned != null && provisioned instanceof ApplicationEventListener) {
-        dispatcherProvider.get().registerListener((ApplicationEventListener) provisioned);
-      }
+    protected void configure() {
+        Provider<ApplicationEventDispatcher> dispatcherProvider = binder()
+                .getProvider(ApplicationEventDispatcher.class);
+        bindListener(Matchers.any(), new ApplicationEventSubscribingTypeListener(dispatcherProvider));
+        bindListener(Matchers.any(),
+                new ApplicationEventSubscribingProvisionListener(dispatcherProvider));
     }
-  }
 
-  @Override
-  protected void configure() {
-    Provider<ApplicationEventDispatcher> dispatcherProvider = binder()
-        .getProvider(ApplicationEventDispatcher.class);
-    bindListener(Matchers.any(), new ApplicationEventSubscribingTypeListener(dispatcherProvider));
-    bindListener(Matchers.any(),
-        new ApplicationEventSubscribingProvisionListener(dispatcherProvider));
-  }
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass().equals(obj.getClass());
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    return obj != null && getClass().equals(obj.getClass());
-  }
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return "ApplicationEventModule[]";
-  }
+    @Override
+    public String toString() {
+        return "ApplicationEventModule[]";
+    }
 }

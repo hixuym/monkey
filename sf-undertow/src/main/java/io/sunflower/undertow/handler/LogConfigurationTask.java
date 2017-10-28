@@ -1,13 +1,13 @@
 package io.sunflower.undertow.handler;
 
-import java.io.PrintWriter;
-import java.util.List;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.google.common.collect.ImmutableMultimap;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Sets the logging level for a number of loggers <p> <b>Parameters:</b> <table> <tr> <td>Name</td>
@@ -17,47 +17,47 @@ import org.slf4j.LoggerFactory;
  */
 public class LogConfigurationTask extends Task {
 
-  private final ILoggerFactory loggerContext;
+    private final ILoggerFactory loggerContext;
 
-  /**
-   * Creates a new LogConfigurationTask.
-   */
-  public LogConfigurationTask() {
-    this(LoggerFactory.getILoggerFactory());
-  }
-
-  /**
-   * Creates a new LogConfigurationTask with the given {@link ILoggerFactory} instance.
-   * <p/>
-   * <b>Use {@link LogConfigurationTask#LogConfigurationTask()} instead.</b>
-   *
-   * @param loggerContext a {@link ILoggerFactory} instance
-   */
-  public LogConfigurationTask(ILoggerFactory loggerContext) {
-    super("log-level");
-    this.loggerContext = loggerContext;
-  }
-
-  @Override
-  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
-      throws Exception {
-    final List<String> loggerNames = getLoggerNames(parameters);
-    final Level loggerLevel = getLoggerLevel(parameters);
-
-    for (String loggerName : loggerNames) {
-      ((LoggerContext) loggerContext).getLogger(loggerName).setLevel(loggerLevel);
-      output
-          .println(String.format("Configured logging level for %s to %s", loggerName, loggerLevel));
-      output.flush();
+    /**
+     * Creates a new LogConfigurationTask.
+     */
+    public LogConfigurationTask() {
+        this(LoggerFactory.getILoggerFactory());
     }
-  }
 
-  private List<String> getLoggerNames(ImmutableMultimap<String, String> parameters) {
-    return parameters.get("logger").asList();
-  }
+    /**
+     * Creates a new LogConfigurationTask with the given {@link ILoggerFactory} instance.
+     * <p/>
+     * <b>Use {@link LogConfigurationTask#LogConfigurationTask()} instead.</b>
+     *
+     * @param loggerContext a {@link ILoggerFactory} instance
+     */
+    public LogConfigurationTask(ILoggerFactory loggerContext) {
+        super("log-level");
+        this.loggerContext = loggerContext;
+    }
 
-  private Level getLoggerLevel(ImmutableMultimap<String, String> parameters) {
-    final List<String> loggerLevels = parameters.get("level").asList();
-    return loggerLevels.isEmpty() ? null : Level.valueOf(loggerLevels.get(0));
-  }
+    @Override
+    public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
+            throws Exception {
+        final List<String> loggerNames = getLoggerNames(parameters);
+        final Level loggerLevel = getLoggerLevel(parameters);
+
+        for (String loggerName : loggerNames) {
+            ((LoggerContext) loggerContext).getLogger(loggerName).setLevel(loggerLevel);
+            output
+                    .println(String.format("Configured logging level for %s to %s", loggerName, loggerLevel));
+            output.flush();
+        }
+    }
+
+    private List<String> getLoggerNames(ImmutableMultimap<String, String> parameters) {
+        return parameters.get("logger").asList();
+    }
+
+    private Level getLoggerLevel(ImmutableMultimap<String, String> parameters) {
+        final List<String> loggerLevels = parameters.get("level").asList();
+        return loggerLevels.isEmpty() ? null : Level.valueOf(loggerLevels.get(0));
+    }
 }

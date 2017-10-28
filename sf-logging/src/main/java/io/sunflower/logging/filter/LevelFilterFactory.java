@@ -11,10 +11,10 @@ import ch.qos.logback.core.spi.DeferredProcessingAware;
  */
 public interface LevelFilterFactory<E extends DeferredProcessingAware> {
 
-  /**
-   * Creates a {@link Filter} of type E
-   *
-   * @return a new {@link Filter}
-   */
-  Filter<E> build(Level threshold);
+    /**
+     * Creates a {@link Filter} of type E
+     *
+     * @return a new {@link Filter}
+     */
+    Filter<E> build(Level threshold);
 }

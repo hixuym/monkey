@@ -11,10 +11,10 @@ import io.undertow.Undertow;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface ConnectorFactory extends Discoverable {
 
-  /**
-   * Create a new connector.
-   *
-   * @return a {@see Undertow.ListenerBuilder}
-   */
-  Undertow.ListenerBuilder build(Environment environment);
+    /**
+     * Create a new connector.
+     *
+     * @return a {@see Undertow.ListenerBuilder}
+     */
+    Undertow.ListenerBuilder build(Environment environment);
 }

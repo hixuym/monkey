@@ -34,7 +34,7 @@ import java.util.function.UnaryOperator;
 
 public final class AdvisableAnnotatedMethodScanner extends ModuleAnnotatedMethodScanner {
     private static final AdvisableAnnotatedMethodScanner INSTANCE = new AdvisableAnnotatedMethodScanner();
-    
+
     public static AdvisableAnnotatedMethodScanner scanner() {
         return INSTANCE;
     }
@@ -47,7 +47,7 @@ public final class AdvisableAnnotatedMethodScanner extends ModuleAnnotatedMethod
             }
         };
     }
-    
+
     private AdvisableAnnotatedMethodScanner() {
     }
 
@@ -65,7 +65,7 @@ public final class AdvisableAnnotatedMethodScanner extends ModuleAnnotatedMethod
             Preconditions.checkArgument(UnaryOperator.class.isAssignableFrom(method.getReturnType()), "Return type fo @Advice method must be UnaryOperator");
             ParameterizedType unaryOperatorType = (ParameterizedType) method.getGenericReturnType();
             Type type = unaryOperatorType.getActualTypeArguments()[0];
-            return (Key<T>) AdvisesBinder.getAdviceKeyForNewItem(binder, key.ofType(type), ((Advises)annotation).order());
+            return (Key<T>) AdvisesBinder.getAdviceKeyForNewItem(binder, key.ofType(type), ((Advises) annotation).order());
         }
         return key;
     }

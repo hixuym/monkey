@@ -12,7 +12,7 @@ package io.sunflower.postoffice;
 
 /**
  * Simply takes a Mail and sends it.
- *
+ * <p>
  * Can be used for instance with the implementation that uses Apache CommonsMail. Or the Mockmailer.
  * Or your own implementation.
  *
@@ -20,11 +20,12 @@ package io.sunflower.postoffice;
  */
 public interface Postoffice {
 
-  /**
-   * send mail
-   * @param mail
-   * @throws Exception
-   */
-  void send(Mail mail) throws Exception;
+    /**
+     * send mail
+     *
+     * @param mail
+     * @throws Exception
+     */
+    void send(Mail mail) throws Exception;
 
 }

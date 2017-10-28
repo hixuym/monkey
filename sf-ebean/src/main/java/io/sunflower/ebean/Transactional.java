@@ -15,14 +15,14 @@
 
 package io.sunflower.ebean;
 
+import io.ebean.annotation.PersistBatch;
+import io.ebean.annotation.TxIsolation;
+import io.ebean.annotation.TxType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.ebean.annotation.PersistBatch;
-import io.ebean.annotation.TxIsolation;
-import io.ebean.annotation.TxType;
 
 /**
  * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is
@@ -65,71 +65,71 @@ import io.ebean.annotation.TxType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transactional {
 
-  /**
-   * The type of transaction scoping. Defaults to REQUIRED.
-   */
-  TxType type() default TxType.REQUIRED;
+    /**
+     * The type of transaction scoping. Defaults to REQUIRED.
+     */
+    TxType type() default TxType.REQUIRED;
 
-  /**
-   * Persist batch mode for the transaction.
-   */
-  PersistBatch batch() default PersistBatch.INHERIT;
+    /**
+     * Persist batch mode for the transaction.
+     */
+    PersistBatch batch() default PersistBatch.INHERIT;
 
-  /**
-   * Persist batch mode for the request if not set on the transaction. <p> If batch is set to NONE
-   * then batchOnCascade can be set to INSERT or ALL and then each save(), delete(), insert(),
-   * update() request that cascades to child beans can use JDBC batch. </p>
-   */
-  PersistBatch batchOnCascade() default PersistBatch.INHERIT;
+    /**
+     * Persist batch mode for the request if not set on the transaction. <p> If batch is set to NONE
+     * then batchOnCascade can be set to INSERT or ALL and then each save(), delete(), insert(),
+     * update() request that cascades to child beans can use JDBC batch. </p>
+     */
+    PersistBatch batchOnCascade() default PersistBatch.INHERIT;
 
-  /**
-   * The batch size to use when using JDBC batch mode. <p> If unset this defaults to the value set
-   * in ServerConfig. </p>
-   */
-  int batchSize() default 0;
+    /**
+     * The batch size to use when using JDBC batch mode. <p> If unset this defaults to the value set
+     * in ServerConfig. </p>
+     */
+    int batchSize() default 0;
 
-  /**
-   * Set to false when we want to skip getting generatedKeys. <p> This is typically used in the case
-   * of large batch inserts where we get a performance benefit from not calling getGeneratedKeys (as
-   * we are going to insert a lot of rows and have no need for the Id values after the insert).
-   * </p>
-   */
-  boolean getGeneratedKeys() default true;
+    /**
+     * Set to false when we want to skip getting generatedKeys. <p> This is typically used in the case
+     * of large batch inserts where we get a performance benefit from not calling getGeneratedKeys (as
+     * we are going to insert a lot of rows and have no need for the Id values after the insert).
+     * </p>
+     */
+    boolean getGeneratedKeys() default true;
 
-  /**
-   * The transaction isolation level this transaction should have. <p> This will only be used if
-   * this scope creates the transaction. If the transaction has already started then this will
-   * currently be ignored (you could argue that it should throw an exception). </p>
-   */
-  TxIsolation isolation() default TxIsolation.DEFAULT;
+    /**
+     * The transaction isolation level this transaction should have. <p> This will only be used if
+     * this scope creates the transaction. If the transaction has already started then this will
+     * currently be ignored (you could argue that it should throw an exception). </p>
+     */
+    TxIsolation isolation() default TxIsolation.DEFAULT;
 
-  /**
-   * Set this to false if the JDBC batch should not be automatically flushed when a query is executed.
-   */
-  boolean flushOnQuery() default true;
+    /**
+     * Set this to false if the JDBC batch should not be automatically flushed when a query is executed.
+     */
+    boolean flushOnQuery() default true;
 
-  /**
-   * Set this to true if the transaction should be only contain queries.
-   */
-  boolean readOnly() default false;
+    /**
+     * Set this to true if the transaction should be only contain queries.
+     */
+    boolean readOnly() default false;
 
-  /**
-   * The name of the server that you want the transaction to be created from. <p> If left blank the
-   * 'default' server is used. </p>
-   */
-  String serverName() default EbeanBundle.DEFAULT_NAME;
+    /**
+     * The name of the server that you want the transaction to be created from. <p> If left blank the
+     * 'default' server is used. </p>
+     */
+    String serverName() default EbeanBundle.DEFAULT_NAME;
 
-  // int timeout() default 0;
+    // int timeout() default 0;
 
-  /**
-   * The Throwable's that will explicitly cause a rollback to occur.
-   */
-  Class<? extends Throwable>[] rollbackFor() default {};
+    /**
+     * The Throwable's that will explicitly cause a rollback to occur.
+     */
+    Class<? extends Throwable>[] rollbackFor() default {};
 
-  /**
-   * The Throwable's that will explicitly NOT cause a rollback to occur.
-   */
-  Class<? extends Throwable>[] noRollbackFor() default {};
+    /**
+     * The Throwable's that will explicitly NOT cause a rollback to occur.
+     */
+    Class<? extends Throwable>[] noRollbackFor() default {};
 
 }
 

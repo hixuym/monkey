@@ -24,6 +24,6 @@ import java.util.EventListener;
  */
 public interface ServerLifecycleListener extends EventListener {
 
-  void serverStarted(Server server);
+    void serverStarted(Server server);
 
 }

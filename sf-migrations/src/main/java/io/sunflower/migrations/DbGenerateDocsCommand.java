@@ -23,21 +23,21 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 public class DbGenerateDocsCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
-  public DbGenerateDocsCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
-      String migrationsFileName) {
-    super("generate-docs", "Generate documentation about the database state.", strategy,
-        configurationClass, migrationsFileName);
-  }
+    public DbGenerateDocsCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
+                                 String migrationsFileName) {
+        super("generate-docs", "Generate documentation about the database state.", strategy,
+                configurationClass, migrationsFileName);
+    }
 
-  @Override
-  public void configure(Subparser subparser) {
-    super.configure(subparser);
+    @Override
+    public void configure(Subparser subparser) {
+        super.configure(subparser);
 
-    subparser.addArgument("output").nargs(1).help("output directory");
-  }
+        subparser.addArgument("output").nargs(1).help("output directory");
+    }
 
-  @Override
-  public void run(Namespace namespace, Liquibase liquibase) throws Exception {
-    liquibase.generateDocumentation(namespace.<String>getList("output").get(0));
-  }
+    @Override
+    public void run(Namespace namespace, Liquibase liquibase) throws Exception {
+        liquibase.generateDocumentation(namespace.<String>getList("output").get(0));
+    }
 }

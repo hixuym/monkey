@@ -2,9 +2,9 @@ package io.sunflower.configuration;
 
 public class UndefinedEnvironmentVariableException extends RuntimeException {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public UndefinedEnvironmentVariableException(String errorMessage) {
-    super(errorMessage);
-  }
+    public UndefinedEnvironmentVariableException(String errorMessage) {
+        super(errorMessage);
+    }
 }

@@ -15,9 +15,9 @@ package io.sunflower.reflect;
 
 public class Test8 {
 
-  private static void s_method() {
-  }
+    private static void s_method() {
+    }
 
-  private void i_method() {
-  }
+    private void i_method() {
+    }
 }

@@ -16,5 +16,5 @@ import io.sunflower.jackson.Discoverable;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface FilterFactory<E extends DeferredProcessingAware> extends Discoverable {
 
-  Filter<E> build();
+    Filter<E> build();
 }

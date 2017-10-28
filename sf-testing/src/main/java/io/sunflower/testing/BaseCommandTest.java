@@ -15,52 +15,52 @@
 
 package io.sunflower.testing;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.Optional;
-
 import io.sunflower.cli.Cli;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.util.JarLocation;
 import org.junit.After;
 import org.junit.Before;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Optional;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public abstract class BaseCommandTest {
 
-  private final PrintStream originalOut = System.out;
-  private final PrintStream originalErr = System.err;
-  private final InputStream originalIn = System.in;
+    private final PrintStream originalOut = System.out;
+    private final PrintStream originalErr = System.err;
+    private final InputStream originalIn = System.in;
 
-  private final ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
-  private final ByteArrayOutputStream stdErr = new ByteArrayOutputStream();
-  protected Cli cli;
+    private final ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream stdErr = new ByteArrayOutputStream();
+    protected Cli cli;
 
-  @Before
-  public void setUp() throws Exception {
-    // Setup necessary mock
-    final JarLocation location = mock(JarLocation.class);
-    when(location.getVersion()).thenReturn(Optional.of("1.0.0"));
+    @Before
+    public void setUp() throws Exception {
+        // Setup necessary mock
+        final JarLocation location = mock(JarLocation.class);
+        when(location.getVersion()).thenReturn(Optional.of("1.0.0"));
 
-    // Add commands you want to test
+        // Add commands you want to test
 
-    // Redirect stdout and stderr to our byte streams
-    System.setOut(new PrintStream(stdOut));
-    System.setErr(new PrintStream(stdErr));
+        // Redirect stdout and stderr to our byte streams
+        System.setOut(new PrintStream(stdOut));
+        System.setErr(new PrintStream(stdErr));
 
-    // Build what'll run the command and interpret arguments
-    cli = new Cli(location, getBootstrap(), stdOut, stdErr);
-  }
+        // Build what'll run the command and interpret arguments
+        cli = new Cli(location, getBootstrap(), stdOut, stdErr);
+    }
 
-  protected abstract Bootstrap getBootstrap();
+    protected abstract Bootstrap getBootstrap();
 
-  @After
-  public void teardown() {
-    System.setOut(originalOut);
-    System.setErr(originalErr);
-    System.setIn(originalIn);
-  }
+    @After
+    public void teardown() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
+        System.setIn(originalIn);
+    }
 }

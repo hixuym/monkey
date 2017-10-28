@@ -13,13 +13,13 @@ import java.io.InputStream;
  */
 public class ResourceConfigurationSourceProvider implements ConfigurationSourceProvider {
 
-  @Override
-  public InputStream open(String path) throws IOException {
-    InputStream result = getResourceAsStream(path);
-    return result == null && path.startsWith("/") ? getResourceAsStream(path.substring(1)) : result;
-  }
+    @Override
+    public InputStream open(String path) throws IOException {
+        InputStream result = getResourceAsStream(path);
+        return result == null && path.startsWith("/") ? getResourceAsStream(path.substring(1)) : result;
+    }
 
-  private InputStream getResourceAsStream(String path) {
-    return getClass().getClassLoader().getResourceAsStream(path);
-  }
+    private InputStream getResourceAsStream(String path) {
+        return getClass().getClassLoader().getResourceAsStream(path);
+    }
 }

@@ -10,28 +10,28 @@ import java.util.Optional;
  */
 public class JarLocation {
 
-  private final Class<?> klass;
+    private final Class<?> klass;
 
-  public JarLocation(Class<?> klass) {
-    this.klass = klass;
-  }
-
-  public Optional<String> getVersion() {
-    return Optional.ofNullable(klass.getPackage())
-        .map(Package::getImplementationVersion);
-  }
-
-  @Override
-  public String toString() {
-    final URL location = klass.getProtectionDomain().getCodeSource().getLocation();
-    try {
-      final String jar = new File(location.toURI()).getName();
-      if (jar.endsWith(".jar")) {
-        return jar;
-      }
-      return "project.jar";
-    } catch (Exception ignored) {
-      return "project.jar";
+    public JarLocation(Class<?> klass) {
+        this.klass = klass;
     }
-  }
+
+    public Optional<String> getVersion() {
+        return Optional.ofNullable(klass.getPackage())
+                .map(Package::getImplementationVersion);
+    }
+
+    @Override
+    public String toString() {
+        final URL location = klass.getProtectionDomain().getCodeSource().getLocation();
+        try {
+            final String jar = new File(location.toURI()).getName();
+            if (jar.endsWith(".jar")) {
+                return jar;
+            }
+            return "project.jar";
+        } catch (Exception ignored) {
+            return "project.jar";
+        }
+    }
 }

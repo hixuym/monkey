@@ -15,14 +15,14 @@
 
 package io.sunflower.setup;
 
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * BootModule
@@ -32,21 +32,21 @@ import com.google.inject.name.Names;
  */
 public class BootModule extends AbstractModule {
 
-  private final Environment environment;
+    private final Environment environment;
 
-  public BootModule(Environment environment) {
-    this.environment = environment;
-  }
+    public BootModule(Environment environment) {
+        this.environment = environment;
+    }
 
-  @Override
-  protected void configure() {
-    bindConstant().annotatedWith(Names.named("application.name")).to(environment.getName());
-    bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
-    bind(MetricRegistry.class).toInstance(environment.metrics());
-    bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
-    ValidatorFactory validatorFactory = environment.getValidatorFactory();
-    bind(Validator.class).toInstance(validatorFactory.getValidator());
-    bind(ValidatorFactory.class).toInstance(validatorFactory);
-    bind(Environment.class).toInstance(environment);
-  }
+    @Override
+    protected void configure() {
+        bindConstant().annotatedWith(Names.named("application.name")).to(environment.getName());
+        bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
+        bind(MetricRegistry.class).toInstance(environment.metrics());
+        bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
+        ValidatorFactory validatorFactory = environment.getValidatorFactory();
+        bind(Validator.class).toInstance(validatorFactory.getValidator());
+        bind(ValidatorFactory.class).toInstance(validatorFactory);
+        bind(Environment.class).toInstance(environment);
+    }
 }

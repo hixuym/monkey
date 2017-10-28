@@ -15,39 +15,39 @@
 
 package io.sunflower.undertow.handler;
 
+import com.codahale.metrics.jvm.ThreadDump;
+import com.google.common.collect.ImmutableMultimap;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 
-import com.codahale.metrics.jvm.ThreadDump;
-import com.google.common.collect.ImmutableMultimap;
-
 public class ThreadDumpTask extends Task {
 
-  private transient ThreadDump threadDump;
+    private transient ThreadDump threadDump;
 
-  public ThreadDumpTask() {
-    super("dump-thread");
-    try {
-      // Some PaaS like Google App Engine blacklist java.lang.managament
-      this.threadDump = new ThreadDump(ManagementFactory.getThreadMXBean());
-    } catch (NoClassDefFoundError ncdfe) {
-      this.threadDump = null; // we won't be able to provide thread dump
-    }
-  }
-
-  @Override
-  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
-      throws Exception {
-    if (threadDump == null) {
-      output.println("Sorry your runtime environment does not allow to dump threads.");
-      return;
+    public ThreadDumpTask() {
+        super("dump-thread");
+        try {
+            // Some PaaS like Google App Engine blacklist java.lang.managament
+            this.threadDump = new ThreadDump(ManagementFactory.getThreadMXBean());
+        } catch (NoClassDefFoundError ncdfe) {
+            this.threadDump = null; // we won't be able to provide thread dump
+        }
     }
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    @Override
+    public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
+            throws Exception {
+        if (threadDump == null) {
+            output.println("Sorry your runtime environment does not allow to dump threads.");
+            return;
+        }
 
-    threadDump.dump(out);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    output.println(out.toString("utf-8"));
-  }
+        threadDump.dump(out);
+
+        output.println(out.toString("utf-8"));
+    }
 }

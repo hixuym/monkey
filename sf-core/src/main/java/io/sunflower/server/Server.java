@@ -28,66 +28,68 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Server extends ContainerLifeCycle {
 
-  protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
-  private Environment environment;
-  private Injector injector;
+    private Environment environment;
+    private Injector injector;
 
-  public Server(Environment environment) {
-    this.environment = environment;
-    environment.lifecycle().attach(this);
-    this.injector = environment.injector();
+    public Server(Environment environment) {
+        this.environment = environment;
+        environment.lifecycle().attach(this);
+        this.injector = environment.injector();
 
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      try {
-        this.stop();
-      } catch (Exception e) {
-        logger.warn("Failure during stop server", e);
-      }
-    }));
-  }
-
-  @Override
-  protected final void doStart() throws Exception {
-    Stopwatch sw = Stopwatch.createStarted();
-    injector.getInstance(LifecycleManager.class).start();
-    super.doStart();
-    this.boot();
-    sw.stop();
-    if (logger.isInfoEnabled()) {
-      logger.info("server started in {}", sw);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                this.stop();
+            } catch (Exception e) {
+                logger.warn("Failure during stop server", e);
+            }
+        }));
     }
-  }
 
-  @Override
-  protected final void doStop() throws Exception {
-    Stopwatch sw = Stopwatch.createStarted();
-    injector.getInstance(LifecycleManager.class).stop();
-    super.doStop();
-    this.shutdown();
-    sw.stop();
-    if (logger.isInfoEnabled()) {
-      logger.info("server stoped in {}", sw);
+    @Override
+    protected final void doStart() throws Exception {
+        Stopwatch sw = Stopwatch.createStarted();
+        injector.getInstance(LifecycleManager.class).start();
+        super.doStart();
+        this.boot();
+        sw.stop();
+        if (logger.isInfoEnabled()) {
+            logger.info("server started in {}", sw);
+        }
     }
-  }
 
-  /**
-   * boot the real server
-   * @throws Exception
-   */
-  protected abstract void boot() throws Exception;
+    @Override
+    protected final void doStop() throws Exception {
+        Stopwatch sw = Stopwatch.createStarted();
+        injector.getInstance(LifecycleManager.class).stop();
+        super.doStop();
+        this.shutdown();
+        sw.stop();
+        if (logger.isInfoEnabled()) {
+            logger.info("server stoped in {}", sw);
+        }
+    }
 
-  /**
-   * shutdown the real server
-   * @throws Exception
-   */
-  protected abstract void shutdown() throws Exception;
+    /**
+     * boot the real server
+     *
+     * @throws Exception
+     */
+    protected abstract void boot() throws Exception;
 
-  public Environment getEnvironment() {
-    return environment;
-  }
+    /**
+     * shutdown the real server
+     *
+     * @throws Exception
+     */
+    protected abstract void shutdown() throws Exception;
 
-  public Injector getInjector() {
-    return injector;
-  }
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public Injector getInjector() {
+        return injector;
+    }
 }

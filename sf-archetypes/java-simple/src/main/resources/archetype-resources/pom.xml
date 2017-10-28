@@ -12,9 +12,9 @@
     <packaging>jar</packaging>
 
     <name>\${name}</name>
-#if( $description != "null" )
+    #if( $description != "null" )
     <description>\${description}</description>
-#end
+    #end
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,15 +43,17 @@
 
     <build>
         <plugins>
-#if( $shaded == "true" )
+            #if( $shaded == "true" )
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.1</version>
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>\${mainClass}</mainClass>
                         </transformer>
                     </transformers>
@@ -76,7 +78,7 @@
                     </execution>
                 </executions>
             </plugin>
-#end
+            #end
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>

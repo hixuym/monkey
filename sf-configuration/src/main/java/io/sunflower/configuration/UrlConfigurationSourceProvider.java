@@ -10,8 +10,8 @@ import java.net.URL;
  */
 public class UrlConfigurationSourceProvider implements ConfigurationSourceProvider {
 
-  @Override
-  public InputStream open(String path) throws IOException {
-    return new URL(path).openStream();
-  }
+    @Override
+    public InputStream open(String path) throws IOException {
+        return new URL(path).openStream();
+    }
 }

@@ -15,13 +15,13 @@
 
 package io.sunflower.server;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author michael
@@ -29,30 +29,30 @@ import org.slf4j.LoggerFactory;
 @JsonTypeName("noops")
 public class NoopsServerFactory implements ServerFactory {
 
-  private static Logger logger = LoggerFactory.getLogger(NoopsServerFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(NoopsServerFactory.class);
 
-  @Override
-  public Server build(Environment environment) {
-    return new Server(environment) {
+    @Override
+    public Server build(Environment environment) {
+        return new Server(environment) {
 
-      @Override
-      protected void boot() throws Exception {
-        logger.info("do nothing, configure your real server type at " + getEnvironment().getName() + ".yml");
-      }
+            @Override
+            protected void boot() throws Exception {
+                logger.info("do nothing, configure your real server type at " + getEnvironment().getName() + ".yml");
+            }
 
-      @Override
-      protected void shutdown() throws Exception {
-      }
-    };
-  }
+            @Override
+            protected void shutdown() throws Exception {
+            }
+        };
+    }
 
-  @Override
-  public void configure(Environment environment) {
-  }
+    @Override
+    public void configure(Environment environment) {
+    }
 
-  @Override
-  public Map<String, String> getServerProperties() {
-    return Collections.emptyMap();
-  }
+    @Override
+    public Map<String, String> getServerProperties() {
+        return Collections.emptyMap();
+    }
 
 }
