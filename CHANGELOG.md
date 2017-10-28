@@ -1,5 +1,10 @@
 ## Sunflower Framework
 
+###1.3.1 - 2017-10-28
+
+    - add some javadoc
+    - reformat code using idea default style.
+
 ###1.3.0 - 2017-10-27
 
   - add injector processor
