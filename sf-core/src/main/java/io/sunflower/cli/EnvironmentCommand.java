@@ -1,7 +1,9 @@
 package io.sunflower.cli;
 
+import com.google.inject.Stage;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
+import io.sunflower.guice.Mode;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -43,11 +45,13 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
         configuration.getServerFactory().configure(environment);
 
+        Mode mode = configuration.getServerFactory().getMode();
+
         bootstrap.run(configuration, environment);
 
         application.run(configuration, environment);
 
-        environment.guice().setup();
+        environment.guice().setup(mode);
 
         run(environment, namespace, configuration);
     }

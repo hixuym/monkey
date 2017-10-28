@@ -16,6 +16,7 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.sunflower.guice.Mode;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ import java.util.Map;
  * @author michael
  */
 @JsonTypeName("noops")
-public class NoopsServerFactory implements ServerFactory {
+public class NoopsServerFactory extends AbstractServerFactory {
 
     private static Logger logger = LoggerFactory.getLogger(NoopsServerFactory.class);
 
@@ -37,7 +38,7 @@ public class NoopsServerFactory implements ServerFactory {
 
             @Override
             protected void boot() throws Exception {
-                logger.info("do nothing, configure your real server type at " + getEnvironment().getName() + ".yml");
+                logger.info("do nothing, just use for testing.");
             }
 
             @Override
@@ -51,8 +52,7 @@ public class NoopsServerFactory implements ServerFactory {
     }
 
     @Override
-    public Map<String, String> getServerProperties() {
-        return Collections.emptyMap();
+    public Mode getMode() {
+        return Mode.test;
     }
-
 }

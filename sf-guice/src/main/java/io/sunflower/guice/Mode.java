@@ -13,21 +13,38 @@
  * limitations under the License.
  */
 
-package io.sunflower.server;
-
-import java.util.EventListener;
+package io.sunflower.guice;
 
 /**
- * ServerLifecycleListener
- *
- * @author michael created on 17/10/17 13:34
+ * @author michael
  */
-public interface ServerLifecycleListener extends EventListener {
+
+public enum Mode {
 
     /**
-     * notify when server started
-     * @param server
+     *  prod running mode
      */
-    void serverStarted(Server server);
+    prod("prod"),
+
+    /**
+     * dev runing mode
+     */
+    dev("dev"),
+
+    /**
+     * test running mode
+     */
+    test("test");
+
+    private String mode;
+
+    Mode(String mode) {
+        this.mode = mode;
+    }
+
+    @Override
+    public String toString() {
+        return mode;
+    }
 
 }

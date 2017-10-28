@@ -21,10 +21,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import io.sunflower.guice.InjectorBuilder;
-import io.sunflower.guice.InjectorProcessor;
-import io.sunflower.guice.LoggerProvider;
-import io.sunflower.guice.ModulesEx;
+import io.sunflower.guice.*;
 import io.sunflower.guice.advise.AdvisableAnnotatedMethodScanner;
 import io.sunflower.guice.event.guava.GuavaApplicationEventModule;
 import io.sunflower.guice.lifecycle.LifecycleSupport;
@@ -37,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 /**
  * @author michael
  */
@@ -44,10 +43,11 @@ public class GuiceEnvironment {
 
     private static Logger LOG = LoggerFactory.getLogger(GuiceEnvironment.class);
 
-    private final List<Module> moduleLoaded = Lists.newArrayList();
-    private final List<Module> overrideModules = Lists.newArrayList();
+    private final List<Module> moduleLoaded = newArrayList();
+    private final List<Module> overrideModules = newArrayList();
+    private final List<InjectorProcessor> injectorProcessors = newArrayList();
 
-    private Injector injector;
+    private volatile Injector injector;
 
     private boolean setuped = false;
 
@@ -56,8 +56,6 @@ public class GuiceEnvironment {
     private boolean adviseEnabled = false;
     private boolean metricsEnabled = false;
     private boolean lifecycleEnabled = false;
-
-    private List<InjectorProcessor> injectorProcessors = Lists.newArrayList();
 
     public GuiceEnvironment() {
         System.setProperty("file.encoding", "utf-8");
@@ -114,7 +112,7 @@ public class GuiceEnvironment {
         register(ModulesEx.fromEagerSingleton(tClass));
     }
 
-    public void override(Module... modules) {
+    public void overrideWith(Module... modules) {
         checkNotSetuped();
         this.overrideModules.addAll(Arrays.asList(modules));
     }
@@ -124,6 +122,10 @@ public class GuiceEnvironment {
     }
 
     public void setup() {
+        setup(Mode.prod);
+    }
+
+    public void setup(Mode mode) {
 
         checkNotSetuped();
 
@@ -158,16 +160,19 @@ public class GuiceEnvironment {
         builder.warnOfStaticInjections()
                 .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
-        this.injector = builder.createInjector(Stage.PRODUCTION);
+        this.injector = builder.createInjector(mode == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
 
         injectorProcessors.forEach(it -> it.process(injector));
 
         sw.stop();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Guice Injector create time: {}", sw);
+            LOG.debug("guice environment setup time: {}", sw);
         }
 
+        this.moduleLoaded.clear();
+        this.injectorProcessors.clear();
+        this.overrideModules.clear();
         this.setuped = true;
     }
 

@@ -16,6 +16,7 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.sunflower.guice.Mode;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
 
@@ -50,4 +51,11 @@ public interface ServerFactory extends Discoverable {
      * @return Map<String, String>
      */
     Map<String, String> getServerProperties();
+
+    /**
+     * get server run mode. default is Mode.dev
+     *
+     * @return
+     */
+    Mode getMode();
 }

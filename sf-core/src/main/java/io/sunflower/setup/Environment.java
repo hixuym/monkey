@@ -61,25 +61,20 @@ public class Environment {
                        ClassLoader classLoader,
                        HealthCheckRegistry healthCheckRegistry) {
         this.name = name;
-        this.objectMapper = objectMapper;
-
-        this.metricRegistry = metricRegistry;
-        this.healthCheckRegistry = healthCheckRegistry;
-
-        this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
-
-        this.validatorFactory = validatorFactory;
         this.classLoader = classLoader;
 
+        this.objectMapper = objectMapper;
+        this.metricRegistry = metricRegistry;
+        this.healthCheckRegistry = healthCheckRegistry;
+        this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
+        this.validatorFactory = validatorFactory;
+
         this.guiceEnvironment = new GuiceEnvironment();
-
-        guiceEnvironment.enableLifecycle();
-        guiceEnvironment.enableMetrics();
-
+        this.guiceEnvironment.enableLifecycle();
+        this.guiceEnvironment.enableMetrics();
         this.guiceEnvironment.register(new BootModule(this));
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
-
         this.lifecycleEnvironment.manage(new Managed() {
             @Override
             public void stop() throws Exception {
@@ -123,15 +118,7 @@ public class Environment {
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader) {
-        this(name, objectMapper, validatorFactory, metricRegistry, classLoader,
-                new HealthCheckRegistry());
-    }
-
-    /**
-     * Returns an {@link ExecutorService} to run time bound health checks
-     */
-    public ExecutorService getHealthCheckExecutorService() {
-        return healthCheckExecutorService;
+        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry());
     }
 
     /**
@@ -139,6 +126,35 @@ public class Environment {
      */
     public LifecycleEnvironment lifecycle() {
         return lifecycleEnvironment;
+    }
+
+    /**
+     * Returns the application's {@link MetricRegistry}.
+     */
+    public MetricRegistry metrics() {
+        return metricRegistry;
+    }
+
+    /**
+     * Returns the application's {@link HealthCheckRegistry}.
+     */
+    public HealthCheckRegistry healthChecks() {
+        return healthCheckRegistry;
+    }
+
+    /**
+     * returns the guice configuration environment
+     * @return
+     */
+    public GuiceEnvironment guice() {
+        return guiceEnvironment;
+    }
+
+    /**
+     * Returns an {@link ExecutorService} to run time bound health checks
+     */
+    public ExecutorService getHealthCheckExecutorService() {
+        return healthCheckExecutorService;
     }
 
     /**
@@ -169,17 +185,6 @@ public class Environment {
         this.validatorFactory = requireNonNull(validator);
     }
 
-    /**
-     * Returns the application's {@link MetricRegistry}.
-     */
-    public MetricRegistry metrics() {
-        return metricRegistry;
-    }
-
-    public GuiceEnvironment guice() {
-        return guiceEnvironment;
-    }
-
     public Injector injector() {
         return guiceEnvironment.getInjector();
     }
@@ -189,13 +194,6 @@ public class Environment {
      */
     public ClassLoader classLoader() {
         return this.classLoader;
-    }
-
-    /**
-     * Returns the application's {@link HealthCheckRegistry}.
-     */
-    public HealthCheckRegistry healthChecks() {
-        return healthCheckRegistry;
     }
 
     public void addServerLifecycleListener(final ServerLifecycleListener lifecycleListener) {
@@ -214,8 +212,7 @@ public class Environment {
     private void logHealthChecks() {
         if (healthChecks().getNames().size() <= 1) {
             LOGGER.warn(String.format(
-                    "%n" +
-                            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
+                    "%n" +  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
                             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
                             "!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !%n" +
                             "!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !%n" +

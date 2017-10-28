@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * 		支持 sf:spi 配置
  * </pre>
+ * @author michael
  */
 public class ExtensionLoader<T> {
 

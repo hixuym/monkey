@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
  * process can be configured by {Application} subclasses by overriding {#bootstrapLogLevel}.
  *
  * @param <T> the type of configuration class for this application
+ * @author michael
  */
 public abstract class Application<T extends Configuration> {
 
@@ -113,6 +114,7 @@ public abstract class Application<T extends Configuration> {
             // only exit if there's an error running the command
             onFatalError();
         }
+
         sw.stop();
 
         logger.info(getName() + " started in {}", sw);

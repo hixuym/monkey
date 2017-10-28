@@ -22,8 +22,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.TypeLiteral;
 import io.sunflower.guice.Injectors;
 import io.sunflower.lifecycle.setup.StandardThreadExecutor;
+import io.sunflower.server.AbstractServerFactory;
 import io.sunflower.server.Server;
-import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.AdminHandlers;
 import io.sunflower.undertow.AppHandlers;
@@ -44,11 +44,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * AbstractServerFactory
+ * AbstractUndertowServerFactory
  *
  * @author michael created on 17/10/17 11:04
  */
-public abstract class AbstractServerFactory implements ServerFactory {
+public abstract class AbstractUndertowServerFactory extends AbstractServerFactory {
 
     @JsonIgnore
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -59,17 +59,17 @@ public abstract class AbstractServerFactory implements ServerFactory {
     protected final PathHandler appHandlers = new PathHandler();
 
     @Override
-    public Server build(Environment environment) {
+    public final Server build(Environment environment) {
 
         Injectors.mapOf(environment.injector(),
-                new TypeLiteral<Map<String, HttpHandler>>() {
-                }, AdminHandlers.class).forEach(adminHandlers::addPrefixPath);
+                new TypeLiteral<Map<String, HttpHandler>>() {}, AdminHandlers.class)
+                .forEach(adminHandlers::addPrefixPath);
 
         Injectors.mapOf(environment.injector(),
-                new TypeLiteral<Map<String, HttpHandler>>() {
-                }, AppHandlers.class).forEach(appHandlers::addPrefixPath);
+                new TypeLiteral<Map<String, HttpHandler>>() {}, AppHandlers.class)
+                .forEach(appHandlers::addPrefixPath);
 
-        return constract(environment);
+        return buildServer(environment);
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class AbstractServerFactory implements ServerFactory {
      * @param environment
      * @return
      */
-    protected abstract Server constract(Environment environment);
+    protected abstract Server buildServer(Environment environment);
 
     @Override
     public void configure(Environment environment) {
@@ -222,5 +222,21 @@ public abstract class AbstractServerFactory implements ServerFactory {
         }
 
         return httpHandler;
+    }
+
+    /**
+     * undertow context path
+     * @return
+     */
+    protected abstract String getApplicationContextPath();
+
+    @Override
+    @JsonProperty("properties")
+    public Map<String, String> getServerProperties() {
+        Map<String, String> properties = super.getServerProperties();
+
+        properties.put("sf.undertowContextPath", getApplicationContextPath());
+
+        return properties;
     }
 }

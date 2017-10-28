@@ -1,5 +1,10 @@
 ## Sunflower Framework
 
+###1.4.0 - 2017-10-28
+
+    - add mode to sf-guice
+    - serverFactory add getMode and add AbstractServerFactory for code reuse
+
 ###1.3.1 - 2017-10-28
 
     - add some javadoc

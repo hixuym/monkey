@@ -36,7 +36,7 @@ import java.util.Map;
  * @author michael created on 17/10/17 11:01
  */
 @JsonTypeName("undertow-simple")
-public class UndertowSimpleServerFactory extends AbstractServerFactory {
+public class UndertowSimpleServerFactory extends AbstractUndertowServerFactory {
 
     private ConnectorFactory connector = HttpConnectorFactory.application();
 
@@ -46,6 +46,7 @@ public class UndertowSimpleServerFactory extends AbstractServerFactory {
     private String adminContextPath = "/admin";
 
     @JsonProperty
+    @Override
     public String getApplicationContextPath() {
         return applicationContextPath;
     }
@@ -65,21 +66,6 @@ public class UndertowSimpleServerFactory extends AbstractServerFactory {
         this.adminContextPath = adminContextPath;
     }
 
-    @NotNull
-    private Map<String, String> serverProperties = new LinkedHashMap<>(20);
-
-    @JsonProperty("properties")
-    @Override
-    public Map<String, String> getServerProperties() {
-        serverProperties.put("sf.undertowContextPath", getApplicationContextPath());
-        return serverProperties;
-    }
-
-    @JsonProperty("properties")
-    public void setServerProperties(Map<String, String> properties) {
-        this.serverProperties = properties;
-    }
-
     @JsonProperty
     public ConnectorFactory getConnector() {
         return connector;
@@ -91,7 +77,7 @@ public class UndertowSimpleServerFactory extends AbstractServerFactory {
     }
 
     @Override
-    protected Server constract(Environment env) {
+    protected Server buildServer(Environment env) {
 
         Undertow.Builder undertowBuilder = Undertow.builder()
                 // NOTE: should not use equals chars within its cookie values?
