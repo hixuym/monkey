@@ -40,12 +40,13 @@ public class Scheduler {
 
     @Inject
     private Injector injector;
-    private volatile ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private volatile ScheduledExecutorService executor;
     private final List<Object> objectsToSchedule = Collections
             .synchronizedList(new ArrayList<>());
 
     @Start(order = 90)
     public void start() {
+        executor = Executors.newSingleThreadScheduledExecutor();
         scheduleCachedObjects();
     }
 
