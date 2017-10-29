@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
  */
 public class EbeanLocalTxnInterceptor implements MethodInterceptor {
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     private static class Internal {
     }
 

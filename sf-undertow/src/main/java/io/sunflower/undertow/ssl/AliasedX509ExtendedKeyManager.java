@@ -26,6 +26,7 @@ import java.security.cert.X509Certificate;
  * <p>An {@link X509ExtendedKeyManager} that select a key with desired alias, delegating other
  * processing to a nested X509ExtendedKeyManager.</p> <p>Can be used both with server and client
  * sockets.</p>
+ * @author michael
  */
 public class AliasedX509ExtendedKeyManager extends X509ExtendedKeyManager {
 

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of the lifecycle service
+ * @author michael
  */
 public class LifecycleManagerImpl implements LifecycleManager {
 

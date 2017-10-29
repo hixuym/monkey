@@ -4,6 +4,9 @@ import io.sunflower.util.Duration;
 
 import java.util.concurrent.ExecutorService;
 
+/**
+ * @author michael
+ */
 public class ExecutorServiceManager extends AbstractLifeCycle {
 
     private final ExecutorService executor;

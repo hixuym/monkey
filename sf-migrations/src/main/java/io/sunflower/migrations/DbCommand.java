@@ -24,6 +24,9 @@ import net.sourceforge.argparse4j.inf.Subparser;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * @author michael
+ */
 public class DbCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private static final String COMMAND_NAME_ATTR = "subcommand";

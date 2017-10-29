@@ -17,7 +17,16 @@ package io.sunflower.db;
 
 import io.sunflower.Configuration;
 
+/**
+ * bundle use this interface to get datasource factory, the method impl at bundle register time.
+ * @author michael
+ */
 public interface DatabaseConfiguration<T extends Configuration> {
 
+    /**
+     * get datasource factory from application configuration.
+     * @param configuration
+     * @return
+     */
     PooledDataSourceFactory getDataSourceFactory(T configuration);
 }

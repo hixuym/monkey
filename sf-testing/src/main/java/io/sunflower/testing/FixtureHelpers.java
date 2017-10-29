@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * A set of helper method for fixture files.
+ * @author michael
  */
 public class FixtureHelpers {
 

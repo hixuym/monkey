@@ -19,6 +19,9 @@ import io.sunflower.lifecycle.Managed;
 
 import javax.sql.DataSource;
 
+/**
+ * @author michael
+ */
 public interface ManagedDataSource extends DataSource, Managed {
 
 }

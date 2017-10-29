@@ -26,6 +26,7 @@ import java.util.Locale;
  * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 public abstract class BaseFormattedReporterFactory extends BaseReporterFactory {
 

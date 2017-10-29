@@ -7,6 +7,7 @@ import java.util.Optional;
 /**
  * A class which encapsulates the location on the local filesystem of the JAR in which the current
  * code is executing.
+ * @author michael
  */
 public class JarLocation {
 

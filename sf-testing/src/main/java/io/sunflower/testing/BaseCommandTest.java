@@ -29,6 +29,9 @@ import java.util.Optional;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author michael
+ */
 public abstract class BaseCommandTest {
 
     private final PrintStream originalOut = System.out;

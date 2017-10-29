@@ -9,6 +9,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Helper methods for class type parameters.
  *
+ * @author michael
  * @see <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Super Type Tokens</a>
  */
 public class Generics {

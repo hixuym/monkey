@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 /**
  * Performs a full JVM garbage collection (probably).
+ * @author michael
  */
 public class GarbageCollectionTask extends Task {
 

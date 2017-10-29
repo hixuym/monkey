@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 /**
  * Factory that creates a {@link SunflowerLayout}
+ * @author michael
  */
 public class SunflowerLayoutFactory implements LayoutFactory<ILoggingEvent> {
 

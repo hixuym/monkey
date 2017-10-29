@@ -39,6 +39,7 @@ import java.util.List;
  * <td>(none)</td> <td> List of patterns of hosts that should be reached without proxy. The patterns
  * may contain symbol '*' as a wildcard. If a host matches one of the patterns it will be reached
  * through a direct connection. </td> </tr> </table>
+ * @author michael
  */
 public class ProxyConfiguration {
 

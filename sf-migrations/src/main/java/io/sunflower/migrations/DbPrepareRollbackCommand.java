@@ -29,6 +29,9 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * @author michael
+ */
 public class DbPrepareRollbackCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream outputStream = System.out;

@@ -14,6 +14,7 @@ import java.util.*;
 
 /**
  * A {@link ConfigurationException} for errors parsing a configuration file.
+ * @author michael
  */
 public class ConfigurationParsingException extends ConfigurationException {
 

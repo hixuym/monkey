@@ -25,6 +25,9 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 import java.util.List;
 
+/**
+ * @author michael
+ */
 public class DbTestCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     public DbTestCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,

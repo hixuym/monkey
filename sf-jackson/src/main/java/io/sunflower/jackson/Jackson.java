@@ -10,6 +10,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 /**
  * A utility class for Jackson.
+ * @author michael
  */
 public class Jackson {
 

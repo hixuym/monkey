@@ -10,6 +10,7 @@ import java.io.InputStream;
  * characters) passed to {@link #open(String)} are converted to relative paths by removing the
  * leading "/". <p> See [1] for more information on resources in Java and how they are loaded at
  * runtime. <p> [1] https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html
+ * @author michael
  */
 public class ResourceConfigurationSourceProvider implements ConfigurationSourceProvider {
 

@@ -8,6 +8,9 @@ import javax.validation.ConstraintViolation;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author michael
+ */
 public class ConstraintViolations {
 
     private ConstraintViolations() { /* singleton */ }

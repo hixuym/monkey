@@ -15,6 +15,7 @@ package io.sunflower.lifecycle;
  * environment.lifecycle().manage(clientManager);
  * }
  * </pre>
+ * @author michael
  */
 public class AutoCloseableManager extends AbstractLifeCycle {
 

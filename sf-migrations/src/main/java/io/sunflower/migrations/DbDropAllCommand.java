@@ -22,6 +22,9 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+/**
+ * @author michael
+ */
 public class DbDropAllCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     public DbDropAllCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,

@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
 
+/**
+ * @author michael
+ */
 public class ExecutorServiceBuilder {
 
     private static Logger log = LoggerFactory.getLogger(ExecutorServiceBuilder.class);

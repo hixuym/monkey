@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.validation.Validator;
 
+/**
+ * @author michael
+ */
 public class DefaultConfigurationFactoryFactory<T> implements ConfigurationFactoryFactory<T> {
 
     @Override

@@ -21,12 +21,13 @@ import com.google.inject.Key;
 import java.lang.annotation.Annotation;
 
 /**
- * @see ScanningModuleBuidler
+ * @author michael
  */
 public interface AnnotatedClassScanner {
 
     /**
-     * @return Annotation class handled by this scanner
+     * Annotation class handled by this scanner
+     * @return
      */
     Class<? extends Annotation> annotationClass();
 

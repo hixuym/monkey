@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author michael
+ */
 public class Duration implements Comparable<Duration> {
 
     private static final Pattern DURATION_PATTERN = Pattern.compile("(\\d+)\\s*(\\S+)");

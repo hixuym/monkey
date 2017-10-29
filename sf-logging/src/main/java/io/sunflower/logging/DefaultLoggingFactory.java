@@ -45,6 +45,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author michael
+ */
 @JsonTypeName("default")
 public class DefaultLoggingFactory implements LoggingFactory {
 

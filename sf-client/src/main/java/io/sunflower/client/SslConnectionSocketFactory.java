@@ -31,16 +31,19 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.List;
 
-public class SSLConnectionSocketFactory {
+/**
+ * @author michael
+ */
+public class SslConnectionSocketFactory {
 
     private final TlsConfiguration configuration;
     private final HostnameVerifier verifier;
 
-    public SSLConnectionSocketFactory(TlsConfiguration configuration) {
+    public SslConnectionSocketFactory(TlsConfiguration configuration) {
         this(configuration, null);
     }
 
-    public SSLConnectionSocketFactory(TlsConfiguration configuration, HostnameVerifier verifier) {
+    public SslConnectionSocketFactory(TlsConfiguration configuration, HostnameVerifier verifier) {
         this.configuration = configuration;
         this.verifier = verifier;
     }

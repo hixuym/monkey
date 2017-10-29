@@ -18,6 +18,9 @@ package io.sunflower.client;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 
+/**
+ * @author michael
+ */
 public class ConfiguredCloseableHttpClient {
 
     private final CloseableHttpClient closeableHttpClient;

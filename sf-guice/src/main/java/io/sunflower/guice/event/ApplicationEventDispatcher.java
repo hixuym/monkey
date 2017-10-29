@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 /**
  * Interface for publishing {@link ApplicationEvent}s as well as programmatically registering {@link
  * ApplicationEventListener}s.
+ * @author michael
  */
 public interface ApplicationEventDispatcher {
 

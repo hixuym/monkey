@@ -80,6 +80,7 @@ import java.util.concurrent.TimeUnit;
  * MetricsFactory#getFrequency() default}.</td>
  * </tr>
  * </table>
+ * @author michael
  */
 public abstract class BaseReporterFactory implements ReporterFactory {
 

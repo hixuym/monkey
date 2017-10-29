@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * @author michael
+ */
 public class BindingLoggingModuleTransformer implements ModuleListTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(BindingLoggingModuleTransformer.class);

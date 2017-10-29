@@ -57,6 +57,7 @@ import javax.validation.constraints.NotNull;
  * </tr>
  * </table>
  *
+ * @author michael
  * @see AbstractAppenderFactory
  */
 @JsonTypeName("console")

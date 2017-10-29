@@ -21,6 +21,9 @@ import io.sunflower.util.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * @author michael
+ */
 public class TimeBoundHealthCheck {
 
     private final ExecutorService executorService;

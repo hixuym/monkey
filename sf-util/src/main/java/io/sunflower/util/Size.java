@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author michael
+ */
 public class Size implements Comparable<Size> {
 
     private static final Pattern SIZE_PATTERN = Pattern.compile("(\\d+)\\s*(\\S+)");

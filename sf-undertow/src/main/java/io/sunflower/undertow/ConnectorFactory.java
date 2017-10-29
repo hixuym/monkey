@@ -7,6 +7,7 @@ import io.undertow.Undertow;
 
 /**
  * A factory for creating Undertow {@see Undertow.ListenerBuilder}s.
+ * @author michael
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface ConnectorFactory extends Discoverable {

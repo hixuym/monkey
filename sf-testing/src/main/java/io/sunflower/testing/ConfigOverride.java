@@ -39,6 +39,7 @@ import java.util.function.Supplier;
  * "https")</code> will change the sole application connector to have type "https" instead of type
  * "http". <li><code>ConfigOverride.config("logging.loggers.com\\.example\\.bar", "DEBUG")</code>
  * will add a logger with the name "com.example.bar" configured for debug logging.</li> </ul>
+ * @author michael
  */
 public class ConfigOverride {
 

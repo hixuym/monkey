@@ -13,20 +13,26 @@
  * limitations under the License.
  */
 
-package io.sunflower.guice.event;
+package io.sunflower.validation.internal;
 
-/***
- * Interface for receiving to events of a given type. Can be registered explicitly
- * via {@link ApplicationEventDispatcher#registerListener(ApplicationEventListener)}
- * or implicitly in Guice by detecting by all bindings for instances of {@link ApplicationEvent}
- *
- * @author michael*/
-public interface ApplicationEventListener<T extends ApplicationEvent> {
+import io.sunflower.validation.ValidationMethod;
 
-    /**
-     * event handler
-     * @param event
-     */
-    void onEvent(T event);
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
+/**
+ * A validator for {@link ValidationMethod}-annotated methods.
+ * @author michael
+ */
+public class MethodValidator implements ConstraintValidator<ValidationMethod, Boolean> {
+
+    @Override
+    public void initialize(ValidationMethod constraintAnnotation) {
+
+    }
+
+    @Override
+    public boolean isValid(Boolean value, ConstraintValidatorContext context) {
+        return (value == null) || value;
+    }
 }

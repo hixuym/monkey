@@ -34,6 +34,9 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author michael
+ */
 public class SslContextFactory {
 
     private final static TrustManager[] TRUST_ALL_CERTS = new X509TrustManager[]{

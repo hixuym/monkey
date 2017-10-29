@@ -22,6 +22,7 @@ import java.util.List;
  * This deserializer is more permissive in the following ways: <ul> <li>Whitespace is permitted but
  * stripped from the input.</li> <li>Dashes and periods in the value are converted to
  * underscores.</li> <li>Matching against the enum values is case insensitive.</li> </ul>
+ * @author michael
  */
 public class FuzzyEnumModule extends Module {
 

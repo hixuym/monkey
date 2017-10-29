@@ -46,6 +46,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author michael
+ */
 public class DbDumpCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream outputStream = System.out;

@@ -6,6 +6,7 @@ import io.sunflower.util.Duration;
 
 /**
  * Manages a {@link ScheduledReporter} lifecycle.
+ * @author michael
  */
 public class ScheduledReporterManager implements Managed {
 

@@ -13,6 +13,9 @@ import java.util.concurrent.ThreadFactory;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author michael
+ */
 public class LifecycleEnvironment {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LifecycleEnvironment.class);

@@ -51,6 +51,7 @@ import static com.google.common.base.MoreObjects.firstNonNull;
  * need to override the {@link #newApplication()} method to provide your application instance(s).
  * </p>
  *
+ * @author michael
  * @param <C> the configuration type
  */
 public class SunflowerTestSupport<C extends Configuration> {
@@ -210,7 +211,7 @@ public class SunflowerTestSupport<C extends Configuration> {
 
             if (explicitConfig) {
                 bootstrap.setConfigurationFactoryFactory((klass, validator, objectMapper, propertyPrefix) ->
-                        new POJOConfigurationFactory<>(configuration));
+                        new PojoConfigurationFactory<>(configuration));
             } else if (customPropertyPrefix.isPresent()) {
                 bootstrap.setConfigurationFactoryFactory((klass, validator, objectMapper, propertyPrefix) ->
                         new YamlConfigurationFactory<>(klass, validator, objectMapper,

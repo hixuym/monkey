@@ -17,6 +17,7 @@ import io.sunflower.logging.layout.LayoutFactory;
  * META-INF/services/AppenderFactory} file with your implementation's full class name to the class
  * path.</li> </ol>
  *
+ * @author michael
  * @see ConsoleAppenderFactory
  * @see FileAppenderFactory
  * @see SyslogAppenderFactory

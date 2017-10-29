@@ -16,7 +16,6 @@
 package io.sunflower.guice.setup;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;

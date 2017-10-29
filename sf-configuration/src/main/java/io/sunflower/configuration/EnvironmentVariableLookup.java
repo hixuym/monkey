@@ -4,6 +4,7 @@ import org.apache.commons.text.StrLookup;
 
 /**
  * A custom {@link StrLookup} implementation using environment variables as lookup source.
+ * @author michael
  */
 public class EnvironmentVariableLookup extends StrLookup<Object> {
 

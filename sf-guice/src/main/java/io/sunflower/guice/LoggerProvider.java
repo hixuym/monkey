@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+/**
+ * @author michael
+ */
 public class LoggerProvider implements Provider<Logger> {
 
     private final Logger applicationWideLogger;
@@ -15,6 +18,7 @@ public class LoggerProvider implements Provider<Logger> {
         this.applicationWideLogger = LoggerFactory.getLogger("sunflower");
     }
 
+    @Override
     public Logger get() {
         return applicationWideLogger;
     }

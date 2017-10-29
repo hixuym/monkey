@@ -448,7 +448,7 @@ public class HttpClientBuilder {
             sslConnectionSocketFactory = org.apache.http.conn.ssl.SSLConnectionSocketFactory
                     .getSocketFactory();
         } else {
-            sslConnectionSocketFactory = new SSLConnectionSocketFactory(tlsConfiguration,
+            sslConnectionSocketFactory = new SslConnectionSocketFactory(tlsConfiguration,
                     verifier).getSocketFactory();
         }
 

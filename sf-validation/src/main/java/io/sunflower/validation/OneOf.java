@@ -1,5 +1,7 @@
 package io.sunflower.validation;
 
+import io.sunflower.validation.internal.OneOfValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

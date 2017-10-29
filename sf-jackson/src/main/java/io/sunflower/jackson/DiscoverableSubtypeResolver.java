@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * A subtype resolver which discovers subtypes via {@code META-INF/services/Discoverable}.
+ * @author michael
  */
 public class DiscoverableSubtypeResolver extends StdSubtypeResolver {
 

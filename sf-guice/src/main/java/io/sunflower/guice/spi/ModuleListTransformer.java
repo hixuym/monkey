@@ -26,6 +26,7 @@ import java.util.List;
  * ModuleTransfomers can be used to do the following types of functionality, 1.  Remove unwanted
  * bindings 2.  Auto add non-existent bindings 3.  Warn on dangerous bindings like toInstance() and
  * static injection.
+ * @author michael
  */
 public interface ModuleListTransformer {
 

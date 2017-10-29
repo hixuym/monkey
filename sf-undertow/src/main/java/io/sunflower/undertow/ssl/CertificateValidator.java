@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * <p>
  * IMPORTANT: at least one of the above mechanisms *MUST* be configured and operational, otherwise
  * certificate validation *WILL FAIL* unconditionally.
+ * @author michael
  */
 public class CertificateValidator {
 

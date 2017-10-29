@@ -24,6 +24,9 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 
+/**
+ * @author michael
+ */
 public class TlsConfiguration {
 
     @NotEmpty

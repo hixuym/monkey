@@ -36,6 +36,7 @@ import javax.validation.constraints.Pattern;
  * org.apache.http.auth.Credentials} implementation to use for proxy authentication. Currently
  * supports UsernamePassword ({@link org.apache.http.auth.UsernamePasswordCredentials}) and NT
  * ({@link org.apache.http.auth.NTCredentials})</td> </tr> </table>
+ * @author michael
  */
 public class AuthConfiguration {
 

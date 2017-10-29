@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 /**
  * Provides the ability to modify an existing ssl factory with new configuration options.
+ * @author michael
  */
 public class SslReload {
 

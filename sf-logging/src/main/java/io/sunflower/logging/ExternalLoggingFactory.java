@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 /**
  * A logging factory which does configure a logging infrastructure. Useful when the users doesn't
  * want to use the Dropwizard logging configuration abilities.
+ * @author michael
  */
 @JsonTypeName("external")
 public class ExternalLoggingFactory implements LoggingFactory {

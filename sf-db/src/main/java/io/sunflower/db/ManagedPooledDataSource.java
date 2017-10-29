@@ -28,6 +28,7 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 /**
  * A {@link ManagedDataSource} which is backed by a Tomcat pooled {@link javax.sql.DataSource}.
+ * @author michael
  */
 public class ManagedPooledDataSource extends DataSourceProxy implements ManagedDataSource {
 

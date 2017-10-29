@@ -10,6 +10,9 @@ import com.google.common.cache.CacheBuilderSpec;
 
 import java.io.IOException;
 
+/**
+ * @author michael
+ */
 public class GuavaExtrasModule extends Module {
 
     private static class CacheBuilderSpecDeserializer extends JsonDeserializer<CacheBuilderSpec> {

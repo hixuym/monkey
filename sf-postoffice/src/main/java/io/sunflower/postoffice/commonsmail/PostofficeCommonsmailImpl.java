@@ -18,6 +18,9 @@ import org.apache.commons.mail.MultiPartEmail;
 import javax.mail.internet.AddressException;
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public class PostofficeCommonsmailImpl implements Postoffice {
 
     private final CommonsmailHelper commonsmailHelper;

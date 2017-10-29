@@ -16,6 +16,7 @@ package io.sunflower.guice.lifecycle;
 
 /**
  * States that are possible for a service.
+ * @author michael
  */
 public enum State {
     /**

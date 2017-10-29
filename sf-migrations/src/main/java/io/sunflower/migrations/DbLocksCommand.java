@@ -27,6 +27,9 @@ import java.io.PrintStream;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+/**
+ * @author michael
+ */
 public class DbLocksCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream printStream = System.out;

@@ -24,6 +24,9 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 
 import java.sql.SQLException;
 
+/**
+ * @author michael
+ */
 public class CloseableLiquibaseWithClassPathMigrationsFile extends CloseableLiquibase implements
         AutoCloseable {
 

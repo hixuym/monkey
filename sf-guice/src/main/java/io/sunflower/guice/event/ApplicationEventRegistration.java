@@ -18,9 +18,13 @@ package io.sunflower.guice.event;
 /**
  * Interface to unregistering a subscriber to events. Returned from {@link
  * ApplicationEventDispatcher} whenever a received is programmatically registered.
+ * @author michael
  */
 public interface ApplicationEventRegistration {
 
+    /**
+     * unreg
+     */
     void unregister();
 
 }

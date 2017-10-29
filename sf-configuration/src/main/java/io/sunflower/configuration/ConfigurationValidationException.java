@@ -8,6 +8,7 @@ import java.util.Set;
 
 /**
  * An exception thrown where there is an error validating a configuration object.
+ * @author michael
  */
 public class ConfigurationValidationException extends ConfigurationException {
 

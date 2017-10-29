@@ -2,6 +2,9 @@ package io.sunflower.util;
 
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public abstract class Optionals {
 
     /**

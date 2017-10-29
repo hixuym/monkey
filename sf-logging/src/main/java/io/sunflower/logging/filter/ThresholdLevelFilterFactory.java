@@ -7,6 +7,7 @@ import ch.qos.logback.core.filter.Filter;
 
 /**
  * Factory that creates a {@link Filter} of type {@link ILoggingEvent}
+ * @author michael
  */
 public class ThresholdLevelFilterFactory implements LevelFilterFactory<ILoggingEvent> {
 

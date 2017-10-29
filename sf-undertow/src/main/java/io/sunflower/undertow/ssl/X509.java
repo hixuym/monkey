@@ -27,6 +27,9 @@ import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
+/**
+ * @author michael
+ */
 public class X509 {
 
     private static final Logger LOG = LoggerFactory.getLogger(X509.class);

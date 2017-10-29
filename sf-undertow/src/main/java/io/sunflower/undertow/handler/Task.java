@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 /**
  * An arbitrary administrative task which can be performed via the admin interface.
  *
+ * @author michael
  * @see AdminTaskManager
  */
 public abstract class Task {

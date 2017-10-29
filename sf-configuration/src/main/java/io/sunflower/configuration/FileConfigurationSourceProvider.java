@@ -5,6 +5,7 @@ import java.io.*;
 /**
  * An implementation of {@link ConfigurationSourceProvider} that reads the configuration from the
  * local file system.
+ * @author michael
  */
 public class FileConfigurationSourceProvider implements ConfigurationSourceProvider {
 

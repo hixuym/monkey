@@ -15,7 +15,7 @@
 
 package io.sunflower.undertow.ssl;
 
-import io.sunflower.util.URIs;
+import io.sunflower.util.Uris;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -24,6 +24,9 @@ import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Collection;
 
+/**
+ * @author michael
+ */
 public class CertificateUtils {
 
     /* ------------------------------------------------------------ */
@@ -38,7 +41,7 @@ public class CertificateUtils {
                 keystore = KeyStore.getInstance(storeType);
             }
 
-            try (InputStream inStream = URIs.openStream(store)) {
+            try (InputStream inStream = Uris.openStream(store)) {
                 keystore.load(inStream, storePassword == null ? null : storePassword.toCharArray());
             }
         }
@@ -53,7 +56,7 @@ public class CertificateUtils {
         if (crlPath != null) {
             InputStream in = null;
             try {
-                in = URIs.openStream(crlPath);
+                in = Uris.openStream(crlPath);
                 crlList = CertificateFactory.getInstance("X.509").generateCRLs(in);
             } finally {
                 if (in != null) {

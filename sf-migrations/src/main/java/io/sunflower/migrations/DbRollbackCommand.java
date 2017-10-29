@@ -34,6 +34,9 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+/**
+ * @author michael
+ */
 public class DbRollbackCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream outputStream = System.out;

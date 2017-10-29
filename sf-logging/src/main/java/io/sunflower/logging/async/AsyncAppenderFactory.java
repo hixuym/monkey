@@ -6,6 +6,7 @@ import ch.qos.logback.core.spi.DeferredProcessingAware;
 /**
  * Factory used to create an {@link AsyncAppenderBase} of type E
  *
+ * @author michael
  * @param <E> The type of log event
  */
 public interface AsyncAppenderFactory<E extends DeferredProcessingAware> {

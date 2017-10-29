@@ -67,6 +67,7 @@ import java.util.regex.Pattern;
  * </tr>
  * </table>
  *
+ * @author michael
  * @see AbstractAppenderFactory
  */
 @JsonTypeName("syslog")

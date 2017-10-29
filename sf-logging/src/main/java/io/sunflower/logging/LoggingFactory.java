@@ -4,9 +4,17 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.jackson.Discoverable;
 
+/**
+ * @author michael
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultLoggingFactory.class)
 public interface LoggingFactory extends Discoverable {
 
+    /**
+     * config logging
+     * @param metricRegistry
+     * @param name
+     */
     void configure(MetricRegistry metricRegistry, String name);
 
     /**

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 /**
  * A Container
+ * @author michael
  */
 public interface Container {
     /* ------------------------------------------------------------ */

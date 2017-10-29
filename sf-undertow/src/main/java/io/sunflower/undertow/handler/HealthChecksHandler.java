@@ -30,6 +30,9 @@ import javax.inject.Singleton;
 import java.util.Map;
 import java.util.SortedMap;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class HealthChecksHandler implements HttpHandler {
 

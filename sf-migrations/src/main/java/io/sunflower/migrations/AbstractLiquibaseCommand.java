@@ -34,6 +34,9 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 import java.sql.SQLException;
 
+/**
+ * @author michael
+ */
 public abstract class AbstractLiquibaseCommand<T extends Configuration> extends
         ConfiguredCommand<T> {
 

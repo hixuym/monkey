@@ -12,9 +12,14 @@ import io.sunflower.jackson.Discoverable;
  * <li>Annotate it with {@code @JsonTypeName} and give it a unique type name.</li> <li>add a {@code
  * META-INF/services/FilterFactory} file with your implementation's full class name to the class
  * path.</li> </ol>
+ * @author michael
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public interface FilterFactory<E extends DeferredProcessingAware> extends Discoverable {
 
+    /**
+     *
+     * @return
+     */
     Filter<E> build();
 }

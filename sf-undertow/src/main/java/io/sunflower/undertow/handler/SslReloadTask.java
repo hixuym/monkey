@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 
 /**
  * A task that will refresh all ssl factories with up to date certificate information
+ * @author michael
  */
 public class SslReloadTask extends Task {
 

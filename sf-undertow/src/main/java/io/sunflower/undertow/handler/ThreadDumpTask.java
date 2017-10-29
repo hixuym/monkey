@@ -22,6 +22,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 
+/**
+ * @author michael
+ */
 public class ThreadDumpTask extends Task {
 
     private transient ThreadDump threadDump;

@@ -20,8 +20,14 @@ import com.google.inject.Module;
 /**
  * Mapping function from one module to another.  A transformer could perform operations such as
  * logging, removing dependencies or auto-generating bindings.
+ * @author michael
  */
 public interface ModuleTransformer {
 
+    /**
+     * transform module
+     * @param module
+     * @return
+     */
     Module transform(Module module);
 }

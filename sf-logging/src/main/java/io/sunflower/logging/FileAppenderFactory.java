@@ -105,6 +105,7 @@ import javax.validation.constraints.Min;
  * </tr>
  * </table>
  *
+ * @author michael
  * @see AbstractAppenderFactory
  */
 @JsonTypeName("file")

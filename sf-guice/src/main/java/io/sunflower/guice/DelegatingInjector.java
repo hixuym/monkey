@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author michael
+ */
 public abstract class DelegatingInjector implements Injector {
 
     private final Injector injector;

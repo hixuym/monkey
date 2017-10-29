@@ -37,6 +37,7 @@ import java.util.List;
  * found in {@link GuavaApplicationEventModule}
  * <p>
  * See {@link EventListener} and {@link ApplicationEventDispatcher} for usage.
+ * @author michael
  */
 public final class ApplicationEventModule extends AbstractModule {
 

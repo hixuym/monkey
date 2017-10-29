@@ -39,6 +39,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *   +~ referenced UNMANAGED object, with separate lifecycle
  *   +? referenced AUTO object that could become MANAGED or UNMANAGED.
  * </pre>
+ * @author michael
  */
 public class ContainerLifeCycle extends AbstractLifeCycle implements Container, Destroyable {
 

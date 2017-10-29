@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Individual {@link Logger} configuration
+ * @author michael
  */
 public class LoggerConfiguration {
 

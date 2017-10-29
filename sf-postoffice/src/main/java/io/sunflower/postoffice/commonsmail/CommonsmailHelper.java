@@ -20,6 +20,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public interface CommonsmailHelper {
 
     void doPopulateMultipartMailWithContent(MultiPartEmail multiPartEmail, Mail mail)

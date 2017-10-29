@@ -28,7 +28,7 @@ import java.sql.Timestamp;
 
 /**
  * @author michael
- * @date 16/5/28
+ * created on 16/5/28
  */
 @MappedSuperclass
 public class BaseModel extends Model implements Serializable {

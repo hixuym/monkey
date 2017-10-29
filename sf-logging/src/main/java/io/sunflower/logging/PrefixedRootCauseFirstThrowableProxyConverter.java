@@ -10,6 +10,7 @@ import static io.sunflower.logging.PrefixedThrowableProxyConverter.PREFIX;
 
 /**
  * A {@link RootCauseFirstThrowableProxyConverter} that prefixes stack traces with {@code !}.
+ * @author michael
  */
 public class PrefixedRootCauseFirstThrowableProxyConverter
         extends RootCauseFirstThrowableProxyConverter {

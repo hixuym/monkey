@@ -82,6 +82,7 @@ import static com.google.common.base.Strings.nullToEmpty;
  * </td>
  * </tr>
  * </table>
+ * @author michael
  */
 public abstract class AbstractAppenderFactory<E extends DeferredProcessingAware> implements
         AppenderFactory<E> {

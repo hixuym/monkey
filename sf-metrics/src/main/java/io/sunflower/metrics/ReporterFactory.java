@@ -20,6 +20,7 @@ import java.util.Optional;
  * file with your implementation's full class name to the class path.</li>
  * </ol>
  *
+ * @author michael
  * @see ConsoleReporterFactory
  * @see CsvReporterFactory
  * @see Slf4jReporterFactory

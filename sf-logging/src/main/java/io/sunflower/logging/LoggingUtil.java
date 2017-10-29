@@ -10,6 +10,9 @@ import javax.annotation.concurrent.GuardedBy;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @author michael
+ */
 public class LoggingUtil {
 
     private static final Duration LOGGER_CONTEXT_AWAITING_TIMEOUT = Duration.seconds(10);

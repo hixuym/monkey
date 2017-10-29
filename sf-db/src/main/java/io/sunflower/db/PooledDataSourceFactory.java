@@ -23,6 +23,7 @@ import java.util.Optional;
 
 /**
  * Interface of a factory that produces JDBC data sources backed by the connection pool.
+ * @author michael
  */
 public interface PooledDataSourceFactory {
 

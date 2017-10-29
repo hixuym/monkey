@@ -66,6 +66,7 @@ import java.util.function.UnaryOperator;
  * ["customized"].
  *
  * Note that AdvisesBinder can be used with qualifiers such as {@literal @}Named.
+ * @author michael
  */
 public abstract class AdvisesBinder {
     private AdvisesBinder() {

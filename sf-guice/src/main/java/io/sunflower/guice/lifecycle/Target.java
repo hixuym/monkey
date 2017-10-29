@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 /**
  * A lifecycle target, ie something to start/stop
+ * @author michael
  */
 class Target implements Comparable<Target> {
 

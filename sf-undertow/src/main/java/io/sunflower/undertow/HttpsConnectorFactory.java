@@ -209,6 +209,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p/>
  * For more configuration parameters, see {@link HttpConnectorFactory}.
  *
+ * @author michael
  * @see HttpConnectorFactory
  */
 @JsonTypeName("https")

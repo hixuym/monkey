@@ -2,6 +2,7 @@ package io.sunflower.util;
 
 /**
  * A unit of size.
+ * @author michael
  */
 public enum SizeUnit {
     /**

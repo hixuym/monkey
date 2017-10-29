@@ -8,6 +8,7 @@ import java.util.Collection;
  * Refer to the implementations for different classes of problems: <ul> <li>Parsing errors: {@link
  * ConfigurationParsingException}</li> <li>Validation errors: {@link
  * ConfigurationValidationException}</li> </ul>
+ * @author michael
  */
 public abstract class ConfigurationException extends Exception {
 

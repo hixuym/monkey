@@ -20,7 +20,10 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
-public abstract class URIs {
+/**
+ * @author michael
+ */
+public abstract class Uris {
 
     static private final String URI_SCHEME_CLASSPATH = "classpath";
 
@@ -28,7 +31,7 @@ public abstract class URIs {
         if (uri.getScheme().equals(URI_SCHEME_CLASSPATH)) {
             String resourceName = uri.getPath();
 
-            InputStream stream = URIs.class.getResourceAsStream(resourceName);
+            InputStream stream = Uris.class.getResourceAsStream(resourceName);
 
             if (stream == null) {
                 throw new IOException("Resource '" + resourceName + "' not found on classpath");

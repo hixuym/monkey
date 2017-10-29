@@ -21,8 +21,11 @@ import io.sunflower.db.DatabaseConfiguration;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
-public abstract class MigrationsBundle<T extends Configuration> implements Bundle,
-        DatabaseConfiguration<T> {
+/**
+ * @author michael
+ */
+public abstract class MigrationsBundle<T extends Configuration>
+        implements Bundle, DatabaseConfiguration<T> {
 
     private static final String DEFAULT_NAME = "db";
     private static final String DEFAULT_MIGRATIONS_FILE = "migrations.xml";

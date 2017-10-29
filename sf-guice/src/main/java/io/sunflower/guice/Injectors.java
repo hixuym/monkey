@@ -22,6 +22,9 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author michael
+ */
 public class Injectors {
 
     public static <T> Set<T> instanceOf(Injector injector, Class<T> baseClass) {

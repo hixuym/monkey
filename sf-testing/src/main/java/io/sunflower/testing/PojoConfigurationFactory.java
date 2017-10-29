@@ -22,13 +22,16 @@ import io.sunflower.configuration.YamlConfigurationFactory;
 
 import java.io.File;
 
-public class POJOConfigurationFactory<C extends Configuration>
+/**
+ * @author michael
+ */
+public class PojoConfigurationFactory<C extends Configuration>
         extends YamlConfigurationFactory<C> {
 
     protected final C configuration;
 
     @SuppressWarnings("unchecked")
-    public POJOConfigurationFactory(C cfg) {
+    public PojoConfigurationFactory(C cfg) {
         super((Class<C>) cfg.getClass(), null, null, null);
         configuration = cfg;
     }

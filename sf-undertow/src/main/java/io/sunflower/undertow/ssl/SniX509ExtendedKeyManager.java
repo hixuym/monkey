@@ -31,6 +31,7 @@ import java.util.Objects;
  * <p>A {@link X509ExtendedKeyManager} that selects a key with an alias retrieved from SNI
  * information, delegating other processing to a nested X509ExtendedKeyManager.</p> <p>Can only be
  * used on server side.</p>
+ * @author michael
  */
 public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
 

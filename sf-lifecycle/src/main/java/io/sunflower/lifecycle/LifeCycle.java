@@ -6,6 +6,7 @@ import java.util.EventListener;
 /**
  * The lifecycle interface for generic components. <br> Classes implementing this interface have a
  * defined life cycle defined by the methods of this interface.
+ * @author michael
  */
 public interface LifeCycle {
     /* ------------------------------------------------------------ */

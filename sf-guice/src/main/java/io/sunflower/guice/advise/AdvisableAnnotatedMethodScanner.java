@@ -32,6 +32,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+/**
+ * @author michael
+ */
 public final class AdvisableAnnotatedMethodScanner extends ModuleAnnotatedMethodScanner {
     private static final AdvisableAnnotatedMethodScanner INSTANCE = new AdvisableAnnotatedMethodScanner();
 

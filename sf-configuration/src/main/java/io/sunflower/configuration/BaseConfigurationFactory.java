@@ -32,6 +32,7 @@ import static java.util.Objects.requireNonNull;
  * and validating their constraints. Allows for overriding configuration parameters from system
  * properties.
  *
+ * @author michael
  * @param <T> the type of the configuration objects to produce
  */
 public abstract class BaseConfigurationFactory<T> implements ConfigurationFactory<T> {

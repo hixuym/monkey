@@ -13,6 +13,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * A delegating {@see ConfigurationSourceProvider} which replaces variables in the underlying
  * configuration source according to the rules of a custom {@see org.apache.commons.lang3.text.StrSubstitutor}.
+ * @author michael
  */
 public class SubstitutingSourceProvider implements ConfigurationSourceProvider {
 

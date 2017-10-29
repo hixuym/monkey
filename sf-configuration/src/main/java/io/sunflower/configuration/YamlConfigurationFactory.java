@@ -10,6 +10,7 @@ import javax.validation.Validator;
  * validating their constraints. Allows for overriding configuration parameters from system
  * properties.
  *
+ * @author michael
  * @param <T> the type of the configuration objects to produce
  */
 public class YamlConfigurationFactory<T> extends BaseConfigurationFactory<T> {

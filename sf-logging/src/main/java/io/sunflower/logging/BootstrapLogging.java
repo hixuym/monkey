@@ -17,6 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * and the provided logging strategy has been applied.
  * <p/>
  * N.B. The methods in this class have run once semantics, multiple calls are idempotent
+ * @author michael
  */
 public class BootstrapLogging {
 

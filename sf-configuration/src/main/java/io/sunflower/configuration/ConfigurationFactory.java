@@ -3,6 +3,9 @@ package io.sunflower.configuration;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author michael
+ */
 public interface ConfigurationFactory<T> {
 
     /**

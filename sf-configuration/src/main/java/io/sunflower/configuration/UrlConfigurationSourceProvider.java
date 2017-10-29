@@ -7,6 +7,7 @@ import java.net.URL;
 /**
  * An implementation of {@link ConfigurationSourceProvider} that reads the configuration from a
  * {@link URL}.
+ * @author michael
  */
 public class UrlConfigurationSourceProvider implements ConfigurationSourceProvider {
 

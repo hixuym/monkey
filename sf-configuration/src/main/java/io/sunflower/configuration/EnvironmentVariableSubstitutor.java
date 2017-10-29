@@ -4,6 +4,7 @@ import org.apache.commons.text.StrSubstitutor;
 
 /**
  * A custom {@link StrSubstitutor} using environment variables as lookup source.
+ * @author michael
  */
 public class EnvironmentVariableSubstitutor extends StrSubstitutor {
 

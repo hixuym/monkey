@@ -25,6 +25,9 @@ import java.io.OutputStream;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @author michael
+ */
 public class CpuProfileHandler implements HttpHandler {
 
     private static final String CONTENT_TYPE = "pprof/raw";

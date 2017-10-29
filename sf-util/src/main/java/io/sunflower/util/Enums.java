@@ -4,6 +4,7 @@ import com.google.common.base.CharMatcher;
 
 /**
  * Helper methods for enum types.
+ * @author michael
  */
 public class Enums {
 

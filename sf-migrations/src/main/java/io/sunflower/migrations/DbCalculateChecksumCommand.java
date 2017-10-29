@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
+/**
+ * @author michael
+ */
 public class DbCalculateChecksumCommand<T extends Configuration> extends
         AbstractLiquibaseCommand<T> {
 

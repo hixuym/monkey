@@ -20,6 +20,9 @@ import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+/**
+ * @author michael
+ */
 public class DbClearChecksumsCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     public DbClearChecksumsCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,

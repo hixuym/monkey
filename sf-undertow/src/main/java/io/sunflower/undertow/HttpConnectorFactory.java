@@ -8,6 +8,7 @@ import io.undertow.Undertow;
 
 /**
  * Builds HTTP connectors.
+ * @author michael
  */
 @JsonTypeName("http")
 public class HttpConnectorFactory implements ConnectorFactory {

@@ -1,6 +1,7 @@
 package io.sunflower.validation;
 
 import io.sunflower.util.SizeUnit;
+import io.sunflower.validation.internal.MaxSizeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

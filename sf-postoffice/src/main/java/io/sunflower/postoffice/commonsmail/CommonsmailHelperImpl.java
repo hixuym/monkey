@@ -23,6 +23,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public class CommonsmailHelperImpl implements CommonsmailHelper {
 
     /**

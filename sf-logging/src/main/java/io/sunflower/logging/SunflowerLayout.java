@@ -12,6 +12,7 @@ import java.util.TimeZone;
  * <li>Prefixes logged exceptions with {@code !}.</li>
  * <li>Sets the pattern to the given timezone.</li>
  * </ul>
+ * @author michael
  */
 public class SunflowerLayout extends PatternLayout {
 

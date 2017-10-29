@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Basic implementation of the life cycle interface for components.
+ * @author michael
  */
 public abstract class AbstractLifeCycle implements LifeCycle {
 

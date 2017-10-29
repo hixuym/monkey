@@ -24,6 +24,9 @@ import liquibase.resource.ResourceAccessor;
 
 import java.sql.SQLException;
 
+/**
+ * @author michael
+ */
 public abstract class CloseableLiquibase extends Liquibase implements AutoCloseable {
 
     private final ManagedDataSource dataSource;

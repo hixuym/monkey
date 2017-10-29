@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 /**
  * Implementation of {@link org.apache.http.conn.routing.HttpRoutePlanner} that routes requests
  * through proxy and takes into account list of hosts that should not be proxied
+ * @author michael
  */
 public class NonProxyListProxyRoutePlanner extends DefaultProxyRoutePlanner {
 

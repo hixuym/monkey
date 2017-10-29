@@ -33,6 +33,9 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+/**
+ * @author michael
+ */
 public class SunflowerAppRule<C extends Configuration> extends ExternalResource {
 
     private final SunflowerTestSupport<C> testSupport;
