@@ -63,15 +63,13 @@ import javax.validation.constraints.NotNull;
 public class Configuration {
 
     @Valid
-    @NotNull
-    private ServerFactory serverFactory = new NoopsServerFactory();
+    private ServerFactory serverFactory;
 
     @Valid
     private LoggingFactory logging;
 
     @Valid
-    @NotNull
-    private MetricsFactory metrics = new MetricsFactory();
+    private MetricsFactory metrics;
 
     /**
      * Returns the server-specific section of the configuration file.
@@ -80,6 +78,9 @@ public class Configuration {
      */
     @JsonProperty("server")
     public ServerFactory getServerFactory() {
+        if (serverFactory == null) {
+            this.serverFactory = new NoopsServerFactory();
+        }
         return serverFactory;
     }
 
@@ -115,6 +116,10 @@ public class Configuration {
 
     @JsonProperty("metrics")
     public MetricsFactory getMetricsFactory() {
+        if (this.metrics == null) {
+            this.metrics = new MetricsFactory();
+        }
+
         return metrics;
     }
 

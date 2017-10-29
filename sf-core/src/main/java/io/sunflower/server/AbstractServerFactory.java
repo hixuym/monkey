@@ -17,11 +17,12 @@ package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.guice.Mode;
-import io.sunflower.guice.ModeHelper;
 
 import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static io.sunflower.guice.ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet;
 
 /**
  * AbstractServerFactory
@@ -31,8 +32,7 @@ import java.util.Map;
  */
 public abstract class AbstractServerFactory implements ServerFactory {
 
-    @NotNull
-    private Mode mode = ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet();
+    private Mode mode;
 
     @NotNull
     private Map<String, String> serverProperties = new LinkedHashMap<>(20);
@@ -56,6 +56,9 @@ public abstract class AbstractServerFactory implements ServerFactory {
     @Override
     @JsonProperty
     public Mode getMode() {
+        if (this.mode == null) {
+            this.mode = determineModeFromSystemPropertiesOrDevIfNotSet();
+        }
         return this.mode;
     }
 }
