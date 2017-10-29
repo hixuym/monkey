@@ -36,10 +36,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.HttpRequestRetryHandler;
-import org.apache.http.client.RedirectStrategy;
+import org.apache.http.client.*;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
@@ -66,6 +63,7 @@ import java.util.List;
  * A convenience class for building {@link HttpClient} instances. <p> Among other things, <ul>
  * <li>Disables stale connection checks by default</li> <li>Disables Nagle's algorithm</li>
  * <li>Disables cookie management by default</li> </ul> </p>
+ *
  * @author michael
  */
 public class HttpClientBuilder {
@@ -88,6 +86,7 @@ public class HttpClientBuilder {
     private boolean disableContentCompression;
     private List<? extends Header> defaultHeaders;
     private HttpProcessor httpProcessor;
+    private ServiceUnavailableRetryStrategy serviceUnavailableRetryStrategy;
 
     public HttpClientBuilder(MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
@@ -107,6 +106,17 @@ public class HttpClientBuilder {
      */
     public HttpClientBuilder name(String environmentName) {
         this.environmentName = environmentName;
+        return this;
+    }
+
+    /**
+     * Use the given {@link ServiceUnavailableRetryStrategy} instance
+     *
+     * @param serviceUnavailableRetryStrategy a {@link ServiceUnavailableRetryStrategy} instance
+     * @return {@code} this
+     */
+    public HttpClientBuilder using(ServiceUnavailableRetryStrategy serviceUnavailableRetryStrategy) {
+        this.serviceUnavailableRetryStrategy = serviceUnavailableRetryStrategy;
         return this;
     }
 
@@ -391,6 +401,10 @@ public class HttpClientBuilder {
 
         if (httpProcessor != null) {
             builder.setHttpProcessor(httpProcessor);
+        }
+
+        if (serviceUnavailableRetryStrategy != null) {
+            builder.setServiceUnavailableRetryStrategy(serviceUnavailableRetryStrategy);
         }
 
         return new ConfiguredCloseableHttpClient(builder.build(), requestConfig);
