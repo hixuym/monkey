@@ -1,6 +1,7 @@
 ## Sunflower Framework
 
-###1.4.1 -
+###1.4.1 - 2017-10-29
+
     - upgrade ebean to 11.2.3
     - upgrade jackson to 2.9.2
     - cleanup code
