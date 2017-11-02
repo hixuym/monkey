@@ -1,1 +1,1 @@
-io.sunflower.server.NoopsServerFactory
+io.sunflower.server.FakeServerFactory

@@ -5,11 +5,10 @@ import com.google.common.base.MoreObjects;
 import io.sunflower.logging.DefaultLoggingFactory;
 import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
-import io.sunflower.server.NoopsServerFactory;
+import io.sunflower.server.FakeServerFactory;
 import io.sunflower.server.ServerFactory;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * An object representation of the YAML configuration file. Extend this with your own configuration
@@ -79,7 +78,7 @@ public class Configuration {
     @JsonProperty("server")
     public ServerFactory getServerFactory() {
         if (serverFactory == null) {
-            this.serverFactory = new NoopsServerFactory();
+            this.serverFactory = new FakeServerFactory();
         }
         return serverFactory;
     }

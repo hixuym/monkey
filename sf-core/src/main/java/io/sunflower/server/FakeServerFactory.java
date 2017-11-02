@@ -21,16 +21,13 @@ import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * @author michael
  */
-@JsonTypeName("noops")
-public class NoopsServerFactory extends AbstractServerFactory {
+@JsonTypeName("fake")
+public class FakeServerFactory extends AbstractServerFactory {
 
-    private static Logger logger = LoggerFactory.getLogger(NoopsServerFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(FakeServerFactory.class);
 
     @Override
     public Server build(Environment environment) {
@@ -38,12 +35,9 @@ public class NoopsServerFactory extends AbstractServerFactory {
 
             @Override
             protected void boot() throws Exception {
-                logger.info("do nothing, just use for testing.");
+                logger.info("do nothing, just use for placeholder.");
             }
 
-            @Override
-            protected void shutdown() throws Exception {
-            }
         };
     }
 

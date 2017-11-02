@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author michael
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = NoopsServerFactory.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = FakeServerFactory.class)
 public interface ServerFactory extends Discoverable {
 
     /**
