@@ -51,7 +51,7 @@ public class LifecycleSupport {
         public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
             if (hasLifecycleMethod(type.getRawType())) {
                 // Add the listener
-                encounter.register(new LifecycleListener<I>());
+                encounter.register(new LifecycleListener<>());
             }
         }
     }
@@ -93,8 +93,8 @@ public class LifecycleSupport {
             protected void configure() {
                 bindListener(Matchers.any(), new LifecycleAnnotatedListener());
                 // Also, bind the lifecycle register
-                bind(LifecycleRegister.class).toInstance(lifecycleRegister);
-                bind(LifecycleSupport.class).toInstance(LifecycleSupport.this);
+//                bind(LifecycleRegister.class).toInstance(lifecycleRegister);
+//                bind(LifecycleSupport.class).toInstance(LifecycleSupport.this);
             }
         };
     }
