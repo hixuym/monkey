@@ -93,8 +93,8 @@ public class LifecycleSupport {
             protected void configure() {
                 bindListener(Matchers.any(), new LifecycleAnnotatedListener());
                 // Also, bind the lifecycle register
-//                bind(LifecycleRegister.class).toInstance(lifecycleRegister);
-//                bind(LifecycleSupport.class).toInstance(LifecycleSupport.this);
+                bind(LifecycleRegister.class).toInstance(lifecycleRegister);
+                bind(LifecycleSupport.class).toInstance(LifecycleSupport.this);
             }
         };
     }
