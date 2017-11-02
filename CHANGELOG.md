@@ -1,5 +1,12 @@
 ## Sunflower Framework
 
+###1.4.2 - 2017-11-02
+
+    - upgrade ebean 11.3.1
+    - add support for ServiceUnavailableRetryStrategy
+    - add module processor
+    - cleanup code. 
+
 ###1.4.1 - 2017-10-29
 
     - upgrade ebean to 11.2.3
