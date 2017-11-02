@@ -45,6 +45,7 @@ public class GuiceEnvironment {
     private final List<Module> moduleLoaded = newArrayList();
     private final List<Module> overrideModules = newArrayList();
     private final List<InjectorProcessor> injectorProcessors = newArrayList();
+    private final List<ModuleProcessor> moduleProcessors = newArrayList();
 
     private volatile Injector injector;
 
@@ -116,8 +117,12 @@ public class GuiceEnvironment {
         this.overrideModules.addAll(Arrays.asList(modules));
     }
 
-    public void addInjectorProcessor(InjectorProcessor processor) {
+    public void registerInjectorProcessor(InjectorProcessor processor) {
         this.injectorProcessors.add(processor);
+    }
+
+    public void registerModuleProcessor(ModuleProcessor moduleProcessor) {
+        this.moduleProcessors.add(moduleProcessor);
     }
 
     public void setup() {
@@ -149,6 +154,8 @@ public class GuiceEnvironment {
         if (metricsEnabled) {
             register(new MetricsModule());
         }
+
+        moduleProcessors.forEach(it -> it.process(moduleLoaded));
 
         InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);
 

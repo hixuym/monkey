@@ -23,6 +23,7 @@ import static com.google.inject.matcher.Matchers.any;
 
 /**
  * Module for Metrics
+ * @author michael
  */
 public class MetricsModule extends AbstractModule {
 
