@@ -6,6 +6,7 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 /**
  * A basic CLI command.
+ * @author michael
  */
 public abstract class Command {
 

@@ -1,6 +1,5 @@
 package io.sunflower.cli;
 
-import com.google.inject.Stage;
 import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.guice.Mode;

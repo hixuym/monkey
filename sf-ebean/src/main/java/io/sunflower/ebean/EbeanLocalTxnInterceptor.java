@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author michael
- * @date 16/12/7
+ * created on 16/12/7
  */
 public class EbeanLocalTxnInterceptor implements MethodInterceptor {
 
