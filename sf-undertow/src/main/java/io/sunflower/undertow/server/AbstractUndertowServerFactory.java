@@ -28,6 +28,7 @@ import io.sunflower.setup.Environment;
 import io.sunflower.undertow.AdminHandlers;
 import io.sunflower.undertow.AppHandlers;
 import io.sunflower.util.Duration;
+import io.sunflower.util.Size;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
@@ -74,6 +75,7 @@ public abstract class AbstractUndertowServerFactory extends AbstractServerFactor
         Undertow.Builder undertowBuilder = Undertow.builder()
                 // NOTE: should not use equals chars within its cookie values?
                 .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
+                .setServerOption(UndertowOptions.MULTIPART_MAX_ENTITY_SIZE, getMaxUploadFileSize().toBytes())
                 .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
 
         logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
@@ -118,8 +120,19 @@ public abstract class AbstractUndertowServerFactory extends AbstractServerFactor
     private int maxWorkerThreads = 200;
     private int workerQueueSize = 2000;
     private boolean http2Enabled = false;
-
     private Duration maxIdleTime = Duration.minutes(1);
+
+    private Size maxUploadFileSize = Size.megabytes(10);
+
+    @JsonProperty
+    public Size getMaxUploadFileSize() {
+        return maxUploadFileSize;
+    }
+
+    @JsonProperty
+    public void setMaxUploadFileSize(Size maxUploadFileSize) {
+        this.maxUploadFileSize = maxUploadFileSize;
+    }
 
     @JsonProperty
     public Duration getMaxIdleTime() {
