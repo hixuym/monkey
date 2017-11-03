@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>sf-framework</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>sunflower framework projects</name>
@@ -26,7 +26,7 @@
         <url>https://github.com/hixuym/sf-framework</url>
         <connection>scm:git:git@github.com:hixuym/sf-framework.git</connection>
         <developerConnection>scm:git:git@github.com:hixuym/sf-framework.git</developerConnection>
-        <tag>v1.5.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
