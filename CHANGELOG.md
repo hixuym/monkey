@@ -1,4 +1,8 @@
 ## Sunflower Framework
+###1.5.0 - 2017011-03
+
+    - undertow module configure method renamed
+    - cleanup code
 
 ###1.4.2 - 2017-11-02
 
