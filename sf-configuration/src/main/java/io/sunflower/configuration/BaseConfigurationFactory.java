@@ -71,7 +71,8 @@ public abstract class BaseConfigurationFactory<T> implements ConfigurationFactor
         this.propertyPrefix = (propertyPrefix == null || propertyPrefix.endsWith("."))
                 ? propertyPrefix : (propertyPrefix + '.');
         // Sub-classes may choose to omit data-binding; if so, null ObjectMapper passed:
-        if (objectMapper == null) { // sub-class has no need for mapper
+        // sub-class has no need for mapper
+        if (objectMapper == null) {
             this.mapper = null;
             this.parserFactory = null;
         } else {
