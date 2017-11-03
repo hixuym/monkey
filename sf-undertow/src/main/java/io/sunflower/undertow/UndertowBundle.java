@@ -40,5 +40,11 @@ public abstract class UndertowBundle<T extends Configuration> implements Configu
     public void initialize(Bootstrap<?> bootstrap) {
     }
 
+    /**
+     * config undertow handlers.
+     * @param configuration
+     * @param environment
+     * @param undertowModule
+     */
     protected abstract void configure(T configuration, Environment environment, UndertowModule undertowModule);
 }

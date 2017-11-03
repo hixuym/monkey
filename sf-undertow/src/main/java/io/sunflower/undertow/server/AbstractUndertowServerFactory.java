@@ -28,6 +28,8 @@ import io.sunflower.setup.Environment;
 import io.sunflower.undertow.AdminHandlers;
 import io.sunflower.undertow.AppHandlers;
 import io.sunflower.util.Duration;
+import io.undertow.Undertow;
+import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
@@ -69,16 +71,23 @@ public abstract class AbstractUndertowServerFactory extends AbstractServerFactor
                 new TypeLiteral<Map<String, HttpHandler>>() {}, AppHandlers.class)
                 .forEach(appHandlers::addPrefixPath);
 
-        return buildServer(environment);
+        Undertow.Builder undertowBuilder = Undertow.builder()
+                // NOTE: should not use equals chars within its cookie values?
+                .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
+                .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
+
+        logger.info("Undertow h2 protocol (undertow.http2 = {})", isHttp2Enabled());
+
+        return buildServer(environment, undertowBuilder);
     }
 
     /**
      * build the server
-     *
+     * @param undertowBuilder
      * @param environment
      * @return
      */
-    protected abstract Server buildServer(Environment environment);
+    protected abstract Server buildServer(Environment environment, Undertow.Builder undertowBuilder);
 
     @Override
     public void configure(Environment environment) {
@@ -108,6 +117,8 @@ public abstract class AbstractUndertowServerFactory extends AbstractServerFactor
     private int minWorkerThreads = 10;
     private int maxWorkerThreads = 200;
     private int workerQueueSize = 2000;
+    private boolean http2Enabled = false;
+
     private Duration maxIdleTime = Duration.minutes(1);
 
     @JsonProperty
@@ -188,6 +199,16 @@ public abstract class AbstractUndertowServerFactory extends AbstractServerFactor
     @JsonProperty
     public void setAccessLogPath(String accessLogPath) {
         this.accessLogPath = accessLogPath;
+    }
+
+    @JsonProperty
+    public boolean isHttp2Enabled() {
+        return http2Enabled;
+    }
+
+    @JsonProperty
+    public void setHttp2Enabled(boolean http2Enabled) {
+        this.http2Enabled = http2Enabled;
     }
 
     @JsonIgnore

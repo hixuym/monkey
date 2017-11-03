@@ -35,7 +35,7 @@ public class FakeServerFactory extends AbstractServerFactory {
 
             @Override
             protected void boot() throws Exception {
-                logger.info("do nothing, just use for placeholder.");
+                logger.info("do nothing, just use for testing.");
             }
 
         };

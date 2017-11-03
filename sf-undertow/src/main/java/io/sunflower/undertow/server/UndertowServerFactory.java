@@ -100,14 +100,7 @@ public class UndertowServerFactory extends AbstractUndertowServerFactory {
     }
 
     @Override
-    protected Server buildServer(Environment environment) {
-
-        Undertow.Builder undertowBuilder = Undertow.builder()
-                // NOTE: should not use equals chars within its cookie values?
-                .setServerOption(UndertowOptions.ALLOW_EQUALS_IN_COOKIE_VALUE, true)
-                .setServerOption(UndertowOptions.ENABLE_STATISTICS, isStatsEnabled());
-
-        logger.info("Undertow h2 protocol (undertow.http2 = {})", false);
+    protected Server buildServer(Environment environment, Undertow.Builder undertowBuilder) {
 
         HttpHandler applicationHandler = addAccessLogWrapper("app", environment, appHandlers);
 
