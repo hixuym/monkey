@@ -35,7 +35,7 @@ public class DataSourceConfigurationTest {
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(ds.getUser()).isEqualTo("pg-user");
-        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
+        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
         assertThat(ds.getPassword()).isEqualTo("iAMs00perSecrEET");
         assertThat(ds.getProperties()).containsEntry("charSet", "UTF-8");
         assertThat(ds.getMaxWaitForConnection()).isEqualTo(Duration.seconds(1));
@@ -80,7 +80,7 @@ public class DataSourceConfigurationTest {
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(ds.getUser()).isEqualTo("pg-user");
-        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
+        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
         assertThat(ds.getPassword()).isEqualTo("iAMs00perSecrEET");
         assertThat(ds.getProperties()).isEmpty();
         assertThat(ds.getMaxWaitForConnection()).isEqualTo(Duration.seconds(30));
@@ -121,7 +121,7 @@ public class DataSourceConfigurationTest {
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(ds.getUrl())
-                .isEqualTo("jdbc:postgresql://db.example.com/db-prod?user=scott&password=tiger");
+                .isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod?user=scott&password=tiger");
         assertThat(ds.getUser()).isNull();
         assertThat(ds.getPassword()).isNull();
     }

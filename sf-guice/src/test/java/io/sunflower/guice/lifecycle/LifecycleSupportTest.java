@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -155,8 +156,10 @@ public class LifecycleSupportTest {
     }
 
     private Injector createInjector(Module... modules) {
-        List<Module> ms = new ArrayList<Module>(Arrays.asList(modules));
-        ms.add(LifecycleSupport.getModule());
+
+        List<Module> ms = newArrayList(Arrays.asList(modules));
+        ms.add(LifecycleSupport.asModule());
+
         return Guice.createInjector(ms);
     }
 

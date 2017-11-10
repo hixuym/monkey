@@ -67,9 +67,9 @@ public class DefaultLoggingFactoryTest {
                 new File(Resources.getResource("yaml/logging_advanced.yml").toURI()));
 
         assertThat(config.getLoggers())
-                .contains(MapEntry.entry("com.example.app", new TextNode("INFO")));
+                .contains(MapEntry.entry("com.quickstarters.app", new TextNode("INFO")));
 
-        final JsonNode newApp = config.getLoggers().get("com.example.newApp");
+        final JsonNode newApp = config.getLoggers().get("com.quickstarters.newApp");
         assertThat(newApp).isNotNull();
         final LoggerConfiguration newAppConfiguration = objectMapper
                 .treeToValue(newApp, LoggerConfiguration.class);
@@ -90,7 +90,7 @@ public class DefaultLoggingFactoryTest {
         assertThat(filterFactories.get(0)).isExactlyInstanceOf(TestFilterFactory.class);
         assertThat(filterFactories.get(1)).isExactlyInstanceOf(SecondTestFilterFactory.class);
 
-        final JsonNode legacyApp = config.getLoggers().get("com.example.legacyApp");
+        final JsonNode legacyApp = config.getLoggers().get("com.quickstarters.legacyApp");
         assertThat(legacyApp).isNotNull();
         final LoggerConfiguration legacyAppConfiguration = objectMapper
                 .treeToValue(legacyApp, LoggerConfiguration.class);
@@ -101,9 +101,9 @@ public class DefaultLoggingFactoryTest {
 
     @Test
     public void testConfigure() throws Exception {
-        final File newAppLog = folder.newFile("example-new-app.log");
-        final File newAppNotAdditiveLog = folder.newFile("example-new-app-not-additive.log");
-        final File defaultLog = folder.newFile("example.log");
+        final File newAppLog = folder.newFile("quickstarters-new-app.log");
+        final File newAppNotAdditiveLog = folder.newFile("quickstarters-new-app-not-additive.log");
+        final File defaultLog = folder.newFile("quickstarters.log");
         final StrSubstitutor substitutor = new StrSubstitutor(ImmutableMap.of(
                 "new_app", StringUtils.removeEnd(newAppLog.getAbsolutePath(), ".log"),
                 "new_app_not_additive",
@@ -117,31 +117,31 @@ public class DefaultLoggingFactoryTest {
                 configPath);
         config.configure(new MetricRegistry(), "test-logger");
 
-        LoggerFactory.getLogger("com.example.app").debug("Application debug log");
-        LoggerFactory.getLogger("com.example.app").info("Application log");
-        LoggerFactory.getLogger("com.example.newApp").debug("New application debug log");
-        LoggerFactory.getLogger("com.example.newApp").info("New application info log");
-        LoggerFactory.getLogger("com.example.legacyApp").debug("Legacy application debug log");
-        LoggerFactory.getLogger("com.example.legacyApp").info("Legacy application info log");
-        LoggerFactory.getLogger("com.example.notAdditive").debug("Not additive application debug log");
-        LoggerFactory.getLogger("com.example.notAdditive").info("Not additive application info log");
+        LoggerFactory.getLogger("com.quickstarters.app").debug("Application debug log");
+        LoggerFactory.getLogger("com.quickstarters.app").info("Application log");
+        LoggerFactory.getLogger("com.quickstarters.newApp").debug("New application debug log");
+        LoggerFactory.getLogger("com.quickstarters.newApp").info("New application info log");
+        LoggerFactory.getLogger("com.quickstarters.legacyApp").debug("Legacy application debug log");
+        LoggerFactory.getLogger("com.quickstarters.legacyApp").info("Legacy application info log");
+        LoggerFactory.getLogger("com.quickstarters.notAdditive").debug("Not additive application debug log");
+        LoggerFactory.getLogger("com.quickstarters.notAdditive").info("Not additive application info log");
 
         config.stop();
 
         assertThat(Files.readLines(defaultLog, StandardCharsets.UTF_8)).containsOnly(
-                "INFO  com.example.app: Application log",
-                "DEBUG com.example.newApp: New application debug log",
-                "INFO  com.example.newApp: New application info log",
-                "DEBUG com.example.legacyApp: Legacy application debug log",
-                "INFO  com.example.legacyApp: Legacy application info log");
+                "INFO  com.quickstarters.app: Application log",
+                "DEBUG com.quickstarters.newApp: New application debug log",
+                "INFO  com.quickstarters.newApp: New application info log",
+                "DEBUG com.quickstarters.legacyApp: Legacy application debug log",
+                "INFO  com.quickstarters.legacyApp: Legacy application info log");
 
         assertThat(Files.readLines(newAppLog, StandardCharsets.UTF_8)).containsOnly(
-                "DEBUG com.example.newApp: New application debug log",
-                "INFO  com.example.newApp: New application info log");
+                "DEBUG com.quickstarters.newApp: New application debug log",
+                "INFO  com.quickstarters.newApp: New application info log");
 
         assertThat(Files.readLines(newAppNotAdditiveLog, StandardCharsets.UTF_8)).containsOnly(
-                "DEBUG com.example.notAdditive: Not additive application debug log",
-                "INFO  com.example.notAdditive: Not additive application info log");
+                "DEBUG com.quickstarters.notAdditive: Not additive application debug log",
+                "INFO  com.quickstarters.notAdditive: Not additive application info log");
     }
 
     @Test

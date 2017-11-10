@@ -32,13 +32,13 @@ import java.util.function.Supplier;
  *
  * logging:
  *   loggers:
- *     com.example.foo: INFO
+ *     com.quickstarters.foo: INFO
  * </pre>
  * <ul> <li><code>ConfigOverride.config("debug", "true")</code> will add a top level field named
  * "debug" mapped to the string "true".</li> <li><code>ConfigOverride.config("server.applicationConnectors[0].type",
  * "https")</code> will change the sole application connector to have type "https" instead of type
- * "http". <li><code>ConfigOverride.config("logging.loggers.com\\.example\\.bar", "DEBUG")</code>
- * will add a logger with the name "com.example.bar" configured for debug logging.</li> </ul>
+ * "http". <li><code>ConfigOverride.config("logging.loggers.com\\.quickstarters\\.bar", "DEBUG")</code>
+ * will add a logger with the name "com.quickstarters.bar" configured for debug logging.</li> </ul>
  * @author michael
  */
 public class ConfigOverride {

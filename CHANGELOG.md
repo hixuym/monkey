@@ -1,9 +1,11 @@
 ## Sunflower Framework
-###1.5.1
+###2.0.0
 
-    - add upload file size limit
+    - remove sf-undertow module, framework just have fake server
+    - remove sf-myabtis module, recommend sf-ebean orm 
+    - add sf-resteasy module, integrate jboss resteasy
     
-###1.5.0 - 2017011-03
+###1.5.0 - 20170-11-03
 
     - undertow module configure method renamed
     - cleanup code

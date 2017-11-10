@@ -62,7 +62,7 @@ public class LifecycleManagerImpl implements LifecycleManager {
                     if (scope.equals(Scopes.SINGLETON)) {
                         Object target = injector.getInstance(binding.getKey());
                         if (binding instanceof ProviderInstanceBinding) {
-                            Provider providerInstance = ((ProviderInstanceBinding) binding).getProviderInstance();
+                            javax.inject.Provider providerInstance = ((ProviderInstanceBinding) binding).getUserSuppliedProvider();
                             if (providerInstance instanceof ProviderMethod) {
                                 // @Provides methods don't get picked up by TypeListeners, so we need to manually register them
                                 if (lifecycleSupport.hasLifecycleMethod(target.getClass())) {
@@ -78,7 +78,7 @@ public class LifecycleManagerImpl implements LifecycleManager {
         }
         lifecycleRegister.start();
         long time = System.currentTimeMillis() - startTime;
-        log.info("application started in {}ms", time);
+        log.info("application started in {} ms", time);
         state = lifecycleRegister.isStarted() ? State.STARTED : State.STOPPED;
     }
 
@@ -89,7 +89,7 @@ public class LifecycleManagerImpl implements LifecycleManager {
         state = State.STOPPING;
         lifecycleRegister.stop();
         long time = System.currentTimeMillis() - start;
-        log.info("application stopped in {}ms", time);
+        log.info("application stopped in {} ms", time);
         state = lifecycleRegister.isStarted() ? State.STARTED : State.STOPPED;
     }
 
@@ -103,6 +103,7 @@ public class LifecycleManagerImpl implements LifecycleManager {
         return state;
     }
 
+    @Override
     public long getUpTime() {
         if (isStarted()) {
             return System.currentTimeMillis() - startTime;

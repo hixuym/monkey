@@ -28,7 +28,7 @@ public class NonProxyListProxyRoutePlannerTest {
 
     private HttpHost proxy = new HttpHost("192.168.52.15");
     private NonProxyListProxyRoutePlanner routePlanner = new NonProxyListProxyRoutePlanner(proxy,
-            ImmutableList.of("localhost", "*.example.com", "192.168.52.*"));
+            ImmutableList.of("localhost", "*.quickstarters.com", "192.168.52.*"));
     private HttpRequest httpRequest = mock(HttpRequest.class);
     private HttpContext httpContext = mock(HttpContext.class);
 
@@ -52,7 +52,7 @@ public class NonProxyListProxyRoutePlannerTest {
     @Test
     public void testHostWithStartWildcardIsMatched() throws Exception {
         assertThat(
-                routePlanner.determineProxy(new HttpHost("test.example.com"), httpRequest, httpContext))
+                routePlanner.determineProxy(new HttpHost("test.quickstarters.com"), httpRequest, httpContext))
                 .isNull();
     }
 

@@ -543,17 +543,17 @@ public class HttpClientBuilderTest {
     public void usesProxyWithNonProxyHosts() throws Exception {
         HttpClientConfiguration config = new HttpClientConfiguration();
         ProxyConfiguration proxy = new ProxyConfiguration("192.168.52.11", 8080);
-        proxy.setNonProxyHosts(ImmutableList.of("*.example.com"));
+        proxy.setNonProxyHosts(ImmutableList.of("*.quickstarters.com"));
         config.setProxyConfiguration(proxy);
 
-        checkProxy(config, new HttpHost("host.example.com", 80), null);
+        checkProxy(config, new HttpHost("host.quickstarters.com", 80), null);
     }
 
     @Test
     public void usesProxyWithNonProxyHostsAndTargetDoesNotMatch() throws Exception {
         HttpClientConfiguration config = new HttpClientConfiguration();
         ProxyConfiguration proxy = new ProxyConfiguration("192.168.52.11");
-        proxy.setNonProxyHosts(ImmutableList.of("*.example.com"));
+        proxy.setNonProxyHosts(ImmutableList.of("*.quickstarters.com"));
         config.setProxyConfiguration(proxy);
 
         checkProxy(config, new HttpHost("dropwizard.io", 80), new HttpHost("192.168.52.11"));

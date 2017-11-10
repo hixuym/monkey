@@ -14,7 +14,7 @@ import javax.validation.Valid;
  * An object representation of the YAML configuration file. Extend this with your own configuration
  * properties, and they'll be parsed from the YAML file as well.
  * <p/>
- * For example, given a YAML file with this:
+ * For quickstarters, given a YAML file with this:
  * <pre>
  * name: "Random Person"
  * age: 43

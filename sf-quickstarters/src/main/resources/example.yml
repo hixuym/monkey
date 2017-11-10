@@ -1,0 +1,56 @@
+template: Hello, %s!
+defaultName: Stranger
+
+logging:
+  level: DEBUG
+  loggers:
+    "io.ebean.SQL": TRACE
+    "io.ebean.TXN": TRACE
+    "io.ebean.SUM": TRACE
+    "io.ebean.cache.QUERY": TRACE
+    "io.ebean.cache.BEAN": TRACE
+    "io.ebean.cache.COLL": TRACE
+    "io.ebean.cache.NATKEY": TRACE
+
+server:
+  type: resteasy
+#  applicationContextPath: /app
+#  adminContextPath: /admin
+#  accessLogFormat: combined
+#  minWorkerThreads: 10
+#  maxWorkerThreads: 200
+#  maxIdleTime: 30s
+#  workerQueueSize: 1000
+  properties:
+    ewf.secret: 12345678
+    ewf.scanPkgs: io.sunflower.quickstartersarters.controllers
+#  applicationConnectors:
+#    - type: https
+#      port: 8443
+#      validateCerts: true
+#      validatePeers: true
+#      supportedProtocols: ['TLSv1.1', 'TLSv1.2']
+#      excludedProtocols:  []
+#      supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
+#      excludedCipherSuites: []
+#      allowRenegotiation: false
+#      endpointIdentificationAlgorithm: HTTPS
+
+metrics:
+  frequency: 1 minutes
+  reporters:
+    - type: log
+      logger: io.sunflower.metrics
+#
+#database:
+#  driverClass: org.h2.Driver
+#  user: sa
+#  autoCommitByDefault: false
+#  password: ""
+#  url: jdbc:h2:mem:test_db
+#  initialSize: 0
+#  minSize: 0
+#  properties:
+#    search.packages: io.sunflower.quickstartersarters
+#    ddl.generate: true
+#    ddl.run: true

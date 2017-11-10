@@ -208,9 +208,9 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesNewOverrideWithPeriod() throws Exception {
-        System.setProperty("sf.my\\.logger.com\\.example", "error");
+        System.setProperty("sf.my\\.logger.com\\.quickstarters", "error");
         final Example example = factory.build(validFile);
-        assertThat(example.getLogger().get("com.example"))
+        assertThat(example.getLogger().get("com.quickstarters"))
                 .isEqualTo("error");
     }
 

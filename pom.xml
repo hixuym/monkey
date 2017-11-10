@@ -60,6 +60,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-core</artifactId>
@@ -131,17 +132,13 @@
                 <artifactId>sf-metrics-ganglia</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics-graphite</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-undertow</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-reflect</artifactId>
@@ -182,9 +179,10 @@
                 <artifactId>sf-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-mybatis</artifactId>
+                <artifactId>sf-resteasy</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -203,16 +201,16 @@
         <module>sf-core</module>
         <module>sf-guice</module>
         <module>sf-lifecycle</module>
-        <module>sf-undertow</module>
         <module>sf-extension</module>
         <module>sf-client</module>
         <module>sf-db</module>
         <module>sf-ebean</module>
         <module>sf-migrations</module>
-        <module>sf-mybatis</module>
         <module>sf-postoffice</module>
         <module>sf-testing</module>
         <module>sf-archetypes</module>
+        <module>sf-resteasy</module>
+        <module>sf-quickstarters</module>
     </modules>
 
 </project>

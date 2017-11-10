@@ -93,8 +93,7 @@ public class InjectorBuilder {
      */
     public <T> InjectorBuilder forEachElement(ElementVisitor<T> visitor, Consumer<T> consumer) {
         Elements.getElements(module)
-                .forEach(
-                        element -> Optional.ofNullable(element.acceptVisitor(visitor)).ifPresent(consumer));
+                .forEach(element -> Optional.ofNullable(element.acceptVisitor(visitor)).ifPresent(consumer));
         return this;
     }
 
@@ -104,8 +103,7 @@ public class InjectorBuilder {
      * This call will not modify any bindings
      */
     public <T> InjectorBuilder forEachElement(ElementVisitor<T> visitor) {
-        Elements
-                .getElements(module)
+        Elements.getElements(module)
                 .forEach(element -> element.acceptVisitor(visitor));
         return this;
     }

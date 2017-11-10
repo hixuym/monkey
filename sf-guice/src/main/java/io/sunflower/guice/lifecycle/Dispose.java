@@ -38,7 +38,7 @@ public @interface Dispose {
      * The order in which it should be disposed, higher meaning earlier.  While apps are free to use
      * any ordering system they wish, the following convention is recommended:
      * <p/>
-     * 10 - Services that connect to resources and do not depend on other services, for example,
+     * 10 - Services that connect to resources and do not depend on other services, for quickstarters,
      * database connections 20-80 - Services that depend on resources, but may still be needed for the
      * app to complete its core functions 90 - Services that stop the app from doing its core
      * functions, eg listening on queues, responding to HTTP requests

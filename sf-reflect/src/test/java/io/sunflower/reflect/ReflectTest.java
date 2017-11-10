@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static io.sunflower.reflect.Reflect.accessible;
 import static io.sunflower.reflect.Reflect.on;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;

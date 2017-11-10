@@ -70,6 +70,7 @@ public final class GuavaApplicationEventModule extends AbstractModule {
             }
         }
 
+        @Override
         public ApplicationEventRegistration registerListener(Object instance, Method method,
                                                              Class<? extends ApplicationEvent> eventType) {
             GuavaSubscriberProxy proxy = new GuavaSubscriberProxy(instance, method, eventType);
@@ -77,6 +78,7 @@ public final class GuavaApplicationEventModule extends AbstractModule {
             return new GuavaEventRegistration(eventBus, proxy);
         }
 
+        @Override
         public <T extends ApplicationEvent> ApplicationEventRegistration registerListener(
                 Class<T> eventType, ApplicationEventListener<T> eventListener) {
             GuavaSubscriberProxy proxy = new GuavaSubscriberProxy(eventListener, eventListenerMethod,
@@ -85,6 +87,7 @@ public final class GuavaApplicationEventModule extends AbstractModule {
             return new GuavaEventRegistration(eventBus, proxy);
         }
 
+        @Override
         public ApplicationEventRegistration registerListener(
                 ApplicationEventListener<? extends ApplicationEvent> eventListener) {
             Type[] genericInterfaces = eventListener.getClass().getGenericInterfaces();
@@ -138,6 +141,7 @@ public final class GuavaApplicationEventModule extends AbstractModule {
                 this.subscriber = subscriber;
             }
 
+            @Override
             public void unregister() {
                 this.eventBus.unregister(subscriber);
             }

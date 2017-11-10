@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * A wrapper for an {@link Object} or {@link Class} upon which reflective calls can be made. <p>
- * An example of using <code>Reflect</code> is <code><pre>
+ * An quickstarters of using <code>Reflect</code> is <code><pre>
  * // Static import all reflection methods to decrease verbosity
  * import static org.joor.Reflect.*;
  * <p>

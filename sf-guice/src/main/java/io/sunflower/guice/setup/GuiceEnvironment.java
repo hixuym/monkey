@@ -16,10 +16,7 @@
 package io.sunflower.guice.setup;
 
 import com.google.common.base.Stopwatch;
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Stage;
+import com.google.inject.*;
 import io.sunflower.guice.*;
 import io.sunflower.guice.advise.AdvisableAnnotatedMethodScanner;
 import io.sunflower.guice.event.guava.GuavaApplicationEventModule;
@@ -44,8 +41,7 @@ public class GuiceEnvironment {
 
     private final List<Module> moduleLoaded = newArrayList();
     private final List<Module> overrideModules = newArrayList();
-    private final List<InjectorProcessor> injectorProcessors = newArrayList();
-    private final List<ModuleProcessor> moduleProcessors = newArrayList();
+    private final List<ModulesProcessor> modulesProcessors = newArrayList();
 
     private volatile Injector injector;
 
@@ -117,12 +113,8 @@ public class GuiceEnvironment {
         this.overrideModules.addAll(Arrays.asList(modules));
     }
 
-    public void registerInjectorProcessor(InjectorProcessor processor) {
-        this.injectorProcessors.add(processor);
-    }
-
-    public void registerModuleProcessor(ModuleProcessor moduleProcessor) {
-        this.moduleProcessors.add(moduleProcessor);
+    public void registerModuleProcessor(ModulesProcessor modulesProcessor) {
+        this.modulesProcessors.add(modulesProcessor);
     }
 
     public void setup() {
@@ -136,7 +128,7 @@ public class GuiceEnvironment {
         Stopwatch sw = Stopwatch.createStarted();
 
         if (scheduleEnabled) {
-            register(SchedulerSupport.getModule());
+            register(SchedulerSupport.asModule());
         }
 
         if (eventEnabled) {
@@ -148,14 +140,14 @@ public class GuiceEnvironment {
         }
 
         if (lifecycleEnabled) {
-            register(LifecycleSupport.getModule());
+            register(LifecycleSupport.asModule());
         }
 
         if (metricsEnabled) {
             register(new MetricsModule());
         }
 
-        moduleProcessors.forEach(it -> it.process(moduleLoaded));
+        modulesProcessors.forEach(it -> it.process(moduleLoaded));
 
         InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);
 
@@ -168,8 +160,6 @@ public class GuiceEnvironment {
 
         this.injector = builder.createInjector(mode == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
 
-        injectorProcessors.forEach(it -> it.process(injector));
-
         sw.stop();
 
         if (LOG.isDebugEnabled()) {
@@ -177,8 +167,8 @@ public class GuiceEnvironment {
         }
 
         this.moduleLoaded.clear();
-        this.injectorProcessors.clear();
         this.overrideModules.clear();
+        this.modulesProcessors.clear();
         this.setuped = true;
     }
 

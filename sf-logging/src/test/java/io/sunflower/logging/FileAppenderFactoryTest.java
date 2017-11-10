@@ -79,7 +79,7 @@ public class FileAppenderFactoryTest {
         fileAppenderFactory.setCurrentLogFilename(folder.newFile("logfile.log").toString());
         fileAppenderFactory.setArchive(true);
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%d.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d.log.gz").toString());
         assertThat(fileAppenderFactory.buildAppender(new LoggerContext()))
                 .isInstanceOf(RollingFileAppender.class);
     }
@@ -104,7 +104,7 @@ public class FileAppenderFactoryTest {
         fileAppenderFactory.setCurrentLogFilename(folder.newFile("logfile.log").toString());
         fileAppenderFactory.setArchivedFileCount(0);
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%d.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d.log.gz").toString());
         ImmutableList<String> errors =
                 ConstraintViolations.format(validator.validate(fileAppenderFactory));
         assertThat(errors).isEmpty();
@@ -117,13 +117,13 @@ public class FileAppenderFactoryTest {
         fileAppenderFactory.setCurrentLogFilename(folder.newFile("logfile.log").toString());
         fileAppenderFactory.setMaxFileSize(Size.kilobytes(1));
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%d.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d.log.gz").toString());
         ImmutableList<String> errors =
                 ConstraintViolations.format(validator.validate(fileAppenderFactory));
         assertThat(errors)
                 .containsOnly("when specifying maxFileSize, archivedLogFilenamePattern must contain %i");
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%d-%i.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d-%i.log.gz").toString());
         errors = ConstraintViolations.format(validator.validate(fileAppenderFactory));
         assertThat(errors).isEmpty();
     }
@@ -133,7 +133,7 @@ public class FileAppenderFactoryTest {
         FileAppenderFactory fileAppenderFactory = new FileAppenderFactory();
         fileAppenderFactory.setCurrentLogFilename(folder.newFile("logfile.log").toString());
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%i.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%i.log.gz").toString());
         ImmutableList<String> errors =
                 ConstraintViolations.format(validator.validate(fileAppenderFactory));
         assertThat(errors)
@@ -188,7 +188,7 @@ public class FileAppenderFactoryTest {
         fileAppenderFactory.setArchive(true);
         fileAppenderFactory.setMaxFileSize(Size.kilobytes(1));
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%d-%i.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d-%i.log.gz").toString());
         RollingFileAppender<ILoggingEvent> appender = (RollingFileAppender<ILoggingEvent>) fileAppenderFactory
                 .buildAppender(new LoggerContext());
 
@@ -207,7 +207,7 @@ public class FileAppenderFactoryTest {
         fileAppenderFactory.setArchive(true);
         fileAppenderFactory.setMaxFileSize(Size.kilobytes(1));
         fileAppenderFactory
-                .setArchivedLogFilenamePattern(folder.newFile("example-%i.log.gz").toString());
+                .setArchivedLogFilenamePattern(folder.newFile("quickstarters-%i.log.gz").toString());
         RollingFileAppender<ILoggingEvent> appender = (RollingFileAppender<ILoggingEvent>) fileAppenderFactory
                 .buildAppender(new LoggerContext());
 
@@ -226,7 +226,7 @@ public class FileAppenderFactoryTest {
     public void appenderContextIsSet() throws Exception {
         final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         final FileAppenderFactory<ILoggingEvent> appenderFactory = new FileAppenderFactory<>();
-        appenderFactory.setArchivedLogFilenamePattern(folder.newFile("example-%d.log.gz").toString());
+        appenderFactory.setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d.log.gz").toString());
         final Appender<ILoggingEvent> appender = appenderFactory
                 .build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
                         new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
@@ -238,7 +238,7 @@ public class FileAppenderFactoryTest {
     public void appenderNameIsSet() throws Exception {
         final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         final FileAppenderFactory<ILoggingEvent> appenderFactory = new FileAppenderFactory<>();
-        appenderFactory.setArchivedLogFilenamePattern(folder.newFile("example-%d.log.gz").toString());
+        appenderFactory.setArchivedLogFilenamePattern(folder.newFile("quickstarters-%d.log.gz").toString());
         final Appender<ILoggingEvent> appender = appenderFactory
                 .build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
                         new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());

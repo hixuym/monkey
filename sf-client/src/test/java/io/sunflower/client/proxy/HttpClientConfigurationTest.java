@@ -67,7 +67,7 @@ public class HttpClientConfigurationTest {
         assertThat(auth.getPassword()).isEqualTo("stuff");
 
         List<String> nonProxyHosts = proxy.getNonProxyHosts();
-        assertThat(nonProxyHosts).contains("localhost", "192.168.52.*", "*.example.com");
+        assertThat(nonProxyHosts).contains("localhost", "192.168.52.*", "*.quickstarters.com");
     }
 
     @Test
@@ -92,7 +92,7 @@ public class HttpClientConfigurationTest {
         assertThat(auth.getCredentialType()).isEqualTo("NT");
 
         List<String> nonProxyHosts = proxy.getNonProxyHosts();
-        assertThat(nonProxyHosts).contains("localhost", "192.168.52.*", "*.example.com");
+        assertThat(nonProxyHosts).contains("localhost", "192.168.52.*", "*.quickstarters.com");
     }
 
     @Test

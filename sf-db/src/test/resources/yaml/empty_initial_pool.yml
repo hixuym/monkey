@@ -1,6 +1,6 @@
 driverClass: org.postgresql.Driver
 user: pg-user
 password: iAMs00perSecrEET
-url: jdbc:postgresql://db.example.com/db-prod
+url: jdbc:postgresql://db.quickstarters.com/db-prod
 initialSize: 0
 minSize: 0

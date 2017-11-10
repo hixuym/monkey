@@ -22,8 +22,8 @@ public class GuavaExtrasModuleTest {
 
     @Test
     public void canDeserializeAHostAndPort() throws Exception {
-        assertThat(mapper.readValue("\"example.com:8080\"", HostAndPort.class))
-                .isEqualTo(HostAndPort.fromParts("example.com", 8080));
+        assertThat(mapper.readValue("\"quickstarters.com:8080\"", HostAndPort.class))
+                .isEqualTo(HostAndPort.fromParts("quickstarters.com", 8080));
     }
 
     @Test

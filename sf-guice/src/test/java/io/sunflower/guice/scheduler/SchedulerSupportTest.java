@@ -100,8 +100,8 @@ public class SchedulerSupportTest {
 
     private Injector createInjector(Module... modules) {
         List<Module> ms = new ArrayList<Module>(Arrays.asList(modules));
-        ms.add(LifecycleSupport.getModule());
-        ms.add(SchedulerSupport.getModule());
+        ms.add(LifecycleSupport.asModule());
+        ms.add(SchedulerSupport.asModule());
         return Guice.createInjector(ms);
     }
 

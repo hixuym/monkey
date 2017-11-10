@@ -38,7 +38,7 @@ public class LifecycleSupport {
      *
      * @return The lifecycle support module
      */
-    public static Module getModule() {
+    public static Module asModule() {
         return new LifecycleSupport().constructModule();
     }
 

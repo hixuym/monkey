@@ -33,7 +33,7 @@ public class SchedulerSupport {
     /**
      * Get the scheduler support module
      */
-    public static Module getModule() {
+    public static Module asModule() {
         return new SchedulerSupport().constructModule();
     }
 

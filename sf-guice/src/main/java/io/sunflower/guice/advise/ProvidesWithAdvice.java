@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * a default implementation of a type but allow extensions and customizations by installing modules
  * with {@literal @}Advises annotated methods.
  * <p>
- * For example,
+ * For quickstarters,
  * <p>
  * <pre>
  * {@literal @}ProvidesWithAdvice

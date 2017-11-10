@@ -107,7 +107,7 @@ public class DataSourceFactoryTest {
     @Test(expected = SQLException.class)
     public void invalidJDBCDriverClassThrowsSQLException() throws SQLException {
         final DataSourceFactory factory = new DataSourceFactory();
-        factory.setDriverClass("org.example.no.driver.here");
+        factory.setDriverClass("org.quickstarters.no.driver.here");
 
         factory.build(metricRegistry, "test").getConnection();
     }
@@ -145,7 +145,7 @@ public class DataSourceFactoryTest {
         assertThat(factory.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(factory.getUser()).isEqualTo("pg-user");
         assertThat(factory.getPassword()).isEqualTo("iAMs00perSecrEET");
-        assertThat(factory.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
+        assertThat(factory.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
         assertThat(factory.getValidationQuery()).isEqualTo("/* Health Check */ SELECT 1");
         assertThat(factory.getValidationQueryTimeout()).isEqualTo(Optional.empty());
     }

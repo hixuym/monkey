@@ -36,7 +36,7 @@ import java.util.function.UnaryOperator;
  * {@link Module} method annotations {@literal @}{@link ProvidesWithAdvice} and {@literal @}{@link Advises}
  * may be used instead of calling AdvisesBinder directly.
  * <p>
- * For example,
+ * For quickstarters,
  * <p>
  * <pre>
  * {@code
