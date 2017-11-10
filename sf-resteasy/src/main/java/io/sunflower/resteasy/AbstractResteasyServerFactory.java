@@ -17,6 +17,7 @@ package io.sunflower.resteasy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.sunflower.resteasy.actuator.ApplicationActuatorResource;
 import io.sunflower.resteasy.internal.ResteasyResourcesRegister;
 import io.sunflower.resteasy.internal.ext.RequestScopeModule;
 import io.sunflower.resteasy.internal.ext.ResteasyModule;
@@ -91,6 +92,7 @@ public abstract class AbstractResteasyServerFactory extends AbstractServerFactor
     public void configure(Environment environment) {
         environment.guice().register(new ResteasyModule(), new RequestScopeModule());
         environment.guice().register(ResteasyWadlDefaultResource.class);
+        environment.guice().register(ApplicationActuatorResource.class);
     }
 
     @JsonIgnore
