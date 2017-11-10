@@ -2,7 +2,7 @@ template: Hello, %s!
 defaultName: Stranger
 
 logging:
-  level: DEBUG
+  level: INFO
   loggers:
     "io.ebean.SQL": TRACE
     "io.ebean.TXN": TRACE
@@ -13,28 +13,17 @@ logging:
     "io.ebean.cache.NATKEY": TRACE
 
 server:
-  type: resteasy
+  type: netty-http
 #  applicationContextPath: /app
-#  adminContextPath: /admin
-#  accessLogFormat: combined
-#  minWorkerThreads: 10
-#  maxWorkerThreads: 200
-#  maxIdleTime: 30s
-#  workerQueueSize: 1000
-  properties:
-    ewf.secret: 12345678
-    ewf.scanPkgs: io.sunflower.quickstartersarters.controllers
-#  applicationConnectors:
-#    - type: https
-#      port: 8443
-#      validateCerts: true
-#      validatePeers: true
-#      supportedProtocols: ['TLSv1.1', 'TLSv1.2']
-#      excludedProtocols:  []
-#      supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
-#      excludedCipherSuites: []
-#      allowRenegotiation: false
-#      endpointIdentificationAlgorithm: HTTPS
+#  port: 8443
+#  validateCerts: true
+#  validatePeers: true
+#  supportedProtocols: ['TLSv1.1', 'TLSv1.2']
+#  excludedProtocols:  []
+#  supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
+#  excludedCipherSuites: []
+#  allowRenegotiation: false
+#  endpointIdentificationAlgorithm: HTTPS
 
 metrics:
   frequency: 1 minutes

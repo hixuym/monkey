@@ -16,6 +16,9 @@
 package io.sunflower.resteasy.internal.ext;
 
 import com.google.inject.AbstractModule;
+import io.sunflower.resteasy.jackson.JacksonFeature;
+import io.sunflower.resteasy.validation.HibernateValidationFeature;
+import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -33,6 +36,9 @@ public class ResteasyModule extends AbstractModule {
         bind(Response.ResponseBuilder.class).toProvider(ResponseBuilderProvider.class);
         bind(UriBuilder.class).toProvider(UriBuilderProvider.class);
         bind(Variant.VariantListBuilder.class).toProvider(VariantListBuilderProvider.class);
+
+        bind(HibernateValidationFeature.class);
+        bind(JacksonFeature.class);
     }
 
 }

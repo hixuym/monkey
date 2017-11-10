@@ -185,6 +185,12 @@
                 <artifactId>sf-resteasy</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-resteasy-netty</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -210,6 +216,7 @@
         <module>sf-testing</module>
         <module>sf-archetypes</module>
         <module>sf-resteasy</module>
+        <module>sf-resteasy-netty</module>
         <module>sf-quickstarters</module>
     </modules>
 
