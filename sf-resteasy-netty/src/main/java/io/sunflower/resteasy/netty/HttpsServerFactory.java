@@ -22,6 +22,7 @@ import com.google.common.collect.Iterables;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.resteasy.netty.ssl.SslContextFactory;
+import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.validation.ValidationMethod;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -359,7 +360,7 @@ public class HttpsServerFactory extends HttpServerFactory {
     }
 
     @Override
-    protected void configure(NettyJaxrsServer server, Environment environment) {
+    protected Server buildNettyServer(NettyJaxrsServer server, Environment environment) {
 
         final SslContextFactory sslContextFactory = new SslContextFactory();
 
@@ -374,6 +375,13 @@ public class HttpsServerFactory extends HttpServerFactory {
         environment.lifecycle().addLifeCycleListener(logSslInfoOnStart(sslContext));
 
         server.setSSLContext(sslContext);
+
+        ResteasyServer nettyServer = new ResteasyServer(server, environment);
+
+        nettyServer.setApplicationContextPath(getApplicationContextPath());
+        nettyServer.setSchema("https");
+
+        return nettyServer;
     }
 
     /**

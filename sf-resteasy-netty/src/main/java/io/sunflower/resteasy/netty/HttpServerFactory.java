@@ -56,9 +56,9 @@ public class HttpServerFactory extends AbstractResteasyServerFactory {
         jaxrsServer.setRootResourcePath(getApplicationContextPath());
         jaxrsServer.setSecurityDomain(null);
 
-        configure(jaxrsServer, environment);
+        buildNettyServer(jaxrsServer, environment);
 
-        return new ResteasyNettyServer(jaxrsServer, environment);
+        return buildNettyServer(jaxrsServer, environment);
     }
 
     @Override
@@ -67,11 +67,14 @@ public class HttpServerFactory extends AbstractResteasyServerFactory {
     }
 
     /**
-     * configure netty server
+     * buildNettyServer netty server
      *
      * @param server
      */
-    protected void configure(NettyJaxrsServer server, Environment environment) {
+    protected Server buildNettyServer(NettyJaxrsServer server, Environment environment) {
+        ResteasyServer resteasyServer = new ResteasyServer(server, environment);
+        resteasyServer.setApplicationContextPath(getApplicationContextPath());
+        return resteasyServer;
     }
 
     @JsonProperty

@@ -39,7 +39,7 @@ public abstract class AbstractResteasyServerFactory extends AbstractServerFactor
 
     private final ResteasyDeployment deployment = new ResteasyDeployment();
 
-    private String applicationContextPath = "";
+    private String applicationContextPath = "/";
 
     private int port = 8080;
 
