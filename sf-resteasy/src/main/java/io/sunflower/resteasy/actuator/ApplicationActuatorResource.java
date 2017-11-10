@@ -15,8 +15,11 @@
 
 package io.sunflower.resteasy.actuator;
 
+import com.codahale.metrics.MetricRegistry;
 import io.sunflower.resteasy.params.IntParam;
+import io.sunflower.setup.Environment;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -28,13 +31,23 @@ import javax.ws.rs.core.MediaType;
  * created on 17/11/10 22:30
  */
 @Singleton
-@Path("/actuator")
+@Path("/__admin")
 public class ApplicationActuatorResource {
+
+    private final Environment environment;
+
+    @Inject
+    public ApplicationActuatorResource(Environment environment) {
+        this.environment = environment;
+    }
 
     @Path("/metrics")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String metrics() {
+
+        MetricRegistry metricRegistry = environment.metrics();
+
         return "";
     }
 
