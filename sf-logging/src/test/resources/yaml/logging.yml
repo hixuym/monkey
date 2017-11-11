@@ -6,20 +6,20 @@ appenders:
     threshold: ALL
   - type: file
     threshold: ALL
-    currentLogFilename: ./logs/quickstarters.log
-    archivedLogFilenamePattern: ./logs/quickstarters-%d.log.gz
+    currentLogFilename: ./logs/example.log
+    archivedLogFilenamePattern: ./logs/example-%d.log.gz
     archivedFileCount: 5
   - type: file
     threshold: ALL
     maxFileSize: 100MB
-    currentLogFilename: ./logs/max-file-size-quickstarters.log
-    archivedLogFilenamePattern: ./logs/max-file-size-quickstarters-%d-%i.log.gz
+    currentLogFilename: ./logs/max-file-size-example.log
+    archivedLogFilenamePattern: ./logs/max-file-size-example-%d-%i.log.gz
     archivedFileCount: 5
   - type: file
     threshold: ALL
     maxFileSize: 100MB
-    currentLogFilename: ./logs/max-file-size-quickstarters.log
-    archivedLogFilenamePattern: ./logs/max-file-size-quickstarters-%i.log.gz
+    currentLogFilename: ./logs/max-file-size-example.log
+    archivedLogFilenamePattern: ./logs/max-file-size-example-%i.log.gz
     archivedFileCount: 5
   - type: syslog
     host: localhost

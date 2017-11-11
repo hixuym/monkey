@@ -7,10 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +25,7 @@ public class GenericsTest<T> {
                 {IntegerList.class, Integer.class, Integer.class, Integer.class, null, null},
                 {NumberList.class, Number.class, Number.class, Number.class, null, null},
                 {IntegerValueMap.class, Object.class, Number.class, Integer.class, null, null},
+                {ListOfStringSets.class, Set.class, Set.class, Set.class, null, null },
         });
     }
 
@@ -75,4 +73,6 @@ public class GenericsTest<T> {
     public static class IntegerValueMap<K> extends HashMap<K, Integer> {
 
     }
+
+    public static class ListOfStringSets extends ArrayList<Set<String>> { }
 }

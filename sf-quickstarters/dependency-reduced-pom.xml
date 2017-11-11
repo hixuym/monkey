@@ -130,7 +130,7 @@
       <dependency>
         <groupId>io.sunflower</groupId>
         <artifactId>sf-bom</artifactId>
-        <version>1</version>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

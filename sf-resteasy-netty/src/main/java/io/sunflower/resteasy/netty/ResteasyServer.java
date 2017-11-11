@@ -37,7 +37,9 @@ public class ResteasyServer extends Server {
     private final String nettyVersion;
     private boolean nettyStarted;
 
-    private String applicationContextPath = "/";
+    private static final String ROOT = "/";
+
+    private String applicationContextPath = ROOT;
 
     private String schema = "http";
 
@@ -82,7 +84,7 @@ public class ResteasyServer extends Server {
     }
 
     public void setApplicationContextPath(String applicationContextPath) {
-        if (applicationContextPath != null && applicationContextPath.equalsIgnoreCase("/")) {
+        if (applicationContextPath != null && ROOT.equals(applicationContextPath)) {
             this.applicationContextPath = "";
         } else {
             this.applicationContextPath = applicationContextPath;

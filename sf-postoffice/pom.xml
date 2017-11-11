@@ -12,6 +12,18 @@
 
     <name>sunflower postoffice module</name>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>io.sunflower</groupId>

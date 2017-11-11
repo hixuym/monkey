@@ -1,10 +1,12 @@
 ## Sunflower Framework
-###2.0.0
+###2.0.0 - 2017-11-11
 
     - remove sf-undertow module, framework just have fake server
     - remove sf-myabtis module, recommend sf-ebean orm 
-    - add sf-resteasy module, integrate jboss resteasy
-    
+    - add sf-resteasy module as resteasy extension
+    - add sf-resteasy-netty module as default runtime
+    - upgrade ebean from 11.3.1 to 11.4.1
+  
 ###1.5.0 - 20170-11-03
 
     - undertow module configure method renamed
