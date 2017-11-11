@@ -1,4 +1,10 @@
 ## Sunflower Framework
+
+###2.1.0 - 2017-11-12
+
+    - upgrade io.ebean.tile:enhancement:4.3 work with ebean 11.4.1
+    - ebean classpath scanner not work
+
 ###2.0.0 - 2017-11-11
 
     - remove sf-undertow module, framework just have fake server

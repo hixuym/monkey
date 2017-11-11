@@ -12,14 +12,14 @@
     <artifactId>java-simple</artifactId>
     <packaging>maven-archetype</packaging>
 
-    <name>sunflower archetype for simple sf-framework application</name>
+    <name>sunflower archetype for simple java application</name>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-bom</artifactId>
-                <version>1</version>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

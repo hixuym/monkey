@@ -144,7 +144,7 @@ public class Environment {
 
     /**
      * returns the guice configuration environment
-     * @return
+     * @return guice configure env
      */
     public GuiceEnvironment guice() {
         return guiceEnvironment;

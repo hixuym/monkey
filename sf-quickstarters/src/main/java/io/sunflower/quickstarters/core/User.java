@@ -15,21 +15,35 @@
 
 package io.sunflower.quickstarters.core;
 
-import com.google.inject.ImplementedBy;
+import io.sunflower.ebean.BaseModel;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
- * GreetingService
- *
- * @author michael created on 17/10/18 11:26
+ * @author michael
  */
-@ImplementedBy(GreetingServiceImpl.class)
-public interface GreetingService {
+@Entity
+@Table(name = "tb_user")
+public class User extends BaseModel {
 
-    /**
-     * say hello to somebody
-     * @param name
-     * @return greeting message
-     */
-    String greeting(String name);
+    private String name;
 
+    private Integer age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 }

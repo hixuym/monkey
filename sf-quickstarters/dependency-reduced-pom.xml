@@ -3,7 +3,7 @@
   <parent>
     <artifactId>sf-framework</artifactId>
     <groupId>io.sunflower</groupId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sf-quickstarters</artifactId>
@@ -37,7 +37,7 @@
               <transformers>
                 <transformer />
                 <transformer>
-                  <mainClass>io.sunflower.quickstarts.ExampleApplication</mainClass>
+                  <mainClass>io.sunflower.quickstarts.QuickstartersApplication</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -67,13 +67,23 @@
           </archive>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>io.repaint.maven</groupId>
+        <artifactId>tiles-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <tiles>
+            <tile>io.ebean.tile:enhancement:4.3</tile>
+          </tiles>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
       <groupId>io.sunflower</groupId>
       <artifactId>sf-testing</artifactId>
-      <version>1.5.1-SNAPSHOT</version>
+      <version>2.0.1-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

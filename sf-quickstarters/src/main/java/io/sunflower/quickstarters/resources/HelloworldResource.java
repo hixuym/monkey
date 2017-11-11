@@ -15,8 +15,10 @@
 
 package io.sunflower.quickstarters.resources;
 
-import io.sunflower.resteasy.params.IntParam;
+import io.sunflower.ebean.Transactional;
 import io.sunflower.quickstarters.core.GreetingService;
+import io.sunflower.quickstarters.core.User;
+import io.sunflower.resteasy.params.IntParam;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,8 +36,8 @@ import java.util.Optional;
  * @author michael
  * created on 17/11/8 11:17
  */
-@Singleton
 @Path("/helloworld")
+@Singleton
 public class HelloworldResource {
 
     private final GreetingService greetingService;
@@ -59,6 +61,28 @@ public class HelloworldResource {
         Message message = new Message();
 
         message.content = greetingService.greeting(name);
+
+        return message;
+    }
+
+    @GET
+    @Path("/add_user")
+    @Transactional(rollbackFor = Exception.class)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Message addUser() {
+
+        User user = new User();
+
+        user.setAge(35);
+        user.setName("michael");
+
+        user.save();
+
+        int userCount = User.db().find(User.class).findCount();
+
+        Message message = new Message();
+
+        message.content = userCount + " users added.";
 
         return message;
     }

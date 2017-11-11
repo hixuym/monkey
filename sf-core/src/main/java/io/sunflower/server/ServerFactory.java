@@ -55,7 +55,7 @@ public interface ServerFactory extends Discoverable {
     /**
      * get server run mode. default is Mode.dev
      *
-     * @return
+     * @return server running mode dev, test or prod
      */
     Mode getMode();
 }

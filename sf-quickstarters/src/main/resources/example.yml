@@ -2,7 +2,7 @@ template: Hello, %s!
 defaultName: Stranger
 
 logging:
-  level: INFO
+  level: DEBUG
   loggers:
     "io.ebean.SQL": TRACE
     "io.ebean.TXN": TRACE
@@ -30,16 +30,16 @@ metrics:
   reporters:
     - type: log
       logger: io.sunflower.metrics
-#
-#database:
-#  driverClass: org.h2.Driver
-#  user: sa
-#  autoCommitByDefault: false
-#  password: ""
-#  url: jdbc:h2:mem:test_db
-#  initialSize: 0
-#  minSize: 0
-#  properties:
-#    search.packages: io.sunflower.quickstartersarters
-#    ddl.generate: true
-#    ddl.run: true
+
+database:
+  driverClass: org.h2.Driver
+  user: sa
+  autoCommitByDefault: false
+  password: ""
+  url: jdbc:h2:mem:test_db
+  initialSize: 0
+  minSize: 0
+  properties:
+    search.packages: io.sunflower.quickstartersarters.core
+    ddl.generate: true
+    ddl.run: true

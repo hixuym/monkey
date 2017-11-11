@@ -37,8 +37,8 @@ import static com.google.inject.matcher.Matchers.*;
 /**
  * @author michael
  */
-public abstract class EbeanBundle<T extends Configuration> implements ConfiguredBundle<T>,
-        DatabaseConfiguration<T> {
+public abstract class EbeanBundle<T extends Configuration>
+        implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
     public static final String DEFAULT_NAME = "ebean";
 

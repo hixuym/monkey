@@ -26,7 +26,7 @@ public interface DatabaseConfiguration<T extends Configuration> {
     /**
      * get datasource factory from application configuration.
      * @param configuration
-     * @return
+     * @return pooled datasource factory
      */
     PooledDataSourceFactory getDataSourceFactory(T configuration);
 }

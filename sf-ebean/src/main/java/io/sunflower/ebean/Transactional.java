@@ -59,6 +59,7 @@ import java.lang.annotation.Target;
  *      ebeanServer.save(order);
  *    }
  *
+ * }
  * }</pre>
  */
 @Target({ElementType.METHOD, ElementType.TYPE})

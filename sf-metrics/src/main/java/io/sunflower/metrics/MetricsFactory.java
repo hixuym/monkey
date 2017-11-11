@@ -71,8 +71,7 @@ public class MetricsFactory {
     }
 
     /**
-     * Configures the given lifecycle with the {@link com.codahale.metrics.ScheduledReporter
-     * reporters} configured for the given registry. <p /> The reporters are tied in to the given
+     * Configures the given lifecycle with the {@link com.codahale.metrics.ScheduledReporter reporters} configured for the given registry. <p /> The reporters are tied in to the given
      * lifecycle, such that their {@link #getFrequency() frequency} for reporting metrics begins when
      * the lifecycle {@link
      *
