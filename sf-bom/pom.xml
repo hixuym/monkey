@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <sf-framework.version>${project.version}</sf-framework.version>
+        <sunflower.version>${project.version}</sunflower.version>
 
         <guava.version>23.2-jre</guava.version>
         <guice.version>4.1.0</guice.version>
@@ -825,131 +825,131 @@
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-core</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-util</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-jackson</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-resteasy</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-resteasy-netty</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-validation</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-configuration</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-logging</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-guice</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-lifecycle</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-cache</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-testing</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics-ganglia</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics-graphite</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-reflect</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-extension</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-db</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-ebean</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-migrations</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-postoffice</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-client</artifactId>
-                <version>${sf-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
