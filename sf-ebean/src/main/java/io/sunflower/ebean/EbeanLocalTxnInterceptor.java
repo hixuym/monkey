@@ -15,9 +15,9 @@
 
 package io.sunflower.ebean;
 
+import io.ebean.Ebean;
+import io.ebean.EbeanServer;
 import io.ebean.TxScope;
-import io.ebeaninternal.api.HelpScopeTrans;
-import io.ebeaninternal.api.ScopeTrans;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -55,21 +55,16 @@ public class EbeanLocalTxnInterceptor implements MethodInterceptor {
         txScope.setNoRollbackFor(transactional.noRollbackFor());
         txScope.setRollbackFor(transactional.rollbackFor());
 
-        ScopeTrans scopeTrans = HelpScopeTrans.createScopeTrans(txScope);
+        EbeanServer ebeanServer = Ebean.getServer(txScope.getServerName());
 
-        Object result;
+        return ebeanServer.executeCall(txScope, () -> {
+            try {
+                return invocation.proceed();
+            } catch (Throwable throwable) {
+                throw new Exception(throwable);
+            }
+        });
 
-        try {
-            result = invocation.proceed();
-        } catch (Error e) {
-            throw scopeTrans.caughtError(e);
-        } catch (RuntimeException e) {
-            throw scopeTrans.caughtThrowable(e);
-        } finally {
-            scopeTrans.onFinally();
-        }
-
-        return result;
     }
 
     private Transactional readTransactionMetadata(MethodInvocation methodInvocation) {
