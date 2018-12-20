@@ -34,7 +34,7 @@ public class FakeServerFactory extends AbstractServerFactory {
         return new Server(environment) {
 
             @Override
-            protected void boot() throws Exception {
+            protected void boot() {
                 logger.info("do nothing, just use for testing.");
             }
 

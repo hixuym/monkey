@@ -71,7 +71,8 @@ public abstract class AbstractResteasyServerFactory extends AbstractServerFactor
             Registry registry = deployment.getRegistry();
             ResteasyProviderFactory providerFactory = deployment.getProviderFactory();
             new ResteasyResourcesRegister(registry, providerFactory).withInjector(server.getInjector());
-            ResteasyWadlDefaultResource.getServices().put("/", ResteasyWadlGenerator.generateServiceRegistry(deployment));
+            ResteasyWadlDefaultResource resteasyWadlDefaultResource = new ResteasyWadlDefaultResource();
+            resteasyWadlDefaultResource.getServices().put("/", ResteasyWadlGenerator.generateServiceRegistry(deployment));
         });
 
         return buildServer(environment);

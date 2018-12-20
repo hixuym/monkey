@@ -18,7 +18,8 @@ package io.sunflower.resteasy.internal.ext;
 import com.google.inject.AbstractModule;
 import io.sunflower.resteasy.jackson.JacksonFeature;
 import io.sunflower.resteasy.validation.HibernateValidationFeature;
-import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
+import org.jboss.resteasy.client.jaxrs.ClientHttpEngine;
+import org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient4Engine;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -32,6 +33,9 @@ public class ResteasyModule extends AbstractModule {
 
     @Override
     public void configure() {
+
+        bind(ClientHttpEngine.class).to(ApacheHttpClient4Engine.class);
+
         bind(RuntimeDelegate.class).toInstance(RuntimeDelegate.getInstance());
         bind(Response.ResponseBuilder.class).toProvider(ResponseBuilderProvider.class);
         bind(UriBuilder.class).toProvider(UriBuilderProvider.class);

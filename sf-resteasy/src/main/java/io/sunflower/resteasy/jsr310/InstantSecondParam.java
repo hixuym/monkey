@@ -32,7 +32,7 @@ public class InstantSecondParam extends AbstractParam<Instant> {
     }
 
     @Override
-    protected Instant parse(final String input) throws Exception {
+    protected Instant parse(final String input) {
         return Instant.ofEpochSecond(Long.parseLong(input));
     }
 }

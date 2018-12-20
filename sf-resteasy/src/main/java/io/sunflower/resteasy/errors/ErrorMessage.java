@@ -84,7 +84,6 @@ public class ErrorMessage {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("code", code)
-                .add("message", message).add("details", details).toString();
+        return "ErrorMessage{code=" + code + ", message='" + message + "', details='" + details + "'}";
     }
 }

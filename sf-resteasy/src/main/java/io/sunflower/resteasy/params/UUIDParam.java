@@ -1,34 +1,19 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.resteasy.params;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
  * A parameter encapsulating UUID values. All non-parsable values will return a {@code 400 Bad
  * Request} response.
- * @author michael
  */
 public class UUIDParam extends AbstractParam<UUID> {
 
-    public UUIDParam(String input) {
+    public UUIDParam(@Nullable String input) {
         super(input);
     }
 
-    public UUIDParam(String input, String parameterName) {
+    public UUIDParam(@Nullable String input, String parameterName) {
         super(input, parameterName);
     }
 
@@ -38,7 +23,18 @@ public class UUIDParam extends AbstractParam<UUID> {
     }
 
     @Override
-    protected UUID parse(String input) throws Exception {
+    protected UUID parse(@Nullable String input) {
+        // From UUID RFC 4122 spec, a UUID contains 32 hex digits with 4 dashes. fromString will
+        // ensure that only hex exists and that there are 4 dashes, but does no length checking, so
+        // the input could have additional hex digits appended and no error would be raised. Since
+        // the spec clearly defines the length to be 36, we'll ensure the input conforms. Some UUID
+        // implementations are lenient and allow absent dashes (thus making the total length 32),
+        // but since fromString requires dashes we don't need to worry about supporting a range of
+        // lengths.
+        if (input != null && input.length() != 36) {
+            throw new IllegalArgumentException("Expecting a UUID of 36 in length");
+        }
+
         return UUID.fromString(input);
     }
 

@@ -32,7 +32,7 @@ public class ZoneIdParam extends AbstractParam<ZoneId> {
     }
 
     @Override
-    protected ZoneId parse(final String input) throws Exception {
+    protected ZoneId parse(final String input) {
         return ZoneId.of(input);
     }
 }

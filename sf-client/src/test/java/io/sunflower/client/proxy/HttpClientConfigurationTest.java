@@ -20,7 +20,7 @@ import com.google.common.io.Resources;
 import io.sunflower.client.HttpClientConfiguration;
 import io.sunflower.configuration.ConfigurationParsingException;
 import io.sunflower.configuration.ConfigurationValidationException;
-import io.sunflower.configuration.YamlConfigurationFactory;
+import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.validation.BaseValidator;
 import org.assertj.core.api.Assertions;
@@ -38,7 +38,8 @@ public class HttpClientConfigurationTest {
     private HttpClientConfiguration configuration;
 
     private void load(String configLocation) throws Exception {
-        configuration = new YamlConfigurationFactory<>(HttpClientConfiguration.class,
+        configuration = new DefaultConfigurationFactoryFactory<HttpClientConfiguration>()
+                .create(HttpClientConfiguration.class,
                 BaseValidator.newValidator(),
                 objectMapper, "sf")
                 .build(new File(Resources.getResource(configLocation).toURI()));

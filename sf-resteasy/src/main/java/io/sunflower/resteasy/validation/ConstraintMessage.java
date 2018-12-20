@@ -1,25 +1,11 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.resteasy.validation;
 
-import com.google.common.base.Strings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterables;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import io.sunflower.util.Lists;
+import io.sunflower.util.Strings;
 import io.sunflower.validation.ValidationMethod;
+import io.sunflower.validation.selfvalidating.SelfValidating;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,19 +18,14 @@ import javax.ws.rs.BeanParam;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-/**
- * @author michael
- */
 public class ConstraintMessage {
 
-    private static final Cache<Pair<Path, ? extends ConstraintDescriptor<?>>, String> MESSAGES_CACHE =
-            CacheBuilder.newBuilder()
+    private static final Cache<Pair<Path, ? extends ConstraintDescriptor<?>>, String> PREFIX_CACHE =
+            Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
@@ -57,27 +38,27 @@ public class ConstraintMessage {
     public static String getMessage(ConstraintViolation<?> v, Method invocable) {
         final Pair<Path, ? extends ConstraintDescriptor<?>> of =
                 Pair.of(v.getPropertyPath(), v.getConstraintDescriptor());
-        final String cachedMessage = MESSAGES_CACHE.getIfPresent(of);
-        if (cachedMessage == null) {
-            final String message = calculateMessage(v, invocable);
-            MESSAGES_CACHE.put(of, message);
-            return message;
+        final String cachePrefix = PREFIX_CACHE.getIfPresent(of);
+        if (cachePrefix == null) {
+            final String prefix = calculatePrefix(v, invocable);
+            PREFIX_CACHE.put(of, prefix);
+            return prefix + v.getMessage();
         }
-        return cachedMessage;
+        return cachePrefix + v.getMessage();
     }
 
-    private static String calculateMessage(ConstraintViolation<?> v, Method invocable) {
+    private static String calculatePrefix(ConstraintViolation<?> v, Method invocable) {
         final Optional<String> returnValueName = getMethodReturnValueName(v);
         if (returnValueName.isPresent()) {
             final String name = isValidationMethod(v) ?
                     StringUtils.substringBeforeLast(returnValueName.get(), ".") : returnValueName.get();
-            return name + " " + v.getMessage();
+            return name + " ";
         }
 
-        // Take the message specified in a ValidationMethod annotation if it
-        // is what caused the violation
-        if (isValidationMethod(v)) {
-            return v.getMessage();
+        // Take the message specified in a ValidationMethod or SelfValidation
+        // annotation if it is what caused the violation.
+        if (isValidationMethod(v) || isSelfValidating(v)) {
+            return "";
         }
 
         final Optional<String> entity = isRequestEntity(v, invocable);
@@ -86,17 +67,14 @@ public class ConstraintMessage {
             // if the request entity is simple (eg. byte[], String, etc), the entity
             // string will be empty, so prepend a message about the request body
             final String prefix = Strings.isNullOrEmpty(entity.get()) ? "The request body" : entity.get();
-            return prefix + " " + v.getMessage();
+            return prefix + " " ;
         }
 
         // Check if the violation occurred on a *Param annotation and if so,
         // return a human friendly error (eg. "Query param xxx may not be null")
         final Optional<String> memberName = getMemberName(v, invocable);
-        if (memberName.isPresent()) {
-            return memberName.get() + " " + v.getMessage();
-        }
+        return memberName.map(s -> s + " ").orElseGet(() -> v.getPropertyPath() + " ");
 
-        return v.getPropertyPath() + " " + v.getMessage();
     }
 
     /**
@@ -104,7 +82,11 @@ public class ConstraintMessage {
      * friendly string representation of where the error occurred (eg. "patient.name")
      */
     public static Optional<String> isRequestEntity(ConstraintViolation<?> violation, Method invocable) {
-        final Path.Node parent = Iterables.get(violation.getPropertyPath(), 1, null);
+        final Collection<Path.Node> propertyPath = Lists.of(violation.getPropertyPath());
+        final Path.Node parent = propertyPath.stream()
+                .skip(1L)
+                .findFirst()
+                .orElse(null);
         if (parent == null) {
             return Optional.empty();
         }
@@ -113,10 +95,19 @@ public class ConstraintMessage {
         if (parent.getKind() == ElementKind.PARAMETER) {
             final Parameter param = parameters.get(parent.as(Path.ParameterNode.class).getParameterIndex());
 
-//            if (param.getSource().equals(Parameter.Source.UNKNOWN)) {
-//                return Optional.of(Joiner.on('.').join(Iterables.skip(violation.getPropertyPath(), 2)));
-//            }
+            final String path = propertyPath.stream()
+                        .skip(2L)
+                        .map(Path.Node::toString)
+                        .collect(Collectors.joining("."));
 
+            return Optional.of(path);
+
+//            if (param.getSource().equals(Parameter.Source.UNKNOWN)) {
+//                final String path = propertyPath.stream()
+//                        .skip(2L)
+//                        .map(Path.Node::toString)
+//                        .collect(Collectors.joining("."));
+//            }
         }
 
         return Optional.empty();
@@ -126,13 +117,15 @@ public class ConstraintMessage {
      * Gets a method parameter (or a parameter field) name, if the violation raised in it.
      */
     private static Optional<String> getMemberName(ConstraintViolation<?> violation, Method invocable) {
-        final int size = Iterables.size(violation.getPropertyPath());
+        final List<Path.Node> propertyPath = Lists.of(violation.getPropertyPath());
+        final int size = propertyPath.size();
         if (size < 2) {
             return Optional.empty();
         }
 
-        final Path.Node parent = Iterables.get(violation.getPropertyPath(), size - 2);
-        final Path.Node member = Iterables.getLast(violation.getPropertyPath());
+        final Path.Node parent = propertyPath.get(size - 2);
+        final Path.Node member = propertyPath.get(size - 1);
+
         switch (parent.getKind()) {
             case PARAMETER:
                 // Constraint violation most likely failed with a BeanParam
@@ -144,7 +137,6 @@ public class ConstraintMessage {
                     final Field field = FieldUtils.getField(param.getType(), member.getName(), true);
                     return ResteasyParameterNameProvider.getParameterNameFromAnnotations(field.getDeclaredAnnotations());
                 }
-
                 break;
             case METHOD:
                 return Optional.of(member.getName());
@@ -176,8 +168,12 @@ public class ConstraintMessage {
         return v.getConstraintDescriptor().getAnnotation() instanceof ValidationMethod;
     }
 
+    private static boolean isSelfValidating(ConstraintViolation<?> v) {
+        return v.getConstraintDescriptor().getAnnotation() instanceof SelfValidating;
+    }
+
     /**
-     * Given a set of constraint violations and where the constraint
+     * Given a set of constraint violations and a Jersey {@link Method} where the constraint
      * occurred, determine the  HTTP Status code for the response. A return value violation is an
      * internal server error, an invalid request body is unprocessable entity, and any params that
      * are invalid means a bad request

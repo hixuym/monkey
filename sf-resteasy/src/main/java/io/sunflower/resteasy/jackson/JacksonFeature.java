@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -41,7 +43,7 @@ public class JacksonFeature implements Feature {
     @Override
     public boolean configure(FeatureContext context) {
 
-        context.register(new JacksonMessageBodyProvider(objectMapper));
+        context.register(new JacksonMessageBodyProvider(objectMapper), MessageBodyReader.class, MessageBodyWriter.class);
         context.register(new JsonProcessingExceptionMapper());
 
         return true;

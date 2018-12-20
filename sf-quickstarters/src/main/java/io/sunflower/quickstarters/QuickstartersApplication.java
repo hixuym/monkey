@@ -39,7 +39,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
     }
 
     @Override
-    public void run(QuickstartersConfiguration configuration, Environment environment) throws Exception {
+    public void run(QuickstartersConfiguration configuration, Environment environment) {
 
         environment.guice().register(HelloworldResource.class);
     }

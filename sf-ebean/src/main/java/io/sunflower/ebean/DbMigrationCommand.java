@@ -84,7 +84,7 @@ public class DbMigrationCommand extends Command {
 
             dbMigrationConfig.setPlatform(Platform.valueOf(namespace.getString("platform")));
 
-            dbMigrationConfig.setName(namespace.getString("name"));
+//            dbMigrationConfig.setName(namespace.getString("name"));
 
             serverConfig.setMigrationConfig(dbMigrationConfig);
 

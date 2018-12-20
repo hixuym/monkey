@@ -32,6 +32,7 @@ public class OptionalParamFeature implements Feature {
     public boolean configure(FeatureContext context) {
 
         context.register(new EmptyOptionalExceptionMapper());
+        context.register(new EmptyOptionalNoContentExceptionMapper());
         context.register(new OptionalDoubleMessageBodyWriter());
         context.register(new OptionalDoubleParamConverterProvider());
         context.register(new OptionalIntMessageBodyWriter());

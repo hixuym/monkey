@@ -32,7 +32,7 @@ public class OffsetDateTimeParam extends AbstractParam<OffsetDateTime> {
     }
 
     @Override
-    protected OffsetDateTime parse(final String input) throws Exception {
+    protected OffsetDateTime parse(final String input) {
         return OffsetDateTime.parse(input);
     }
 }

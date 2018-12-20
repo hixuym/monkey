@@ -16,7 +16,9 @@
 package io.sunflower.resteasy.params;
 
 import com.google.common.base.Strings;
+import io.sunflower.resteasy.validation.ResteasyParameterNameProvider;
 
+import javax.annotation.Nullable;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.ParamConverter;
@@ -44,9 +46,10 @@ public class AbstractParamConverterProvider implements ParamConverterProvider {
     }
 
     @Override
+    @Nullable
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
         if (AbstractParam.class.isAssignableFrom(rawType)) {
-            final String parameterName = ParameterNameProvider.getParameterNameFromAnnotations(annotations).orElse("Parameter");
+            final String parameterName = ResteasyParameterNameProvider.getParameterNameFromAnnotations(annotations).orElse("Parameter");
             final Constructor<T> constructor;
             try {
                 constructor = rawType.getConstructor(String.class, String.class);
@@ -57,7 +60,7 @@ public class AbstractParamConverterProvider implements ParamConverterProvider {
             }
             return new ParamConverter<T>() {
                 @Override
-                @SuppressWarnings("unchecked")
+                @Nullable
                 public T fromString(String value) {
                     if (rawType != NonEmptyStringParam.class && Strings.isNullOrEmpty(value)) {
                         return null;
@@ -69,7 +72,7 @@ public class AbstractParamConverterProvider implements ParamConverterProvider {
                         if (cause instanceof WebApplicationException) {
                             throw (WebApplicationException) cause;
                         } else {
-                            throw new WebApplicationException(cause);
+                            throw new RuntimeException(cause);
                         }
                     } catch (final Exception ex) {
                         throw new ProcessingException(ex);

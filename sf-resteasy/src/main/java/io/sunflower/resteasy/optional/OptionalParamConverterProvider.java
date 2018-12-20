@@ -18,6 +18,7 @@ package io.sunflower.resteasy.optional;
 import com.google.inject.TypeLiteral;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
+import javax.inject.Singleton;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.RuntimeDelegate;
@@ -28,6 +29,7 @@ import java.util.Optional;
 /**
  * @author michael
  */
+@Singleton
 public class OptionalParamConverterProvider implements ParamConverterProvider {
 
     private ResteasyProviderFactory providerFactory;

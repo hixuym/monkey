@@ -64,16 +64,12 @@ public class ResteasyResourcesRegister {
         }
 
         for (Binding<?> binding : rootResourceBindings) {
-            Class<?> beanClass = (Class) binding.getKey().getTypeLiteral().getType();
 
-            if (Scopes.isSingleton(binding)) {
-                registry.addSingletonResource(binding.getProvider().get());
-                LOGGER.info("registering singleton resource factory for {}", beanClass.getName());
-            } else {
-                final ResourceFactory resourceFactory = new GuiceResourceFactory(binding.getProvider(), beanClass);
-                LOGGER.info("registering factory for {}", beanClass.getName());
-                registry.addResourceFactory(resourceFactory);
-            }
+            Class<?> beanClass = (Class) binding.getKey().getTypeLiteral().getType();
+            final ResourceFactory resourceFactory = new GuiceResourceFactory(binding.getProvider(), beanClass);
+            LOGGER.info("registering factory for {}", beanClass.getName());
+            registry.addResourceFactory(resourceFactory);
+
         }
     }
 }

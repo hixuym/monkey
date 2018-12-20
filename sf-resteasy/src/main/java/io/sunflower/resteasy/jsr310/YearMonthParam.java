@@ -32,7 +32,7 @@ public class YearMonthParam extends AbstractParam<YearMonth> {
     }
 
     @Override
-    protected YearMonth parse(final String input) throws Exception {
+    protected YearMonth parse(final String input) {
         return YearMonth.parse(input);
     }
 }

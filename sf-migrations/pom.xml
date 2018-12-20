@@ -44,8 +44,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-jdbi</artifactId>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi</artifactId>
+            <version>2.78</version>
             <scope>test</scope>
         </dependency>
         <dependency>

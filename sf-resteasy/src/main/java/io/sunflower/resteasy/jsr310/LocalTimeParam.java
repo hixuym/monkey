@@ -32,7 +32,7 @@ public class LocalTimeParam extends AbstractParam<LocalTime> {
     }
 
     @Override
-    protected LocalTime parse(final String input) throws Exception {
+    protected LocalTime parse(final String input) {
         return LocalTime.parse(input);
     }
 }

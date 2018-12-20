@@ -81,7 +81,7 @@ public abstract class EbeanBundle<T extends Configuration>
     }
 
     @Override
-    public void run(T configuration, Environment environment) throws Exception {
+    public void run(T configuration, Environment environment) {
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
         this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());

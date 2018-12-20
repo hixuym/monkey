@@ -32,7 +32,7 @@ public class LocalDateParam extends AbstractParam<LocalDate> {
     }
 
     @Override
-    protected LocalDate parse(final String input) throws Exception {
+    protected LocalDate parse(final String input) {
         return LocalDate.parse(input);
     }
 }

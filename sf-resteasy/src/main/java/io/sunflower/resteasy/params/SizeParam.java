@@ -1,35 +1,22 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.resteasy.params;
 
-
 import io.sunflower.util.Size;
+
+import javax.annotation.Nullable;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A parameter encapsulating size values. All non-parsable values will return a {@code 400 Bad
  * Request} response. Supports all input formats the {@link Size} class supports.
- * @author michael
  */
 public class SizeParam extends AbstractParam<Size> {
 
-    public SizeParam(String input) {
+    public SizeParam(@Nullable String input) {
         super(input);
     }
 
-    public SizeParam(String input, String parameterName) {
+    public SizeParam(@Nullable String input, String parameterName) {
         super(input, parameterName);
     }
 
@@ -39,7 +26,7 @@ public class SizeParam extends AbstractParam<Size> {
     }
 
     @Override
-    protected Size parse(String input) throws Exception {
-        return Size.parse(input);
+    protected Size parse(@Nullable String input) {
+        return Size.parse(requireNonNull(input));
     }
 }

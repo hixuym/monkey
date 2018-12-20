@@ -32,7 +32,7 @@ public class ZonedDateTimeParam extends AbstractParam<ZonedDateTime> {
     }
 
     @Override
-    protected ZonedDateTime parse(final String input) throws Exception {
+    protected ZonedDateTime parse(final String input) {
         return ZonedDateTime.parse(input);
     }
 }

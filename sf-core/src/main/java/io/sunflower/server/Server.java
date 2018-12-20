@@ -74,16 +74,14 @@ public abstract class Server extends ContainerLifeCycle {
     /**
      * boot the real server
      *
-     * @throws Exception
      */
-    protected void boot() throws Exception {}
+    protected void boot() {}
 
     /**
      * shutdown the real server
      *
-     * @throws Exception
      */
-    protected void shutdown() throws Exception {}
+    protected void shutdown() {}
 
     public Environment getEnvironment() {
         return environment;

@@ -1,0 +1,2 @@
+io.sunflower.resteasy.server.HttpServerFactory
+io.sunflower.resteasy.server.HttpsServerFactory
