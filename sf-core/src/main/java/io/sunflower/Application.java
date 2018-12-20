@@ -28,13 +28,13 @@ public abstract class Application<T extends Configuration> {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String LOGO = "\n"
-            + " _____              __ _                        \n"
+            + " _____              __ _                       \n"
             + "/  ___|            / _| |                       \n"
             + "\\ `--. _   _ _ __ | |_| | _____      _____ _ __ \n"
             + " `--. \\ | | | '_ \\|  _| |/ _ \\ \\ /\\ / / _ \\ '__| \n"
-            + "/\\__/ / |_| | | | | | | | (_) \\ V  V /  __/ |    http://www.sunflower.io\n"
-            + "\\____/ \\__,_|_| |_|_| |_|\\___/ \\_/\\_/ \\___|_|    @sunflower({})\n"
-            + "       framework                                                 \n";
+            + "/\\__/ / |_| | | | | | | | (_) \\ V  V /  __/ |    \n"
+            + "\\____/ \\__,_|_| |_|_| |_|\\___/ \\_/\\_/ \\___|_| \n"
+            + "       Framework@({})                                \n";
 
     protected Application() {
         bootstrapLogging();
@@ -146,7 +146,7 @@ public abstract class Application<T extends Configuration> {
         String sunflowerVersion = Application.class.getPackage().getImplementationVersion();
 
         // log Sunflower splash screen
-        logger.info(LOGO, sunflowerVersion);
+        logger.info(LOGO, sunflowerVersion == null ? "@@" : sunflowerVersion);
 
     }
 }

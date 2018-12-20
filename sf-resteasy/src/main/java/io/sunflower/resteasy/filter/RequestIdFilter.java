@@ -36,7 +36,7 @@ public class RequestIdFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(final ContainerRequestContext request,
-            final ContainerResponseContext response) throws IOException {
+            final ContainerResponseContext response) {
 
         String id = request.getHeaderString(REQUEST_ID);
         if (Strings.isNullOrEmpty(id)) {

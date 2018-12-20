@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author michael
  * created on 17/11/10 21:15
  */
-@JsonTypeName("resteasy-https")
+@JsonTypeName("https")
 public class HttpsServerFactory extends HttpServerFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpsServerFactory.class);

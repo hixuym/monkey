@@ -36,8 +36,7 @@ class ResteasyViolationExceptionMapper implements ExceptionMapper<ResteasyViolat
 
     @Override
     public Response toResponse(final ResteasyViolationException exception) {
-        // Provide a way to log if desired, Issue #2128, PR #2129
-        LOGGER.debug("Object validation failure", exception);
+        LOGGER.debug("Object validation failure");
 
         final Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         final Method invocable = exception.getMethod();

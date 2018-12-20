@@ -13,7 +13,7 @@ logging:
     "io.ebean.cache.NATKEY": TRACE
 
 server:
-  type: resteasy
+  type: http
 #  applicationContextPath: /app
 #  port: 8443
 #  validateCerts: true
@@ -26,7 +26,7 @@ server:
 #  endpointIdentificationAlgorithm: HTTPS
 
 metrics:
-  frequency: 1 minutes
+  frequency: 10 minutes
   reporters:
     - type: log
       logger: io.sunflower.metrics

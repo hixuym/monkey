@@ -57,7 +57,7 @@ public class ResteasyServer extends Server {
 
         nettyStarted = true;
 
-        logger.info("Started server v{}", nettyVersion);
+        logger.info("Started Server Netty {}", nettyVersion);
 
         logger.info("Resteasy WADL at: {}", this.schema + "://"
                 + (server.getHostname() == null ? "localhost" : server.getHostname())
@@ -71,7 +71,7 @@ public class ResteasyServer extends Server {
         if (server != null && nettyStarted) {
             logger.info("Trying to stop server {}", nettyVersion);
             server.stop();
-            logger.info("Stopped server v{}", nettyVersion);
+            logger.info("Stopped Server Netty {}", nettyVersion);
         }
     }
 

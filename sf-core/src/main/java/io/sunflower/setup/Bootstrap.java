@@ -84,8 +84,7 @@ public class Bootstrap<T extends Configuration> {
             return;
         }
         getMetricRegistry().register("jvm.attribute", new JvmAttributeGaugeSet());
-        getMetricRegistry().register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory
-                .getPlatformMBeanServer()));
+        getMetricRegistry().register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
         getMetricRegistry().register("jvm.classloader", new ClassLoadingGaugeSet());
         getMetricRegistry().register("jvm.filedescriptor", new FileDescriptorRatioGauge());
         getMetricRegistry().register("jvm.gc", new GarbageCollectorMetricSet());

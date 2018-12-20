@@ -17,7 +17,6 @@ package io.sunflower.resteasy.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.resteasy.AbstractResteasyServerFactory;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import org.jboss.resteasy.plugins.server.netty.NettyJaxrsServer;
@@ -29,8 +28,8 @@ import org.jboss.resteasy.spi.ResteasyDeployment;
  * @author michael
  * created on 17/11/6 15:52
  */
-@JsonTypeName("resteasy")
-public class HttpServerFactory extends AbstractResteasyServerFactory {
+@JsonTypeName("http")
+public class HttpServerFactory extends AbsResteasyServerFactory {
 
     private String hostname;
     private int ioWorkerCount = Runtime.getRuntime().availableProcessors() * 2;

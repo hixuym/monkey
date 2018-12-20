@@ -24,14 +24,14 @@ import java.util.zip.GZIPOutputStream;
 @Provider
 @Priority(Priorities.ENTITY_CODER)
 public class ConfiguredGZipEncoder implements WriterInterceptor, ClientRequestFilter {
-    private boolean forceEncoding = false;
+    private boolean forceEncoding;
 
     public ConfiguredGZipEncoder(boolean forceEncoding) {
         this.forceEncoding = forceEncoding;
     }
 
     @Override
-    public void filter(ClientRequestContext context) throws IOException {
+    public void filter(ClientRequestContext context) {
         if (context.hasEntity() && context.getHeaders().getFirst(HttpHeaders.CONTENT_ENCODING) == null && this.forceEncoding) {
             context.getHeaders().add(HttpHeaders.CONTENT_ENCODING, "gzip");
         }

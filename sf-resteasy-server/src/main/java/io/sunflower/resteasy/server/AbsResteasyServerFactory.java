@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy;
+package io.sunflower.resteasy.server;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.sunflower.resteasy.actuator.ApplicationActuatorResource;
 import io.sunflower.resteasy.internal.ResteasyResourcesRegister;
 import io.sunflower.resteasy.internal.ext.RequestScopeModule;
 import io.sunflower.resteasy.internal.ext.ResteasyModule;
+import io.sunflower.resteasy.validation.Validators;
 import io.sunflower.server.AbstractServerFactory;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
@@ -31,12 +31,12 @@ import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
 import org.jboss.resteasy.wadl.ResteasyWadlGenerator;
 
 /**
- * AbstractResteasyServerFactory
+ * AbsResteasyServerFactory
  *
  * @author michael
  * created on 17/11/10 15:53
  */
-public abstract class AbstractResteasyServerFactory extends AbstractServerFactory {
+public abstract class AbsResteasyServerFactory extends AbstractServerFactory {
 
     private final ResteasyDeployment deployment = new ResteasyDeployment();
 
@@ -91,9 +91,8 @@ public abstract class AbstractResteasyServerFactory extends AbstractServerFactor
 
     @Override
     public void configure(Environment environment) {
+        environment.setValidatorFactory(Validators.newValidatorFactory());
         environment.guice().register(new ResteasyModule(), new RequestScopeModule());
-        environment.guice().register(ResteasyWadlDefaultResource.class);
-        environment.guice().register(ApplicationActuatorResource.class);
     }
 
     @JsonIgnore
