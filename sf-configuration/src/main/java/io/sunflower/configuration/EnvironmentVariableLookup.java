@@ -1,13 +1,11 @@
 package io.sunflower.configuration;
 
-import org.apache.commons.text.StrLookup;
+import org.apache.commons.text.lookup.StringLookup;
 
 /**
- * A custom {@link StrLookup} implementation using environment variables as lookup source.
- * @author michael
+ * A custom {@link org.apache.commons.text.StrLookup} implementation using environment variables as lookup source.
  */
-public class EnvironmentVariableLookup extends StrLookup<Object> {
-
+public class EnvironmentVariableLookup implements StringLookup {
     private final boolean strict;
 
     /**
@@ -20,10 +18,10 @@ public class EnvironmentVariableLookup extends StrLookup<Object> {
     /**
      * Create a new instance.
      *
-     * @param strict {@code true} if looking up undefined environment variables should throw a {@link
-     *               UndefinedEnvironmentVariableException}, {@code false} otherwise.
-     * @throws UndefinedEnvironmentVariableException if the environment variable doesn't exist and
-     *                                               strict behavior is enabled.
+     * @param strict {@code true} if looking up undefined environment variables should throw a
+     *               {@link UndefinedEnvironmentVariableException}, {@code false} otherwise.
+     * @throws UndefinedEnvironmentVariableException if the environment variable doesn't exist and strict behavior
+     *                                               is enabled.
      */
     public EnvironmentVariableLookup(boolean strict) {
         this.strict = strict;
@@ -32,8 +30,8 @@ public class EnvironmentVariableLookup extends StrLookup<Object> {
     /**
      * {@inheritDoc}
      *
-     * @throws UndefinedEnvironmentVariableException if the environment variable doesn't exist and
-     *                                               strict behavior is enabled.
+     * @throws UndefinedEnvironmentVariableException if the environment variable doesn't exist and strict behavior
+     *                                               is enabled.
      */
     @Override
     public String lookup(String key) {

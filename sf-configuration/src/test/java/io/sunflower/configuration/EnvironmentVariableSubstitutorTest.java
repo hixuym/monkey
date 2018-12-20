@@ -1,10 +1,10 @@
 package io.sunflower.configuration;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assume.assumeThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assumptions.assumeThat;
+
+import org.junit.Test;
 
 public class EnvironmentVariableSubstitutorTest {
 
@@ -14,12 +14,12 @@ public class EnvironmentVariableSubstitutorTest {
         assertThat(substitutor.isEnableSubstitutionInVariables()).isFalse();
     }
 
-    @Test(expected = UndefinedEnvironmentVariableException.class)
+    @Test
     public void defaultConstructorEnablesStrict() {
-        assumeThat(System.getenv("DOES_NOT_EXIST"), nullValue());
+        assumeThat(System.getenv("DOES_NOT_EXIST")).isNull();
 
-        EnvironmentVariableSubstitutor substitutor = new EnvironmentVariableSubstitutor();
-        substitutor.replace("${DOES_NOT_EXIST}");
+        assertThatExceptionOfType(UndefinedEnvironmentVariableException.class).isThrownBy(() ->
+            new EnvironmentVariableSubstitutor().replace("${DOES_NOT_EXIST}"));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class EnvironmentVariableSubstitutorTest {
     @Test
     public void substitutorUsesEnvironmentVariableLookup() {
         EnvironmentVariableSubstitutor substitutor = new EnvironmentVariableSubstitutor();
-        assertThat(substitutor.getVariableResolver()).isInstanceOf(EnvironmentVariableLookup.class);
+        assertThat(substitutor.getStringLookup()).isInstanceOf(EnvironmentVariableLookup.class);
     }
 
     @Test
@@ -44,12 +44,12 @@ public class EnvironmentVariableSubstitutorTest {
         assertThat(substitutor.replace("${DOES_NOT_EXIST:-default}")).isEqualTo("default");
     }
 
-    @Test(expected = UndefinedEnvironmentVariableException.class)
+    @Test
     public void substitutorThrowsExceptionInStrictMode() {
-        assumeThat(System.getenv("DOES_NOT_EXIST"), nullValue());
+        assumeThat(System.getenv("DOES_NOT_EXIST")).isNull();
 
-        EnvironmentVariableSubstitutor substitutor = new EnvironmentVariableSubstitutor(true);
-        substitutor.replace("${DOES_NOT_EXIST}");
+        assertThatExceptionOfType(UndefinedEnvironmentVariableException.class).isThrownBy(() ->
+            new EnvironmentVariableSubstitutor(true).replace("${DOES_NOT_EXIST}"));
     }
 
     @Test

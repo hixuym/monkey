@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OptionalDoubleValidatedValueUnwrapperTest {
 
     public static class Example {
-
         @Min(3)
         @UnwrapValidatedValue
         public OptionalDouble three = OptionalDouble.empty();
@@ -28,11 +27,11 @@ public class OptionalDoubleValidatedValueUnwrapperTest {
     }
 
     private final Validator validator = Validation
-            .byProvider(HibernateValidator.class)
-            .configure()
-            .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
-            .buildValidatorFactory()
-            .getValidator();
+        .byProvider(HibernateValidator.class)
+        .configure()
+        .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
+        .buildValidatorFactory()
+        .getValidator();
 
     @Test
     public void succeedsWhenAbsent() {

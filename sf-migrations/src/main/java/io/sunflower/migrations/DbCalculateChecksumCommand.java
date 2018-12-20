@@ -1,21 +1,5 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
@@ -27,24 +11,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
-/**
- * @author michael
- */
-public class DbCalculateChecksumCommand<T extends Configuration> extends
-        AbstractLiquibaseCommand<T> {
-
+public class DbCalculateChecksumCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger("liquibase");
 
-    private Consumer<CheckSum> checkSumConsumer = (checkSum) -> LOGGER
-            .info("checksum = {}", checkSum);
+    private Consumer<CheckSum> checkSumConsumer = (checkSum) -> LOGGER.info("checksum = {}", checkSum);
 
-    public DbCalculateChecksumCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
-                                      String migrationsFileName) {
+    public DbCalculateChecksumCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass, String migrationsFileName) {
         super("calculate-checksum", "Calculates and prints a checksum for a change set", strategy,
-                configurationClass, migrationsFileName);
+            configurationClass, migrationsFileName);
     }
 
-    @VisibleForTesting
     void setCheckSumConsumer(Consumer<CheckSum> checkSumConsumer) {
         this.checkSumConsumer = checkSumConsumer;
     }
@@ -61,8 +37,8 @@ public class DbCalculateChecksumCommand<T extends Configuration> extends
     public void run(Namespace namespace,
                     Liquibase liquibase) throws Exception {
         final CheckSum checkSum = liquibase.calculateCheckSum("migrations.xml",
-                namespace.<String>getList("id").get(0),
-                namespace.<String>getList("author").get(0));
+            namespace.<String>getList("id").get(0),
+            namespace.<String>getList("author").get(0));
         checkSumConsumer.accept(checkSum);
     }
 }

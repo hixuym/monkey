@@ -1,5 +1,6 @@
 package io.sunflower.util;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -8,12 +9,9 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Helper methods for class type parameters.
- *
- * @author michael
  * @see <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Super Type Tokens</a>
  */
 public class Generics {
-
     private Generics() { /* singleton */ }
 
     /**
@@ -34,7 +32,6 @@ public class Generics {
      * @param <T>   the type bound
      * @return the class's type parameter
      */
-    @SuppressWarnings("unchecked")
     public static <T> Class<T> getTypeParameter(Class<?> klass, Class<? super T> bound) {
         Type t = requireNonNull(klass);
         while (t instanceof Class<?>) {
@@ -77,6 +74,7 @@ public class Generics {
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     private static <T> Class<T> determineClass(Class<? super T> bound, Type candidate) {
         if (candidate instanceof Class<?>) {
             final Class<?> cls = (Class<?>) candidate;

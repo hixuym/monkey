@@ -5,7 +5,9 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
+import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
+import io.sunflower.logging.layout.DiscoverableLayoutFactory;
 
 import javax.annotation.concurrent.GuardedBy;
 import java.util.TimeZone;
@@ -13,11 +15,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Utility class to configure logging before the sunflower yml configuration has been read, parsed,
- * and the provided logging strategy has been applied.
+ * Utility class to configure logging before the dropwizard yml
+ * configuration has been read, parsed, and the provided logging
+ * strategy has been applied.
  * <p/>
- * N.B. The methods in this class have run once semantics, multiple calls are idempotent
- * @author michael
+ * N.B. The methods in this class have run once semantics,
+ * multiple calls are idempotent
  */
 public class BootstrapLogging {
 
@@ -34,6 +37,10 @@ public class BootstrapLogging {
     }
 
     public static void bootstrap(Level level) {
+        bootstrap(level, SunflowerLayout::new);
+    }
+
+    public static void bootstrap(Level level, DiscoverableLayoutFactory<ILoggingEvent> layoutFactory) {
         LoggingUtil.hijackJDKLogging();
 
         BOOTSTRAPPING_LOCK.lock();
@@ -41,13 +48,11 @@ public class BootstrapLogging {
             if (bootstrapped) {
                 return;
             }
-            final Logger root = LoggingUtil.getLoggerContext()
-                    .getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+            final Logger root = LoggingUtil.getLoggerContext().getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
             root.detachAndStopAllAppenders();
 
-            final SunflowerLayout formatter = new SunflowerLayout(root.getLoggerContext(),
-                    TimeZone.getDefault());
-            formatter.start();
+            final Layout<ILoggingEvent> layout = layoutFactory.build(root.getLoggerContext(), TimeZone.getDefault());
+            layout.start();
 
             final ThresholdFilter filter = new ThresholdFilter();
             filter.setLevel(level.toString());
@@ -58,7 +63,7 @@ public class BootstrapLogging {
             appender.setContext(root.getLoggerContext());
 
             final LayoutWrappingEncoder<ILoggingEvent> layoutEncoder = new LayoutWrappingEncoder<>();
-            layoutEncoder.setLayout(formatter);
+            layoutEncoder.setLayout(layout);
             appender.setEncoder(layoutEncoder);
             appender.start();
 

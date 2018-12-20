@@ -1,14 +1,19 @@
 package io.sunflower.setup;
 
-import com.codahale.metrics.JmxReporter;
-import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.codahale.metrics.jvm.*;
+import com.codahale.metrics.jmx.JmxReporter;
+import com.codahale.metrics.jvm.BufferPoolMetricSet;
+import com.codahale.metrics.jvm.ClassLoadingGaugeSet;
+import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
+import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
+import com.codahale.metrics.jvm.JvmAttributeGaugeSet;
+import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
+import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import io.sunflower.Application;
-import io.sunflower.Bundle;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.cli.Command;
@@ -37,7 +42,6 @@ import static java.util.Objects.requireNonNull;
 public class Bootstrap<T extends Configuration> {
 
     private final Application<T> application;
-    private final List<Bundle> bundles;
     private final List<ConfiguredBundle<? super T>> configuredBundles;
     private final List<Command> commands;
 
@@ -61,7 +65,6 @@ public class Bootstrap<T extends Configuration> {
         this.application = application;
         this.objectMapper = Jackson.newObjectMapper();
 
-        this.bundles = new ArrayList<>();
         this.configuredBundles = new ArrayList<>();
         this.commands = new ArrayList<>();
         this.validatorFactory = BaseValidator.newConfiguration().buildValidatorFactory();
@@ -131,16 +134,6 @@ public class Bootstrap<T extends Configuration> {
     /**
      * Adds the given bundle to the bootstrap.
      *
-     * @param bundle a {@link Bundle}
-     */
-    public void addBundle(Bundle bundle) {
-        bundle.initialize(this);
-        bundles.add(bundle);
-    }
-
-    /**
-     * Adds the given bundle to the bootstrap.
-     *
      * @param bundle a {@link ConfiguredBundle}
      */
     public void addBundle(ConfiguredBundle<? super T> bundle) {
@@ -192,9 +185,6 @@ public class Bootstrap<T extends Configuration> {
      * @throws Exception if a bundle throws an exception
      */
     public void run(T configuration, Environment environment) throws Exception {
-        for (Bundle bundle : bundles) {
-            bundle.run(environment);
-        }
         for (ConfiguredBundle<? super T> bundle : configuredBundles) {
             bundle.run(configuration, environment);
         }

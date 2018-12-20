@@ -62,8 +62,7 @@ public class DefaultLoggingFactoryPrintErrorMessagesTest {
 
     @Test
     public void testWhenUsingDefaultConstructor_SystemErrIsSet() throws Exception {
-        PrintStream configurationErrorsStream = new DefaultLoggingFactory()
-                .getConfigurationErrorsStream();
+        PrintStream configurationErrorsStream = new DefaultLoggingFactory().getConfigurationErrorsStream();
 
         assertThat(configurationErrorsStream).isSameAs(System.err);
     }
@@ -76,21 +75,18 @@ public class DefaultLoggingFactoryPrintErrorMessagesTest {
     }
 
     @Test
-    public void testWhenFileAppenderDoesNotHaveWritePermissionToFolder_PrintsErrorMessageToConsole()
-            throws Exception {
+    public void testWhenFileAppenderDoesNotHaveWritePermissionToFolder_PrintsErrorMessageToConsole() throws Exception {
         File folderWithoutWritePermission = tempDir.newFolder("folder-without-write-permission");
         assumeTrue(folderWithoutWritePermission.setWritable(false));
 
         configureLoggingFactoryWithFileAppender(folderWithoutWritePermission);
 
         assertThat(folderWithoutWritePermission.canWrite()).isFalse();
-        assertThat(configureAndGetOutputWrittenToErrorStream())
-                .contains(folderWithoutWritePermission.toString());
+        assertThat(configureAndGetOutputWrittenToErrorStream()).contains(folderWithoutWritePermission.toString());
     }
 
     @Test
-    public void testWhenSettingUpLoggingWithValidConfiguration_NoErrorMessageIsPrintedToConsole()
-            throws Exception {
+    public void testWhenSettingUpLoggingWithValidConfiguration_NoErrorMessageIsPrintedToConsole() throws Exception {
         File folderWithWritePermission = tempDir.newFolder("folder-with-write-permission");
 
         configureLoggingFactoryWithFileAppender(folderWithWritePermission);

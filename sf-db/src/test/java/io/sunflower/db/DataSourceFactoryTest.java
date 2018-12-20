@@ -1,20 +1,7 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.db;
 
+import com.codahale.metrics.Gauge;
+import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import io.sunflower.configuration.ResourceConfigurationSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
@@ -27,19 +14,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class DataSourceFactoryTest {
-
     private final MetricRegistry metricRegistry = new MetricRegistry();
 
     private DataSourceFactory factory;
+
+    @Nullable
     private ManagedDataSource dataSource;
 
     @Before
@@ -104,12 +95,13 @@ public class DataSourceFactoryTest {
         }
     }
 
-    @Test(expected = SQLException.class)
-    public void invalidJDBCDriverClassThrowsSQLException() throws SQLException {
+    @Test
+    public void invalidJDBCDriverClassThrowsSQLException() {
         final DataSourceFactory factory = new DataSourceFactory();
-        factory.setDriverClass("org.quickstarters.no.driver.here");
+        factory.setDriverClass("org.example.no.driver.here");
 
-        factory.build(metricRegistry, "test").getConnection();
+        assertThatExceptionOfType(SQLException.class).isThrownBy(() ->
+            factory.build(metricRegistry, "test").getConnection());
     }
 
     @Test
@@ -132,21 +124,40 @@ public class DataSourceFactoryTest {
         final ManagedPooledDataSource source = (ManagedPooledDataSource) dataSource();
 
         assertThat(source.getPoolProperties().getJdbcInterceptorsAsArray())
-                .extracting("interceptorClass")
-                .contains(StatementFinalizer.class, ConnectionState.class);
+            .extracting("interceptorClass")
+            .contains(StatementFinalizer.class, ConnectionState.class);
     }
 
     @Test
     public void createDefaultFactory() throws Exception {
         final DataSourceFactory factory = new YamlConfigurationFactory<>(DataSourceFactory.class,
-                BaseValidator.newValidator(), Jackson.newObjectMapper(), "sf")
-                .build(new ResourceConfigurationSourceProvider(), "yaml/minimal_db_pool.yml");
+            BaseValidator.newValidator(), Jackson.newObjectMapper(), "dw")
+            .build(new ResourceConfigurationSourceProvider(), "yaml/minimal_db_pool.yml");
 
         assertThat(factory.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(factory.getUser()).isEqualTo("pg-user");
         assertThat(factory.getPassword()).isEqualTo("iAMs00perSecrEET");
-        assertThat(factory.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
+        assertThat(factory.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
         assertThat(factory.getValidationQuery()).isEqualTo("/* Health Check */ SELECT 1");
         assertThat(factory.getValidationQueryTimeout()).isEqualTo(Optional.empty());
     }
+
+    @Test
+    public void metricsRecorded() throws Exception {
+        dataSource();
+        Map<String, Gauge> poolMetrics = metricRegistry.getGauges(MetricFilter.startsWith("io.sunflower.db.ManagedPooledDataSource.test."));
+        assertThat(poolMetrics.keySet()).contains(
+            "io.sunflower.db.ManagedPooledDataSource.test.active",
+            "io.sunflower.db.ManagedPooledDataSource.test.idle",
+            "io.sunflower.db.ManagedPooledDataSource.test.waiting",
+            "io.sunflower.db.ManagedPooledDataSource.test.size",
+            "io.sunflower.db.ManagedPooledDataSource.test.created",
+            "io.sunflower.db.ManagedPooledDataSource.test.borrowed",
+            "io.sunflower.db.ManagedPooledDataSource.test.reconnected",
+            "io.sunflower.db.ManagedPooledDataSource.test.released",
+            "io.sunflower.db.ManagedPooledDataSource.test.releasedIdle",
+            "io.sunflower.db.ManagedPooledDataSource.test.returned",
+            "io.sunflower.db.ManagedPooledDataSource.test.removeAbandoned");
+    }
+
 }

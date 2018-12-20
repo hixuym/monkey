@@ -1,21 +1,5 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
@@ -25,22 +9,14 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 import java.io.PrintStream;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
-
-/**
- * @author michael
- */
 public class DbLocksCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream printStream = System.out;
 
-    public DbLocksCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
-                          String migrationsFileName) {
-        super("locks", "Manage database migration locks", strategy, configurationClass,
-                migrationsFileName);
+    public DbLocksCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass, String migrationsFileName) {
+        super("locks", "Manage database migration locks", strategy, configurationClass, migrationsFileName);
     }
 
-    @VisibleForTesting
     void setPrintStream(PrintStream printStream) {
         this.printStream = printStream;
     }
@@ -50,16 +26,16 @@ public class DbLocksCommand<T extends Configuration> extends AbstractLiquibaseCo
         super.configure(subparser);
 
         subparser.addArgument("-l", "--list")
-                .dest("list")
-                .action(Arguments.storeTrue())
-                .setDefault(Boolean.FALSE)
-                .help("list all open locks");
+                 .dest("list")
+                 .action(Arguments.storeTrue())
+                 .setDefault(Boolean.FALSE)
+                 .help("list all open locks");
 
         subparser.addArgument("-r", "--force-release")
-                .dest("release")
-                .action(Arguments.storeTrue())
-                .setDefault(Boolean.FALSE)
-                .help("forcibly release all open locks");
+                 .dest("release")
+                 .action(Arguments.storeTrue())
+                 .setDefault(Boolean.FALSE)
+                 .help("forcibly release all open locks");
     }
 
     @Override
@@ -74,5 +50,9 @@ public class DbLocksCommand<T extends Configuration> extends AbstractLiquibaseCo
         } else {
             liquibase.forceReleaseLocks();
         }
+    }
+
+    private static <T> T firstNonNull(T first, T second) {
+        return first == null ? second : first;
     }
 }

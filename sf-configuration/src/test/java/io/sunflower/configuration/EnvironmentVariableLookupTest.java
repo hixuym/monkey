@@ -3,17 +3,16 @@ package io.sunflower.configuration;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assume.assumeThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class EnvironmentVariableLookupTest {
-
-    @Test(expected = UndefinedEnvironmentVariableException.class)
+    @Test
     public void defaultConstructorEnablesStrict() {
-        assumeThat(System.getenv("nope"), nullValue());
+        assumeThat(System.getenv("nope")).isNull();
 
-        EnvironmentVariableLookup lookup = new EnvironmentVariableLookup();
-        lookup.lookup("nope");
+        assertThatExceptionOfType(UndefinedEnvironmentVariableException.class).isThrownBy(()->
+            new EnvironmentVariableLookup().lookup("nope"));
     }
 
     @Test
@@ -25,11 +24,11 @@ public class EnvironmentVariableLookupTest {
         assertThat(lookup.lookup("nope")).isNull();
     }
 
-    @Test(expected = UndefinedEnvironmentVariableException.class)
+    @Test
     public void lookupThrowsExceptionInStrictMode() {
-        assumeThat(System.getenv("nope"), nullValue());
+        assumeThat(System.getenv("nope")).isNull();
 
-        EnvironmentVariableLookup lookup = new EnvironmentVariableLookup(true);
-        lookup.lookup("nope");
+        assertThatExceptionOfType(UndefinedEnvironmentVariableException.class).isThrownBy(() ->
+            new EnvironmentVariableLookup(true).lookup("nope"));
     }
 }

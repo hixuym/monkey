@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 /**
  * A {@link ThrowableProxyConverter} which prefixes stack traces with {@code !}.
- * @author michael
  */
 public class PrefixedThrowableProxyConverter extends ThrowableProxyConverter {
 

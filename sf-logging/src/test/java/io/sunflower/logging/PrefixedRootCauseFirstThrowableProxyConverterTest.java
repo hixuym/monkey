@@ -1,15 +1,18 @@
 package io.sunflower.logging;
 
 import ch.qos.logback.classic.spi.ThrowableProxy;
-import com.google.common.base.Splitter;
+import io.sunflower.util.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +26,7 @@ public class PrefixedRootCauseFirstThrowableProxyConverterTest {
 
     private final ThrowableProxy proxy = new ThrowableProxy(getException());
 
+    @Nullable
     private Exception getException() {
         try {
             throwOuterWrapper();
@@ -60,13 +64,14 @@ public class PrefixedRootCauseFirstThrowableProxyConverterTest {
     }
 
     @Test
-    public void prefixesExceptionsWithExclamationMarks() {
-        final List<String> stackTrace = Splitter.on(System.lineSeparator()).omitEmptyStrings()
-                .splitToList(converter.throwableProxyToString(proxy));
-        assertThat(stackTrace).isNotEmpty();
-        for (String line : stackTrace) {
-            assertThat(line).startsWith("!");
-        }
+    public void prefixesExceptionsWithExclamationMarks()  {
+        final List<String> stackTrace = Arrays.stream(converter.throwableProxyToString(proxy).split(System.lineSeparator()))
+                .filter(s -> !Strings.isNullOrEmpty(s))
+                .collect(Collectors.toList());
+
+        assertThat(stackTrace)
+                .isNotEmpty()
+                .allSatisfy(line -> assertThat(line).startsWith("!"));
     }
 
     @Test

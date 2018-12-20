@@ -1,15 +1,10 @@
 package io.sunflower.jackson;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Person {
-
     private final String name;
     private final String surname;
 
-    @JsonCreator
-    public Person(@JsonProperty("name") String name, @JsonProperty("surname") String surname) {
+    public Person(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }

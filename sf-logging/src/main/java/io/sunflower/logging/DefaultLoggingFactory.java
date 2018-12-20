@@ -1,6 +1,5 @@
 package io.sunflower.logging;
 
-import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -8,6 +7,7 @@ import ch.qos.logback.classic.jmx.JMXConfigurator;
 import ch.qos.logback.classic.jul.LevelChangePropagator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.AsyncAppenderBase;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.util.StatusPrinter;
@@ -18,11 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
@@ -30,14 +25,22 @@ import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.filter.ThresholdLevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;
+import io.sunflower.util.Lists;
 
 import javax.annotation.Nullable;
-import javax.management.*;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -45,12 +48,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * @author michael
- */
 @JsonTypeName("default")
 public class DefaultLoggingFactory implements LoggingFactory {
-
     private static final ReentrantLock MBEAN_REGISTRATION_LOCK = new ReentrantLock();
     private static final ReentrantLock CHANGE_LOGGER_CONTEXT_LOCK = new ReentrantLock();
 
@@ -58,13 +57,11 @@ public class DefaultLoggingFactory implements LoggingFactory {
     private String level = "INFO";
 
     @NotNull
-    private ImmutableMap<String, JsonNode> loggers = ImmutableMap.of();
+    private Map<String, JsonNode> loggers = Collections.emptyMap();
 
     @Valid
     @NotNull
-    private ImmutableList<AppenderFactory<ILoggingEvent>> appenders = ImmutableList.of(
-            new ConsoleAppenderFactory<>()
-    );
+    private List<AppenderFactory<ILoggingEvent>> appenders = Collections.singletonList(new ConsoleAppenderFactory<>());
 
     @JsonIgnore
     private final LoggerContext loggerContext;
@@ -72,24 +69,52 @@ public class DefaultLoggingFactory implements LoggingFactory {
     @JsonIgnore
     private final PrintStream configurationErrorsStream;
 
+    @JsonIgnore
+    @Nullable
+    private volatile String loggerName;
+
     public DefaultLoggingFactory() {
         this(LoggingUtil.getLoggerContext(), System.err);
     }
 
-    @VisibleForTesting
     DefaultLoggingFactory(LoggerContext loggerContext, PrintStream configurationErrorsStream) {
+        super();
+        this.loggerName = null;
         this.loggerContext = requireNonNull(loggerContext);
         this.configurationErrorsStream = requireNonNull(configurationErrorsStream);
     }
 
-    @VisibleForTesting
     LoggerContext getLoggerContext() {
         return loggerContext;
     }
 
-    @VisibleForTesting
     PrintStream getConfigurationErrorsStream() {
         return configurationErrorsStream;
+    }
+
+    /**
+     * This method is designed to be used by unit tests only.
+     */
+    void clear() {
+
+        // This is volatile, read once for performance.
+        final String name = loggerName;
+        if (name != null) {
+            CHANGE_LOGGER_CONTEXT_LOCK.lock();
+            try {
+                loggerContext.stop();
+
+                final Logger logger = loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+                logger.detachAndStopAllAppenders();
+
+                // Additional cleanup/reset for this name
+                configureLoggers(name);
+            } finally {
+                CHANGE_LOGGER_CONTEXT_LOCK.unlock();
+            }
+
+            StatusPrinter.setPrintStream(System.out);
+        }
     }
 
     @JsonProperty
@@ -103,23 +128,23 @@ public class DefaultLoggingFactory implements LoggingFactory {
     }
 
     @JsonProperty
-    public ImmutableMap<String, JsonNode> getLoggers() {
+    public Map<String, JsonNode> getLoggers() {
         return loggers;
     }
 
     @JsonProperty
     public void setLoggers(Map<String, JsonNode> loggers) {
-        this.loggers = ImmutableMap.copyOf(loggers);
+        this.loggers = new HashMap<>(loggers);
     }
 
     @JsonProperty
-    public ImmutableList<AppenderFactory<ILoggingEvent>> getAppenders() {
+    public List<AppenderFactory<ILoggingEvent>> getAppenders() {
         return appenders;
     }
 
     @JsonProperty
     public void setAppenders(List<AppenderFactory<ILoggingEvent>> appenders) {
-        this.appenders = ImmutableList.copyOf(appenders);
+        this.appenders = new ArrayList<>(appenders);
     }
 
     @Override
@@ -134,13 +159,14 @@ public class DefaultLoggingFactory implements LoggingFactory {
             CHANGE_LOGGER_CONTEXT_LOCK.unlock();
         }
 
+        loggerName = name;
+
         final LevelFilterFactory<ILoggingEvent> levelFilterFactory = new ThresholdLevelFilterFactory();
         final AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory = new AsyncLoggingEventAppenderFactory();
         final LayoutFactory<ILoggingEvent> layoutFactory = new SunflowerLayoutFactory();
 
         for (AppenderFactory<ILoggingEvent> output : appenders) {
-            root.addAppender(output
-                    .build(loggerContext, name, layoutFactory, levelFilterFactory, asyncAppenderFactory));
+            root.addAppender(output.build(loggerContext, name, layoutFactory, levelFilterFactory, asyncAppenderFactory));
         }
 
         StatusPrinter.setPrintStream(configurationErrorsStream);
@@ -153,7 +179,7 @@ public class DefaultLoggingFactory implements LoggingFactory {
         final MBeanServer server = ManagementFactory.getPlatformMBeanServer();
         MBEAN_REGISTRATION_LOCK.lock();
         try {
-            final ObjectName objectName = new ObjectName("io.sunflower:type=Logging");
+            final ObjectName objectName = new ObjectName("io.dropwizard:type=Logging");
             if (!server.isRegistered(objectName)) {
                 server.registerMBean(new JMXConfigurator(loggerContext,
                                 server,
@@ -180,11 +206,12 @@ public class DefaultLoggingFactory implements LoggingFactory {
             // mechanism built into logback, we wait for a short period of time before
             // giving up that the appender will be completely flushed.
             final Logger logger = loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-            final ArrayList<Appender<ILoggingEvent>> appenders = Lists
-                    .newArrayList(logger.iteratorForAppenders());
+            final List<Appender<ILoggingEvent>> appenders = Lists.of(logger.iteratorForAppenders());
             for (Appender<ILoggingEvent> appender : appenders) {
-                if (appender instanceof AsyncAppender) {
-                    flushAppender((AsyncAppender) appender);
+                if (appender instanceof AsyncAppenderBase) {
+                    flushAppender((AsyncAppenderBase<?>) appender);
+                } else if (appender instanceof AsyncAppenderBaseProxy) {
+                    flushAppender(((AsyncAppenderBaseProxy<?>) appender).getAppender());
                 }
             }
         } catch (InterruptedException ignored) {
@@ -222,7 +249,7 @@ public class DefaultLoggingFactory implements LoggingFactory {
         }
     }
 
-    private void flushAppender(AsyncAppender appender) throws InterruptedException {
+    private void flushAppender(AsyncAppenderBase<?> appender) throws InterruptedException {
         int timeWaiting = 0;
         while (timeWaiting < appender.getMaxFlushTime() && appender.getNumberOfElementsInQueue() > 0) {
             Thread.sleep(100);
@@ -270,8 +297,7 @@ public class DefaultLoggingFactory implements LoggingFactory {
                 // A level and an appender
                 final LoggerConfiguration configuration;
                 try {
-                    configuration = Jackson.newObjectMapper()
-                            .treeToValue(jsonNode, LoggerConfiguration.class);
+                    configuration = Jackson.newObjectMapper().treeToValue(jsonNode, LoggerConfiguration.class);
                 } catch (JsonProcessingException e) {
                     throw new IllegalArgumentException("Wrong format of logger '" + entry.getKey() + "'", e);
                 }
@@ -279,8 +305,7 @@ public class DefaultLoggingFactory implements LoggingFactory {
                 logger.setAdditive(configuration.isAdditive());
 
                 for (AppenderFactory<ILoggingEvent> appender : configuration.getAppenders()) {
-                    logger.addAppender(appender
-                            .build(loggerContext, name, layoutFactory, levelFilterFactory, asyncAppenderFactory));
+                    logger.addAppender(appender.build(loggerContext, name, layoutFactory, levelFilterFactory, asyncAppenderFactory));
                 }
             } else {
                 throw new IllegalArgumentException("Unsupported format of logger '" + entry.getKey() + "'");
@@ -304,10 +329,10 @@ public class DefaultLoggingFactory implements LoggingFactory {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("level", level)
-                .add("loggers", loggers)
-                .add("appenders", appenders)
-                .toString();
+        return "DefaultLoggingFactory{"
+                + "level=" + level
+                + ", loggers=" + loggers
+                + ", appenders=" + appenders
+                + '}';
     }
 }

@@ -46,7 +46,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.1.0</version>
                     <configuration>
                         <escapeString>\</escapeString>
                     </configuration>
@@ -60,7 +60,7 @@
                 <plugin>
                     <!-- clean any existing integration tests -->
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                     <executions>
                         <execution>
                             <id>prepare-integration-test</id>
@@ -84,7 +84,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-invoker-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.0</version>
                     <configuration>
                         <!-- custom settings.xml to have invoker use our local M2 repo for artifacts -->
                         <settingsFile>${project.parent.basedir}/src/test/resources/settings.xml</settingsFile>
@@ -143,7 +143,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>package-tools</id>

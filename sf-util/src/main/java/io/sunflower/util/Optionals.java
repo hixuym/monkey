@@ -2,19 +2,14 @@ package io.sunflower.util;
 
 import java.util.Optional;
 
-/**
- * @author michael
- */
 public abstract class Optionals {
-
     /**
      * Convert a Guava {@link com.google.common.base.Optional} to an {@link Optional}.
      *
      * @param guavaOptional The Guava {@link com.google.common.base.Optional}
      * @return An equivalent {@link Optional}
      */
-    public static <T> Optional<T> fromGuavaOptional(
-            final com.google.common.base.Optional<T> guavaOptional) {
+    public static <T> Optional<T> fromGuavaOptional(final com.google.common.base.Optional<T> guavaOptional) {
         return Optional.ofNullable(guavaOptional.orNull());
     }
 

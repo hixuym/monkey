@@ -1,7 +1,7 @@
 driverClass: org.postgresql.Driver
 user: pg-user
 password: iAMs00perSecrEET
-url: jdbc:postgresql://db.quickstarters.com/db-prod
+url: jdbc:postgresql://db.example.com/db-prod
 properties:
   charSet: UTF-8
 maxWaitForConnection: 1s
@@ -34,6 +34,7 @@ defaultTransactionIsolation: read-committed
 removeAbandoned: true
 removeAbandonedTimeout: 15s
 useFairQueue: false
+ignoreExceptionOnPreLoad: true
 
 logAbandonedConnections: true
 logValidationErrors: true
@@ -43,5 +44,5 @@ checkConnectionOnBorrow: true
 checkConnectionOnConnect: false
 checkConnectionOnReturn: true
 
-validatorClassName: CustomConnectionValidator
+validatorClassName: io.dropwizard.db.CustomConnectionValidator
 jdbcInterceptors: "StatementFinalizer;SlowQueryReport"

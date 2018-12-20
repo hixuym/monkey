@@ -1,24 +1,28 @@
 package io.sunflower.logging;
 
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.FileAppender;
-import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
-import ch.qos.logback.core.rolling.*;
+import ch.qos.logback.core.OutputStreamAppender;
+import ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy;
+import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
+import ch.qos.logback.core.rolling.RollingFileAppender;
+import ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy;
+import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
+import ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicy;
+import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import ch.qos.logback.core.util.FileSize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.logging.async.AsyncAppenderFactory;
-import io.sunflower.logging.filter.LevelFilterFactory;
-import io.sunflower.logging.layout.LayoutFactory;
 import io.sunflower.util.Size;
 import io.sunflower.validation.MinSize;
 import io.sunflower.validation.ValidationMethod;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 
+import static java.util.Objects.requireNonNull;
 
 /**
  * An {@link AppenderFactory} implementation which provides an appender that writes events to a file, archiving older
@@ -26,134 +30,138 @@ import javax.validation.constraints.Min;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>{@code type}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The appender type. Must be {@code file}.</td>
- * </tr>
- * <tr>
- * <td>{@code threshold}</td>
- * <td>{@code ALL}</td>
- * <td>The lowest level of events to write to the file.</td>
- * </tr>
- * <tr>
- * <td>{@code currentLogFilename}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The filename where current events are logged.</td>
- * </tr>
- * <tr>
- * <td>{@code archive}</td>
- * <td>{@code true}</td>
- * <td>Whether or not to archive old events in separate files.</td>
- * </tr>
- * <tr>
- * <td>{@code archivedLogFilenamePattern}</td>
- * <td><b>REQUIRED</b> if {@code archive} is {@code true}.</td>
- * <td>
- * The filename pattern for archived files.
- * If {@code maxFileSize} is specified, rollover is size-based, and the pattern must contain {@code %i} for
- * an integer index of the archived file.
- * Otherwise rollover is date-based, and the pattern must contain {@code %d}, which is replaced with the
- * date in {@code yyyy-MM-dd} form.
- * If the pattern ends with {@code .gz} or {@code .zip}, files will be compressed as they are archived.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code archivedFileCount}</td>
- * <td>{@code 5}</td>
- * <td>
- * The number of archived files to keep. Must be greater than or equal to {@code 0}. Zero is a
- * special value signifying to keep infinite logs (use with caution)
- * </td>
- * </tr>
- * <tr>
- * <td>{@code maxFileSize}</td>
- * <td>(unlimited)</td>
- * <td>
- * The maximum size of the currently active file before a rollover is triggered. The value can be expressed
- * in bytes, kilobytes, megabytes, gigabytes, and terabytes by appending B, K, MB, GB, or TB to the
- * numeric value.  Examples include 100MB, 1GB, 1TB.  Sizes can also be spelled out, such as 100 megabytes,
- * 1 gigabyte, 1 terabyte.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code timeZone}</td>
- * <td>{@code UTC}</td>
- * <td>The time zone to which event timestamps will be converted.</td>
- * </tr>
- * <tr>
- * <td>{@code logFormat}</td>
- * <td>the default format</td>
- * <td>
- * The Logback pattern with which events will be formatted. See
- * <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
- * for details.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code bufferSize}</td>
- * <td>8KB</td>
- * <td>
- * The buffer size of the underlying FileAppender (setting added in logback 1.1.10). Increasing this from
- * the default of 8KB to 256KB is reported to significantly reduce thread contention.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code immediateFlush}</td>
- * <td>{@code true}</td>
- * <td>
- * If set to true, log events will be immediately flushed to disk. Immediate flushing is safer, but
- * it degrades logging throughput.
- * See <a href="https://logback.qos.ch/manual/appenders.html#immediateFlush">the Logback documentation</a>
- * for details.
- * </td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code type}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>The appender type. Must be {@code file}.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code threshold}</td>
+ *         <td>{@code ALL}</td>
+ *         <td>The lowest level of events to write to the file.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code currentLogFilename}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>The filename where current events are logged.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code archive}</td>
+ *         <td>{@code true}</td>
+ *         <td>Whether or not to archive old events in separate files.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code archivedLogFilenamePattern}</td>
+ *         <td><b>REQUIRED</b> if {@code archive} is {@code true}.</td>
+ *         <td>
+ *             The filename pattern for archived files.
+ *             If {@code maxFileSize} is specified, rollover is size-based, and the pattern must contain {@code %i} for
+ *             an integer index of the archived file.
+ *             Otherwise rollover is date-based, and the pattern must contain {@code %d}, which is replaced with the
+ *             date in {@code yyyy-MM-dd} form.
+ *             If the pattern ends with {@code .gz} or {@code .zip}, files will be compressed as they are archived.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code archivedFileCount}</td>
+ *         <td>{@code 5}</td>
+ *         <td>
+ *             The number of archived files to keep. Must be greater than or equal to {@code 0}. Zero is a
+ *             special value signifying to keep infinite logs (use with caution)
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code maxFileSize}</td>
+ *         <td>(unlimited)</td>
+ *         <td>
+ *             The maximum size of the currently active file before a rollover is triggered. The value can be expressed
+ *             in bytes, kilobytes, megabytes, gigabytes, and terabytes by appending B, K, MB, GB, or TB to the
+ *             numeric value.  Examples include 100MB, 1GB, 1TB.  Sizes can also be spelled out, such as 100 megabytes,
+ *             1 gigabyte, 1 terabyte.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code totalSizeCap}</td>
+ *         <td>(unlimited)</td>
+ *         <td>
+ *             Controls the total size of all files. Oldest archives are deleted asynchronously when the total
+ *             size cap is exceeded.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code timeZone}</td>
+ *         <td>{@code UTC}</td>
+ *         <td>The time zone to which event timestamps will be converted.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logFormat}</td>
+ *         <td>the default format</td>
+ *         <td>
+ *             The Logback pattern with which events will be formatted. See
+ *             <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
+ *             for details.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code bufferSize}</td>
+ *         <td>8KB</td>
+ *         <td>
+ *             The buffer size of the underlying FileAppender (setting added in logback 1.1.10). Increasing this from
+ *             the default of 8KB to 256KB is reported to significantly reduce thread contention.
+ *         </td>
+ *     </tr>
+ *      <tr>
+ *         <td>{@code immediateFlush}</td>
+ *         <td>{@code true}</td>
+ *         <td>
+ *             If set to true, log events will be immediately flushed to disk. Immediate flushing is safer, but
+ *             it degrades logging throughput.
+ *             See <a href="https://logback.qos.ch/manual/appenders.html#immediateFlush">the Logback documentation</a>
+ *             for details.
+ *         </td>
+ *     </tr>
  * </table>
  *
- * @author michael
  * @see AbstractAppenderFactory
  */
 @JsonTypeName("file")
-public class FileAppenderFactory<E extends DeferredProcessingAware> extends
-        AbstractAppenderFactory<E> {
+public class FileAppenderFactory<E extends DeferredProcessingAware> extends AbstractOutputStreamAppenderFactory<E> {
 
+    @Nullable
     private String currentLogFilename;
 
     private boolean archive = true;
 
+    @Nullable
     private String archivedLogFilenamePattern;
 
     @Min(0)
     private int archivedFileCount = 5;
 
+    @Nullable
     private Size maxFileSize;
+
+    @Nullable
+    private Size totalSizeCap;
 
     @MinSize(1)
     private Size bufferSize = Size.bytes(FileAppender.DEFAULT_BUFFER_SIZE);
 
     private boolean immediateFlush = true;
 
-    public boolean isImmediateFlush() {
-        return immediateFlush;
-    }
-
     @JsonProperty
-    public void setImmediateFlush(boolean immediateFlush) {
-        this.immediateFlush = immediateFlush;
-    }
-
-    @JsonProperty
+    @Nullable
     public String getCurrentLogFilename() {
         return currentLogFilename;
     }
 
     @JsonProperty
-    public void setCurrentLogFilename(String currentLogFilename) {
+    public void setCurrentLogFilename(@Nullable String currentLogFilename) {
         this.currentLogFilename = currentLogFilename;
     }
 
@@ -168,6 +176,7 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     }
 
     @JsonProperty
+    @Nullable
     public String getArchivedLogFilenamePattern() {
         return archivedLogFilenamePattern;
     }
@@ -188,6 +197,7 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     }
 
     @JsonProperty
+    @Nullable
     public Size getMaxFileSize() {
         return maxFileSize;
     }
@@ -198,6 +208,17 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     }
 
     @JsonProperty
+    @Nullable
+    public Size getTotalSizeCap() {
+        return totalSizeCap;
+    }
+
+    @JsonProperty
+    public void setTotalSizeCap(@Nullable Size totalSizeCap) {
+        this.totalSizeCap = totalSizeCap;
+    }
+
+    @JsonProperty
     public Size getBufferSize() {
         return bufferSize;
     }
@@ -205,6 +226,22 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     @JsonProperty
     public void setBufferSize(Size bufferSize) {
         this.bufferSize = bufferSize;
+    }
+
+    public boolean isImmediateFlush() {
+        return immediateFlush;
+    }
+
+    @JsonProperty
+    public void setImmediateFlush(boolean immediateFlush) {
+        this.immediateFlush = immediateFlush;
+    }
+
+    @JsonIgnore
+    @ValidationMethod(message = "totalSizeCap has no effect when using maxFileSize and an archivedLogFilenamePattern without %d, as archivedFileCount implicitly controls the total size cap")
+    public boolean isTotalSizeCapValid() {
+        return !archive || totalSizeCap == null ||
+            !(maxFileSize != null && !requireNonNull(archivedLogFilenamePattern).contains("%d"));
     }
 
     @JsonIgnore
@@ -223,8 +260,7 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     @JsonIgnore
     @ValidationMethod(message = "when archivedLogFilenamePattern contains %i, maxFileSize must be specified")
     public boolean isMaxFileSizeSettingSpecified() {
-        return !archive || !(archivedLogFilenamePattern != null && archivedLogFilenamePattern
-                .contains("%i")) ||
+        return !archive || !(archivedLogFilenamePattern != null && archivedLogFilenamePattern.contains("%i")) ||
                 maxFileSize != null;
     }
 
@@ -235,26 +271,14 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
     }
 
     @Override
-    public Appender<E> build(LoggerContext context, String applicationName,
-                             LayoutFactory<E> layoutFactory,
-                             LevelFilterFactory<E> levelFilterFactory, AsyncAppenderFactory<E> asyncAppenderFactory) {
+    protected OutputStreamAppender<E> appender(LoggerContext context) {
         final FileAppender<E> appender = buildAppender(context);
         appender.setName("file-appender");
-
         appender.setAppend(true);
         appender.setContext(context);
-
-        final LayoutWrappingEncoder<E> layoutEncoder = new LayoutWrappingEncoder<>();
-        layoutEncoder.setLayout(buildLayout(context, layoutFactory));
-        appender.setEncoder(layoutEncoder);
-
-        appender.setImmediateFlush(isImmediateFlush());
+        appender.setImmediateFlush(immediateFlush);
         appender.setPrudent(false);
-        appender.addFilter(levelFilterFactory.build(threshold));
-        getFilterFactories().forEach(f -> appender.addFilter(f.build()));
-        appender.start();
-
-        return wrapAsync(appender, asyncAppenderFactory);
+        return appender;
     }
 
     protected FileAppender<E> buildAppender(LoggerContext context) {
@@ -264,7 +288,7 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
             appender.setFile(currentLogFilename);
             appender.setBufferSize(new FileSize(bufferSize.toBytes()));
 
-            if (maxFileSize != null && !archivedLogFilenamePattern.contains("%d")) {
+            if (maxFileSize != null && !requireNonNull(archivedLogFilenamePattern).contains("%d")) {
                 final FixedWindowRollingPolicy rollingPolicy = new FixedWindowRollingPolicy();
                 rollingPolicy.setContext(context);
                 rollingPolicy.setMaxIndex(getArchivedFileCount());
@@ -295,6 +319,10 @@ public class FileAppenderFactory<E extends DeferredProcessingAware> extends
                     final SizeAndTimeBasedRollingPolicy<E> sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<>();
                     sizeAndTimeBasedRollingPolicy.setMaxFileSize(new FileSize(maxFileSize.toBytes()));
                     rollingPolicy = sizeAndTimeBasedRollingPolicy;
+                }
+
+                if (totalSizeCap != null) {
+                    rollingPolicy.setTotalSizeCap(new FileSize(totalSizeCap.toBytes()));
                 }
 
                 rollingPolicy.setContext(context);

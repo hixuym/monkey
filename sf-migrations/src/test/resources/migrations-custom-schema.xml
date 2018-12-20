@@ -20,9 +20,7 @@
         <addColumn schemaName="${database.defaultSchemaName}" tableName="persons">
             <column name="email" type="varchar(128)"/>
         </addColumn>
-        <sql>insert into ${database.defaultSchemaName}.persons (name, email) values ('Bill Smith',
-            'bill@smith.me')
-        </sql>
+        <sql>insert into ${database.defaultSchemaName}.persons (name, email) values ('Bill Smith', 'bill@smith.me')</sql>
     </changeSet>
     <changeSet id="3" author="db_dev">
         <sql>create index email_idx on ${database.defaultSchemaName}.persons(email)</sql>

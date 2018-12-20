@@ -16,17 +16,16 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * The command-line runner for Dropwizard application.
  *
  * @author michael
  */
 public class Cli {
-
     private static final String COMMAND_NAME_ATTR = "command";
-    /**
-     * assume -h if no arguments are given
-     */
+    // assume -h if no arguments are given
     private static final String[][] HELP = {{}, {"-h"}, {"--help"}};
     private static final String[][] VERSION = {{"-v"}, {"--version"}};
 
@@ -39,13 +38,12 @@ public class Cli {
     /**
      * Create a new CLI interface for a application and its bootstrapped environment.
      *
-     * @param location  the location of the application
-     * @param bootstrap the bootstrap for the application
-     * @param stdOut    standard out
-     * @param stdErr    standard err
+     * @param location     the location of the application
+     * @param bootstrap    the bootstrap for the application
+     * @param stdOut       standard out
+     * @param stdErr       standard err
      */
-    public Cli(JarLocation location, Bootstrap<?> bootstrap, OutputStream stdOut,
-               OutputStream stdErr) {
+    public Cli(JarLocation location, Bootstrap<?> bootstrap, OutputStream stdOut, OutputStream stdErr) {
         this.stdOut = new PrintWriter(new OutputStreamWriter(stdOut, StandardCharsets.UTF_8), true);
         this.stdErr = new PrintWriter(new OutputStreamWriter(stdErr, StandardCharsets.UTF_8), true);
         this.commands = new TreeMap<>();
@@ -71,7 +69,8 @@ public class Cli {
                 parser.printVersion(stdOut);
             } else {
                 final Namespace namespace = parser.parseArgs(arguments);
-                final Command command = commands.get(namespace.getString(COMMAND_NAME_ATTR));
+                final Command command = requireNonNull(commands.get(namespace.getString(COMMAND_NAME_ATTR)),
+                        "Command is not found");
                 try {
                     command.run(bootstrap, namespace);
                 } catch (Throwable e) {
@@ -104,7 +103,7 @@ public class Cli {
 
     private ArgumentParser buildParser(JarLocation location) {
         final String usage = "java -jar " + location;
-        final ArgumentParser p = ArgumentParsers.newArgumentParser(usage, false);
+        final ArgumentParser p = ArgumentParsers.newFor(usage).addHelp(false).build();
         p.version(location.getVersion().orElse(
                 "No application version detected. Add a Implementation-Version " +
                         "entry to your JAR's manifest to enable this."));
@@ -142,7 +141,6 @@ public class Cli {
     }
 
     private static class SafeHelpAction implements ArgumentAction {
-
         private final PrintWriter out;
 
         SafeHelpAction(PrintWriter out) {

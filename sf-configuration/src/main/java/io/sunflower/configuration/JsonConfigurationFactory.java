@@ -7,10 +7,8 @@ import javax.validation.Validator;
 
 /**
  * A factory class for loading JSON configuration files, binding them to configuration objects, and
- * validating their constraints. Allows for overriding configuration parameters from system
- * properties.
+ * validating their constraints. Allows for overriding configuration parameters from system properties.
  *
- * @author michael
  * @param <T> the type of the configuration objects to produce
  */
 public class JsonConfigurationFactory<T> extends BaseConfigurationFactory<T> {
@@ -27,7 +25,6 @@ public class JsonConfigurationFactory<T> extends BaseConfigurationFactory<T> {
                                     Validator validator,
                                     ObjectMapper objectMapper,
                                     String propertyPrefix) {
-        super(objectMapper.getFactory(), JsonFactory.FORMAT_NAME_JSON, klass, validator, objectMapper,
-                propertyPrefix);
+        super(objectMapper.getFactory(), JsonFactory.FORMAT_NAME_JSON, klass, validator, objectMapper, propertyPrefix);
     }
 }

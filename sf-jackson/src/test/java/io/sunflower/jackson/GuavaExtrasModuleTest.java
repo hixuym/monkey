@@ -11,7 +11,6 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuavaExtrasModuleTest {
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Before
@@ -22,8 +21,8 @@ public class GuavaExtrasModuleTest {
 
     @Test
     public void canDeserializeAHostAndPort() throws Exception {
-        assertThat(mapper.readValue("\"quickstarters.com:8080\"", HostAndPort.class))
-                .isEqualTo(HostAndPort.fromParts("quickstarters.com", 8080));
+        assertThat(mapper.readValue("\"example.com:8080\"", HostAndPort.class))
+                .isEqualTo(HostAndPort.fromParts("example.com", 8080));
     }
 
     @Test
@@ -35,7 +34,7 @@ public class GuavaExtrasModuleTest {
     @Test
     public void canSerializeCacheBuilderSpecs() throws Exception {
         assertThat(mapper.writeValueAsString(CacheBuilderSpec.disableCaching()))
-                .isEqualTo("\"maximumSize=0\"");
+            .isEqualTo("\"maximumSize=0\"");
     }
 
     @Test

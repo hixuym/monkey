@@ -15,45 +15,41 @@ import java.util.TimeZone;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>timeZone</td>
- * <td>UTC</td>
- * <td>The timezone to display dates/times for.</td>
- * </tr>
- * <tr>
- * <td>output</td>
- * <td>stdout</td>
- * <td>The stream to write to. One of {@code stdout} or {@code stderr}.</td>
- * </tr>
- * <tr>
- * <td colspan="3">See {@link BaseFormattedReporterFactory} for more options.</td>
- * </tr>
- * <tr>
- * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>timeZone</td>
+ *         <td>UTC</td>
+ *         <td>The timezone to display dates/times for.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>output</td>
+ *         <td>stdout</td>
+ *         <td>The stream to write to. One of {@code stdout} or {@code stderr}.</td>
+ *     </tr>
+ *     <tr>
+ *         <td colspan="3">See {@link BaseFormattedReporterFactory} for more options.</td>
+ *     </tr>
+ *     <tr>
+ *         <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
+ *     </tr>
  * </table>
- * @author michael
  */
 @JsonTypeName("console")
 public class ConsoleReporterFactory extends BaseFormattedReporterFactory {
-
     public enum ConsoleStream {
-        STDOUT(System.out),
-        STDERR(System.err);
-
-        private final PrintStream printStream;
-
-        ConsoleStream(PrintStream printStream) {
-            this.printStream = printStream;
-        }
+        STDOUT,
+        STDERR;
 
         public PrintStream get() {
-            return printStream;
+            if (this == STDERR) {
+                return System.err;
+            } else {
+                return System.out;
+            }
         }
     }
 
@@ -86,12 +82,12 @@ public class ConsoleReporterFactory extends BaseFormattedReporterFactory {
     @Override
     public ScheduledReporter build(MetricRegistry registry) {
         return ConsoleReporter.forRegistry(registry)
-                .convertDurationsTo(getDurationUnit())
-                .convertRatesTo(getRateUnit())
-                .filter(getFilter())
-                .formattedFor(getLocale())
-                .formattedFor(getTimeZone())
-                .outputTo(getOutput().get())
-                .build();
+                              .convertDurationsTo(getDurationUnit())
+                              .convertRatesTo(getRateUnit())
+                              .filter(getFilter())
+                              .formattedFor(getLocale())
+                              .formattedFor(getTimeZone())
+                              .outputTo(getOutput().get())
+                              .build();
     }
 }

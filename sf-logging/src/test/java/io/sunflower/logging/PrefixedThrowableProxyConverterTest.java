@@ -10,7 +10,6 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrefixedThrowableProxyConverterTest {
-
     private final PrefixedThrowableProxyConverter converter = new PrefixedThrowableProxyConverter();
     private final ThrowableProxy proxy = new ThrowableProxy(new IOException("noo"));
 
@@ -24,6 +23,6 @@ public class PrefixedThrowableProxyConverterTest {
     public void prefixesExceptionsWithExclamationMarks() throws Exception {
         assertThat(converter.throwableProxyToString(proxy))
                 .startsWith(String.format("! java.io.IOException: noo%n" +
-                        "! at io.sunflower.logging.PrefixedThrowableProxyConverterTest.<init>(PrefixedThrowableProxyConverterTest.java:15)%n"));
+                                                  "! at io.sunflower.logging.PrefixedThrowableProxyConverterTest.<init>(PrefixedThrowableProxyConverterTest.java:14)%n"));
     }
 }

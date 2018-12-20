@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OptionalIntValidatedValueUnwrapperTest {
 
     public static class Example {
-
         @Min(3)
         @UnwrapValidatedValue
         public OptionalInt three = OptionalInt.empty();
@@ -28,11 +27,11 @@ public class OptionalIntValidatedValueUnwrapperTest {
     }
 
     private final Validator validator = Validation
-            .byProvider(HibernateValidator.class)
-            .configure()
-            .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
-            .buildValidatorFactory()
-            .getValidator();
+        .byProvider(HibernateValidator.class)
+        .configure()
+        .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
+        .buildValidatorFactory()
+        .getValidator();
 
     @Test
     public void succeedsWhenAbsent() {

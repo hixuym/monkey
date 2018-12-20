@@ -3,28 +3,29 @@ package io.sunflower.metrics;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import io.sunflower.util.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 @RunWith(Parameterized.class)
 public class BaseReporterFactoryTest {
-
-    private static final ImmutableSet<String> INCLUDES = ImmutableSet.of("inc", "both", "inc.+");
-    private static final ImmutableSet<String> EXCLUDES = ImmutableSet.of("exc", "both", "exc.+");
-    private static final ImmutableSet<String> EMPTY = ImmutableSet.of();
+    private static final Set<String> INCLUDES = Sets.of("inc", "both", "inc.+");
+    private static final Set<String> EXCLUDES = Sets.of("exc", "both", "exc.+");
+    private static final Set<String> EMPTY = Collections.emptySet();
 
     @Parameterized.Parameters(name = "{index} {6} {2}")
     public static List<Object[]> data() {
 
-        return ImmutableList.of(
+        return Arrays.asList(
                 /*
                  * case1: If include list is empty and exclude list is empty, everything should be
                  * included.
@@ -83,13 +84,13 @@ public class BaseReporterFactoryTest {
     };
 
     @Parameterized.Parameter
-    public ImmutableSet<String> includes;
+    public Set<String> includes = Collections.emptySet();
 
     @Parameterized.Parameter(1)
-    public ImmutableSet<String> excludes;
+    public Set<String> excludes = Collections.emptySet();
 
     @Parameterized.Parameter(2)
-    public String name;
+    public String name = "";
 
     @Parameterized.Parameter(3)
     public boolean expectedDefaultResult;
@@ -101,7 +102,7 @@ public class BaseReporterFactoryTest {
     public boolean expectedSubstringResult;
 
     @Parameterized.Parameter(6)
-    public String msg;
+    public String msg = "";
 
     private final Metric metric = mock(Metric.class);
 
@@ -113,8 +114,7 @@ public class BaseReporterFactoryTest {
         factory.setUseRegexFilters(false);
         factory.setUseSubstringMatching(false);
         assertThat(factory.getFilter().matches(name, metric))
-                .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for default matcher", name,
-                        expectedDefaultResult)
+                .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for default matcher", name, expectedDefaultResult)
                 .isEqualTo(expectedDefaultResult);
     }
 
@@ -126,8 +126,7 @@ public class BaseReporterFactoryTest {
         factory.setUseRegexFilters(true);
         factory.setUseSubstringMatching(false);
         assertThat(factory.getFilter().matches(name, metric))
-                .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for regex matcher", name,
-                        expectedRegexResult)
+                .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for regex matcher", name, expectedRegexResult)
                 .isEqualTo(expectedRegexResult);
     }
 
@@ -139,8 +138,7 @@ public class BaseReporterFactoryTest {
         factory.setUseRegexFilters(false);
         factory.setUseSubstringMatching(true);
         assertThat(factory.getFilter().matches(name, metric))
-                .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for substring matcher", name,
-                        expectedSubstringResult)
-                .isEqualTo(expectedSubstringResult);
+            .overridingErrorMessage(msg + ": expected 'matches(%s)=%s' for substring matcher", name, expectedSubstringResult)
+            .isEqualTo(expectedSubstringResult);
     }
 }

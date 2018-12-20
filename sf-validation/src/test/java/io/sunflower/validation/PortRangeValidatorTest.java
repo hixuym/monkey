@@ -1,23 +1,20 @@
 package io.sunflower.validation;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assume.assumeThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class PortRangeValidatorTest {
-
     @SuppressWarnings("PublicField")
     public static class Example {
-
         @PortRange
         public int port = 8080;
 
@@ -25,7 +22,7 @@ public class PortRangeValidatorTest {
         public int otherPort = 10001;
 
         @Valid
-        List<@PortRange Integer> ports = ImmutableList.of();
+        List<@PortRange Integer> ports = Collections.emptyList();
     }
 
 
@@ -34,7 +31,7 @@ public class PortRangeValidatorTest {
 
     @Before
     public void setUp() throws Exception {
-        assumeThat(Locale.getDefault().getLanguage(), is("en"));
+        assumeThat(Locale.getDefault().getLanguage()).isEqualTo("en");
     }
 
     @Test
@@ -79,8 +76,8 @@ public class PortRangeValidatorTest {
 
     @Test
     public void rejectsInvalidPortsInList() {
-        example.ports = ImmutableList.of(-1);
+        example.ports = Collections.singletonList(-1);
         assertThat(ConstraintViolations.format(validator.validate(example)))
-                .containsOnly("ports[0].<collection element> must be between 1 and 65535");
+            .containsOnly("ports[0].<collection element> must be between 1 and 65535");
     }
 }

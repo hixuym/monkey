@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
 import com.codahale.metrics.MetricRegistry;
@@ -32,14 +17,10 @@ import liquibase.exception.ValidationFailedException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+import javax.annotation.Nullable;
 import java.sql.SQLException;
 
-/**
- * @author michael
- */
-public abstract class AbstractLiquibaseCommand<T extends Configuration> extends
-        ConfiguredCommand<T> {
-
+public abstract class AbstractLiquibaseCommand<T extends Configuration> extends ConfiguredCommand<T> {
     private final DatabaseConfiguration<T> strategy;
     private final Class<T> configurationClass;
     private final String migrationsFileName;
@@ -79,8 +60,7 @@ public abstract class AbstractLiquibaseCommand<T extends Configuration> extends
 
     @Override
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration)
-            throws Exception {
+    protected void run(@Nullable Bootstrap<T> bootstrap, Namespace namespace, T configuration) throws Exception {
         final PooledDataSourceFactory dbConfig = strategy.getDataSourceFactory(configuration);
         dbConfig.asSingleConnectionPool();
 
@@ -92,27 +72,24 @@ public abstract class AbstractLiquibaseCommand<T extends Configuration> extends
         }
     }
 
-    CloseableLiquibase openLiquibase(final PooledDataSourceFactory dataSourceFactory,
-                                     final Namespace namespace)
+    CloseableLiquibase openLiquibase(final PooledDataSourceFactory dataSourceFactory, final Namespace namespace)
             throws SQLException, LiquibaseException {
         final CloseableLiquibase liquibase;
         final ManagedDataSource dataSource = dataSourceFactory.build(new MetricRegistry(), "liquibase");
         final Database database = createDatabase(dataSource, namespace);
         final String migrationsFile = namespace.getString("migrations-file");
         if (migrationsFile == null) {
-            liquibase = new CloseableLiquibaseWithClassPathMigrationsFile(dataSource, database,
-                    migrationsFileName);
+            liquibase = new CloseableLiquibaseWithClassPathMigrationsFile(dataSource, database, migrationsFileName);
         } else {
-            liquibase = new CloseableLiquibaseWithFileSystemMigrationsFile(dataSource, database,
-                    migrationsFile);
+            liquibase = new CloseableLiquibaseWithFileSystemMigrationsFile(dataSource, database, migrationsFile);
         }
 
         return liquibase;
     }
 
     private Database createDatabase(
-            ManagedDataSource dataSource,
-            Namespace namespace
+        ManagedDataSource dataSource,
+        Namespace namespace
     ) throws SQLException, LiquibaseException {
         final DatabaseConnection conn = new JdbcConnection(dataSource.getConnection());
         final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(conn);

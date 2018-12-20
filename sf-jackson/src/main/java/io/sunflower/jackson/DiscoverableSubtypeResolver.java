@@ -1,7 +1,6 @@
 package io.sunflower.jackson;
 
 import com.fasterxml.jackson.databind.jsontype.impl.StdSubtypeResolver;
-import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,32 +16,31 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * A subtype resolver which discovers subtypes via {@code META-INF/services/Discoverable}.
- * @author michael
+ * A subtype resolver which discovers subtypes via
+ * {@code META-INF/services/io.sunflower.jackson.Discoverable}.
  */
 public class DiscoverableSubtypeResolver extends StdSubtypeResolver {
-
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscoverableSubtypeResolver.class);
 
-    private final ImmutableList<Class<?>> discoveredSubtypes;
+    private final List<Class<?>> discoveredSubtypes;
 
     public DiscoverableSubtypeResolver() {
         this(Discoverable.class);
     }
 
     public DiscoverableSubtypeResolver(Class<?> rootKlass) {
-        final ImmutableList.Builder<Class<?>> subtypes = ImmutableList.builder();
+        final List<Class<?>> subtypes = new ArrayList<>();
         for (Class<?> klass : discoverServices(rootKlass)) {
             for (Class<?> subtype : discoverServices(klass)) {
                 subtypes.add(subtype);
                 registerSubtypes(subtype);
             }
         }
-        this.discoveredSubtypes = subtypes.build();
+        this.discoveredSubtypes = subtypes;
     }
 
-    public ImmutableList<Class<?>> getDiscoveredSubtypes() {
+    public List<Class<?>> getDiscoveredSubtypes() {
         return discoveredSubtypes;
     }
 
@@ -56,8 +54,7 @@ public class DiscoverableSubtypeResolver extends StdSubtypeResolver {
             // use classloader that loaded this class to find the service descriptors on the classpath
             // better than ClassLoader.getSystemResources() which may not be the same classloader if ths app
             // is running in a container (e.g. via maven exec:java)
-            final Enumeration<URL> resources = getClassLoader()
-                    .getResources("META-INF/services/" + klass.getName());
+            final Enumeration<URL> resources = getClassLoader().getResources("META-INF/services/" + klass.getName());
             while (resources.hasMoreElements()) {
                 final URL url = resources.nextElement();
                 try (InputStream input = url.openStream();

@@ -21,69 +21,76 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <sunflower.version>${project.version}</sunflower.version>
-
-        <guava.version>23.2-jre</guava.version>
-        <guice.version>4.1.0</guice.version>
-        <jackson.version>2.9.2</jackson.version>
-        <metrics3.version>3.2.5</metrics3.version>
+        <guava.version>27.0.1-jre</guava.version>
+        <guice.version>4.2.2</guice.version>
+        <jackson.version>2.9.7</jackson.version>
+        <metrics4.version>4.0.3</metrics4.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <h2.version>1.4.196</h2.version>
-        <mysql.version>6.0.6</mysql.version>
-        <postgresql.version>42.1.4</postgresql.version>
-        <freemarker.version>2.3.26-incubating</freemarker.version>
-        <mybatis.version>3.4.5</mybatis.version>
-        <undertow.version>1.4.21.Final</undertow.version>
-        <netty.version>4.1.16.Final</netty.version>
-        <okhttp.version>3.9.0</okhttp.version>
-        <retrofit.version>2.3.0</retrofit.version>
-        <okio.version>1.13.0</okio.version>
-        <jwt.version>3.2.0</jwt.version>
-        <validator.version>5.4.1.Final</validator.version>
+        <h2.version>1.4.197</h2.version>
+        <mysql.version>8.0.13</mysql.version>
+        <postgresql.version>42.2.5</postgresql.version>
+        <jdbi3.version>3.5.1</jdbi3.version>
+        <freemarker.version>2.3.28</freemarker.version>
+        <undertow.version>2.0.16.Final</undertow.version>
+        <netty.version>4.1.32.Final</netty.version>
+        <okhttp.version>3.12.0</okhttp.version>
+        <retrofit.version>2.5.0</retrofit.version>
+        <okio.version>2.1.0</okio.version>
+        <jwt.version>3.4.1</jwt.version>
+        <validator.version>5.4.2.Final</validator.version>
         <websocket.version>1.1</websocket.version>
-        <sharding.jdbc.version>1.5.4</sharding.jdbc.version>
-
-        <cassandra.driver.version>3.3.0</cassandra.driver.version>
-        <jedis.version>2.9.0</jedis.version>
-        <tomcat.jdbc.version>8.5.23</tomcat.jdbc.version>
-        <ebean.version>11.4.1</ebean.version>
-        <liquibase.version>3.5.3</liquibase.version>
+        <sharding.jdbc.version>2.0.3</sharding.jdbc.version>
+        <cassandra.driver.version>3.6.0</cassandra.driver.version>
+        <jedis.version>3.0.0</jedis.version>
         <spymemcached.version>2.12.3</spymemcached.version>
-        <woodstox.version>5.0.3</woodstox.version>
-        <commons-email.version>1.4</commons-email.version>
-        <classmate.version>1.3.4</classmate.version>
-        <hessian.version>4.0.38</hessian.version>
-        <commons-lang3.version>3.6</commons-lang3.version>
-        <commons-text.version>1.1</commons-text.version>
-        <httpclient.version>4.5.3</httpclient.version>
-        <cglib.version>3.2.5</cglib.version>
-        <prettytime.version>4.0.1.Final</prettytime.version>
+        <ebean.version>11.30.1</ebean.version>
+        <jdbi3.version>3.5.1</jdbi3.version>
+        <hikaricp.version>3.2.0</hikaricp.version>
+        <tomcat-jdbc.version>9.0.14</tomcat-jdbc.version>
+        <liquibase.version>3.6.2</liquibase.version>
+        <woodstox.version>5.2.0</woodstox.version>
+        <commons-email.version>1.5</commons-email.version>
+        <classmate.version>1.4.0</classmate.version>
+        <hessian.version>4.0.51</hessian.version>
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <commons-text.version>1.6</commons-text.version>
+        <httpclient.version>4.5.6</httpclient.version>
+        <cglib.version>3.2.10</cglib.version>
+        <prettytime.version>4.0.2.Final</prettytime.version>
         <javax.el.version>3.0.0</javax.el.version>
-        <javapoet.version>1.9.0</javapoet.version>
+        <javapoet.version>1.11.1</javapoet.version>
         <argparse4j.version>0.8.1</argparse4j.version>
         <jsr305.version>3.0.2</jsr305.version>
-
         <junit.version>4.12</junit.version>
         <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <mockito.version>2.10.0</mockito.version>
-        <assertj.version>3.6.2</assertj.version>
-
-        <shiro.version>1.4.0</shiro.version>
+        <mockito.version>2.23.4</mockito.version>
+        <assertj.version>3.11.1</assertj.version>
         <reflections.version>0.9.11</reflections.version>
-        <resteasy.version>3.1.4.Final</resteasy.version>
-
-        <boringssl.version>2.0.7</boringssl.version>
-
-        <javassist.version>3.22.0-GA</javassist.version>
-
+        <resteasy.version>3.6.2.Final</resteasy.version>
+        <boringssl.version>2.0.20</boringssl.version>
+        <javassist.version>3.24.0-GA</javassist.version>
+        <joda-time.version>2.10.1</joda-time.version>
+        <caffeine.version>2.6.2</caffeine.version>
     </properties>
 
     <dependencyManagement>
 
         <dependencies>
+
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>javassist</groupId>
@@ -125,12 +132,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-core</artifactId>
-                <version>${shiro.version}</version>
             </dependency>
 
             <!-- excellent io lib -->
@@ -255,19 +256,7 @@
 
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-multibindings</artifactId>
-                <version>${guice.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-assistedinject</artifactId>
-                <version>${guice.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-servlet</artifactId>
                 <version>${guice.version}</version>
             </dependency>
 
@@ -464,45 +453,29 @@
             </dependency>
 
             <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-core</artifactId>
-                <version>1.3.5</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
-                <version>5.1.2</version>
-            </dependency>
-
-            <dependency>
                 <groupId>io.ebean</groupId>
                 <artifactId>ebean</artifactId>
                 <version>${ebean.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>1.1.3</version>
+                <groupId>org.jdbi</groupId>
+                <artifactId>jdbi3-bom</artifactId>
+                <version>${jdbi3.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>2.7.1</version>
+                <version>${hikaricp.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-jdbc</artifactId>
-                <version>${tomcat.jdbc.version}</version>
+                <version>${tomcat-jdbc.version}</version>
             </dependency>
 
             <dependency>
@@ -555,7 +528,7 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-core</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -566,17 +539,28 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-json</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
+                <groupId>io.sunflower.metrics</groupId>
                 <artifactId>metrics-annotation</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-jvm</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-jmx</artifactId>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -587,7 +571,7 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-healthchecks</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -598,7 +582,7 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-logback</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>ch.qos.logback</groupId>
@@ -613,7 +597,7 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-httpclient</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
@@ -631,8 +615,8 @@
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-ganglia</artifactId>
-                <version>${metrics3.version}</version>
+                <artifactId>metrics-jdbi3</artifactId>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -643,7 +627,7 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-graphite</artifactId>
-                <version>${metrics3.version}</version>
+                <version>${metrics4.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -907,11 +891,6 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-metrics-ganglia</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.sunflower</groupId>
                 <artifactId>sf-metrics-graphite</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -937,6 +916,12 @@
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-ebean</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-jdbi</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

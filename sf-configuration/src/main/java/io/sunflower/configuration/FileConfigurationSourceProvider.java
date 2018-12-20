@@ -1,14 +1,16 @@
 package io.sunflower.configuration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An implementation of {@link ConfigurationSourceProvider} that reads the configuration from the
  * local file system.
- * @author michael
  */
 public class FileConfigurationSourceProvider implements ConfigurationSourceProvider {
-
     @Override
     public InputStream open(String path) throws IOException {
         final File file = new File(path);

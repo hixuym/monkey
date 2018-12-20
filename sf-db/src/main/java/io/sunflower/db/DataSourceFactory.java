@@ -1,34 +1,24 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.db;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.primitives.Ints;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.MinDuration;
 import io.sunflower.validation.ValidationMethod;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.sql.Connection;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,280 +26,286 @@ import java.util.concurrent.TimeUnit;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>{@code driverClass}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The full name of the JDBC driver class.</td>
- * </tr>
- * <tr>
- * <td>{@code url}</td>
- * <td><b>REQUIRED</b></td>
- * <td>The URL of the server.</td>
- * </tr>
- * <tr>
- * <td>{@code user}</td>
- * <td><b>none</b></td>
- * <td>The username used to connect to the server.</td>
- * </tr>
- * <tr>
- * <td>{@code password}</td>
- * <td>none</td>
- * <td>The password used to connect to the server.</td>
- * </tr>
- * <tr>
- * <td>{@code removeAbandoned}</td>
- * <td>{@code false}</td>
- * <td>
- * Remove abandoned connections if they exceed the {@code removeAbandonedTimeout}.
- * If set to {@code true} a connection is considered abandoned and eligible for removal if it has
- * been in use longer than the {@code removeAbandonedTimeout} and the condition for
- * {@code abandonWhenPercentageFull} is met.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code removeAbandonedTimeout}</td>
- * <td>60 seconds</td>
- * <td>
- * The time before a database connection can be considered abandoned.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code abandonWhenPercentageFull}</td>
- * <td>0</td>
- * <td>
- * Connections that have been abandoned (timed out) won't get closed and reported up
- * unless the number of connections in use are above the percentage defined by
- * {@code abandonWhenPercentageFull}. The value should be between 0-100.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code alternateUsernamesAllowed}</td>
- * <td>{@code false}</td>
- * <td>
- * Set to true if the call
- * {@link javax.sql.DataSource#getConnection(String, String) getConnection(username,password)}
- * is allowed. This is used for when the pool is used by an application accessing
- * multiple schemas. There is a performance impact turning this option on, even when not
- * used.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code commitOnReturn}</td>
- * <td>{@code false}</td>
- * <td>
- * Set to true if you want the connection pool to commit any pending transaction when a
- * connection is returned.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code rollbackOnReturn}</td>
- * <td>{@code false}</td>
- * <td>
- * Set to true if you want the connection pool to rollback any pending transaction when a
- * connection is returned.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code autoCommitByDefault}</td>
- * <td>JDBC driver's default</td>
- * <td>The default auto-commit state of the connections.</td>
- * </tr>
- * <tr>
- * <td>{@code readOnlyByDefault}</td>
- * <td>JDBC driver's default</td>
- * <td>The default read-only state of the connections.</td>
- * </tr>
- * <tr>
- * <td>{@code properties}</td>
- * <td>none</td>
- * <td>Any additional JDBC driver parameters.</td>
- * </tr>
- * <tr>
- * <td>{@code defaultCatalog}</td>
- * <td>none</td>
- * <td>The default catalog to use for the connections.</td>
- * </tr>
- * <tr>
- * <td>{@code defaultTransactionIsolation}</td>
- * <td>JDBC driver default</td>
- * <td>
- * The default transaction isolation to use for the connections. Can be one of
- * {@code none}, {@code default}, {@code read-uncommitted}, {@code read-committed},
- * {@code repeatable-read}, or {@code serializable}.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code useFairQueue}</td>
- * <td>{@code true}</td>
- * <td>
- * If {@code true}, calls to {@code getConnection} are handled in a FIFO manner.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code initialSize}</td>
- * <td>10</td>
- * <td>
- * The initial size of the connection pool. May be zero, which will allow you to start
- * the connection pool without requiring the DB to be up. In the latter case the {@link #minSize}
- * must also be set to zero.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code minSize}</td>
- * <td>10</td>
- * <td>
- * The minimum size of the connection pool.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code maxSize}</td>
- * <td>100</td>
- * <td>
- * The maximum size of the connection pool.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code initializationQuery}</td>
- * <td>none</td>
- * <td>
- * A custom query to be run when a connection is first created.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code logAbandonedConnections}</td>
- * <td>{@code false}</td>
- * <td>
- * If {@code true}, logs stack traces of abandoned connections.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code logValidationErrors}</td>
- * <td>{@code false}</td>
- * <td>
- * If {@code true}, logs errors when connections fail validation.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code maxConnectionAge}</td>
- * <td>none</td>
- * <td>
- * If set, connections which have been open for longer than {@code maxConnectionAge} are
- * closed when returned.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code maxWaitForConnection}</td>
- * <td>30 seconds</td>
- * <td>
- * If a request for a connection is blocked for longer than this period, an exception
- * will be thrown.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code minIdleTime}</td>
- * <td>1 minute</td>
- * <td>
- * The minimum amount of time an connection must sit idle in the pool before it is
- * eligible for eviction.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code validationQuery}</td>
- * <td>{@code SELECT 1}</td>
- * <td>
- * The SQL query that will be used to validate connections from this pool before
- * returning them to the caller or pool. If specified, this query does not have to
- * return any data, it just can't throw a SQLException.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code validationQueryTimeout}</td>
- * <td>none</td>
- * <td>
- * The timeout before a connection validation queries fail.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code checkConnectionWhileIdle}</td>
- * <td>{@code true}</td>
- * <td>
- * Set to true if query validation should take place while the connection is idle.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code checkConnectionOnBorrow}</td>
- * <td>{@code false}</td>
- * <td>
- * Whether or not connections will be validated before being borrowed from the pool. If
- * the connection fails to validate, it will be dropped from the pool, and another will
- * be borrowed.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code checkConnectionOnConnect}</td>
- * <td>{@code true}</td>
- * <td>
- * Whether or not connections will be validated before being added to the pool. If the
- * connection fails to validate, it won't be added to the pool.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code checkConnectionOnReturn}</td>
- * <td>{@code false}</td>
- * <td>
- * Whether or not connections will be validated after being returned to the pool. If
- * the connection fails to validate, it will be dropped from the pool.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code autoCommentsEnabled}</td>
- * <td>{@code true}</td>
- * <td>
- * Whether or not ORMs should automatically add comments.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code evictionInterval}</td>
- * <td>5 seconds</td>
- * <td>
- * The amount of time to sleep between runs of the idle connection validation, abandoned
- * cleaner and idle pool resizing.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code validationInterval}</td>
- * <td>30 seconds</td>
- * <td>
- * To avoid excess validation, only run validation once every interval.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code validatorClassName}</td>
- * <td>(none)</td>
- * <td>
- * Name of a class of a custom {@link org.apache.tomcat.jdbc.pool.Validator}
- * implementation, which will be used for validating connections.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code jdbcInterceptors}</td>
- * <td>(none)</td>
- * <td>
- * A semicolon separated list of classnames extending
- * {@link org.apache.tomcat.jdbc.pool.JdbcInterceptor}
- * </td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code driverClass}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>The full name of the JDBC driver class.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code url}</td>
+ *         <td><b>REQUIRED</b></td>
+ *         <td>The URL of the server.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code user}</td>
+ *         <td><b>none</b></td>
+ *         <td>The username used to connect to the server.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code password}</td>
+ *         <td>none</td>
+ *         <td>The password used to connect to the server.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code removeAbandoned}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Remove abandoned connections if they exceed the {@code removeAbandonedTimeout}.
+ *             If set to {@code true} a connection is considered abandoned and eligible for removal if it has
+ *             been in use longer than the {@code removeAbandonedTimeout} and the condition for
+ *             {@code abandonWhenPercentageFull} is met.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code removeAbandonedTimeout}</td>
+ *         <td>60 seconds</td>
+ *         <td>
+ *             The time before a database connection can be considered abandoned.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code abandonWhenPercentageFull}</td>
+ *         <td>0</td>
+ *         <td>
+ *             Connections that have been abandoned (timed out) won't get closed and reported up
+ *             unless the number of connections in use are above the percentage defined by
+ *             {@code abandonWhenPercentageFull}. The value should be between 0-100.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code alternateUsernamesAllowed}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Set to true if the call
+ *             {@link javax.sql.DataSource#getConnection(String, String) getConnection(username,password)}
+ *             is allowed. This is used for when the pool is used by an application accessing
+ *             multiple schemas. There is a performance impact turning this option on, even when not
+ *             used.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code commitOnReturn}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Set to true if you want the connection pool to commit any pending transaction when a
+ *             connection is returned.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code rollbackOnReturn}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Set to true if you want the connection pool to rollback any pending transaction when a
+ *             connection is returned.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code autoCommitByDefault}</td>
+ *         <td>JDBC driver's default</td>
+ *         <td>The default auto-commit state of the connections.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code readOnlyByDefault}</td>
+ *         <td>JDBC driver's default</td>
+ *         <td>The default read-only state of the connections.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code properties}</td>
+ *         <td>none</td>
+ *         <td>Any additional JDBC driver parameters.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code defaultCatalog}</td>
+ *         <td>none</td>
+ *         <td>The default catalog to use for the connections.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code defaultTransactionIsolation}</td>
+ *         <td>JDBC driver default</td>
+ *         <td>
+ *             The default transaction isolation to use for the connections. Can be one of
+ *             {@code none}, {@code default}, {@code read-uncommitted}, {@code read-committed},
+ *             {@code repeatable-read}, or {@code serializable}.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code useFairQueue}</td>
+ *         <td>{@code true}</td>
+ *         <td>
+ *             If {@code true}, calls to {@code getConnection} are handled in a FIFO manner.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code initialSize}</td>
+ *         <td>10</td>
+ *         <td>
+ *             The initial size of the connection pool. May be zero, which will allow you to start
+ *             the connection pool without requiring the DB to be up. In the latter case the {@link #minSize}
+ *             must also be set to zero.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code minSize}</td>
+ *         <td>10</td>
+ *         <td>
+ *             The minimum size of the connection pool.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code maxSize}</td>
+ *         <td>100</td>
+ *         <td>
+ *             The maximum size of the connection pool.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code initializationQuery}</td>
+ *         <td>none</td>
+ *         <td>
+ *             A custom query to be run when a connection is first created.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logAbandonedConnections}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             If {@code true}, logs stack traces of abandoned connections.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logValidationErrors}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             If {@code true}, logs errors when connections fail validation.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code maxConnectionAge}</td>
+ *         <td>none</td>
+ *         <td>
+ *             If set, connections which have been open for longer than {@code maxConnectionAge} are
+ *             closed when returned.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code maxWaitForConnection}</td>
+ *         <td>30 seconds</td>
+ *         <td>
+ *             If a request for a connection is blocked for longer than this period, an exception
+ *             will be thrown.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code minIdleTime}</td>
+ *         <td>1 minute</td>
+ *         <td>
+ *             The minimum amount of time an connection must sit idle in the pool before it is
+ *             eligible for eviction.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validationQuery}</td>
+ *         <td>{@code SELECT 1}</td>
+ *         <td>
+ *             The SQL query that will be used to validate connections from this pool before
+ *             returning them to the caller or pool. If specified, this query does not have to
+ *             return any data, it just can't throw a SQLException.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validationQueryTimeout}</td>
+ *         <td>none</td>
+ *         <td>
+ *             The timeout before a connection validation queries fail.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code checkConnectionWhileIdle}</td>
+ *         <td>{@code true}</td>
+ *         <td>
+ *             Set to true if query validation should take place while the connection is idle.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code checkConnectionOnBorrow}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Whether or not connections will be validated before being borrowed from the pool. If
+ *             the connection fails to validate, it will be dropped from the pool, and another will
+ *             be borrowed.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code checkConnectionOnConnect}</td>
+ *         <td>{@code true}</td>
+ *         <td>
+ *             Whether or not connections will be validated before being added to the pool. If the
+ *             connection fails to validate, it won't be added to the pool.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code checkConnectionOnReturn}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Whether or not connections will be validated after being returned to the pool. If
+ *             the connection fails to validate, it will be dropped from the pool.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code autoCommentsEnabled}</td>
+ *         <td>{@code true}</td>
+ *         <td>
+ *             Whether or not ORMs should automatically add comments.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code evictionInterval}</td>
+ *         <td>5 seconds</td>
+ *         <td>
+ *             The amount of time to sleep between runs of the idle connection validation, abandoned
+ *             cleaner and idle pool resizing.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validationInterval}</td>
+ *         <td>30 seconds</td>
+ *         <td>
+ *             To avoid excess validation, only run validation once every interval.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code validatorClassName}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             Name of a class of a custom {@link org.apache.tomcat.jdbc.pool.Validator}
+ *             implementation, which will be used for validating connections.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code jdbcInterceptors}</td>
+ *         <td>(none)</td>
+ *         <td>
+ *             A semicolon separated list of classnames extending
+ *             {@link org.apache.tomcat.jdbc.pool.JdbcInterceptor}
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code ignoreExceptionOnPreLoad}</td>
+ *         <td>{@code false}</td>
+ *         <td>
+ *             Flag whether ignore error of connection creation while initializing the pool. Set to
+ *             true if you want to ignore error of connection creation while initializing the pool.
+ *             Set to false if you want to fail the initialization of the pool by throwing exception.
+ *         </td>
+ *     </tr>
  * </table>
- *
- * @author michael
  */
 public class DataSourceFactory implements PooledDataSourceFactory {
-
     @SuppressWarnings("UnusedDeclaration")
     public enum TransactionIsolation {
         NONE(Connection.TRANSACTION_NONE),
@@ -330,8 +326,8 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         }
     }
 
-    @NotNull
-    private String driverClass = null;
+    @NotEmpty
+    private String driverClass = "";
 
     @Min(0)
     @Max(100)
@@ -343,20 +339,25 @@ public class DataSourceFactory implements PooledDataSourceFactory {
 
     private boolean rollbackOnReturn = false;
 
+    @Nullable
     private Boolean autoCommitByDefault;
 
+    @Nullable
     private Boolean readOnlyByDefault;
 
-    private String user = null;
+    @Nullable
+    private String user;
 
-    private String password = null;
+    @Nullable
+    private String password;
 
-    @NotNull
-    private String url = null;
+    @NotEmpty
+    private String url = "";
 
     @NotNull
     private Map<String, String> properties = new LinkedHashMap<>();
 
+    @Nullable
     private String defaultCatalog;
 
     @NotNull
@@ -373,27 +374,30 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     @Min(1)
     private int maxSize = 100;
 
+    @Nullable
     private String initializationQuery;
 
     private boolean logAbandonedConnections = false;
 
     private boolean logValidationErrors = false;
 
-    @MinDuration(value = 1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+    @Nullable
     private Duration maxConnectionAge;
 
     @NotNull
-    @MinDuration(value = 1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration maxWaitForConnection = Duration.seconds(30);
 
     @NotNull
-    @MinDuration(value = 1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration minIdleTime = Duration.minutes(1);
 
     @NotNull
     private String validationQuery = "/* Health Check */ SELECT 1";
 
-    @MinDuration(value = 1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
+    @Nullable
     private Duration validationQueryTimeout;
 
     private boolean checkConnectionWhileIdle = true;
@@ -407,7 +411,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     private boolean autoCommentsEnabled = true;
 
     @NotNull
-    @MinDuration(1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration evictionInterval = Duration.seconds(5);
 
     @NotNull
@@ -419,10 +423,12 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     private boolean removeAbandoned = false;
 
     @NotNull
-    @MinDuration(1)
+    @MinDuration(value = 0, unit = TimeUnit.MILLISECONDS, inclusive = false)
     private Duration removeAbandonedTimeout = Duration.seconds(60L);
 
     private Optional<String> jdbcInterceptors = Optional.empty();
+
+    private boolean ignoreExceptionOnPreLoad = false;
 
     @JsonProperty
     @Override
@@ -447,6 +453,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public String getUser() {
         return user;
     }
@@ -457,6 +464,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public String getPassword() {
         return password;
     }
@@ -502,6 +510,13 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     @JsonProperty
     public String getValidationQuery() {
         return validationQuery;
+    }
+
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String getHealthCheckValidationQuery() {
+        return getValidationQuery();
     }
 
     @JsonProperty
@@ -610,6 +625,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public Boolean getAutoCommitByDefault() {
         return autoCommitByDefault;
     }
@@ -620,6 +636,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public String getDefaultCatalog() {
         return defaultCatalog;
     }
@@ -630,6 +647,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public Boolean getReadOnlyByDefault() {
         return readOnlyByDefault;
     }
@@ -670,6 +688,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
+    @Nullable
     public String getInitializationQuery() {
         return initializationQuery;
     }
@@ -785,6 +804,13 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         this.validatorClassName = validatorClassName;
     }
 
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Optional<Duration> getHealthCheckValidationTimeout() {
+        return getValidationQueryTimeout();
+    }
+
     @JsonProperty
     public void setValidationQueryTimeout(Duration validationQueryTimeout) {
         this.validationQueryTimeout = validationQueryTimeout;
@@ -820,6 +846,16 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         this.jdbcInterceptors = jdbcInterceptors;
     }
 
+    @JsonProperty
+    public boolean isIgnoreExceptionOnPreLoad() {
+        return ignoreExceptionOnPreLoad;
+    }
+
+    @JsonProperty
+    public void setIgnoreExceptionOnPreLoad(boolean ignoreExceptionOnPreLoad) {
+        this.ignoreExceptionOnPreLoad = ignoreExceptionOnPreLoad;
+    }
+
     @Override
     public void asSingleConnectionPool() {
         minSize = 1;
@@ -846,6 +882,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         poolConfig.setDefaultTransactionIsolation(defaultTransactionIsolation.get());
         poolConfig.setDriverClassName(driverClass);
         poolConfig.setFairQueue(useFairQueue);
+        poolConfig.setIgnoreExceptionOnPreLoad(ignoreExceptionOnPreLoad);
         poolConfig.setInitialSize(initialSize);
         poolConfig.setInitSQL(initializationQuery);
         poolConfig.setLogAbandoned(logAbandonedConnections);
@@ -855,7 +892,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         poolConfig.setMinIdle(minSize);
 
         if (getMaxConnectionAge().isPresent()) {
-            poolConfig.setMaxAge(maxConnectionAge.toMilliseconds());
+            poolConfig.setMaxAge(getMaxConnectionAge().get().toMilliseconds());
         }
 
         poolConfig.setMaxWait((int) maxWaitForConnection.toMilliseconds());
@@ -865,7 +902,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         poolConfig.setUsername(user);
         poolConfig.setPassword(user != null && password == null ? "" : password);
         poolConfig.setRemoveAbandoned(removeAbandoned);
-        poolConfig.setRemoveAbandonedTimeout(Ints.saturatedCast(removeAbandonedTimeout.toSeconds()));
+        poolConfig.setRemoveAbandonedTimeout((int) removeAbandonedTimeout.toSeconds());
 
         poolConfig.setTestWhileIdle(checkConnectionWhileIdle);
         poolConfig.setValidationQuery(validationQuery);
@@ -876,7 +913,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         poolConfig.setValidationInterval(validationInterval.toMilliseconds());
 
         if (getValidationQueryTimeout().isPresent()) {
-            poolConfig.setValidationQueryTimeout((int) validationQueryTimeout.toSeconds());
+            poolConfig.setValidationQueryTimeout((int) getValidationQueryTimeout().get().toSeconds());
         }
         validatorClassName.ifPresent(poolConfig::setValidatorClassName);
         jdbcInterceptors.ifPresent(poolConfig::setJdbcInterceptors);

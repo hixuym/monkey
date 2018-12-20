@@ -25,64 +25,66 @@ import java.util.regex.Pattern;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>{@code host}</td>
- * <td>{@code localhost}</td>
- * <td>The hostname of the syslog server.</td>
- * </tr>
- * <tr>
- * <td>{@code port}</td>
- * <td>{@code 514}</td>
- * <td>The port on which the syslog server is listening.</td>
- * </tr>
- * <tr>
- * <td>{@code facility}</td>
- * <td>{@code local0}</td>
- * <td>
- * The syslog facility to use. Can be either {@code auth}, {@code authpriv},
- * {@code daemon}, {@code cron}, {@code ftp}, {@code lpr}, {@code kern}, {@code mail},
- * {@code news}, {@code syslog}, {@code user}, {@code uucp}, {@code local0},
- * {@code local1}, {@code local2}, {@code local3}, {@code local4}, {@code local5},
- * {@code local6}, or {@code local7}.
- * </td>
- * </tr>
- * <tr>
- * <td>{@code threshold}</td>
- * <td>{@code ALL}</td>
- * <td>The lowest level of events to write to the file.</td>
- * </tr>
- * <tr>
- * <td>{@code logFormat}</td>
- * <td>the default format</td>
- * <td>
- * The Logback pattern with which events will be formatted. See
- * <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
- * for details.
- * </td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code host}</td>
+ *         <td>{@code localhost}</td>
+ *         <td>The hostname of the syslog server.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code port}</td>
+ *         <td>{@code 514}</td>
+ *         <td>The port on which the syslog server is listening.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code facility}</td>
+ *         <td>{@code local0}</td>
+ *         <td>
+ *             The syslog facility to use. Can be either {@code auth}, {@code authpriv},
+ *             {@code daemon}, {@code cron}, {@code ftp}, {@code lpr}, {@code kern}, {@code mail},
+ *             {@code news}, {@code syslog}, {@code user}, {@code uucp}, {@code local0},
+ *             {@code local1}, {@code local2}, {@code local3}, {@code local4}, {@code local5},
+ *             {@code local6}, or {@code local7}.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code threshold}</td>
+ *         <td>{@code ALL}</td>
+ *         <td>The lowest level of events to write to the file.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code logFormat}</td>
+ *         <td>the default format</td>
+ *         <td>
+ *             The Logback pattern with which events will be formatted. See
+ *             <a href="http://logback.qos.ch/manual/layouts.html#conversionWord">the Logback documentation</a>
+ *             for details.
+ *         </td>
+ *     </tr>
  * </table>
  *
- * @author michael
  * @see AbstractAppenderFactory
  */
 @JsonTypeName("syslog")
 public class SyslogAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
-
     public enum Facility {
+        ALERT,
+        AUDIT,
         AUTH,
         AUTHPRIV,
         DAEMON,
+        CLOCK,
         CRON,
         FTP,
         LPR,
         KERN,
         MAIL,
         NEWS,
+        NTP,
         SYSLOG,
         USER,
         UUCP,
@@ -126,28 +128,11 @@ public class SyslogAppenderFactory extends AbstractAppenderFactory<ILoggingEvent
     @NotNull
     private String stackTracePrefix = SyslogAppender.DEFAULT_STACKTRACE_PATTERN;
 
-    // prefix the logFormat with the application name and PID (if available)
-    private String logFormat = LOG_TOKEN_NAME + LOG_TOKEN_PID + ": " +
-            SyslogAppender.DEFAULT_SUFFIX_PATTERN;
-
     private boolean includeStackTrace = true;
 
-    /**
-     * Returns the Logback pattern with which events will be formatted.
-     */
-    @Override
-    @JsonProperty
-    public String getLogFormat() {
-        return logFormat;
-    }
-
-    /**
-     * Sets the Logback pattern with which events will be formatted.
-     */
-    @Override
-    @JsonProperty
-    public void setLogFormat(String logFormat) {
-        this.logFormat = logFormat;
+    public SyslogAppenderFactory() {
+        // prefix the logFormat with the application name and PID (if available)
+        this.logFormat = LOG_TOKEN_NAME + LOG_TOKEN_PID + ": " + SyslogAppender.DEFAULT_SUFFIX_PATTERN;
     }
 
     /**
@@ -204,16 +189,16 @@ public class SyslogAppenderFactory extends AbstractAppenderFactory<ILoggingEvent
     }
 
     @Override
-    public Appender<ILoggingEvent> build(LoggerContext context, String applicationName,
-                                         LayoutFactory<ILoggingEvent> layoutFactory,
-                                         LevelFilterFactory<ILoggingEvent> levelFilterFactory,
-                                         AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory) {
+    public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, LayoutFactory<ILoggingEvent> layoutFactory,
+                                         LevelFilterFactory<ILoggingEvent> levelFilterFactory, AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory) {
         final SyslogAppender appender = new SyslogAppender();
         appender.setName("syslog-appender");
         appender.setContext(context);
-        appender.setSuffixPattern(logFormat
-                .replaceAll(LOG_TOKEN_PID, pid)
-                .replaceAll(LOG_TOKEN_NAME, Matcher.quoteReplacement(applicationName)));
+        if (logFormat != null && !logFormat.isEmpty()) {
+            appender.setSuffixPattern(logFormat
+                    .replaceAll(LOG_TOKEN_PID, pid)
+                    .replaceAll(LOG_TOKEN_NAME, Matcher.quoteReplacement(applicationName)));
+        }
         appender.setSyslogHost(host);
         appender.setPort(port);
         appender.setFacility(facility.toString().toLowerCase(Locale.ENGLISH));

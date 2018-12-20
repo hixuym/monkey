@@ -10,11 +10,7 @@ import org.hibernate.validator.HibernateValidatorConfiguration;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-/**
- * @author michael
- */
 public class BaseValidator {
-
     private BaseValidator() { /* singleton */ }
 
     /**
@@ -30,11 +26,11 @@ public class BaseValidator {
      */
     public static HibernateValidatorConfiguration newConfiguration() {
         return Validation
-                .byProvider(HibernateValidator.class)
-                .configure()
-                .addValidatedValueHandler(new GuavaOptionalValidatedValueUnwrapper())
-                .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
-                .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
-                .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());
+            .byProvider(HibernateValidator.class)
+            .configure()
+            .addValidatedValueHandler(new GuavaOptionalValidatedValueUnwrapper())
+            .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
+            .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
+            .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());
     }
 }

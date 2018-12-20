@@ -6,13 +6,11 @@ import ch.qos.logback.core.AsyncAppenderBase;
 
 /**
  * An implementation of {@link AsyncAppenderFactory} for {@link ILoggingEvent}.
- * @author michael
  */
 public class AsyncLoggingEventAppenderFactory implements AsyncAppenderFactory<ILoggingEvent> {
 
     /**
      * Creates an {@link AsyncAppenderFactory} of type {@link ILoggingEvent}
-     *
      * @return the {@link AsyncAppenderFactory}
      */
     @Override

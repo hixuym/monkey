@@ -1,13 +1,11 @@
 package io.sunflower.configuration;
 
-import org.apache.commons.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 
 /**
- * A custom {@link StrSubstitutor} using environment variables as lookup source.
- * @author michael
+ * A custom {@link StringSubstitutor} using environment variables as lookup source.
  */
-public class EnvironmentVariableSubstitutor extends StrSubstitutor {
-
+public class EnvironmentVariableSubstitutor extends StringSubstitutor {
     public EnvironmentVariableSubstitutor() {
         this(true, false);
     }
@@ -17,11 +15,11 @@ public class EnvironmentVariableSubstitutor extends StrSubstitutor {
     }
 
     /**
-     * @param strict                  {@code true} if looking up undefined environment variables should throw a {@link
-     *                                UndefinedEnvironmentVariableException}, {@code false} otherwise.
+     * @param strict                  {@code true} if looking up undefined environment variables should throw a
+     *                                {@link UndefinedEnvironmentVariableException}, {@code false} otherwise.
      * @param substitutionInVariables a flag whether substitution is done in variable names.
-     * @see EnvironmentVariableLookup#EnvironmentVariableLookup(boolean)
-     * @see StrSubstitutor#setEnableSubstitutionInVariables(boolean)
+     * @see io.sunflower.configuration.EnvironmentVariableLookup#EnvironmentVariableLookup(boolean)
+     * @see StringSubstitutor#setEnableSubstitutionInVariables(boolean)
      */
     public EnvironmentVariableSubstitutor(boolean strict, boolean substitutionInVariables) {
         super(new EnvironmentVariableLookup(strict));

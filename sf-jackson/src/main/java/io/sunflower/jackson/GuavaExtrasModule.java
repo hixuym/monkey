@@ -3,20 +3,24 @@ package io.sunflower.jackson;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.common.cache.CacheBuilderSpec;
 
 import java.io.IOException;
 
-/**
- * @author michael
- */
 public class GuavaExtrasModule extends Module {
-
     private static class CacheBuilderSpecDeserializer extends JsonDeserializer<CacheBuilderSpec> {
-
         @Override
         public CacheBuilderSpec deserialize(JsonParser jp,
                                             DeserializationContext ctxt) throws IOException {
@@ -29,16 +33,13 @@ public class GuavaExtrasModule extends Module {
     }
 
     private static class CacheBuilderSpecSerializer extends JsonSerializer<CacheBuilderSpec> {
-
         @Override
-        public void serialize(CacheBuilderSpec value, JsonGenerator gen, SerializerProvider serializers)
-                throws IOException {
+        public void serialize(CacheBuilderSpec value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             gen.writeString(value.toParsableString());
         }
     }
 
     private static class GuavaExtrasDeserializers extends Deserializers.Base {
-
         @Override
         public JsonDeserializer<?> findBeanDeserializer(JavaType type,
                                                         DeserializationConfig config,
@@ -52,10 +53,8 @@ public class GuavaExtrasModule extends Module {
     }
 
     private static class GuavaExtrasSerializers extends Serializers.Base {
-
         @Override
-        public JsonSerializer<?> findSerializer(SerializationConfig config, JavaType type,
-                                                BeanDescription beanDesc) {
+        public JsonSerializer<?> findSerializer(SerializationConfig config, JavaType type, BeanDescription beanDesc) {
             if (CacheBuilderSpec.class.isAssignableFrom(type.getRawClass())) {
                 return new CacheBuilderSpecSerializer();
             }

@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OptionalLongValidatedValueUnwrapperTest {
 
     public static class Example {
-
         @Min(3)
         @UnwrapValidatedValue
         public OptionalLong three = OptionalLong.empty();
@@ -28,11 +27,11 @@ public class OptionalLongValidatedValueUnwrapperTest {
     }
 
     private final Validator validator = Validation
-            .byProvider(HibernateValidator.class)
-            .configure()
-            .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper())
-            .buildValidatorFactory()
-            .getValidator();
+        .byProvider(HibernateValidator.class)
+        .configure()
+        .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper())
+        .buildValidatorFactory()
+        .getValidator();
 
     @Test
     public void succeedsWhenAbsent() {

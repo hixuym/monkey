@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.db;
 
 import com.codahale.metrics.Gauge;
@@ -28,10 +13,8 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 /**
  * A {@link ManagedDataSource} which is backed by a Tomcat pooled {@link javax.sql.DataSource}.
- * @author michael
  */
 public class ManagedPooledDataSource extends DataSourceProxy implements ManagedDataSource {
-
     private final MetricRegistry metricRegistry;
 
     /**
@@ -53,16 +36,37 @@ public class ManagedPooledDataSource extends DataSourceProxy implements ManagedD
     public void start() throws Exception {
         final ConnectionPool connectionPool = createPool();
         metricRegistry.register(name(getClass(), connectionPool.getName(), "active"),
-                (Gauge<Integer>) connectionPool::getActive);
+            (Gauge<Integer>) connectionPool::getActive);
 
         metricRegistry.register(name(getClass(), connectionPool.getName(), "idle"),
-                (Gauge<Integer>) connectionPool::getIdle);
+            (Gauge<Integer>) connectionPool::getIdle);
 
         metricRegistry.register(name(getClass(), connectionPool.getName(), "waiting"),
-                (Gauge<Integer>) connectionPool::getWaitCount);
+            (Gauge<Integer>) connectionPool::getWaitCount);
 
         metricRegistry.register(name(getClass(), connectionPool.getName(), "size"),
-                (Gauge<Integer>) connectionPool::getSize);
+            (Gauge<Integer>) connectionPool::getSize);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "created"),
+            (Gauge<Long>) connectionPool::getCreatedCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "borrowed"),
+            (Gauge<Long>) connectionPool::getBorrowedCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "reconnected"),
+            (Gauge<Long>) connectionPool::getReconnectedCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "released"),
+            (Gauge<Long>) connectionPool::getReleasedCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "releasedIdle"),
+            (Gauge<Long>) connectionPool::getReleasedIdleCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "returned"),
+            (Gauge<Long>) connectionPool::getReturnedCount);
+
+        metricRegistry.register(name(getClass(), connectionPool.getName(), "removeAbandoned"),
+            (Gauge<Long>) connectionPool::getRemoveAbandonedCount);
     }
 
     @Override

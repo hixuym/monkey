@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.metrics.graphite;
 
 import com.codahale.metrics.MetricRegistry;
@@ -22,7 +7,6 @@ import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.graphite.GraphiteUDP;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.metrics.BaseReporterFactory;
 import io.sunflower.validation.OneOf;
 import io.sunflower.validation.PortRange;
@@ -35,38 +19,36 @@ import javax.validation.constraints.NotNull;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>host</td>
- * <td>localhost</td>
- * <td>The hostname of the Graphite server to report to.</td>
- * </tr>
- * <tr>
- * <td>port</td>
- * <td>2003</td>
- * <td>The port of the Graphite server to report to.</td>
- * </tr>
- * <tr>
- * <td>prefix</td>
- * <td><i>None</i></td>
- * <td>The prefix for Metric key names to report to Graphite.</td>
- * </tr>
- * <tr>
- * <td>transport</td>
- * <td><i>tcp</i></td>
- * <td>The transport used to report to Graphite. One of {@code tcp} or
- * {@code udp}.</td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>host</td>
+ *         <td>localhost</td>
+ *         <td>The hostname of the Graphite server to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>port</td>
+ *         <td>2003</td>
+ *         <td>The port of the Graphite server to report to.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>prefix</td>
+ *         <td><i>None</i></td>
+ *         <td>The prefix for Metric key names to report to Graphite.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>transport</td>
+ *         <td><i>tcp</i></td>
+ *         <td>The transport used to report to Graphite. One of {@code tcp} or
+ *         {@code udp}.</td>
+ *     </tr>
  * </table>
- * @author michael
  */
 @JsonTypeName("graphite")
 public class GraphiteReporterFactory extends BaseReporterFactory {
-
     @NotEmpty
     private String host = "localhost";
 
@@ -131,7 +113,6 @@ public class GraphiteReporterFactory extends BaseReporterFactory {
         }
     }
 
-    @VisibleForTesting
     protected GraphiteReporter.Builder builder(MetricRegistry registry) {
         return GraphiteReporter.forRegistry(registry)
                 .convertDurationsTo(getDurationUnit())

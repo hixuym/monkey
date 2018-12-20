@@ -1,22 +1,5 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
 import liquibase.Liquibase;
@@ -28,24 +11,20 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * @author michael
- */
 public class DbFastForwardCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream printStream = System.out;
 
-    protected DbFastForwardCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
-                                   String migrationsFileName) {
+    protected DbFastForwardCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass, String migrationsFileName) {
         super("fast-forward",
-                "Mark the next pending change set as applied without running it",
-                strategy,
-                configurationClass,
-                migrationsFileName);
+              "Mark the next pending change set as applied without running it",
+              strategy,
+              configurationClass,
+              migrationsFileName);
     }
 
-    @VisibleForTesting
     void setPrintStream(PrintStream printStream) {
         this.printStream = printStream;
     }
@@ -55,21 +34,21 @@ public class DbFastForwardCommand<T extends Configuration> extends AbstractLiqui
         super.configure(subparser);
 
         subparser.addArgument("-n", "--dry-run")
-                .action(Arguments.storeTrue())
-                .dest("dry-run")
-                .setDefault(Boolean.FALSE)
-                .help("output the DDL to stdout, don't run it");
+                 .action(Arguments.storeTrue())
+                 .dest("dry-run")
+                 .setDefault(Boolean.FALSE)
+                 .help("output the DDL to stdout, don't run it");
 
         subparser.addArgument("-a", "--all")
-                .action(Arguments.storeTrue())
-                .dest("all")
-                .setDefault(Boolean.FALSE)
-                .help("mark all pending change sets as applied");
+                 .action(Arguments.storeTrue())
+                 .dest("all")
+                 .setDefault(Boolean.FALSE)
+                 .help("mark all pending change sets as applied");
 
         subparser.addArgument("-i", "--include")
-                .action(Arguments.append())
-                .dest("contexts")
-                .help("include change sets from the given context");
+                 .action(Arguments.append())
+                 .dest("contexts")
+                 .help("include change sets from the given context");
     }
 
     @Override
@@ -78,15 +57,13 @@ public class DbFastForwardCommand<T extends Configuration> extends AbstractLiqui
         final String context = getContext(namespace);
         if (namespace.getBoolean("all")) {
             if (namespace.getBoolean("dry-run")) {
-                liquibase
-                        .changeLogSync(context, new OutputStreamWriter(printStream, StandardCharsets.UTF_8));
+                liquibase.changeLogSync(context, new OutputStreamWriter(printStream, StandardCharsets.UTF_8));
             } else {
                 liquibase.changeLogSync(context);
             }
         } else {
             if (namespace.getBoolean("dry-run")) {
-                liquibase.markNextChangeSetRan(context,
-                        new OutputStreamWriter(printStream, StandardCharsets.UTF_8));
+                liquibase.markNextChangeSetRan(context, new OutputStreamWriter(printStream, StandardCharsets.UTF_8));
             } else {
                 liquibase.markNextChangeSetRan(context);
             }
@@ -98,6 +75,8 @@ public class DbFastForwardCommand<T extends Configuration> extends AbstractLiqui
         if (contexts == null) {
             return "";
         }
-        return Joiner.on(',').join(contexts);
+        return contexts.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
     }
 }

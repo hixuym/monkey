@@ -1,2 +1,2 @@
 driverClass: org.postgresql.Driver
-url: jdbc:postgresql://db.quickstarters.com/db-prod?user=scott&password=tiger
+url: jdbc:postgresql://db.example.com/db-prod?user=scott&password=tiger

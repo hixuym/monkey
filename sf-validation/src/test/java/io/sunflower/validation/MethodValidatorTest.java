@@ -1,18 +1,16 @@
 package io.sunflower.validation;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings({"FieldMayBeFinal", "MethodMayBeStatic", "UnusedDeclaration"})
 public class MethodValidatorTest {
-
     public static class SubExample {
-
         @ValidationMethod(message = "also needs something special")
         public boolean isOK() {
             return false;
@@ -20,7 +18,6 @@ public class MethodValidatorTest {
     }
 
     public static class Example {
-
         @Valid
         private SubExample subExample = new SubExample();
 
@@ -39,11 +36,11 @@ public class MethodValidatorTest {
 
     @Test
     public void complainsAboutMethodsWhichReturnFalse() throws Exception {
-        final ImmutableList<String> errors =
+        final Collection<String> errors =
                 ConstraintViolations.format(validator.validate(new Example()));
 
         assertThat(errors)
                 .containsOnly("must have a false thing",
-                        "also needs something special");
+                              "also needs something special");
     }
 }

@@ -42,6 +42,10 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.sunflower</groupId>
             <artifactId>sf-logging</artifactId>
             <scope>test</scope>

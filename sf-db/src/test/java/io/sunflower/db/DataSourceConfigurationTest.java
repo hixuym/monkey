@@ -1,24 +1,9 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.db;
 
-import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.util.Duration;
+import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Test;
 
@@ -35,7 +20,7 @@ public class DataSourceConfigurationTest {
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(ds.getUser()).isEqualTo("pg-user");
-        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
+        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
         assertThat(ds.getPassword()).isEqualTo("iAMs00perSecrEET");
         assertThat(ds.getProperties()).containsEntry("charSet", "UTF-8");
         assertThat(ds.getMaxWaitForConnection()).isEqualTo(Duration.seconds(1));
@@ -60,8 +45,7 @@ public class DataSourceConfigurationTest {
         assertThat(ds.getDefaultTransactionIsolation())
                 .isEqualTo(DataSourceFactory.TransactionIsolation.READ_COMMITTED);
         assertThat(ds.getUseFairQueue()).isFalse();
-        assertThat(ds.getInitializationQuery())
-                .isEqualTo("insert into connections_log(ts) values (now())");
+        assertThat(ds.getInitializationQuery()).isEqualTo("insert into connections_log(ts) values (now())");
         assertThat(ds.getLogAbandonedConnections()).isEqualTo(true);
         assertThat(ds.getLogValidationErrors()).isEqualTo(true);
         assertThat(ds.getMaxConnectionAge()).isEqualTo(Optional.of(Duration.hours(1)));
@@ -69,9 +53,9 @@ public class DataSourceConfigurationTest {
         assertThat(ds.getCheckConnectionOnConnect()).isEqualTo(false);
         assertThat(ds.getCheckConnectionOnReturn()).isEqualTo(true);
         assertThat(ds.getValidationQueryTimeout()).isEqualTo(Optional.of(Duration.seconds(3)));
-        assertThat(ds.getValidatorClassName()).isEqualTo(Optional.of("CustomConnectionValidator"));
-        assertThat(ds.getJdbcInterceptors())
-                .isEqualTo(Optional.of("StatementFinalizer;SlowQueryReport"));
+        assertThat(ds.getValidatorClassName()).isEqualTo(Optional.of("io.dropwizard.db.CustomConnectionValidator"));
+        assertThat(ds.getJdbcInterceptors()).isEqualTo(Optional.of("StatementFinalizer;SlowQueryReport"));
+        assertThat(ds.isIgnoreExceptionOnPreLoad()).isTrue();
     }
 
     @Test
@@ -80,7 +64,7 @@ public class DataSourceConfigurationTest {
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
         assertThat(ds.getUser()).isEqualTo("pg-user");
-        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod");
+        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod");
         assertThat(ds.getPassword()).isEqualTo("iAMs00perSecrEET");
         assertThat(ds.getProperties()).isEmpty();
         assertThat(ds.getMaxWaitForConnection()).isEqualTo(Duration.seconds(30));
@@ -113,6 +97,7 @@ public class DataSourceConfigurationTest {
         assertThat(ds.getCheckConnectionOnConnect()).isEqualTo(true);
         assertThat(ds.getCheckConnectionOnReturn()).isEqualTo(false);
         assertThat(ds.getValidationQueryTimeout()).isEqualTo(Optional.empty());
+        assertThat(ds.isIgnoreExceptionOnPreLoad()).isFalse();
     }
 
     @Test
@@ -120,12 +105,10 @@ public class DataSourceConfigurationTest {
         DataSourceFactory ds = getDataSourceFactory("yaml/inline_user_pass_db_pool.yml");
 
         assertThat(ds.getDriverClass()).isEqualTo("org.postgresql.Driver");
-        assertThat(ds.getUrl())
-                .isEqualTo("jdbc:postgresql://db.quickstarters.com/db-prod?user=scott&password=tiger");
+        assertThat(ds.getUrl()).isEqualTo("jdbc:postgresql://db.example.com/db-prod?user=scott&password=tiger");
         assertThat(ds.getUser()).isNull();
         assertThat(ds.getPassword()).isNull();
     }
-
     @Test
     public void testInitialSizeZeroIsAllowed() throws Exception {
         DataSourceFactory ds = getDataSourceFactory("yaml/empty_initial_pool.yml");
@@ -134,7 +117,7 @@ public class DataSourceConfigurationTest {
 
     private DataSourceFactory getDataSourceFactory(String resourceName) throws Exception {
         return new YamlConfigurationFactory<>(DataSourceFactory.class,
-                BaseValidator.newValidator(), Jackson.newObjectMapper(), "sf")
+                BaseValidator.newValidator(), Jackson.newObjectMapper(), "dw")
                 .build(new File(Resources.getResource(resourceName).toURI()));
     }
 }

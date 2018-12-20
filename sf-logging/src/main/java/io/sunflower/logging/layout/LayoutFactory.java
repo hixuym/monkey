@@ -8,16 +8,13 @@ import java.util.TimeZone;
 
 /**
  * An interface for building Logback {@link PatternLayoutBase} layouts
- *
- * @author michael
  * @param <E> The type of log event
  */
 public interface LayoutFactory<E extends DeferredProcessingAware> {
 
     /**
      * Creates a {@link PatternLayoutBase} of type E
-     *
-     * @param context  the Logback context
+     * @param context the Logback context
      * @param timeZone the TimeZone
      * @return a new {@link PatternLayoutBase}
      */

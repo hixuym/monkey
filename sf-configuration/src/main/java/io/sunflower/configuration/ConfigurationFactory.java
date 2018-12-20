@@ -3,9 +3,6 @@ package io.sunflower.configuration;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author michael
- */
 public interface ConfigurationFactory<T> {
 
     /**
@@ -17,8 +14,7 @@ public interface ConfigurationFactory<T> {
      * @throws IOException            if there is an error reading the file
      * @throws ConfigurationException if there is an error parsing or validating the file
      */
-    T build(ConfigurationSourceProvider provider, String path)
-            throws IOException, ConfigurationException;
+    T build(ConfigurationSourceProvider provider, String path) throws IOException, ConfigurationException;
 
     /**
      * Loads, parses, binds, and validates a configuration object from a file.

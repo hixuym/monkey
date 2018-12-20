@@ -13,7 +13,10 @@ import io.sunflower.logging.layout.SunflowerLayoutFactory;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class SyslogAppenderFactoryTest {
 
@@ -42,8 +45,7 @@ public class SyslogAppenderFactoryTest {
     @Test
     public void patternIncludesAppNameAndPid() throws Exception {
         final AsyncAppender wrapper = (AsyncAppender) new SyslogAppenderFactory()
-                .build(new LoggerContext(), "MyApplication", new SunflowerLayoutFactory(),
-                        new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+                .build(new LoggerContext(), "MyApplication", new SunflowerLayoutFactory(), new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
         assertThat(((SyslogAppender) wrapper.getAppender("syslog-appender")).getSuffixPattern())
                 .matches("^MyApplication\\[\\d+\\].+");
     }
@@ -53,8 +55,7 @@ public class SyslogAppenderFactoryTest {
         final SyslogAppenderFactory syslogAppenderFactory = new SyslogAppenderFactory();
         syslogAppenderFactory.setStackTracePrefix("--->");
         final AsyncAppender wrapper = (AsyncAppender) syslogAppenderFactory
-                .build(new LoggerContext(), "MyApplication", new SunflowerLayoutFactory(),
-                        new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+                .build(new LoggerContext(), "MyApplication", new SunflowerLayoutFactory(), new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
         assertThat(((SyslogAppender) wrapper.getAppender("syslog-appender"))
                 .getStackTracePattern()).isEqualTo("--->");
     }
@@ -63,9 +64,8 @@ public class SyslogAppenderFactoryTest {
     public void appenderContextIsSet() throws Exception {
         final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         final SyslogAppenderFactory appenderFactory = new SyslogAppenderFactory();
-        final Appender<ILoggingEvent> appender = appenderFactory
-                .build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
-                        new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+        final Appender<ILoggingEvent> appender = appenderFactory.build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
+            new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
 
         assertThat(appender.getContext()).isEqualTo(root.getLoggerContext());
     }
@@ -74,10 +74,18 @@ public class SyslogAppenderFactoryTest {
     public void appenderNameIsSet() throws Exception {
         final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         final SyslogAppenderFactory appenderFactory = new SyslogAppenderFactory();
-        final Appender<ILoggingEvent> appender = appenderFactory
-                .build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
-                        new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+        final Appender<ILoggingEvent> appender = appenderFactory.build(root.getLoggerContext(), "test", new SunflowerLayoutFactory(),
+            new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
 
         assertThat(appender.getName()).isEqualTo("async-syslog-appender");
+    }
+
+    @Test
+    public void syslogFacilityTest() {
+        for (SyslogAppenderFactory.Facility facility : SyslogAppenderFactory.Facility.values()) {
+            assertThatCode(() ->
+                    SyslogAppender.facilityStringToint(facility.toString().toLowerCase(Locale.ENGLISH)))
+                .doesNotThrowAnyException();
+        }
     }
 }

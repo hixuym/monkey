@@ -7,10 +7,8 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DiscoverableSubtypeResolverTest {
-
     private final ObjectMapper mapper = new ObjectMapper();
-    private final DiscoverableSubtypeResolver resolver = new DiscoverableSubtypeResolver(
-            ExampleTag.class);
+    private final DiscoverableSubtypeResolver resolver = new DiscoverableSubtypeResolver(ExampleTag.class);
 
     @Before
     public void setUp() throws Exception {

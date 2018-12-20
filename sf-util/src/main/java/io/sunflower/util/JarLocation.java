@@ -7,10 +7,8 @@ import java.util.Optional;
 /**
  * A class which encapsulates the location on the local filesystem of the JAR in which the current
  * code is executing.
- * @author michael
  */
 public class JarLocation {
-
     private final Class<?> klass;
 
     public JarLocation(Class<?> klass) {
@@ -19,7 +17,7 @@ public class JarLocation {
 
     public Optional<String> getVersion() {
         return Optional.ofNullable(klass.getPackage())
-                .map(Package::getImplementationVersion);
+            .map(Package::getImplementationVersion);
     }
 
     @Override

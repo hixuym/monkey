@@ -12,7 +12,6 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParanamerModuleTest {
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Before
@@ -33,7 +32,7 @@ public class ParanamerModuleTest {
         final ObjectWriter reader = mapper.writerFor(Person.class);
         final String person = reader.writeValueAsString(new Person("Foo", "Bar"));
         assertThat(person)
-                .contains("\"name\":\"Foo\"")
-                .contains("\"surname\":\"Bar\"");
+            .contains("\"name\":\"Foo\"")
+            .contains("\"surname\":\"Bar\"");
     }
 }

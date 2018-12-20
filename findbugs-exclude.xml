@@ -2,14 +2,14 @@
 <FindBugsFilter>
     <!-- we're *supposed* to manually GC there -->
     <Match>
-        <Class name="io.dropwizard.servlets.tasks.GarbageCollectionTask"/>
+        <Class name="io.sunflower.servlets.tasks.GarbageCollectionTask"/>
         <Method name="execute"/>
         <Bug pattern="DM_GC"/>
     </Match>
 
     <!-- kind of hard to use exit codes without System.exit -->
     <Match>
-        <Class name="io.dropwizard.Application"/>
+        <Class name="io.sunflower.Application"/>
         <Method name="onFatalError"/>
         <Bug pattern="DM_EXIT"/>
     </Match>
@@ -17,17 +17,17 @@
     <!-- serialization is boring -->
     <Match>
         <Bug code="Se"/>
-        <Class name="io.dropwizard.servlets.tasks.TaskServlet"/>
+        <Class name="io.sunflower.servlets.tasks.TaskServlet"/>
     </Match>
     <Match>
         <Bug code="Se"/>
-        <Class name="io.dropwizard.servlets.assets.AssetServlet"/>
+        <Class name="io.sunflower.servlets.assets.AssetServlet"/>
     </Match>
 
     <!-- pretty sure this is a bug in FindBugs -->
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"/>
-        <Class name="io.dropwizard.configuration.ConfigurationFactory"/>
+        <Class name="io.sunflower.configuration.ConfigurationFactory"/>
     </Match>
 
     <!-- exclude the generated code by JMH from the analysis -->

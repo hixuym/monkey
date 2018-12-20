@@ -12,24 +12,22 @@ import java.util.Locale;
  * <p/>
  * <b>Configuration Parameters:</b>
  * <table>
- * <tr>
- * <td>Name</td>
- * <td>Default</td>
- * <td>Description</td>
- * </tr>
- * <tr>
- * <td>locale</td>
- * <td>System default {@link Locale}.</td>
- * <td>The {@link Locale} for formatting numbers, dates and times.</td>
- * </tr>
- * <tr>
- * <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
- * </tr>
+ *     <tr>
+ *         <td>Name</td>
+ *         <td>Default</td>
+ *         <td>Description</td>
+ *     </tr>
+ *     <tr>
+ *         <td>locale</td>
+ *         <td>System default {@link Locale}.</td>
+ *         <td>The {@link Locale} for formatting numbers, dates and times.</td>
+ *     </tr>
+ *     <tr>
+ *         <td colspan="3">See {@link BaseReporterFactory} for more options.</td>
+ *     </tr>
  * </table>
- * @author michael
  */
 public abstract class BaseFormattedReporterFactory extends BaseReporterFactory {
-
     @NotNull
     private Locale locale = Locale.getDefault();
 

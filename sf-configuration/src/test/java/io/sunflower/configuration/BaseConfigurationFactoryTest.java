@@ -1,11 +1,10 @@
 package io.sunflower.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.cache.CacheBuilderSpec;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Resources;
+import com.github.benmanes.caffeine.cache.CaffeineSpec;
 import io.sunflower.jackson.Jackson;
+import io.sunflower.util.Maps;
+import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.assertj.core.data.MapEntry;
 import org.junit.After;
@@ -17,10 +16,19 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public abstract class BaseConfigurationFactoryTest {
 
@@ -49,23 +57,23 @@ public abstract class BaseConfigurationFactoryTest {
 
         @NotNull
         @Pattern(regexp = "[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?")
-        private String name;
+        private String name = "";
 
         @JsonProperty
         private int age = 1;
 
-        List<String> type;
+        List<String> type = Collections.emptyList();
 
         @JsonProperty
-        private Map<String, String> properties = new LinkedHashMap<>();
+        private Map<String, String> properties = Collections.emptyMap();
 
         @JsonProperty
-        private List<ExampleServer> servers = new ArrayList<>();
+        private List<ExampleServer> servers = Collections.emptyList();
 
         private boolean admin;
 
         @JsonProperty("my.logger")
-        private Map<String, String> logger = new LinkedHashMap<>();
+        private Map<String, String> logger = Collections.emptyMap();
 
         public String getName() {
             return name;
@@ -104,18 +112,18 @@ public abstract class BaseConfigurationFactoryTest {
         String name = "Coda Hale";
 
         @JsonProperty
-        List<String> type = ImmutableList.of("coder", "wizard");
+        List<String> type = Arrays.asList("coder", "wizard");
 
         @JsonProperty
-        Map<String, String> properties = ImmutableMap.of("debug", "true", "settings.enabled", "false");
+        Map<String, String> properties = Maps.of("debug", "true", "settings.enabled", "false");
 
         @JsonProperty
-        List<ExampleServer> servers = ImmutableList.of(
+        List<ExampleServer> servers = Arrays.asList(
                 ExampleServer.create(8080), ExampleServer.create(8081), ExampleServer.create(8082));
 
         @JsonProperty
         @Valid
-        CacheBuilderSpec cacheBuilderSpec = CacheBuilderSpec.disableCaching();
+        CaffeineSpec cacheBuilderSpec = CaffeineSpec.parse("initialCapacity=0,maximumSize=0");
     }
 
     static class NonInsatiableExample {
@@ -129,14 +137,24 @@ public abstract class BaseConfigurationFactoryTest {
     }
 
     protected final Validator validator = BaseValidator.newValidator();
-    protected ConfigurationFactory<Example> factory;
-    protected File malformedFile;
-    protected File emptyFile;
-    protected File invalidFile;
-    protected File validFile;
-    protected File typoFile;
-    protected File wrongTypeFile;
-    protected File malformedAdvancedFile;
+    protected ConfigurationFactory<Example> factory = new ConfigurationFactory<Example>() {
+        @Override
+        public Example build(ConfigurationSourceProvider provider, String path) throws IOException, ConfigurationException {
+            return new Example();
+        }
+
+        @Override
+        public Example build() throws IOException, ConfigurationException {
+            return new Example();
+        }
+    };
+    protected File malformedFile = new File("/");
+    protected File emptyFile = new File("/");
+    protected File invalidFile = new File("/");
+    protected File validFile = new File("/");
+    protected File typoFile = new File("/");
+    protected File wrongTypeFile = new File("/");
+    protected File malformedAdvancedFile = new File("/");
 
     protected static File resourceFileName(String resourceName) throws URISyntaxException {
         return new File(Resources.getResource(resourceName).toURI());
@@ -144,9 +162,9 @@ public abstract class BaseConfigurationFactoryTest {
 
     @After
     public void resetConfigOverrides() {
-        for (Enumeration<?> props = System.getProperties().propertyNames(); props.hasMoreElements(); ) {
+        for (Enumeration<?> props = System.getProperties().propertyNames(); props.hasMoreElements();) {
             String keyString = (String) props.nextElement();
-            if (keyString.startsWith("sf.")) {
+            if (keyString.startsWith("dw.")) {
                 System.clearProperty(keyString);
             }
         }
@@ -158,13 +176,12 @@ public abstract class BaseConfigurationFactoryTest {
     @Test
     public void usesDefaultedCacheBuilderSpec() throws Exception {
         final ExampleWithDefaults example =
-                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
-                        Jackson.newObjectMapper(), "sf")
-                        .build();
+            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
+                .build();
         assertThat(example.cacheBuilderSpec)
-                .isNotNull();
+            .isNotNull();
         assertThat(example.cacheBuilderSpec)
-                .isEqualTo(CacheBuilderSpec.disableCaching());
+            .isEqualTo(CaffeineSpec.parse("initialCapacity=0,maximumSize=0"));
     }
 
     @Test
@@ -192,31 +209,31 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesSimpleOverride() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
+        System.setProperty("dw.name", "Coda Hale Overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getName())
-                .isEqualTo("Coda Hale Overridden");
+            .isEqualTo("Coda Hale Overridden");
     }
 
     @Test
     public void handlesExistingOverrideWithPeriod() throws Exception {
-        System.setProperty("sf.my\\.logger.level", "debug");
+        System.setProperty("dw.my\\.logger.level", "debug");
         final Example example = factory.build(validFile);
         assertThat(example.getLogger().get("level"))
-                .isEqualTo("debug");
+            .isEqualTo("debug");
     }
 
     @Test
     public void handlesNewOverrideWithPeriod() throws Exception {
-        System.setProperty("sf.my\\.logger.com\\.quickstarters", "error");
+        System.setProperty("dw.my\\.logger.com\\.example", "error");
         final Example example = factory.build(validFile);
-        assertThat(example.getLogger().get("com.quickstarters"))
-                .isEqualTo("error");
+        assertThat(example.getLogger().get("com.example"))
+            .isEqualTo("error");
     }
 
     @Test
     public void handlesArrayOverride() throws Exception {
-        System.setProperty("sf.type", "coder,wizard,overridden");
+        System.setProperty("dw.type", "coder,wizard,overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(2))
                 .isEqualTo("overridden");
@@ -226,7 +243,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesArrayOverrideEscaped() throws Exception {
-        System.setProperty("sf.type", "coder,wizard,overr\\,idden");
+        System.setProperty("dw.type", "coder,wizard,overr\\,idden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(2))
                 .isEqualTo("overr,idden");
@@ -236,7 +253,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesSingleElementArrayOverride() throws Exception {
-        System.setProperty("sf.type", "overridden");
+        System.setProperty("dw.type", "overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(0))
                 .isEqualTo("overridden");
@@ -246,7 +263,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayWithIndices() throws Exception {
-        System.setProperty("sf.type[1]", "overridden");
+        System.setProperty("dw.type[1]", "overridden");
         final Example example = factory.build(validFile);
 
         assertThat(example.getType().get(0))
@@ -257,7 +274,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayWithIndicesReverse() throws Exception {
-        System.setProperty("sf.type[0]", "overridden");
+        System.setProperty("dw.type[0]", "overridden");
         final Example example = factory.build(validFile);
 
         assertThat(example.getType().get(0))
@@ -268,8 +285,8 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayPropertiesWithIndices() throws Exception {
-        System.setProperty("sf.servers[0].port", "7000");
-        System.setProperty("sf.servers[2].port", "9000");
+        System.setProperty("dw.servers[0].port", "7000");
+        System.setProperty("dw.servers[2].port", "9000");
         final Example example = factory.build(validFile);
 
         assertThat(example.getServers())
@@ -282,7 +299,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overrideMapProperty() throws Exception {
-        System.setProperty("sf.properties.settings.enabled", "true");
+        System.setProperty("dw.properties.settings.enabled", "true");
         final Example example = factory.build(validFile);
         assertThat(example.getProperties())
                 .contains(MapEntry.entry("debug", "true"),
@@ -291,7 +308,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionOnUnexpectedArrayOverride() throws Exception {
-        System.setProperty("sf.servers.port", "9000");
+        System.setProperty("dw.servers.port", "9000");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -301,17 +318,16 @@ public abstract class BaseConfigurationFactoryTest {
         }
     }
 
-    @Test(expected = ConfigurationParsingException.class)
+    @Test
     public void throwsAnExceptionOnArrayOverrideWithInvalidType() throws Exception {
-        System.setProperty("sf.servers", "one,two");
+        System.setProperty("dw.servers", "one,two");
 
-        factory.build(validFile);
-        failBecauseExceptionWasNotThrown(ConfigurationParsingException.class);
+        assertThatExceptionOfType(ConfigurationParsingException.class).isThrownBy(() -> factory.build(validFile));
     }
 
     @Test
     public void throwsAnExceptionOnOverrideArrayIndexOutOfBounds() throws Exception {
-        System.setProperty("sf.type[2]", "invalid");
+        System.setProperty("dw.type[2]", "invalid");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
@@ -323,7 +339,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionOnOverrideArrayPropertyIndexOutOfBounds() throws Exception {
-        System.setProperty("sf.servers[4].port", "9000");
+        System.setProperty("dw.servers[4].port", "9000");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
@@ -361,22 +377,21 @@ public abstract class BaseConfigurationFactoryTest {
                         .endsWith(String.format(
                                 "%s has an error:%n" +
                                         "  * name must match \"[\\w]+[\\s]+[\\w]+([\\s][\\w]+)?\"%n",
-                                invalidFile.getName()));
+                                        invalidFile.getName()));
             }
         }
     }
 
     @Test
     public void handleOverrideDefaultConfiguration() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
-        System.setProperty("sf.type", "coder,wizard,overridden");
-        System.setProperty("sf.properties.settings.enabled", "true");
-        System.setProperty("sf.servers[0].port", "8090");
-        System.setProperty("sf.servers[2].port", "8092");
+        System.setProperty("dw.name", "Coda Hale Overridden");
+        System.setProperty("dw.type", "coder,wizard,overridden");
+        System.setProperty("dw.properties.settings.enabled", "true");
+        System.setProperty("dw.servers[0].port", "8090");
+        System.setProperty("dw.servers[2].port", "8092");
 
         final ExampleWithDefaults example =
-                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
-                        Jackson.newObjectMapper(), "sf")
+                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
                         .build();
 
         assertThat(example.name).isEqualTo("Coda Hale Overridden");
@@ -390,14 +405,12 @@ public abstract class BaseConfigurationFactoryTest {
     @Test
     public void handleDefaultConfigurationWithoutOverriding() throws Exception {
         final ExampleWithDefaults example =
-                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator,
-                        Jackson.newObjectMapper(), "sf")
+                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
                         .build();
 
         assertThat(example.name).isEqualTo("Coda Hale");
-        assertThat(example.type).isEqualTo(ImmutableList.of("coder", "wizard"));
-        assertThat(example.properties)
-                .isEqualTo(ImmutableMap.of("debug", "true", "settings.enabled", "false"));
+        assertThat(example.type).isEqualTo(Arrays.asList("coder", "wizard"));
+        assertThat(example.properties).isEqualTo(Maps.of("debug", "true", "settings.enabled", "false"));
         assertThat(example.servers.get(0).getPort()).isEqualTo(8080);
         assertThat(example.servers.get(1).getPort()).isEqualTo(8081);
         assertThat(example.servers.get(2).getPort()).isEqualTo(8082);
@@ -405,38 +418,21 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionIfDefaultConfigurationCantBeInstantiated() throws Exception {
-        System.setProperty("sf.name", "Coda Hale Overridden");
+        System.setProperty("dw.name", "Coda Hale Overridden");
         final YamlConfigurationFactory<NonInsatiableExample> factory =
-                new YamlConfigurationFactory<>(NonInsatiableExample.class, validator,
-                        Jackson.newObjectMapper(), "sf");
+            new YamlConfigurationFactory<>(NonInsatiableExample.class, validator, Jackson.newObjectMapper(), "dw");
         assertThatThrownBy(factory::build)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Unable create an instance of the configuration class: " +
-                        "'io.sunflower.configuration.BaseConfigurationFactoryTest.NonInsatiableExample'");
-    }
-
-    @Test
-    public void printsDidYouMeanOnUnrecognizedField() throws Exception {
-        assertThatThrownBy(() -> factory.build(typoFile))
-                .isInstanceOf(ConfigurationParsingException.class)
-                .hasMessage(String.format("%s has an error:%n" +
-                        "  * Unrecognized field at: propertis%n" +
-                        "    Did you mean?:%n" +
-                        "      - properties%n" +
-                        "      - servers%n" +
-                        "      - type%n" +
-                        "      - name%n" +
-                        "      - age%n" +
-                        "        [2 more]%n", typoFile));
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Unable create an instance of the configuration class: " +
+                "'io.sunflower.configuration.BaseConfigurationFactoryTest.NonInsatiableExample'");
     }
 
     @Test
     public void incorrectTypeIsFound() throws Exception {
         assertThatThrownBy(() -> factory.build(wrongTypeFile))
-                .isInstanceOf(ConfigurationParsingException.class)
-                .hasMessage(String.format("%s has an error:" + NEWLINE +
-                                "  * Incorrect type of value at: age; is of type: String, expected: int" + NEWLINE,
-                        wrongTypeFile));
+            .isInstanceOf(ConfigurationParsingException.class)
+            .hasMessage(String.format("%s has an error:" + NEWLINE +
+                "  * Incorrect type of value at: age; is of type: String, expected: int" + NEWLINE, wrongTypeFile));
     }
 
     @Test

@@ -1,25 +1,6 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
+import io.sunflower.util.Resources;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.commons.lang3.StringUtils;
@@ -33,38 +14,43 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NotThreadSafe
 public class DbDumpCommandTest extends AbstractMigrationTest {
 
+    private static final List<String> ATTRIBUTE_NAMES = Arrays.asList("columns", "foreign-keys", "indexes",
+            "primary-keys", "sequences", "tables", "unique-constraints", "views");
     private static DocumentBuilder xmlParser;
-    private static List<String> attributeNames;
 
     private final DbDumpCommand<TestMigrationConfiguration> dumpCommand =
-            new DbDumpCommand<>(new TestMigrationDatabaseConfiguration(),
-                    TestMigrationConfiguration.class, "migrations.xml");
+            new DbDumpCommand<>(new TestMigrationDatabaseConfiguration(), TestMigrationConfiguration.class, "migrations.xml");
     private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     private TestMigrationConfiguration existedDbConf;
 
     @BeforeClass
     public static void initXmlParser() throws Exception {
         xmlParser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        attributeNames = ImmutableList
-                .of("columns", "foreign-keys", "indexes", "primary-keys", "sequences",
-                        "tables", "unique-constraints", "views");
     }
 
     @Before
     public void setUp() throws Exception {
-        final String existedDbPath = new File(Resources.getResource("test-db.mv.db").toURI())
-                .getAbsolutePath();
+        final String existedDbPath = new File(Resources.getResource("test-db.mv.db").toURI()).getAbsolutePath();
         final String existedDbUrl = "jdbc:h2:" + StringUtils.removeEnd(existedDbPath, ".mv.db");
         existedDbConf = createConfiguration(existedDbUrl);
         dumpCommand.setOutputStream(new PrintStream(baos));
@@ -72,54 +58,43 @@ public class DbDumpCommandTest extends AbstractMigrationTest {
 
     @Test
     public void testDumpSchema() throws Exception {
-        final Map<String, Object> attributes = new HashMap<>();
-        for (String name : attributeNames) {
-            attributes.put(name, true);
-        }
-        dumpCommand.run(null, new Namespace(attributes), existedDbConf);
+        dumpCommand.run(null, new Namespace(ATTRIBUTE_NAMES.stream()
+            .collect(Collectors.toMap(a -> a, b -> true))), existedDbConf);
 
-        final Element changeSet = getFirstElement(toXmlDocument(baos).getDocumentElement(),
-                "changeSet");
+        final Element changeSet = getFirstElement(toXmlDocument(baos).getDocumentElement(), "changeSet");
         assertCreateTable(changeSet);
     }
 
     @Test
     public void testDumpSchemaAndData() throws Exception {
-        final Map<String, Object> attributes = new HashMap<>();
-        for (String name : Iterables.concat(attributeNames, ImmutableList.of("data"))) {
-            attributes.put(name, true);
-        }
-        dumpCommand.run(null, new Namespace(attributes), existedDbConf);
+        dumpCommand.run(null, new Namespace(Stream.concat(ATTRIBUTE_NAMES.stream(), Stream.of("data"))
+            .collect(Collectors.toMap(a -> a, b -> true))), existedDbConf);
 
-        final NodeList changeSets = toXmlDocument(baos).getDocumentElement()
-                .getElementsByTagName("changeSet");
+        final NodeList changeSets = toXmlDocument(baos).getDocumentElement().getElementsByTagName("changeSet");
         assertCreateTable((Element) changeSets.item(0));
         assertInsertData((Element) changeSets.item(1));
     }
 
     @Test
     public void testDumpOnlyData() throws Exception {
-        dumpCommand.run(null, new Namespace(ImmutableMap.of("data", (Object) true)), existedDbConf);
+        dumpCommand.run(null, new Namespace(Collections.singletonMap("data", true)), existedDbConf);
 
-        final Element changeSet = getFirstElement(toXmlDocument(baos).getDocumentElement(),
-                "changeSet");
+        final Element changeSet = getFirstElement(toXmlDocument(baos).getDocumentElement(), "changeSet");
         assertInsertData(changeSet);
     }
 
     @Test
     public void testWriteToFile() throws Exception {
         final File file = File.createTempFile("migration", ".xml");
-        final Map<String, Object> attributes = ImmutableMap.of("output", file.getAbsolutePath());
-        dumpCommand.run(null, new Namespace(attributes), existedDbConf);
+        dumpCommand.run(null, new Namespace(Collections.singletonMap("output", file.getAbsolutePath())), existedDbConf);
         // Check that file is exist, and has some XML content (no reason to make a full-blown XML assertion)
-        assertThat(Files.toString(file, StandardCharsets.UTF_8))
-                .startsWith("<?xml version=\"1.1\" encoding=\"UTF-8\" standalone=\"no\"?>");
+        assertThat(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8))
+            .startsWith("<?xml version=\"1.1\" encoding=\"UTF-8\" standalone=\"no\"?>");
     }
 
     @Test
     public void testHelpPage() throws Exception {
-        createSubparser(dumpCommand)
-                .printHelp(new PrintWriter(new OutputStreamWriter(baos, UTF_8), true));
+        createSubparser(dumpCommand).printHelp(new PrintWriter(new OutputStreamWriter(baos, UTF_8), true));
         assertThat(baos.toString(UTF_8)).isEqualTo(String.format(
                 "usage: db dump [-h] [--migrations MIGRATIONS-FILE] [--catalog CATALOG]%n" +
                         "          [--schema SCHEMA] [-o OUTPUT] [--tables] [--ignore-tables]%n" +
@@ -187,8 +162,7 @@ public class DbDumpCommandTest extends AbstractMigrationTest {
     }
 
 
-    private static Document toXmlDocument(ByteArrayOutputStream baos)
-            throws SAXException, IOException {
+    private static Document toXmlDocument(ByteArrayOutputStream baos) throws SAXException, IOException {
         return xmlParser.parse(new ByteArrayInputStream(baos.toByteArray()));
     }
 
@@ -209,7 +183,7 @@ public class DbDumpCommandTest extends AbstractMigrationTest {
         final Element idColumn = (Element) columns.item(0);
         assertThat(idColumn.getAttribute("autoIncrement")).isEqualTo("true");
         assertThat(idColumn.getAttribute("name")).isEqualTo("ID");
-        assertThat(idColumn.getAttribute("type")).isEqualTo("INT(10)");
+        assertThat(idColumn.getAttribute("type")).isEqualTo("INT");
         final Element idColumnConstraints = getFirstElement(idColumn, "constraints");
         assertThat(idColumnConstraints.getAttribute("primaryKey")).isEqualTo("true");
         assertThat(idColumnConstraints.getAttribute("primaryKeyName")).isEqualTo("PK_PERSONS");

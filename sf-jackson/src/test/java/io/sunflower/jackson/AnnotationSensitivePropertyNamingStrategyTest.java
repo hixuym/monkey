@@ -6,18 +6,18 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nullable;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnnotationSensitivePropertyNamingStrategyTest {
-
     public static class RegularExample {
-
         @JsonProperty
+        @Nullable
         String firstName;
 
-        @SuppressWarnings("UnusedDeclaration") // Jackson
-        private RegularExample() {
-        }
+        @SuppressWarnings({ "UnusedDeclaration", "unused" }) // Jackson
+        private RegularExample() {}
 
         public RegularExample(String firstName) {
             this.firstName = firstName;
@@ -26,13 +26,12 @@ public class AnnotationSensitivePropertyNamingStrategyTest {
 
     @JsonSnakeCase
     public static class SnakeCaseExample {
-
         @JsonProperty
+        @Nullable
         String firstName;
 
-        @SuppressWarnings("UnusedDeclaration") // Jackson
-        private SnakeCaseExample() {
-        }
+        @SuppressWarnings({ "UnusedDeclaration", "unused" }) // Jackson
+        private SnakeCaseExample() {}
 
         public SnakeCaseExample(String firstName) {
             this.firstName = firstName;

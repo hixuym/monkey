@@ -1,10 +1,10 @@
 package io.sunflower.validation;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,10 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 public class OneOfValidatorTest {
-
     @SuppressWarnings("UnusedDeclaration")
     public static class Example {
-
         @OneOf({"one", "two", "three"})
         private String basic = "one";
 
@@ -27,7 +25,7 @@ public class OneOfValidatorTest {
         private String whitespaceInsensitive = "one";
 
         @Valid
-        private List<@OneOf({"one", "two", "three"}) String> basicList = ImmutableList.of("one");
+        private List<@OneOf({"one", "two", "three"}) String> basicList = Collections.singletonList("one");
     }
 
     private final Validator validator = BaseValidator.newValidator();
@@ -52,10 +50,10 @@ public class OneOfValidatorTest {
     @Test
     public void doesNotAllowBadElementsInList() {
         final Example example = new Example();
-        example.basicList = ImmutableList.of("four");
+        example.basicList = Collections.singletonList("four");
 
         assertThat(format(validator.validate(example)))
-                .containsOnly("basicList[0].<collection element> must be one of [one, two, three]");
+            .containsOnly("basicList[0].<collection element> must be one of [one, two, three]");
     }
 
     @Test

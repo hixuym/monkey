@@ -2,11 +2,11 @@ package io.sunflower.metrics;
 
 import com.codahale.metrics.MetricAttribute;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.logging.BootstrapLogging;
 import io.sunflower.util.Duration;
+import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,21 +17,19 @@ import java.util.EnumSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MetricsFactoryTest {
-
     static {
         BootstrapLogging.bootstrap();
     }
 
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final YamlConfigurationFactory<MetricsFactory> factory = new YamlConfigurationFactory<>(
-            MetricsFactory.class, BaseValidator.newValidator(), objectMapper, "dw");
+        MetricsFactory.class, BaseValidator.newValidator(), objectMapper, "dw");
     private MetricsFactory config;
 
     @Before
     public void setUp() throws Exception {
-        objectMapper.getSubtypeResolver()
-                .registerSubtypes(ConsoleReporterFactory.class, CsvReporterFactory.class,
-                        Slf4jReporterFactory.class);
+        objectMapper.getSubtypeResolver().registerSubtypes(ConsoleReporterFactory.class, CsvReporterFactory.class,
+            Slf4jReporterFactory.class);
 
         this.config = factory.build(new File(Resources.getResource("yaml/metrics.yml").toURI()));
     }
@@ -55,9 +53,8 @@ public class MetricsFactoryTest {
         assertThat(reporterFactory).isInstanceOf(ConsoleReporterFactory.class);
         final ConsoleReporterFactory consoleReporterFactory = (ConsoleReporterFactory) reporterFactory;
         assertThat(consoleReporterFactory.getIncludesAttributes()).isEqualTo(EnumSet.of(
-                MetricAttribute.P50, MetricAttribute.P95, MetricAttribute.P98, MetricAttribute.P99));
-        assertThat(consoleReporterFactory.getExcludesAttributes())
-                .isEqualTo(EnumSet.of(MetricAttribute.P98));
+            MetricAttribute.P50, MetricAttribute.P95, MetricAttribute.P98, MetricAttribute.P99));
+        assertThat(consoleReporterFactory.getExcludesAttributes()).isEqualTo(EnumSet.of(MetricAttribute.P98));
     }
 
     @Test
@@ -66,8 +63,7 @@ public class MetricsFactoryTest {
         final ReporterFactory reporterFactory = config.getReporters().get(1);
         assertThat(reporterFactory).isInstanceOf(CsvReporterFactory.class);
         final CsvReporterFactory csvReporterFactory = (CsvReporterFactory) reporterFactory;
-        assertThat(csvReporterFactory.getIncludesAttributes())
-                .isEqualTo(EnumSet.allOf(MetricAttribute.class));
+        assertThat(csvReporterFactory.getIncludesAttributes()).isEqualTo(EnumSet.allOf(MetricAttribute.class));
         assertThat(csvReporterFactory.getExcludesAttributes()).isEmpty();
     }
 }

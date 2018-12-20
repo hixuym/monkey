@@ -6,10 +6,8 @@ import java.io.InputStream;
 /**
  * An interface for objects that can create an {@link InputStream} to represent the application
  * configuration.
- * @author michael
  */
 public interface ConfigurationSourceProvider {
-
     /**
      * Returns an {@link InputStream} that contains the source of the configuration for the
      * application. The caller is responsible for closing the result.

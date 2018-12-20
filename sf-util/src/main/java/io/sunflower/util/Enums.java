@@ -1,27 +1,32 @@
 package io.sunflower.util;
 
-import com.google.common.base.CharMatcher;
+import javax.annotation.Nullable;
 
 /**
  * Helper methods for enum types.
- * @author michael
  */
 public class Enums {
 
     /**
      * Convert a string to an enum with more permissive rules than {@link Enum} valueOf().
      * <p/>
-     * This method is more permissive in the following ways: <ul> <li>Whitespace is permitted but
-     * stripped from the input.</li> <li>Dashes and periods in the value are converted to
-     * underscores.</li> <li>Matching against the enum values is case insensitive.</li> </ul>
-     *
-     * @param value     The string to convert.
+     * This method is more permissive in the following ways:
+     * <ul>
+     * <li>Whitespace is permitted but stripped from the input.</li>
+     * <li>Dashes and periods in the value are converted to underscores.</li>
+     * <li>Matching against the enum values is case insensitive.</li>
+     * </ul>
+     * @param value The string to convert.
      * @param constants The list of constants for the {@link Enum} to which you wish to convert.
      * @return The enum or null, if no enum constant matched the input value.
      */
+    @Nullable
     public static Enum<?> fromStringFuzzy(String value, Enum<?>[] constants) {
-        final String text = CharMatcher.whitespace()
-                .removeFrom(value)
+        final String text = value
+                .replace(" ", "")
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace("\t", "")
                 .replace('-', '_')
                 .replace('.', '_');
         for (Enum<?> constant : constants) {

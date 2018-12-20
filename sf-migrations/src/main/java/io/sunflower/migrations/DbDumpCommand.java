@@ -1,21 +1,5 @@
-/*
- * Copyright (C) 2017. the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.sunflower.migrations;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.sunflower.Configuration;
 import io.sunflower.db.DatabaseConfiguration;
 import liquibase.CatalogAndSchema;
@@ -33,7 +17,15 @@ import liquibase.snapshot.InvalidExampleException;
 import liquibase.snapshot.SnapshotControl;
 import liquibase.snapshot.SnapshotGeneratorFactory;
 import liquibase.structure.DatabaseObject;
-import liquibase.structure.core.*;
+import liquibase.structure.core.Column;
+import liquibase.structure.core.Data;
+import liquibase.structure.core.ForeignKey;
+import liquibase.structure.core.Index;
+import liquibase.structure.core.PrimaryKey;
+import liquibase.structure.core.Sequence;
+import liquibase.structure.core.Table;
+import liquibase.structure.core.UniqueConstraint;
+import liquibase.structure.core.View;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -46,25 +38,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author michael
- */
 public class DbDumpCommand<T extends Configuration> extends AbstractLiquibaseCommand<T> {
 
     private PrintStream outputStream = System.out;
 
-    @VisibleForTesting
-    void setOutputStream(PrintStream outputStream) {
-        this.outputStream = outputStream;
+    public DbDumpCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass, String migrationsFileName) {
+        super("dump",
+              "Generate a dump of the existing database state.",
+              strategy,
+              configurationClass,
+              migrationsFileName);
     }
 
-    public DbDumpCommand(DatabaseConfiguration<T> strategy, Class<T> configurationClass,
-                         String migrationsFileName) {
-        super("dump",
-                "Generate a dump of the existing database state.",
-                strategy,
-                configurationClass,
-                migrationsFileName);
+    void setOutputStream(PrintStream outputStream) {
+        this.outputStream = outputStream;
     }
 
     @Override
@@ -72,100 +59,100 @@ public class DbDumpCommand<T extends Configuration> extends AbstractLiquibaseCom
         super.configure(subparser);
 
         subparser.addArgument("-o", "--output")
-                .dest("output")
-                .help("Write output to <file> instead of stdout");
+                 .dest("output")
+                 .help("Write output to <file> instead of stdout");
 
         final ArgumentGroup tables = subparser.addArgumentGroup("Tables");
         tables.addArgument("--tables")
-                .action(Arguments.storeTrue())
-                .dest("tables")
-                .help("Check for added or removed tables (default)");
+              .action(Arguments.storeTrue())
+              .dest("tables")
+              .help("Check for added or removed tables (default)");
         tables.addArgument("--ignore-tables")
-                .action(Arguments.storeFalse())
-                .dest("tables")
-                .help("Ignore tables");
+              .action(Arguments.storeFalse())
+              .dest("tables")
+              .help("Ignore tables");
 
         final ArgumentGroup columns = subparser.addArgumentGroup("Columns");
         columns.addArgument("--columns")
-                .action(Arguments.storeTrue())
-                .dest("columns")
-                .help("Check for added, removed, or modified columns (default)");
+               .action(Arguments.storeTrue())
+               .dest("columns")
+               .help("Check for added, removed, or modified columns (default)");
         columns.addArgument("--ignore-columns")
-                .action(Arguments.storeFalse())
-                .dest("columns")
-                .help("Ignore columns");
+               .action(Arguments.storeFalse())
+               .dest("columns")
+               .help("Ignore columns");
 
         final ArgumentGroup views = subparser.addArgumentGroup("Views");
         views.addArgument("--views")
-                .action(Arguments.storeTrue())
-                .dest("views")
-                .help("Check for added, removed, or modified views (default)");
+             .action(Arguments.storeTrue())
+             .dest("views")
+             .help("Check for added, removed, or modified views (default)");
         views.addArgument("--ignore-views")
-                .action(Arguments.storeFalse())
-                .dest("views")
-                .help("Ignore views");
+             .action(Arguments.storeFalse())
+             .dest("views")
+             .help("Ignore views");
 
         final ArgumentGroup primaryKeys = subparser.addArgumentGroup("Primary Keys");
         primaryKeys.addArgument("--primary-keys")
-                .action(Arguments.storeTrue())
-                .dest("primary-keys")
-                .help("Check for changed primary keys (default)");
+                   .action(Arguments.storeTrue())
+                   .dest("primary-keys")
+                   .help("Check for changed primary keys (default)");
         primaryKeys.addArgument("--ignore-primary-keys")
-                .action(Arguments.storeFalse())
-                .dest("primary-keys")
-                .help("Ignore primary keys");
+                   .action(Arguments.storeFalse())
+                   .dest("primary-keys")
+                   .help("Ignore primary keys");
 
         final ArgumentGroup uniqueConstraints = subparser.addArgumentGroup("Unique Constraints");
         uniqueConstraints.addArgument("--unique-constraints")
-                .action(Arguments.storeTrue())
-                .dest("unique-constraints")
-                .help("Check for changed unique constraints (default)");
+                         .action(Arguments.storeTrue())
+                         .dest("unique-constraints")
+                         .help("Check for changed unique constraints (default)");
         uniqueConstraints.addArgument("--ignore-unique-constraints")
-                .action(Arguments.storeFalse())
-                .dest("unique-constraints")
-                .help("Ignore unique constraints");
+                         .action(Arguments.storeFalse())
+                         .dest("unique-constraints")
+                         .help("Ignore unique constraints");
 
         final ArgumentGroup indexes = subparser.addArgumentGroup("Indexes");
         indexes.addArgument("--indexes")
-                .action(Arguments.storeTrue())
-                .dest("indexes")
-                .help("Check for changed indexes (default)");
+               .action(Arguments.storeTrue())
+               .dest("indexes")
+               .help("Check for changed indexes (default)");
         indexes.addArgument("--ignore-indexes")
-                .action(Arguments.storeFalse())
-                .dest("indexes")
-                .help("Ignore indexes");
+               .action(Arguments.storeFalse())
+               .dest("indexes")
+               .help("Ignore indexes");
 
         final ArgumentGroup foreignKeys = subparser.addArgumentGroup("Foreign Keys");
         foreignKeys.addArgument("--foreign-keys")
-                .action(Arguments.storeTrue())
-                .dest("foreign-keys")
-                .help("Check for changed foreign keys (default)");
+                   .action(Arguments.storeTrue())
+                   .dest("foreign-keys")
+                   .help("Check for changed foreign keys (default)");
         foreignKeys.addArgument("--ignore-foreign-keys")
-                .action(Arguments.storeFalse())
-                .dest("foreign-keys")
-                .help("Ignore foreign keys");
+                   .action(Arguments.storeFalse())
+                   .dest("foreign-keys")
+                   .help("Ignore foreign keys");
 
         final ArgumentGroup sequences = subparser.addArgumentGroup("Sequences");
         sequences.addArgument("--sequences")
-                .action(Arguments.storeTrue())
-                .dest("sequences")
-                .help("Check for changed sequences (default)");
+                 .action(Arguments.storeTrue())
+                 .dest("sequences")
+                 .help("Check for changed sequences (default)");
         sequences.addArgument("--ignore-sequences")
-                .action(Arguments.storeFalse())
-                .dest("sequences")
-                .help("Ignore sequences");
+                 .action(Arguments.storeFalse())
+                 .dest("sequences")
+                 .help("Ignore sequences");
 
         final ArgumentGroup data = subparser.addArgumentGroup("Data");
         data.addArgument("--data")
-                .action(Arguments.storeTrue())
-                .dest("data")
-                .help("Check for changed data")
-                .setDefault(Boolean.FALSE);
+            .action(Arguments.storeTrue())
+            .dest("data")
+            .help("Check for changed data")
+            .setDefault(Boolean.FALSE);
         data.addArgument("--ignore-data")
-                .action(Arguments.storeFalse())
-                .dest("data")
-                .help("Ignore data (default)")
-                .setDefault(Boolean.FALSE);
+            .action(Arguments.storeFalse())
+            .dest("data")
+            .help("Ignore data (default)")
+            .setDefault(Boolean.FALSE);
     }
 
     @Override
@@ -207,12 +194,10 @@ public class DbDumpCommand<T extends Configuration> extends AbstractLiquibaseCom
         final String filename = namespace.getString("output");
         if (filename != null) {
             try (PrintStream file = new PrintStream(filename, StandardCharsets.UTF_8.name())) {
-                generateChangeLog(database, database.getDefaultSchema(), diffToChangeLog, file,
-                        compareTypes);
+                generateChangeLog(database, database.getDefaultSchema(), diffToChangeLog, file, compareTypes);
             }
         } else {
-            generateChangeLog(database, database.getDefaultSchema(), diffToChangeLog, outputStream,
-                    compareTypes);
+            generateChangeLog(database, database.getDefaultSchema(), diffToChangeLog, outputStream, compareTypes);
         }
     }
 
@@ -220,11 +205,11 @@ public class DbDumpCommand<T extends Configuration> extends AbstractLiquibaseCom
                                    final DiffToChangeLog changeLogWriter, PrintStream outputStream,
                                    final Set<Class<? extends DatabaseObject>> compareTypes)
             throws DatabaseException, IOException, ParserConfigurationException {
-        @SuppressWarnings({"unchecked",
-                "rawtypes"}) final SnapshotControl snapshotControl = new SnapshotControl(database,
+        @SuppressWarnings("unchecked")
+        final SnapshotControl snapshotControl = new SnapshotControl(database,
                 compareTypes.toArray(new Class[compareTypes.size()]));
         final CompareControl compareControl = new CompareControl(new CompareControl.SchemaComparison[]{
-                new CompareControl.SchemaComparison(catalogAndSchema, catalogAndSchema)}, compareTypes);
+            new CompareControl.SchemaComparison(catalogAndSchema, catalogAndSchema)}, compareTypes);
         final CatalogAndSchema[] compareControlSchemas = compareControl
                 .getSchemas(CompareControl.DatabaseRole.REFERENCE);
 

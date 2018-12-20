@@ -3,12 +3,19 @@ package io.sunflower.jackson;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import io.sunflower.util.Enums;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -19,15 +26,15 @@ import java.util.List;
 /**
  * A module for deserializing enums that is more permissive than the default.
  * <p/>
- * This deserializer is more permissive in the following ways: <ul> <li>Whitespace is permitted but
- * stripped from the input.</li> <li>Dashes and periods in the value are converted to
- * underscores.</li> <li>Matching against the enum values is case insensitive.</li> </ul>
- * @author michael
+ * This deserializer is more permissive in the following ways:
+ * <ul>
+ * <li>Whitespace is permitted but stripped from the input.</li>
+ * <li>Dashes and periods in the value are converted to underscores.</li>
+ * <li>Matching against the enum values is case insensitive.</li>
+ * </ul>
  */
 public class FuzzyEnumModule extends Module {
-
     private static class PermissiveEnumDeserializer extends StdScalarDeserializer<Enum<?>> {
-
         private static final long serialVersionUID = 1L;
 
         private final Enum<?>[] constants;
@@ -49,14 +56,20 @@ public class FuzzyEnumModule extends Module {
             if (constant != null) {
                 return constant;
             }
-            throw ctxt.mappingException(jp.getText() + " was not one of " + acceptedValues);
+            throw ctxt.weirdStringException(jp.getText(), handledType(), jp.getText() + " was not one of " + acceptedValues);
+        }
+
+        @Override
+        public boolean isCachable() {
+            // Should cache enum deserializers similar to com.fasterxml.jackson.databind.deser.std.EnumDeserializer
+            return true;
         }
     }
 
     private static class PermissiveEnumDeserializers extends Deserializers.Base {
-
         @Override
         @SuppressWarnings("unchecked")
+        @Nullable
         public JsonDeserializer<?> findEnumDeserializer(Class<?> type,
                                                         DeserializationConfig config,
                                                         BeanDescription desc) throws JsonMappingException {

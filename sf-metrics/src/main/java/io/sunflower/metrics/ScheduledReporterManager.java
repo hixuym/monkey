@@ -6,10 +6,8 @@ import io.sunflower.util.Duration;
 
 /**
  * Manages a {@link ScheduledReporter} lifecycle.
- * @author michael
  */
 public class ScheduledReporterManager implements Managed {
-
     private final ScheduledReporter reporter;
     private final Duration period;
 
@@ -17,7 +15,7 @@ public class ScheduledReporterManager implements Managed {
      * Manages the given {@code reporter} by reporting with the given {@code period}.
      *
      * @param reporter the reporter to manage.
-     * @param period   the frequency to report metrics at.
+     * @param period the frequency to report metrics at.
      */
     public ScheduledReporterManager(ScheduledReporter reporter, Duration period) {
         this.reporter = reporter;
@@ -26,6 +24,8 @@ public class ScheduledReporterManager implements Managed {
 
     /**
      * Begins reporting metrics using the configured {@link ScheduledReporter}.
+     *
+     * @throws Exception
      */
     @Override
     public void start() throws Exception {
@@ -34,6 +34,8 @@ public class ScheduledReporterManager implements Managed {
 
     /**
      * Stops the configured {@link ScheduledReporter} from reporting metrics.
+     *
+     * @throws Exception
      */
     @Override
     public void stop() throws Exception {

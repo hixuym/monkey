@@ -43,7 +43,11 @@
             <artifactId>jcip-annotations</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-jdbi</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
