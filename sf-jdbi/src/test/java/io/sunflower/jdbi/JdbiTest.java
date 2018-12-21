@@ -42,6 +42,7 @@ public class JdbiTest {
         dataSourceFactory.setUser("sa");
         dataSourceFactory.setDriverClass("org.h2.Driver");
         dataSourceFactory.asSingleConnectionPool();
+        dataSourceFactory.setAutoCommitByDefault(true);
 
         dbi = new JdbiFactory(new TimedAnnotationNameStrategy()).build(environment, dataSourceFactory, "h2");
         dbi.useTransaction(h -> {
