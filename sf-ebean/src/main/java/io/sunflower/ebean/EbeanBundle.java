@@ -27,7 +27,6 @@ import io.sunflower.db.DatabaseConfiguration;
 import io.sunflower.db.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.util.Duration;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -40,14 +39,14 @@ import static com.google.inject.matcher.Matchers.*;
 public abstract class EbeanBundle<T extends Configuration>
         implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
-    public static final String DEFAULT_NAME = "ebean";
-
     private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
         @Override
         public boolean matches(Method method) {
             return method.getDeclaringClass() == Object.class;
         }
     };
+
+    private static final String DEFAULT_NAME = "default_db";
 
     private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
         @Override
@@ -56,7 +55,6 @@ public abstract class EbeanBundle<T extends Configuration>
         }
     };
 
-    private EbeanServer ebeanServer;
     private final EbeanServerFactory ebeanServerFactory;
 
     private final ImmutableList<String> scanPkgs;
@@ -76,15 +74,11 @@ public abstract class EbeanBundle<T extends Configuration>
         this.ebeanServerFactory = ebeanServerFactory;
     }
 
-    public boolean isDefault() {
-        return DEFAULT_NAME.equalsIgnoreCase(name());
-    }
-
     @Override
     public void run(T configuration, Environment environment) {
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        this.ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs, name());
+        final EbeanServer ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
 
         environment.guice().register(new AbstractModule() {
             @Override
@@ -92,30 +86,22 @@ public abstract class EbeanBundle<T extends Configuration>
                 if (isDefault()) {
                     bind(EbeanServer.class).toInstance(ebeanServer);
                 } else {
-                    bind(EbeanServer.class).annotatedWith(Names.named(name())).toInstance(ebeanServer);
+                    bind(EbeanServer.class).annotatedWith(Names.named(ebeanServer.getName())).toInstance(ebeanServer);
                 }
 
                 // class-level @Txn
                 EbeanLocalTxnInterceptor txnInterceptor = new EbeanLocalTxnInterceptor();
 
                 bindInterceptor(any(),
-                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)),
-                        txnInterceptor);
+                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)), txnInterceptor);
                 // Intercept classes annotated with Transactional, but avoid "double"
                 // interception when a mathod is also annotated inside an annotated
                 // class.
                 bindInterceptor(annotatedWith(Transactional.class),
-                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))),
-                        txnInterceptor);
+                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
             }
         });
 
-        environment.healthChecks().register(name(),
-                new EbeanServerHealthCheck(
-                        environment.getHealthCheckExecutorService(),
-                        dbConfig.getValidationQueryTimeout().orElse(Duration.seconds(5)),
-                        ebeanServer,
-                        dbConfig.getValidationQuery()));
     }
 
     @Override
@@ -131,10 +117,11 @@ public abstract class EbeanBundle<T extends Configuration>
         return DEFAULT_NAME;
     }
 
+    protected boolean isDefault() {
+        return true;
+    }
+
     protected void configure(ServerConfig serverConfig) {
     }
 
-    public EbeanServer getEbeanServer() {
-        return ebeanServer;
-    }
 }

@@ -14,7 +14,7 @@ logging:
 
 server:
   type: http
-#  applicationContextPath: /app
+  applicationContextPath: /app
 #  port: 8443
 #  validateCerts: true
 #  validatePeers: true
@@ -26,7 +26,7 @@ server:
 #  endpointIdentificationAlgorithm: HTTPS
 
 metrics:
-  frequency: 10 minutes
+  frequency: 1 minutes
   reporters:
     - type: log
       logger: io.sunflower.metrics

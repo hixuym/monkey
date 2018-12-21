@@ -15,7 +15,7 @@
 
 package io.sunflower.quickstarters.core;
 
-import io.sunflower.ebean.BaseModel;
+import io.sunflower.ebean.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tb_user")
-public class User extends BaseModel {
+public class User extends AbstractEntity {
 
     private String name;
 

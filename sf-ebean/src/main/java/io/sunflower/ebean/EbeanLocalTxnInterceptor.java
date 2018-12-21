@@ -34,7 +34,7 @@ public class EbeanLocalTxnInterceptor implements MethodInterceptor {
     }
 
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(MethodInvocation invocation) {
 
         Transactional transactional = readTransactionMetadata(invocation);
 

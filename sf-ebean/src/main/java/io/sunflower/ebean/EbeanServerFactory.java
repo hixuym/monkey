@@ -38,24 +38,15 @@ public class EbeanServerFactory {
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
                              List<String> scanPkgs) {
-        return build(bundle, environment, dbConfig, scanPkgs, EbeanBundle.DEFAULT_NAME);
-    }
-
-    public EbeanServer build(EbeanBundle<?> bundle,
-                             Environment environment,
-                             PooledDataSourceFactory dbConfig,
-                             List<String> scanPkgs,
-                             String name) {
-        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), name);
-        return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
+        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks(), null);
+        return build(bundle, environment, dbConfig, dataSource, scanPkgs);
     }
 
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
                              ManagedDataSource dataSource,
-                             List<String> scanPkgs,
-                             String name) {
+                             List<String> scanPkgs) {
 
         ServerConfig serverConfig = new ServerConfig();
 
@@ -69,7 +60,7 @@ public class EbeanServerFactory {
 
         serverConfig.loadFromProperties(properties);
 
-        serverConfig.setName(name);
+        serverConfig.setName(bundle.name());
         serverConfig.setDataSource(dataSource);
         serverConfig.setDefaultServer(bundle.isDefault());
         serverConfig.setRegister(true);

@@ -1,6 +1,7 @@
 package io.sunflower.db;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import io.sunflower.util.Duration;
 
 import java.util.Map;
@@ -35,32 +36,12 @@ public interface PooledDataSourceFactory {
     Optional<Duration> getValidationQueryTimeout();
 
     /**
-     * Returns the timeout for awaiting a response from the database
-     * during connection health checks.
-     *
-     * @return the timeout as {@code Duration}
-     * @deprecated Use {@link #getValidationQueryTimeout()}
-     */
-    @Deprecated
-    Optional<Duration> getHealthCheckValidationTimeout();
-
-    /**
      * Returns the SQL query, which is being used for the database
      * connection health check.
      *
      * @return the SQL query as a string
      */
     String getValidationQuery();
-
-    /**
-     * Returns the SQL query, which is being used for the database
-     * connection health check.
-     *
-     * @return the SQL query as a string
-     * @deprecated Use {@link #getValidationQuery()}
-     */
-    @Deprecated
-    String getHealthCheckValidationQuery();
 
     /**
      * Returns the Java class of the database driver.
@@ -87,9 +68,10 @@ public interface PooledDataSourceFactory {
      * Builds a new JDBC data source backed by the connection pool
      * and managed by Dropwizard.
      *
-     * @param metricRegistry the application metric registry
+     * @param metricRegistry the application metrics registry
+     * @param healthCheckRegistry the application healthcheck registry
      * @param name           name of the connection pool
      * @return a new JDBC data source as {@code ManagedDataSource}
      */
-    ManagedDataSource build(MetricRegistry metricRegistry, String name);
+    ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry, String name);
 }

@@ -1,7 +1,6 @@
 package io.sunflower.jdbi;
 
 import com.codahale.metrics.health.HealthCheck;
-import io.sunflower.db.TimeBoundHealthCheck;
 import io.sunflower.util.DirectExecutorService;
 import io.sunflower.util.Duration;
 import org.jdbi.v3.core.Handle;

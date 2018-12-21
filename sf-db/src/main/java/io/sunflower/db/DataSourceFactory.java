@@ -1,24 +1,20 @@
 package io.sunflower.db;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.zaxxer.hikari.HikariConfig;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.MinDuration;
 import io.sunflower.validation.ValidationMethod;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.sql.Connection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -308,20 +304,20 @@ import java.util.concurrent.TimeUnit;
 public class DataSourceFactory implements PooledDataSourceFactory {
     @SuppressWarnings("UnusedDeclaration")
     public enum TransactionIsolation {
-        NONE(Connection.TRANSACTION_NONE),
-        DEFAULT(org.apache.tomcat.jdbc.pool.DataSourceFactory.UNKNOWN_TRANSACTIONISOLATION),
-        READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),
-        READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),
-        REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),
-        SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);
+        NONE("TRANSACTION_NONE"),
+        DEFAULT(null),
+        READ_UNCOMMITTED("TRANSACTION_READ_UNCOMMITTED"),
+        READ_COMMITTED("RANSACTION_READ_COMMITTED"),
+        REPEATABLE_READ("TRANSACTION_REPEATABLE_READ"),
+        SERIALIZABLE("TRANSACTION_SERIALIZABLE");
 
-        private final int value;
+        private final String value;
 
-        TransactionIsolation(int value) {
+        TransactionIsolation(String value) {
             this.value = value;
         }
 
-        public int get() {
+        public String get() {
             return value;
         }
     }
@@ -339,11 +335,9 @@ public class DataSourceFactory implements PooledDataSourceFactory {
 
     private boolean rollbackOnReturn = false;
 
-    @Nullable
-    private Boolean autoCommitByDefault;
+    private boolean autoCommitByDefault = false;
 
-    @Nullable
-    private Boolean readOnlyByDefault;
+    private boolean readOnlyByDefault = false;
 
     @Nullable
     private String user;
@@ -512,13 +506,6 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         return validationQuery;
     }
 
-    @Override
-    @Deprecated
-    @JsonIgnore
-    public String getHealthCheckValidationQuery() {
-        return getValidationQuery();
-    }
-
     @JsonProperty
     public void setValidationQuery(String validationQuery) {
         this.validationQuery = validationQuery;
@@ -552,12 +539,6 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     @JsonProperty
     public void setCheckConnectionWhileIdle(boolean checkConnectionWhileIdle) {
         this.checkConnectionWhileIdle = checkConnectionWhileIdle;
-    }
-
-    @Deprecated
-    @JsonProperty
-    public boolean isDefaultReadOnly() {
-        return Boolean.TRUE.equals(readOnlyByDefault);
     }
 
     @Deprecated
@@ -625,13 +606,12 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
-    @Nullable
-    public Boolean getAutoCommitByDefault() {
+    public boolean getAutoCommitByDefault() {
         return autoCommitByDefault;
     }
 
     @JsonProperty
-    public void setAutoCommitByDefault(Boolean autoCommit) {
+    public void setAutoCommitByDefault(boolean autoCommit) {
         this.autoCommitByDefault = autoCommit;
     }
 
@@ -647,8 +627,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @JsonProperty
-    @Nullable
-    public Boolean getReadOnlyByDefault() {
+    public boolean getReadOnlyByDefault() {
         return readOnlyByDefault;
     }
 
@@ -804,13 +783,6 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         this.validatorClassName = validatorClassName;
     }
 
-    @Override
-    @Deprecated
-    @JsonIgnore
-    public Optional<Duration> getHealthCheckValidationTimeout() {
-        return getValidationQueryTimeout();
-    }
-
     @JsonProperty
     public void setValidationQueryTimeout(Duration validationQueryTimeout) {
         this.validationQueryTimeout = validationQueryTimeout;
@@ -864,59 +836,42 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @Override
-    public ManagedDataSource build(MetricRegistry metricRegistry, String name) {
+    public ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry, String name) {
         final Properties properties = new Properties();
         for (Map.Entry<String, String> property : this.properties.entrySet()) {
             properties.setProperty(property.getKey(), property.getValue());
         }
 
-        final PoolProperties poolConfig = new PoolProperties();
-        poolConfig.setAbandonWhenPercentageFull(abandonWhenPercentageFull);
-        poolConfig.setAlternateUsernameAllowed(alternateUsernamesAllowed);
-        poolConfig.setCommitOnReturn(commitOnReturn);
-        poolConfig.setRollbackOnReturn(rollbackOnReturn);
-        poolConfig.setDbProperties(properties);
-        poolConfig.setDefaultAutoCommit(autoCommitByDefault);
-        poolConfig.setDefaultCatalog(defaultCatalog);
-        poolConfig.setDefaultReadOnly(readOnlyByDefault);
-        poolConfig.setDefaultTransactionIsolation(defaultTransactionIsolation.get());
-        poolConfig.setDriverClassName(driverClass);
-        poolConfig.setFairQueue(useFairQueue);
-        poolConfig.setIgnoreExceptionOnPreLoad(ignoreExceptionOnPreLoad);
-        poolConfig.setInitialSize(initialSize);
-        poolConfig.setInitSQL(initializationQuery);
-        poolConfig.setLogAbandoned(logAbandonedConnections);
-        poolConfig.setLogValidationErrors(logValidationErrors);
-        poolConfig.setMaxActive(maxSize);
-        poolConfig.setMaxIdle(maxSize);
-        poolConfig.setMinIdle(minSize);
+        HikariConfig hikariConfig = new HikariConfig();
+
+        hikariConfig.setDataSourceProperties(properties);
+        hikariConfig.setMetricRegistry(metricRegistry);
+        hikariConfig.setHealthCheckRegistry(healthCheckRegistry);
+
+        hikariConfig.setPoolName(name);
+        hikariConfig.setCatalog(defaultCatalog);
+        hikariConfig.setAutoCommit(autoCommitByDefault);
+        hikariConfig.setJdbcUrl(url);
+        hikariConfig.setUsername(user);
+        hikariConfig.setPassword(password);
+        hikariConfig.setDriverClassName(driverClass);
+        hikariConfig.setConnectionInitSql(initializationQuery);
+        hikariConfig.setMaximumPoolSize(maxSize);
+        hikariConfig.setMinimumIdle(minSize);
+        hikariConfig.setIdleTimeout(minIdleTime.toMilliseconds());
+        hikariConfig.setTransactionIsolation(defaultTransactionIsolation.get());
+        hikariConfig.setReadOnly(readOnlyByDefault);
+        hikariConfig.setConnectionTimeout(maxWaitForConnection.toMilliseconds());
 
         if (getMaxConnectionAge().isPresent()) {
-            poolConfig.setMaxAge(getMaxConnectionAge().get().toMilliseconds());
+            hikariConfig.setMaxLifetime(getMaxConnectionAge().get().toMilliseconds());
         }
-
-        poolConfig.setMaxWait((int) maxWaitForConnection.toMilliseconds());
-        poolConfig.setMinEvictableIdleTimeMillis((int) minIdleTime.toMilliseconds());
-        poolConfig.setName(name);
-        poolConfig.setUrl(url);
-        poolConfig.setUsername(user);
-        poolConfig.setPassword(user != null && password == null ? "" : password);
-        poolConfig.setRemoveAbandoned(removeAbandoned);
-        poolConfig.setRemoveAbandonedTimeout((int) removeAbandonedTimeout.toSeconds());
-
-        poolConfig.setTestWhileIdle(checkConnectionWhileIdle);
-        poolConfig.setValidationQuery(validationQuery);
-        poolConfig.setTestOnBorrow(checkConnectionOnBorrow);
-        poolConfig.setTestOnConnect(checkConnectionOnConnect);
-        poolConfig.setTestOnReturn(checkConnectionOnReturn);
-        poolConfig.setTimeBetweenEvictionRunsMillis((int) evictionInterval.toMilliseconds());
-        poolConfig.setValidationInterval(validationInterval.toMilliseconds());
 
         if (getValidationQueryTimeout().isPresent()) {
-            poolConfig.setValidationQueryTimeout((int) getValidationQueryTimeout().get().toSeconds());
+            hikariConfig.setValidationTimeout((int) getValidationQueryTimeout().get().toMilliseconds());
         }
-        validatorClassName.ifPresent(poolConfig::setValidatorClassName);
-        jdbcInterceptors.ifPresent(poolConfig::setJdbcInterceptors);
-        return new ManagedPooledDataSource(poolConfig, metricRegistry);
+
+
+        return new ManagedPooledDataSource(hikariConfig);
     }
 }

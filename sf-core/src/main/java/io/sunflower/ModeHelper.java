@@ -85,7 +85,7 @@ public class ModeHelper {
 
         mode = modeOptional.orElse(Mode.dev);
 
-        logger.info("sunflower is running in mode {}", mode.toString());
+        logger.info("Sunflower is running in mode {}", mode.toString());
 
         return mode;
 
