@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server;
+package io.sunflower.resteasy.netty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.sunflower.resteasy.AbstractResteasyServerFactory;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import org.jboss.resteasy.plugins.server.netty.NettyJaxrsServer;
@@ -29,7 +30,7 @@ import org.jboss.resteasy.spi.ResteasyDeployment;
  * created on 17/11/6 15:52
  */
 @JsonTypeName("http")
-public class HttpServerFactory extends AbsResteasyServerFactory {
+public class HttpServerFactory extends AbstractResteasyServerFactory {
 
     private String hostname;
     private int ioWorkerCount = Runtime.getRuntime().availableProcessors() * 2;
@@ -66,14 +67,14 @@ public class HttpServerFactory extends AbsResteasyServerFactory {
     }
 
     /**
-     * buildNettyServer server server
+     * buildNettyServer netty netty
      *
      * @param server
      */
     protected Server buildNettyServer(NettyJaxrsServer server, Environment environment) {
-        ResteasyServer resteasyServer = new ResteasyServer(server, environment);
-        resteasyServer.setApplicationContextPath(getApplicationContextPath());
-        return resteasyServer;
+        ResteasyNettyServer resteasyNettyServer = new ResteasyNettyServer(server, environment);
+        resteasyNettyServer.setApplicationContextPath(getApplicationContextPath());
+        return resteasyNettyServer;
     }
 
     @JsonProperty

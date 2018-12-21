@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server.ssl;
+package io.sunflower.resteasy.netty.ssl;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedKeyManager;
@@ -24,7 +24,7 @@ import java.security.cert.X509Certificate;
 
 /**
  * <p>An {@link X509ExtendedKeyManager} that select a key with desired alias, delegating other
- * processing to a nested X509ExtendedKeyManager.</p> <p>Can be used both with server and client
+ * processing to a nested X509ExtendedKeyManager.</p> <p>Can be used both with netty and client
  * sockets.</p>
  * @author michael
  */

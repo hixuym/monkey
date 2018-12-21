@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server.ssl;
+package io.sunflower.resteasy.netty.ssl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

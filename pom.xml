@@ -89,7 +89,7 @@
         <module>sf-testing</module>
         <module>sf-archetypes</module>
         <module>sf-resteasy</module>
-        <module>sf-resteasy-server</module>
+        <module>sf-resteasy-netty</module>
         <module>sf-quickstarters</module>
     </modules>
 

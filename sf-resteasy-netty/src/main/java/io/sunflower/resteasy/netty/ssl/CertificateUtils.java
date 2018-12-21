@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server.ssl;
+package io.sunflower.resteasy.netty.ssl;
 
 import io.sunflower.util.Uris;
 

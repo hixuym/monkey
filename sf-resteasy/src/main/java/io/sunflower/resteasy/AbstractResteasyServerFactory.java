@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server;
+package io.sunflower.resteasy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,16 +27,14 @@ import io.sunflower.setup.Environment;
 import org.jboss.resteasy.spi.Registry;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
-import org.jboss.resteasy.wadl.ResteasyWadlGenerator;
 
 /**
- * AbsResteasyServerFactory
+ * AbstractResteasyServerFactory
  *
  * @author michael
  * created on 17/11/10 15:53
  */
-public abstract class AbsResteasyServerFactory extends AbstractServerFactory {
+public abstract class AbstractResteasyServerFactory extends AbstractServerFactory {
 
     private final ResteasyDeployment deployment = new ResteasyDeployment();
 
@@ -71,8 +69,6 @@ public abstract class AbsResteasyServerFactory extends AbstractServerFactory {
             Registry registry = deployment.getRegistry();
             ResteasyProviderFactory providerFactory = deployment.getProviderFactory();
             new ResteasyResourcesRegister(registry, providerFactory).withInjector(server.getInjector());
-            ResteasyWadlDefaultResource resteasyWadlDefaultResource = new ResteasyWadlDefaultResource();
-            resteasyWadlDefaultResource.getServices().put("/", ResteasyWadlGenerator.generateServiceRegistry(deployment));
         });
 
         return buildServer(environment);

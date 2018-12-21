@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server;
+package io.sunflower.resteasy.netty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -21,7 +21,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
-import io.sunflower.resteasy.server.ssl.SslContextFactory;
+import io.sunflower.resteasy.netty.ssl.SslContextFactory;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.validation.ValidationMethod;
@@ -50,7 +50,7 @@ public class HttpsServerFactory extends HttpServerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpsServerFactory.class);
     private static final AtomicBoolean LOGGED = new AtomicBoolean(false);
 
-    private URI keyStorePath = URI.create("classpath:/io/sunflower/resteasy/server/sf-dev.keystore");
+    private URI keyStorePath = URI.create("classpath:/io/sunflower/resteasy/netty/sf-dev.keystore");
 
     private String keyStorePassword = "password";
 
@@ -59,7 +59,7 @@ public class HttpsServerFactory extends HttpServerFactory {
 
     private String keyStoreProvider;
 
-    private URI trustStorePath = URI.create("classpath:/io/sunflower/resteasy/server/sf-dev.truststore");
+    private URI trustStorePath = URI.create("classpath:/io/sunflower/resteasy/netty/sf-dev.truststore");
 
     private String trustStorePassword = "password";
 
@@ -376,7 +376,7 @@ public class HttpsServerFactory extends HttpServerFactory {
 
         server.setSSLContext(sslContext);
 
-        ResteasyServer nettyServer = new ResteasyServer(server, environment);
+        ResteasyNettyServer nettyServer = new ResteasyNettyServer(server, environment);
 
         nettyServer.setApplicationContextPath(getApplicationContextPath());
         nettyServer.setSchema("https");

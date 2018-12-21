@@ -16,5 +16,5 @@
 /**
  * Common SSL Utility Classes
  */
-package io.sunflower.resteasy.server.ssl;
+package io.sunflower.resteasy.netty.ssl;
 

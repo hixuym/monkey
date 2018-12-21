@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-resteasy-server</artifactId>
+            <artifactId>sf-resteasy-netty</artifactId>
         </dependency>
 
         <dependency>

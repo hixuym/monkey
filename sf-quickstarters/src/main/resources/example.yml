@@ -13,7 +13,7 @@ logging:
     "io.ebean.cache.NATKEY": TRACE
 
 server:
-  type: http
+  type: https
   applicationContextPath: /app
 #  port: 8443
 #  validateCerts: true

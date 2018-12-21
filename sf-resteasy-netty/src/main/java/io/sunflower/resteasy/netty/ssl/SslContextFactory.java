@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server.ssl;
+package io.sunflower.resteasy.netty.ssl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -1157,7 +1157,7 @@ public class SslContextFactory {
      * SSLContext#createSSLEngine(String, int)} method is used to pass host and port information as a
      * hint for session reuse.  Note that this is only a hint and session may not be reused. Moreover,
      * the hint is typically only used on client side implementations and setting this to false does
-     * not stop a server from accepting an offered session ID to reuse.
+     * not stop a netty from accepting an offered session ID to reuse.
      *
      * @param enableSessionCaching the value of the flag
      */
@@ -1250,7 +1250,7 @@ public class SslContextFactory {
 
     /**
      * General purpose factory method for creating {@link SSLEngine}s, although creation of {@link
-     * SSLEngine}s on the server-side should prefer {@link #newSSLEngine(InetSocketAddress)}.
+     * SSLEngine}s on the netty-side should prefer {@link #newSSLEngine(InetSocketAddress)}.
      *
      * @param host the remote host
      * @param port the remote port

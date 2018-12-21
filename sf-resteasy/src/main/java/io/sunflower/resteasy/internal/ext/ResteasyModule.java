@@ -21,12 +21,8 @@ import io.sunflower.resteasy.caching.CacheControlledResponseFeature;
 import io.sunflower.resteasy.errors.ErrorsMapperFeature;
 import io.sunflower.resteasy.jackson.JacksonFeature;
 import io.sunflower.resteasy.optional.OptionalParamFeature;
-import io.sunflower.resteasy.params.AbstractParamConverterProvider;
 import io.sunflower.resteasy.params.BasicParamFeature;
-import io.sunflower.resteasy.validation.FuzzyEnumParamConverterProvider;
 import io.sunflower.resteasy.validation.HibernateValidationFeature;
-import org.jboss.resteasy.client.jaxrs.ClientHttpEngine;
-import org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient4Engine;
 import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
 
 import javax.ws.rs.core.Response;
@@ -41,8 +37,6 @@ public class ResteasyModule extends AbstractModule {
 
     @Override
     public void configure() {
-
-        bind(ClientHttpEngine.class).to(ApacheHttpClient4Engine.class);
 
         bind(RuntimeDelegate.class).toInstance(RuntimeDelegate.getInstance());
         bind(Response.ResponseBuilder.class).toProvider(ResponseBuilderProvider.class);

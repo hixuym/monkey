@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.resteasy.server;
+package io.sunflower.resteasy.netty;
 
 import io.netty.util.NettyRuntime;
 import io.sunflower.server.Server;
@@ -24,14 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ResteasyServer
+ * ResteasyNettyServer
  *
  * @author michael
  * created on 17/11/6 15:53
  */
-public class ResteasyServer extends Server {
+public class ResteasyNettyServer extends Server {
 
-    private static Logger logger = LoggerFactory.getLogger(ResteasyServer.class);
+    private static Logger logger = LoggerFactory.getLogger(ResteasyNettyServer.class);
 
     private final NettyJaxrsServer server;
     private final String nettyVersion;
@@ -43,7 +43,7 @@ public class ResteasyServer extends Server {
 
     private String schema = "http";
 
-    public ResteasyServer(NettyJaxrsServer server, Environment environment) {
+    public ResteasyNettyServer(NettyJaxrsServer server, Environment environment) {
         super(environment);
         this.server = server;
         this.nettyVersion = NettyRuntime.class.getPackage().getImplementationVersion();
