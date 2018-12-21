@@ -1,7 +1,6 @@
 package io.sunflower.db;
 
 import com.codahale.metrics.Gauge;
-import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import io.sunflower.configuration.ResourceConfigurationSourceProvider;
@@ -9,8 +8,6 @@ import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.jackson.Jackson;
 import io.sunflower.util.Duration;
 import io.sunflower.validation.BaseValidator;
-import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
-import org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -20,7 +17,6 @@ import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -98,30 +94,6 @@ public class DataSourceFactoryTest {
         assertThatExceptionOfType(RuntimeException.class).isThrownBy(() ->
             factory.build(metricRegistry, healthCheckRegistry, "test").getConnection());
     }
-
-    @Ignore
-    public void testCustomValidator() throws Exception {
-        factory.setValidatorClassName(Optional.of(CustomConnectionValidator.class.getName()));
-        try (Connection connection = dataSource().getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select 1")) {
-                try (ResultSet rs = statement.executeQuery()) {
-                    assertThat(rs.next()).isTrue();
-                    assertThat(rs.getInt(1)).isEqualTo(1);
-                }
-            }
-        }
-        assertThat(CustomConnectionValidator.loaded).isTrue();
-    }
-
-//    @Test
-//    public void testJdbcInterceptors() throws Exception {
-//        factory.setJdbcInterceptors(Optional.of("StatementFinalizer;ConnectionState"));
-//        final ManagedPooledDataSource source = (ManagedPooledDataSource) dataSource();
-//
-//        assertThat(source.getPoolProperties().getJdbcInterceptorsAsArray())
-//            .extracting("interceptorClass")
-//            .contains(StatementFinalizer.class, ConnectionState.class);
-//    }
 
     @Test
     public void createDefaultFactory() throws Exception {
