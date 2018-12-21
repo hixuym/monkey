@@ -46,8 +46,6 @@ public abstract class EbeanBundle<T extends Configuration>
         }
     };
 
-    private static final String DEFAULT_NAME = "default_db";
-
     private static final AbstractMatcher<Method> SYNTHETIC = new AbstractMatcher<Method>() {
         @Override
         public boolean matches(Method method) {
@@ -111,10 +109,10 @@ public abstract class EbeanBundle<T extends Configuration>
 
     /**
      * Override to configure the name of the bundle (It's used for the bundle health check and
-     * database pool metrics)
+     * database pool metrics), default use app name + _db
      */
     protected String name() {
-        return DEFAULT_NAME;
+        return null;
     }
 
     protected boolean isDefault() {

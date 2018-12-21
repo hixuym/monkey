@@ -34,19 +34,23 @@ public class EbeanServerFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EbeanServerFactory.class);
 
+    private static final String DB_SUFFIX = "_db";
+
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
                              List<String> scanPkgs) {
-        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks(), null);
-        return build(bundle, environment, dbConfig, dataSource, scanPkgs);
+        String name = bundle.name() == null ? environment.getName() + DB_SUFFIX : bundle.name();
+        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks(), name);
+        return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
     }
 
     public EbeanServer build(EbeanBundle<?> bundle,
                              Environment environment,
                              PooledDataSourceFactory dbConfig,
                              ManagedDataSource dataSource,
-                             List<String> scanPkgs) {
+                             List<String> scanPkgs,
+                             String name) {
 
         ServerConfig serverConfig = new ServerConfig();
 
@@ -60,7 +64,7 @@ public class EbeanServerFactory {
 
         serverConfig.loadFromProperties(properties);
 
-        serverConfig.setName(bundle.name());
+        serverConfig.setName(name);
         serverConfig.setDataSource(dataSource);
         serverConfig.setDefaultServer(bundle.isDefault());
         serverConfig.setRegister(true);

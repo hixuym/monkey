@@ -41,7 +41,7 @@ public class JdbiFactory {
     public Jdbi build(Environment environment,
                       PooledDataSourceFactory configuration,
                       String name) {
-        final ManagedDataSource dataSource = configuration.build(environment.metrics(), name);
+        final ManagedDataSource dataSource = configuration.build(environment.metrics(), environment.healthChecks(), name);
         return build(environment, configuration, dataSource, name);
     }
 
@@ -67,14 +67,6 @@ public class JdbiFactory {
 
         // Manage the data source that created this instance.
         environment.lifecycle().manage(dataSource);
-
-        // Setup the required health checks.
-        final String validationQuery = configuration.getValidationQuery();
-        environment.healthChecks().register(name, new JdbiHealthCheck(
-            environment.getHealthCheckExecutorService(),
-            configuration.getValidationQueryTimeout().orElseGet(() -> Duration.seconds(5)),
-            jdbi,
-            validationQuery));
 
         // Setup the timing collector
         jdbi.setTimingCollector(new InstrumentedTimingCollector(environment.metrics(), nameStrategy));
