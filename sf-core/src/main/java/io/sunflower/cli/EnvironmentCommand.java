@@ -2,7 +2,7 @@ package io.sunflower.cli;
 
 import io.sunflower.Application;
 import io.sunflower.Configuration;
-import io.sunflower.guice.Mode;
+import io.sunflower.Mode;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;

@@ -15,7 +15,6 @@
 
 package io.sunflower.lifecycle.setup;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.sunflower.lifecycle.ExecutorServiceManager;
 import io.sunflower.util.Duration;
 import org.slf4j.Logger;

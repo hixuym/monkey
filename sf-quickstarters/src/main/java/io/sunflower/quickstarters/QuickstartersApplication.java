@@ -33,7 +33,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
             @Override
             protected void configure(ServerConfig serverConfig) {
-                serverConfig.addClass(User.class);
+//                serverConfig.addClass(User.class);
             }
         });
     }

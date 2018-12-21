@@ -16,13 +16,13 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.sunflower.guice.Mode;
+import io.sunflower.Mode;
 
 import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static io.sunflower.guice.ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet;
+import static io.sunflower.ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet;
 
 /**
  * AbstractServerFactory

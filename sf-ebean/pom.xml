@@ -36,12 +36,10 @@
         <dependency>
             <groupId>io.ebean</groupId>
             <artifactId>ebean</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.avaje</groupId>
-                    <artifactId>avaje-datasource</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-datasource-api</artifactId>
         </dependency>
     </dependencies>
 

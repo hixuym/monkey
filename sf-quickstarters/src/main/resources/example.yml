@@ -2,7 +2,7 @@ template: Hello, %s!
 defaultName: Stranger
 
 logging:
-  level: DEBUG
+  level: INFO
   loggers:
     "io.ebean.SQL": TRACE
     "io.ebean.TXN": TRACE
@@ -40,6 +40,6 @@ database:
   initialSize: 0
   minSize: 0
   properties:
-    search.packages: io.sunflower.quickstartersarters.core
+    search.packages: io.sunflower.quickstarters.core
     ddl.generate: true
     ddl.run: true

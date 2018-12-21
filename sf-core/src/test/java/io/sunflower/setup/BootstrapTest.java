@@ -10,7 +10,6 @@ import io.sunflower.Configuration;
 import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
 import io.sunflower.jackson.Jackson;
-import io.sunflower.validation.valuehandling.GuavaOptionalValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;
@@ -111,7 +110,7 @@ public class BootstrapTest {
         // https://hibernate.atlassian.net/browse/HV-904
         assertThat(validatorFactory.getValidatedValueHandlers())
                 .extractingResultOf("getClass")
-                .containsSubsequence(GuavaOptionalValidatedValueUnwrapper.class,
+                .containsSubsequence(
                         OptionalDoubleValidatedValueUnwrapper.class,
                         OptionalIntValidatedValueUnwrapper.class,
                         OptionalLongValidatedValueUnwrapper.class);

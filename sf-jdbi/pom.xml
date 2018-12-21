@@ -43,10 +43,6 @@
         </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-jodatime2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jdbi</groupId>
             <artifactId>jdbi3-guava</artifactId>
         </dependency>
         <dependency>
@@ -59,22 +55,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.repaint.maven</groupId>
-                <artifactId>tiles-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <tiles>
-                        <!-- other tiles ... -->
-                        <tile>org.avaje.tile:java-compile:1.1</tile>
-						<tile>io.ebean.tile:enhancement:6.1</tile>
-                    </tiles>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

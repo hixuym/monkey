@@ -8,7 +8,6 @@ import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
-import io.sunflower.guice.setup.GuiceEnvironment;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;

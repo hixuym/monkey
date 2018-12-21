@@ -17,7 +17,7 @@ package io.sunflower.server;
 
 import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
-import io.sunflower.guice.lifecycle.LifecycleManager;
+import io.sunflower.inject.lifecycle.LifecycleManager;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;

@@ -10,7 +10,6 @@ import io.sunflower.setup.Environment;
 import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.jdbi.v3.core.Jdbi;
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,16 +129,16 @@ public class JdbiTest {
         assertThat(metricRegistry.timer("game-dao.last-played-date").getCount()).isEqualTo(1);
     }
 
-    @Test
-    public void testJodaTimeWorksForDateTimes() {
-        dbi.useHandle(h -> assertThat(h.createQuery("SELECT played_at FROM games " +
-            "WHERE home_scored > visitor_scored " +
-            "AND played_at > :played_at")
-            .bind("played_at", org.joda.time.LocalDate.parse("2016-02-15").toDateTimeAtStartOfDay())
-            .mapTo(DateTime.class)
-            .stream()
-            .map(DateTime::toLocalDate)
-            .collect(Collectors.toList())).containsOnly(
-            org.joda.time.LocalDate.parse("2016-05-14"), org.joda.time.LocalDate.parse("2016-03-10")));
-    }
+//    @Test
+//    public void testJodaTimeWorksForDateTimes() {
+//        dbi.useHandle(h -> assertThat(h.createQuery("SELECT played_at FROM games " +
+//            "WHERE home_scored > visitor_scored " +
+//            "AND played_at > :played_at")
+//            .bind("played_at", org.joda.time.LocalDate.parse("2016-02-15").toDateTimeAtStartOfDay())
+//            .mapTo(DateTime.class)
+//            .stream()
+//            .map(DateTime::toLocalDate)
+//            .collect(Collectors.toList())).containsOnly(
+//            org.joda.time.LocalDate.parse("2016-05-14"), org.joda.time.LocalDate.parse("2016-03-10")));
+//    }
 }

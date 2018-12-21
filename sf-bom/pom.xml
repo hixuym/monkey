@@ -246,6 +246,28 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>listenablefuture</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.checkerframework</groupId>
+                        <artifactId>checker-qual</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.j2objc</groupId>
+                        <artifactId>j2objc-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.errorprone</groupId>
+                        <artifactId>error_prone_annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>animal-sniffer-annotations</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -456,6 +478,12 @@
                 <groupId>io.ebean</groupId>
                 <artifactId>ebean</artifactId>
                 <version>${ebean.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.ebean</groupId>
+                        <artifactId>ebean-datasource</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -861,12 +889,6 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-guice</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
                 <artifactId>sf-lifecycle</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -897,20 +919,14 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-reflect</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-extension</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
                 <artifactId>sf-db</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.ebean</groupId>
+                <artifactId>ebean-datasource-api</artifactId>
+                <version>4.3</version>
             </dependency>
 
             <dependency>
@@ -934,11 +950,6 @@
             <dependency>
                 <groupId>io.sunflower</groupId>
                 <artifactId>sf-postoffice</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

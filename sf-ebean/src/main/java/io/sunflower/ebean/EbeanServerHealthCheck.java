@@ -49,7 +49,7 @@ public class EbeanServerHealthCheck extends HealthCheck {
     }
 
     @Override
-    protected Result check() throws Exception {
+    protected Result check() {
         return timeBoundHealthCheck.check(() -> {
 
             ebeanServer.beginTransaction();

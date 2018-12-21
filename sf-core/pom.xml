@@ -46,8 +46,16 @@
             <artifactId>sf-lifecycle</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-guice</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>

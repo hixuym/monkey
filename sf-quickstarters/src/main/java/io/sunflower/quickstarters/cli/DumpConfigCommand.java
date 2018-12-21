@@ -31,8 +31,7 @@ public class DumpConfigCommand extends ConfiguredCommand<QuickstartersConfigurat
     }
 
     @Override
-    protected void run(Bootstrap bootstrap, Namespace namespace, QuickstartersConfiguration configuration)
-            throws Exception {
+    protected void run(Bootstrap bootstrap, Namespace namespace, QuickstartersConfiguration configuration) {
         System.out.println("dump..");
     }
 

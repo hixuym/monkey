@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
@@ -59,17 +58,16 @@ public class Jackson {
         mapper.registerModule(new GuavaModule());
         mapper.registerModule(new GuavaExtrasModule());
         mapper.registerModule(new CaffeineModule());
-        mapper.registerModule(new JodaModule());
         mapper.registerModule(new AfterburnerModule());
         mapper.registerModule(new FuzzyEnumModule());
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());// use jsr310 instead of joda
+        mapper.registerModule(new SafeJavaTimeModule());
         mapper.setPropertyNamingStrategy(new AnnotationSensitivePropertyNamingStrategy());
         mapper.setSubtypeResolver(new DiscoverableSubtypeResolver());
         mapper.disable(FAIL_ON_UNKNOWN_PROPERTIES);
 
-        mapper.registerModule(new SafeJavaTimeModule());
         return mapper;
     }
 }

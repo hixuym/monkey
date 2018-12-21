@@ -10,7 +10,7 @@
 
     <artifactId>sf-resteasy</artifactId>
 
-    <name>sunflower resteasy ext module</name>
+    <name>sunflower resteasy module</name>
 
     <dependencyManagement>
         <dependencies>

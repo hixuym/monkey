@@ -16,7 +16,7 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.guice.Mode;
+import io.sunflower.Mode;
 import io.sunflower.jackson.Discoverable;
 import io.sunflower.setup.Environment;
 

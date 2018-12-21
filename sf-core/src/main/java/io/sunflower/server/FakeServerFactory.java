@@ -16,7 +16,7 @@
 package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.sunflower.guice.Mode;
+import io.sunflower.Mode;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

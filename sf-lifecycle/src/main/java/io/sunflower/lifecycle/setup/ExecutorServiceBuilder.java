@@ -1,7 +1,5 @@
 package io.sunflower.lifecycle.setup;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.sunflower.lifecycle.ExecutorServiceManager;
 import io.sunflower.util.Duration;
 import org.slf4j.Logger;
@@ -105,7 +103,6 @@ public class ExecutorServiceBuilder {
         return workQueue.remainingCapacity() != Integer.MAX_VALUE;
     }
 
-    @VisibleForTesting
     static synchronized void setLog(Logger newLog) {
         log = newLog;
     }

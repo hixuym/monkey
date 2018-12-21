@@ -1,6 +1,5 @@
 package io.sunflower.validation;
 
-import io.sunflower.validation.valuehandling.GuavaOptionalValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;
@@ -28,7 +27,6 @@ public class BaseValidator {
         return Validation
             .byProvider(HibernateValidator.class)
             .configure()
-            .addValidatedValueHandler(new GuavaOptionalValidatedValueUnwrapper())
             .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
             .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
             .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());

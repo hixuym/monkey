@@ -76,15 +76,11 @@
         <module>sf-configuration</module>
         <module>sf-jackson</module>
         <module>sf-util</module>
-        <module>sf-reflect</module>
         <module>sf-validation</module>
         <module>sf-metrics</module>
         <module>sf-metrics-graphite</module>
         <module>sf-core</module>
-        <module>sf-guice</module>
         <module>sf-lifecycle</module>
-        <module>sf-extension</module>
-        <module>sf-client</module>
         <module>sf-db</module>
         <module>sf-ebean</module>
         <module>sf-jdbi</module>
