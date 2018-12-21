@@ -23,3 +23,4 @@ build/
 *.swp
 logs
 *all.sql
+dependency-reduced-pom.xml
