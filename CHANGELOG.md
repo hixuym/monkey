@@ -1,5 +1,12 @@
 ## Sunflower Framework
 
+###3.0.0.Final - 2018-12-21
+
+    - use HikariCP pool.
+    - delete or merge unused modules.
+    - upgrade thirdparty deps.
+    - add sf-jdbi3 module.
+
 ###2.1.0 - 2017-11-12
 
     - upgrade io.ebean.tile:enhancement:4.3 work with ebean 11.4.1
