@@ -1,6 +1,7 @@
 package io.sunflower.migrations;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import io.sunflower.Configuration;
 import io.sunflower.cli.ConfiguredCommand;
 import io.sunflower.db.DatabaseConfiguration;
@@ -75,7 +76,7 @@ public abstract class AbstractLiquibaseCommand<T extends Configuration> extends 
     CloseableLiquibase openLiquibase(final PooledDataSourceFactory dataSourceFactory, final Namespace namespace)
             throws SQLException, LiquibaseException {
         final CloseableLiquibase liquibase;
-        final ManagedDataSource dataSource = dataSourceFactory.build(new MetricRegistry(), "liquibase");
+        final ManagedDataSource dataSource = dataSourceFactory.build(new MetricRegistry(), new HealthCheckRegistry(), "liquibase");
         final Database database = createDatabase(dataSource, namespace);
         final String migrationsFile = namespace.getString("migrations-file");
         if (migrationsFile == null) {
