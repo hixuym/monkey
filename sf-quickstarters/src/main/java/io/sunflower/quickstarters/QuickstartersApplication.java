@@ -29,11 +29,6 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
             public PooledDataSourceFactory getDataSourceFactory(QuickstartersConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
-
-            @Override
-            protected void configure(ServerConfig serverConfig) {
-//                serverConfig.addClass(User.class);
-            }
         });
     }
 

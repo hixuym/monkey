@@ -2,7 +2,6 @@ package io.sunflower.setup;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.codahale.metrics.jmx.JmxReporter;
 import com.codahale.metrics.jvm.BufferPoolMetricSet;
 import com.codahale.metrics.jvm.ClassLoadingGaugeSet;
 import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
@@ -91,7 +90,6 @@ public class Bootstrap<T extends Configuration> {
         getMetricRegistry().register("jvm.memory", new MemoryUsageGaugeSet());
         getMetricRegistry().register("jvm.threads", new ThreadStatesGaugeSet());
 
-        JmxReporter.forRegistry(metricRegistry).build().start();
         metricsAreRegistered = true;
     }
 

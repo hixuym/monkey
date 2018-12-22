@@ -122,7 +122,7 @@ public abstract class BaseConfigurationFactoryTest {
                 ExampleServer.create(8080), ExampleServer.create(8081), ExampleServer.create(8082));
 
         @JsonProperty
-        @Valid
+        //@Valid
         CacheBuilderSpec cacheBuilderSpec = CacheBuilderSpec.disableCaching();
     }
 

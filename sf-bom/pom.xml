@@ -107,6 +107,10 @@
                         <groupId>org.apache.httpcomponents</groupId>
                         <artifactId>httpclient</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.jboss.spec.javax.xml.bind</groupId>
+                        <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -262,6 +266,10 @@
                     <exclusion>
                         <groupId>com.google.guava</groupId>
                         <artifactId>listenablefuture</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.checkerframework</groupId>
+                        <artifactId>checker-qual</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>com.google.j2objc</groupId>
