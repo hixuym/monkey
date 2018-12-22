@@ -859,19 +859,19 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-jackson</artifactId>
+                <artifactId>sf-json</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-resteasy</artifactId>
+                <artifactId>sf-jaxrs</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-resteasy-netty</artifactId>
+                <artifactId>sf-jaxrs-netty</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -925,7 +925,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-db</artifactId>
+                <artifactId>sf-datasource</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -937,13 +937,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-ebean</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-jdbi</artifactId>
+                <artifactId>sf-orm</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

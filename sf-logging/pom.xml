@@ -28,7 +28,7 @@
         <!-- logging -->
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-jackson</artifactId>
+            <artifactId>sf-json</artifactId>
         </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>

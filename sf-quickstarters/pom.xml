@@ -29,12 +29,12 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-resteasy-netty</artifactId>
+            <artifactId>sf-jaxrs-netty</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-ebean</artifactId>
+            <artifactId>sf-orm</artifactId>
         </dependency>
 
         <dependency>

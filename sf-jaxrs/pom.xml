@@ -8,9 +8,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-jdbi</artifactId>
+    <artifactId>sf-jaxrs</artifactId>
 
-    <name>sunflower jdbi module</name>
+    <name>sunflower jaxrs ext module</name>
 
     <dependencyManagement>
         <dependencies>
@@ -29,31 +29,20 @@
             <groupId>io.sunflower</groupId>
             <artifactId>sf-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-db</artifactId>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-core</artifactId>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-sqlobject</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-jdbi3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-wadl</artifactId>
         </dependency>
     </dependencies>
-
 </project>

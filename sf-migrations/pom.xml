@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-db</artifactId>
+            <artifactId>sf-datasource</artifactId>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>

@@ -275,22 +275,6 @@ import java.util.concurrent.TimeUnit;
  *         </td>
  *     </tr>
  *     <tr>
- *         <td>{@code validatorClassName}</td>
- *         <td>(none)</td>
- *         <td>
- *             Name of a class of a custom {@link org.apache.tomcat.jdbc.pool.Validator}
- *             implementation, which will be used for validating connections.
- *         </td>
- *     </tr>
- *     <tr>
- *         <td>{@code jdbcInterceptors}</td>
- *         <td>(none)</td>
- *         <td>
- *             A semicolon separated list of classnames extending
- *             {@link org.apache.tomcat.jdbc.pool.JdbcInterceptor}
- *         </td>
- *     </tr>
- *     <tr>
  *         <td>{@code ignoreExceptionOnPreLoad}</td>
  *         <td>{@code false}</td>
  *         <td>

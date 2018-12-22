@@ -74,22 +74,21 @@
         <module>sf-bom</module>
         <module>sf-logging</module>
         <module>sf-configuration</module>
-        <module>sf-jackson</module>
+        <module>sf-json</module>
         <module>sf-util</module>
         <module>sf-validation</module>
         <module>sf-metrics</module>
         <module>sf-metrics-graphite</module>
         <module>sf-core</module>
         <module>sf-lifecycle</module>
-        <module>sf-db</module>
-        <module>sf-ebean</module>
-        <module>sf-jdbi</module>
+        <module>sf-datasource</module>
+        <module>sf-orm</module>
         <module>sf-migrations</module>
         <module>sf-postoffice</module>
         <module>sf-testing</module>
         <module>sf-archetypes</module>
-        <module>sf-resteasy</module>
-        <module>sf-resteasy-netty</module>
+        <module>sf-jaxrs</module>
+        <module>sf-jaxrs-netty</module>
         <module>sf-quickstarters</module>
     </modules>
 
@@ -522,7 +521,7 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <excludes>
-                            <exclude>io/dropwizard/benchmarks/**/*.class</exclude>
+                            <exclude>io/sunflower/benchmarks/**/*.class</exclude>
                             <exclude>org/openjdk/jmh/**/*.class</exclude>
                         </excludes>
                     </instrumentation>

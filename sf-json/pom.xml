@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-jackson</artifactId>
+    <artifactId>sf-json</artifactId>
 
     <name>sunflower json module</name>
 
