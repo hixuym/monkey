@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.util.Resources;
+import com.google.common.io.Resources;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.commons.lang3.StringUtils;

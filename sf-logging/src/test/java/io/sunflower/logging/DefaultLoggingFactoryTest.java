@@ -9,14 +9,14 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
 import io.sunflower.configuration.SubstitutingSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.Jackson;
 import io.sunflower.logging.filter.FilterFactory;
-import io.sunflower.util.Lists;
-import io.sunflower.util.Maps;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
@@ -38,7 +38,7 @@ public class DefaultLoggingFactoryTest {
     private final YamlConfigurationFactory<DefaultLoggingFactory> factory = new YamlConfigurationFactory<>(
             DefaultLoggingFactory.class,
             BaseValidator.newValidator(),
-            objectMapper, "dw");
+            objectMapper, "sf");
 
     private DefaultLoggingFactory config;
 
@@ -96,7 +96,7 @@ public class DefaultLoggingFactoryTest {
         final File newAppLog = folder.newFile("example-new-app.log");
         final File newAppNotAdditiveLog = folder.newFile("example-new-app-not-additive.log");
         final File defaultLog = folder.newFile("example.log");
-        final StringSubstitutor substitutor = new StringSubstitutor(Maps.of(
+        final StringSubstitutor substitutor = new StringSubstitutor(ImmutableMap.of(
                 "new_app", StringUtils.removeEnd(newAppLog.getAbsolutePath(), ".log"),
                 "new_app_not_additive", StringUtils.removeEnd(newAppNotAdditiveLog.getAbsolutePath(), ".log"),
                 "default", StringUtils.removeEnd(defaultLog.getAbsolutePath(), ".log")
@@ -145,7 +145,7 @@ public class DefaultLoggingFactoryTest {
 
         // There should be exactly one appender configured, a ConsoleAppender
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        final List<Appender<ILoggingEvent>> appenders = Lists.of(logger.iteratorForAppenders());
+        final List<Appender<ILoggingEvent>> appenders = Lists.newArrayList(logger.iteratorForAppenders());
         assertThat(appenders).hasAtLeastOneElementOfType(ConsoleAppender.class);
         assertThat(appenders).as("context").allMatch((Appender<?> a) -> a.getContext() != null);
         assertThat(appenders).as("started").allMatch(LifeCycle::isStarted);

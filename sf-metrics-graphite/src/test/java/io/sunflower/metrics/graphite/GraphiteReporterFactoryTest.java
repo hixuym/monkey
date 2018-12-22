@@ -38,7 +38,7 @@ public class GraphiteReporterFactoryTest {
     @Test
     public void createDefaultFactory() throws Exception {
         final GraphiteReporterFactory factory = new YamlConfigurationFactory<>(GraphiteReporterFactory.class,
-             BaseValidator.newValidator(), Jackson.newObjectMapper(), "dw")
+             BaseValidator.newValidator(), Jackson.newObjectMapper(), "sf")
             .build();
         assertThat(factory.getFrequency()).isEqualTo(Optional.empty());
     }

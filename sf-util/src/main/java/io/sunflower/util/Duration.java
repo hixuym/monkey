@@ -2,6 +2,7 @@ package io.sunflower.util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,36 +17,31 @@ import static java.util.Objects.requireNonNull;
 public class Duration implements Comparable<Duration> {
     private static final Pattern DURATION_PATTERN = Pattern.compile("(\\d+)\\s*(\\S+)");
 
-    private static final Map<String, TimeUnit> SUFFIXES;
-
-    static {
-        final Map<String, TimeUnit> suffixes = new HashMap<>();
-        suffixes.put("ns", TimeUnit.NANOSECONDS);
-        suffixes.put("nanosecond", TimeUnit.NANOSECONDS);
-        suffixes.put("nanoseconds", TimeUnit.NANOSECONDS);
-        suffixes.put("us", TimeUnit.MICROSECONDS);
-        suffixes.put("microsecond", TimeUnit.MICROSECONDS);
-        suffixes.put("microseconds", TimeUnit.MICROSECONDS);
-        suffixes.put("ms", TimeUnit.MILLISECONDS);
-        suffixes.put("millisecond", TimeUnit.MILLISECONDS);
-        suffixes.put("milliseconds", TimeUnit.MILLISECONDS);
-        suffixes.put("s", TimeUnit.SECONDS);
-        suffixes.put("second", TimeUnit.SECONDS);
-        suffixes.put("seconds", TimeUnit.SECONDS);
-        suffixes.put("m", TimeUnit.MINUTES);
-        suffixes.put("min", TimeUnit.MINUTES);
-        suffixes.put("mins", TimeUnit.MINUTES);
-        suffixes.put("minute", TimeUnit.MINUTES);
-        suffixes.put("minutes", TimeUnit.MINUTES);
-        suffixes.put("h", TimeUnit.HOURS);
-        suffixes.put("hour", TimeUnit.HOURS);
-        suffixes.put("hours", TimeUnit.HOURS);
-        suffixes.put("d", TimeUnit.DAYS);
-        suffixes.put("day", TimeUnit.DAYS);
-        suffixes.put("days", TimeUnit.DAYS);
-        SUFFIXES = Collections.unmodifiableMap(suffixes);
-
-    }
+    private static final Map<String, TimeUnit> SUFFIXES = new ImmutableMap.Builder<String, TimeUnit>()
+            .put("ns", TimeUnit.NANOSECONDS)
+            .put("nanosecond", TimeUnit.NANOSECONDS)
+            .put("nanoseconds", TimeUnit.NANOSECONDS)
+            .put("us", TimeUnit.MICROSECONDS)
+            .put("microsecond", TimeUnit.MICROSECONDS)
+            .put("microseconds", TimeUnit.MICROSECONDS)
+            .put("ms", TimeUnit.MILLISECONDS)
+            .put("millisecond", TimeUnit.MILLISECONDS)
+            .put("milliseconds", TimeUnit.MILLISECONDS)
+            .put("s", TimeUnit.SECONDS)
+            .put("second", TimeUnit.SECONDS)
+            .put("seconds", TimeUnit.SECONDS)
+            .put("m", TimeUnit.MINUTES)
+            .put("min", TimeUnit.MINUTES)
+            .put("mins", TimeUnit.MINUTES)
+            .put("minute", TimeUnit.MINUTES)
+            .put("minutes", TimeUnit.MINUTES)
+            .put("h", TimeUnit.HOURS)
+            .put("hour", TimeUnit.HOURS)
+            .put("hours", TimeUnit.HOURS)
+            .put("d", TimeUnit.DAYS)
+            .put("day", TimeUnit.DAYS)
+            .put("days", TimeUnit.DAYS)
+            .build();
 
     public static Duration nanoseconds(long count) {
         return new Duration(count, TimeUnit.NANOSECONDS);

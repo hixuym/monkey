@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.util.Maps;
+import com.google.common.collect.ImmutableMap;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -41,7 +41,7 @@ public class DbMigrateCommandTest extends AbstractMigrationTest {
             final List<Map<String, Object>> rows = handle.select("select * from persons");
             assertThat(rows).hasSize(1);
             assertThat(rows.get(0)).isEqualTo(
-                    Maps.of("id", 1,
+                    ImmutableMap.of("id", 1,
                             "name", "Bill Smith",
                             "email", "bill@smith.me"));
         }

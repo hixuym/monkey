@@ -2,9 +2,9 @@ package io.sunflower.logging;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.Jackson;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.After;
 import org.junit.Before;
@@ -67,7 +67,7 @@ public class UdpSocketAppenderFactoryTest {
         objectMapper.getSubtypeResolver().registerSubtypes(UdpSocketAppenderFactory.class);
 
         DefaultLoggingFactory loggingFactory = new YamlConfigurationFactory<>(DefaultLoggingFactory.class,
-            BaseValidator.newValidator(), objectMapper, "dw-udp")
+            BaseValidator.newValidator(), objectMapper, "sf-udp")
             .build(new File(Resources.getResource("yaml/logging-udp.yml").toURI()));
         loggingFactory.configure(new MetricRegistry(), "udp-test");
 

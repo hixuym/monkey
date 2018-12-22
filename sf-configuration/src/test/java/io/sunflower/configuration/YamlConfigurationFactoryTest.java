@@ -8,7 +8,7 @@ public class YamlConfigurationFactoryTest extends BaseConfigurationFactoryTest {
 
     @Override
     public void setUp() throws Exception {
-        this.factory = new YamlConfigurationFactory<>(Example.class, validator, Jackson.newObjectMapper(), "dw");
+        this.factory = new YamlConfigurationFactory<>(Example.class, validator, Jackson.newObjectMapper(), "sf");
         this.malformedFile = resourceFileName("factory-test-malformed.yml");
         this.emptyFile = resourceFileName("factory-test-empty.yml");
         this.invalidFile = resourceFileName("factory-test-invalid.yml");

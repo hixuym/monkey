@@ -91,7 +91,6 @@
         <module>sf-quickstarters</module>
     </modules>
 
-
     <dependencyManagement>
         <dependencies>
             <dependency>

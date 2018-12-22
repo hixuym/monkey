@@ -43,7 +43,7 @@ import java.util.function.Supplier;
  */
 public class ConfigOverride {
 
-    public static final String DEFAULT_PREFIX = "dw.";
+    public static final String DEFAULT_PREFIX = "sf.";
     private final String key;
     private final Supplier<String> value;
     private final String propertyPrefix;

@@ -14,6 +14,7 @@ import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.ConfigurationException;
 import io.sunflower.configuration.ConfigurationValidationException;
 import io.sunflower.configuration.YamlConfigurationFactory;
@@ -22,7 +23,6 @@ import io.sunflower.json.Jackson;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
 import io.sunflower.logging.filter.NullLevelFilterFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;
-import io.sunflower.util.Resources;
 import io.sunflower.util.Size;
 import io.sunflower.validation.BaseValidator;
 import io.sunflower.validation.ConstraintViolations;
@@ -306,7 +306,7 @@ public class FileAppenderFactoryTest {
         maxFileSize.setAccessible(true);
 
         final YamlConfigurationFactory<FileAppenderFactory> factory =
-            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "dw");
+            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "sf");
 
         final FileAppenderFactory appenderFactory = factory.build(new File(Resources.getResource("yaml/appender_file_cap.yaml").getFile()));
         final FileAppender appender = appenderFactory.buildAppender(new LoggerContext());
@@ -335,7 +335,7 @@ public class FileAppenderFactoryTest {
         totalSizeCap.setAccessible(true);
 
         final YamlConfigurationFactory<FileAppenderFactory> factory =
-            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "dw");
+            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "sf");
 
         final FileAppenderFactory appenderFactory = factory.build(new File(Resources.getResource("yaml/appender_file_cap2.yaml").getFile()));
         final FileAppender appender = appenderFactory.buildAppender(new LoggerContext());
@@ -357,7 +357,7 @@ public class FileAppenderFactoryTest {
     @Test
     public void invalidUseOfTotalSizeCap() {
         final YamlConfigurationFactory<FileAppenderFactory> factory =
-            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "dw");
+            new YamlConfigurationFactory<>(FileAppenderFactory.class, validator, mapper, "sf");
         assertThatThrownBy(() ->
             factory.build(new File(Resources.getResource("yaml/appender_file_cap_invalid.yaml").getFile()))
         ).isExactlyInstanceOf(ConfigurationValidationException.class)

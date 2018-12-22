@@ -1,6 +1,6 @@
 package io.sunflower.jaxrs.filter;
 
-import io.sunflower.util.Strings;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

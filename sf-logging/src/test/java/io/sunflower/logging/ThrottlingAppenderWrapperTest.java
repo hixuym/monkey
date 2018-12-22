@@ -79,7 +79,7 @@ public class ThrottlingAppenderWrapperTest {
             ConsoleAppenderFactory.class,
             BaseValidator.newValidator(),
             Jackson.newObjectMapper(),
-            "dw");
+            "sf");
     }
 
     @Before

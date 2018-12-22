@@ -2,11 +2,9 @@ package io.sunflower.util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.common.collect.ImmutableSortedMap;
 
-import java.util.Collections;
-import java.util.Locale;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,35 +13,31 @@ import static java.util.Objects.requireNonNull;
 public class Size implements Comparable<Size> {
     private static final Pattern SIZE_PATTERN = Pattern.compile("(\\d+)\\s*(\\S+)");
 
-    private static final SortedMap<String, SizeUnit> SUFFIXES;
-
-    static {
-        final SortedMap<String, SizeUnit> suffixes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        suffixes.put("B", SizeUnit.BYTES);
-        suffixes.put("byte", SizeUnit.BYTES);
-        suffixes.put("bytes", SizeUnit.BYTES);
-        suffixes.put("K", SizeUnit.KILOBYTES);
-        suffixes.put("KB", SizeUnit.KILOBYTES);
-        suffixes.put("KiB", SizeUnit.KILOBYTES);
-        suffixes.put("kilobyte", SizeUnit.KILOBYTES);
-        suffixes.put("kilobytes", SizeUnit.KILOBYTES);
-        suffixes.put("M", SizeUnit.MEGABYTES);
-        suffixes.put("MB", SizeUnit.MEGABYTES);
-        suffixes.put("MiB", SizeUnit.MEGABYTES);
-        suffixes.put("megabyte", SizeUnit.MEGABYTES);
-        suffixes.put("megabytes", SizeUnit.MEGABYTES);
-        suffixes.put("G", SizeUnit.GIGABYTES);
-        suffixes.put("GB", SizeUnit.GIGABYTES);
-        suffixes.put("GiB", SizeUnit.GIGABYTES);
-        suffixes.put("gigabyte", SizeUnit.GIGABYTES);
-        suffixes.put("gigabytes", SizeUnit.GIGABYTES);
-        suffixes.put("T", SizeUnit.TERABYTES);
-        suffixes.put("TB", SizeUnit.TERABYTES);
-        suffixes.put("TiB", SizeUnit.TERABYTES);
-        suffixes.put("terabyte", SizeUnit.TERABYTES);
-        suffixes.put("terabytes", SizeUnit.TERABYTES);
-        SUFFIXES = Collections.unmodifiableSortedMap(suffixes);
-    }
+    private static final Map<String, SizeUnit> SUFFIXES = ImmutableSortedMap.<String, SizeUnit>orderedBy(String.CASE_INSENSITIVE_ORDER)
+            .put("B", SizeUnit.BYTES)
+            .put("byte", SizeUnit.BYTES)
+            .put("bytes", SizeUnit.BYTES)
+            .put("K", SizeUnit.KILOBYTES)
+            .put("KB", SizeUnit.KILOBYTES)
+            .put("KiB", SizeUnit.KILOBYTES)
+            .put("kilobyte", SizeUnit.KILOBYTES)
+            .put("kilobytes", SizeUnit.KILOBYTES)
+            .put("M", SizeUnit.MEGABYTES)
+            .put("MB", SizeUnit.MEGABYTES)
+            .put("MiB", SizeUnit.MEGABYTES)
+            .put("megabyte", SizeUnit.MEGABYTES)
+            .put("megabytes", SizeUnit.MEGABYTES)
+            .put("G", SizeUnit.GIGABYTES)
+            .put("GB", SizeUnit.GIGABYTES)
+            .put("GiB", SizeUnit.GIGABYTES)
+            .put("gigabyte", SizeUnit.GIGABYTES)
+            .put("gigabytes", SizeUnit.GIGABYTES)
+            .put("T", SizeUnit.TERABYTES)
+            .put("TB", SizeUnit.TERABYTES)
+            .put("TiB", SizeUnit.TERABYTES)
+            .put("terabyte", SizeUnit.TERABYTES)
+            .put("terabytes", SizeUnit.TERABYTES)
+            .build();
 
     public static Size bytes(long count) {
         return new Size(count, SizeUnit.BYTES);

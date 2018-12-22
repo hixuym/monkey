@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.util.Maps;
+import com.google.common.collect.ImmutableMap;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.Before;
@@ -54,7 +54,7 @@ public class DbRollbackCommandTest extends AbstractMigrationTest {
 
         // Print out the change that rollbacks the second change
         rollbackCommand.setOutputStream(new PrintStream(baos, true));
-        rollbackCommand.run(null, new Namespace(Maps.of("count", 1, "dry-run", true)), conf);
+        rollbackCommand.run(null, new Namespace(ImmutableMap.of("count", 1, "dry-run", true)), conf);
         assertThat(baos.toString(UTF_8))
             .containsIgnoringCase("ALTER TABLE PUBLIC.persons DROP COLUMN email;");
     }
@@ -81,7 +81,7 @@ public class DbRollbackCommandTest extends AbstractMigrationTest {
 
         // Print out a rollback script for both changes after the migration date
         rollbackCommand.setOutputStream(new PrintStream(baos, true));
-        rollbackCommand.run(null, new Namespace(Maps.of(
+        rollbackCommand.run(null, new Namespace(ImmutableMap.of(
                 "date", new Date(migrationDate - 1000),
                 "dry-run", true)),
                 conf);
@@ -125,7 +125,7 @@ public class DbRollbackCommandTest extends AbstractMigrationTest {
 
         // Print out the rollback script for the second change
         rollbackCommand.setOutputStream(new PrintStream(baos, true));
-        rollbackCommand.run(null, new Namespace(Maps.of("tag", "v1", "dry-run", true)), conf);
+        rollbackCommand.run(null, new Namespace(ImmutableMap.of("tag", "v1", "dry-run", true)), conf);
         assertThat(baos.toString(UTF_8))
             .containsIgnoringCase("ALTER TABLE PUBLIC.persons DROP COLUMN email;");
     }

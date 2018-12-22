@@ -1,7 +1,7 @@
 package io.sunflower.configuration;
 
-import io.sunflower.util.ByteStreams;
-import io.sunflower.util.Resources;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Resources;
 import org.junit.Test;
 
 import java.io.InputStream;

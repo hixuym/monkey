@@ -25,10 +25,10 @@ public class BaseValidator {
      */
     public static HibernateValidatorConfiguration newConfiguration() {
         return Validation
-            .byProvider(HibernateValidator.class)
-            .configure()
-            .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
-            .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
-            .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());
+                .byProvider(HibernateValidator.class)
+                .configure()
+                .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
+                .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
+                .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());
     }
 }

@@ -264,10 +264,6 @@
                         <artifactId>listenablefuture</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>org.checkerframework</groupId>
-                        <artifactId>checker-qual</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>com.google.j2objc</groupId>
                         <artifactId>j2objc-annotations</artifactId>
                     </exclusion>

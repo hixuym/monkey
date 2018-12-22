@@ -1,8 +1,8 @@
 package io.sunflower.logging;
 
+import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.Jackson;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class AppenderFactoryCustomTimeZone {
 
     @SuppressWarnings("rawtypes")
     private final YamlConfigurationFactory<ConsoleAppenderFactory> factory = new YamlConfigurationFactory<>(
-        ConsoleAppenderFactory.class, BaseValidator.newValidator(), Jackson.newObjectMapper(), "dw");
+        ConsoleAppenderFactory.class, BaseValidator.newValidator(), Jackson.newObjectMapper(), "sf");
 
     private static File loadResource(String resourceName) throws URISyntaxException {
         return new File(Resources.getResource(resourceName).toURI());

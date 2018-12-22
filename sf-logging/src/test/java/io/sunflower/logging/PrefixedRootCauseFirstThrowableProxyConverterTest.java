@@ -1,7 +1,7 @@
 package io.sunflower.logging;
 
 import ch.qos.logback.classic.spi.ThrowableProxy;
-import io.sunflower.util.Strings;
+import com.google.common.base.Strings;
 import org.junit.Before;
 import org.junit.Test;
 

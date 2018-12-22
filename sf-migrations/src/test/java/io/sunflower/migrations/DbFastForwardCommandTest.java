@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.util.Maps;
+import com.google.common.collect.ImmutableMap;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class DbFastForwardCommandTest extends AbstractMigrationTest {
         }
 
         // Fast-forward one change
-        fastForwardCommand.run(null, new Namespace(Maps.of("all", false, "dry-run", false)), conf);
+        fastForwardCommand.run(null, new Namespace(ImmutableMap.of("all", false, "dry-run", false)), conf);
 
         // 2nd and 3rd migrations is performed
         new DbMigrateCommand<>(
@@ -67,7 +67,7 @@ public class DbFastForwardCommandTest extends AbstractMigrationTest {
         }
 
         // Fast-forward all the changes
-        fastForwardCommand.run(null, new Namespace(Maps.of("all", true, "dry-run", false)), conf);
+        fastForwardCommand.run(null, new Namespace(ImmutableMap.of("all", true, "dry-run", false)), conf);
 
         // No migrations is performed
         new DbMigrateCommand<>(
@@ -89,7 +89,7 @@ public class DbFastForwardCommandTest extends AbstractMigrationTest {
         fastForwardCommand.setPrintStream(new PrintStream(baos));
 
         // Fast-forward one change
-        fastForwardCommand.run(null, new Namespace(Maps.of("all", false, "dry-run", true)), conf);
+        fastForwardCommand.run(null, new Namespace(ImmutableMap.of("all", false, "dry-run", true)), conf);
 
         assertThat(NEWLINE_PATTERN.splitAsStream(baos.toString(UTF_8))
             .filter(s -> s.startsWith("INSERT INTO PUBLIC.DATABASECHANGELOG (")))
@@ -102,7 +102,7 @@ public class DbFastForwardCommandTest extends AbstractMigrationTest {
         fastForwardCommand.setPrintStream(new PrintStream(baos));
 
         // Fast-forward 3 changes
-        fastForwardCommand.run(null, new Namespace(Maps.of("all", true, "dry-run", true)), conf);
+        fastForwardCommand.run(null, new Namespace(ImmutableMap.of("all", true, "dry-run", true)), conf);
 
         assertThat(NEWLINE_PATTERN.splitAsStream(baos.toString(UTF_8))
             .filter(s -> s.startsWith("INSERT INTO PUBLIC.DATABASECHANGELOG (")))

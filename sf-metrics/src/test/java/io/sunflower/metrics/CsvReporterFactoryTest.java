@@ -2,11 +2,11 @@ package io.sunflower.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.DiscoverableSubtypeResolver;
 import io.sunflower.json.Jackson;
 import io.sunflower.lifecycle.setup.LifecycleEnvironment;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class CsvReporterFactoryTest {
     private final YamlConfigurationFactory<MetricsFactory> factory =
             new YamlConfigurationFactory<>(MetricsFactory.class,
                                            BaseValidator.newValidator(),
-                                           objectMapper, "dw");
+                                           objectMapper, "sf");
 
     @Before
     public void setUp() throws Exception {

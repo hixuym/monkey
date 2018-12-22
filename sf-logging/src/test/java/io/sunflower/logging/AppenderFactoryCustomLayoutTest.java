@@ -6,12 +6,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.Jackson;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
 import io.sunflower.logging.filter.NullLevelFilterFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class AppenderFactoryCustomLayoutTest {
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     @SuppressWarnings("rawtypes")
     private final YamlConfigurationFactory<ConsoleAppenderFactory> factory = new YamlConfigurationFactory<>(
-        ConsoleAppenderFactory.class, BaseValidator.newValidator(), objectMapper, "dw-layout");
+        ConsoleAppenderFactory.class, BaseValidator.newValidator(), objectMapper, "sf-layout");
 
     private static File loadResource() throws URISyntaxException {
         return new File(Resources.getResource("yaml/appender_with_custom_layout.yml").toURI());

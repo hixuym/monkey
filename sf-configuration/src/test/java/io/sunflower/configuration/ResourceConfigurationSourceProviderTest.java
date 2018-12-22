@@ -1,6 +1,6 @@
 package io.sunflower.configuration;
 
-import io.sunflower.util.CharStreams;
+import com.google.common.io.CharStreams;
 import org.junit.Test;
 
 import java.io.InputStream;

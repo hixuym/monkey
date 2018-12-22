@@ -50,7 +50,7 @@ public class CommandTest {
     public void setUp() throws Exception {
         final JarLocation location = mock(JarLocation.class);
         final Bootstrap<Configuration> bootstrap = new Bootstrap<>(app);
-        when(location.toString()).thenReturn("dw-thing.jar");
+        when(location.toString()).thenReturn("sf-thing.jar");
         when(location.getVersion()).thenReturn(Optional.of("1.0.0"));
         bootstrap.addCommand(command);
 
@@ -64,7 +64,7 @@ public class CommandTest {
 
         assertThat(stdOut.toString())
                 .isEqualTo(String.format(
-                        "usage: java -jar dw-thing.jar test [-h] {a,b,c}%n" +
+                        "usage: java -jar sf-thing.jar test [-h] {a,b,c}%n" +
                                 "%n" +
                                 "test%n" +
                                 "%n" +

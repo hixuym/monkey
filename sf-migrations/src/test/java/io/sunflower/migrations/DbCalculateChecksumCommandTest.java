@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.util.Maps;
+import com.google.common.collect.ImmutableMap;
 import liquibase.change.CheckSum;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -27,7 +27,7 @@ public class DbCalculateChecksumCommandTest extends AbstractMigrationTest {
             assertThat(checkSum).isEqualTo(CheckSum.parse("8:0f3683b37321ccfb1694a044986de4d9"));
             checkSumVerified.set(true);
         });
-        migrateCommand.run(null, new Namespace(Maps.of(
+        migrateCommand.run(null, new Namespace(ImmutableMap.of(
                 "id", Collections.singletonList("2"),
                 "author", Collections.singletonList("db_dev"))),
                 createConfiguration(getDatabaseUrl()));

@@ -2,7 +2,7 @@ package io.sunflower.configuration;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import io.sunflower.util.Strings;
+import com.google.common.base.Strings;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import javax.annotation.Nullable;

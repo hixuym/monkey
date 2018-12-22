@@ -1,9 +1,9 @@
 package io.sunflower.datasource;
 
+import com.google.common.io.Resources;
 import io.sunflower.configuration.YamlConfigurationFactory;
 import io.sunflower.json.Jackson;
 import io.sunflower.util.Duration;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Test;
 

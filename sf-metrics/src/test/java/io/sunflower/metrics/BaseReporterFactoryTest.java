@@ -3,7 +3,7 @@ package io.sunflower.metrics;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
-import io.sunflower.util.Sets;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -18,8 +18,8 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(Parameterized.class)
 public class BaseReporterFactoryTest {
-    private static final Set<String> INCLUDES = Sets.of("inc", "both", "inc.+");
-    private static final Set<String> EXCLUDES = Sets.of("exc", "both", "exc.+");
+    private static final Set<String> INCLUDES = ImmutableSet.of("inc", "both", "inc.+");
+    private static final Set<String> EXCLUDES = ImmutableSet.of("exc", "both", "exc.+");
     private static final Set<String> EMPTY = Collections.emptySet();
 
     @Parameterized.Parameters(name = "{index} {6} {2}")

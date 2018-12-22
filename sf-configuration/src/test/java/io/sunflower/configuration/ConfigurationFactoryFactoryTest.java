@@ -2,9 +2,9 @@ package io.sunflower.configuration;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import io.sunflower.configuration.BaseConfigurationFactoryTest.Example;
 import io.sunflower.json.Jackson;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class ConfigurationFactoryFactoryTest {
     public void createDefaultFactory() throws Exception {
         File validFile = new File(Resources.getResource("factory-test-valid.yml").toURI());
         ConfigurationFactory<Example> factory =
-            factoryFactory.create(Example.class, validator, Jackson.newObjectMapper(), "dw");
+            factoryFactory.create(Example.class, validator, Jackson.newObjectMapper(), "sf");
         final Example example = factory.build(validFile);
         assertThat(example.getName())
             .isEqualTo("Coda Hale");
@@ -36,7 +36,7 @@ public class ConfigurationFactoryFactoryTest {
         File validFileWithUnknownProp = new File(
             Resources.getResource("factory-test-unknown-property.yml").toURI());
         ConfigurationFactory<Example> factory =
-            factoryFactory.create(Example.class, validator, Jackson.newObjectMapper(), "dw");
+            factoryFactory.create(Example.class, validator, Jackson.newObjectMapper(), "sf");
 
         assertThatExceptionOfType(ConfigurationException.class)
             .isThrownBy(() -> factory.build(validFileWithUnknownProp))
@@ -53,7 +53,7 @@ public class ConfigurationFactoryFactoryTest {
                 Example.class,
                 validator,
                 Jackson.newObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES),
-                "dw");
+                "sf");
         Example example = factory.build(validFileWithUnknownProp);
         assertThat(example.getName())
             .isEqualTo("Mighty Wizard");

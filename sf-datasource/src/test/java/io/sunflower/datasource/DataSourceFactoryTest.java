@@ -98,7 +98,7 @@ public class DataSourceFactoryTest {
     @Test
     public void createDefaultFactory() throws Exception {
         final DataSourceFactory factory = new YamlConfigurationFactory<>(DataSourceFactory.class,
-            BaseValidator.newValidator(), Jackson.newObjectMapper(), "dw")
+            BaseValidator.newValidator(), Jackson.newObjectMapper(), "sf")
             .build(new ResourceConfigurationSourceProvider(), "yaml/minimal_db_pool.yml");
 
         assertThat(factory.getDriverClass()).isEqualTo("org.postgresql.Driver");

@@ -1,8 +1,8 @@
 package io.sunflower.jaxrs.validation;
 
+import com.google.common.base.Strings;
 import io.sunflower.jaxrs.errors.ErrorMessage;
 import io.sunflower.util.Enums;
-import io.sunflower.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

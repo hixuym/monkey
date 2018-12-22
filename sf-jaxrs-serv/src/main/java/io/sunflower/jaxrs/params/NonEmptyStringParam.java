@@ -1,7 +1,7 @@
 package io.sunflower.jaxrs.params;
 
 
-import io.sunflower.util.Strings;
+import com.google.common.base.Strings;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

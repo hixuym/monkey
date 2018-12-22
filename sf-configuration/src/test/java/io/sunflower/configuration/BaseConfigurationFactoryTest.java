@@ -1,10 +1,10 @@
 package io.sunflower.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.benmanes.caffeine.cache.CaffeineSpec;
+import com.google.common.cache.CacheBuilderSpec;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Resources;
 import io.sunflower.json.Jackson;
-import io.sunflower.util.Maps;
-import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.assertj.core.data.MapEntry;
 import org.junit.After;
@@ -115,7 +115,7 @@ public abstract class BaseConfigurationFactoryTest {
         List<String> type = Arrays.asList("coder", "wizard");
 
         @JsonProperty
-        Map<String, String> properties = Maps.of("debug", "true", "settings.enabled", "false");
+        Map<String, String> properties = ImmutableMap.of("debug", "true", "settings.enabled", "false");
 
         @JsonProperty
         List<ExampleServer> servers = Arrays.asList(
@@ -123,7 +123,7 @@ public abstract class BaseConfigurationFactoryTest {
 
         @JsonProperty
         @Valid
-        CaffeineSpec cacheBuilderSpec = CaffeineSpec.parse("initialCapacity=0,maximumSize=0");
+        CacheBuilderSpec cacheBuilderSpec = CacheBuilderSpec.disableCaching();
     }
 
     static class NonInsatiableExample {
@@ -164,7 +164,7 @@ public abstract class BaseConfigurationFactoryTest {
     public void resetConfigOverrides() {
         for (Enumeration<?> props = System.getProperties().propertyNames(); props.hasMoreElements();) {
             String keyString = (String) props.nextElement();
-            if (keyString.startsWith("dw.")) {
+            if (keyString.startsWith("sf.")) {
                 System.clearProperty(keyString);
             }
         }
@@ -176,12 +176,11 @@ public abstract class BaseConfigurationFactoryTest {
     @Test
     public void usesDefaultedCacheBuilderSpec() throws Exception {
         final ExampleWithDefaults example =
-            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
-                .build();
+            new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf").build();
         assertThat(example.cacheBuilderSpec)
             .isNotNull();
         assertThat(example.cacheBuilderSpec)
-            .isEqualTo(CaffeineSpec.parse("initialCapacity=0,maximumSize=0"));
+            .isEqualTo(CacheBuilderSpec.disableCaching());
     }
 
     @Test
@@ -209,7 +208,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesSimpleOverride() throws Exception {
-        System.setProperty("dw.name", "Coda Hale Overridden");
+        System.setProperty("sf.name", "Coda Hale Overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getName())
             .isEqualTo("Coda Hale Overridden");
@@ -217,7 +216,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesExistingOverrideWithPeriod() throws Exception {
-        System.setProperty("dw.my\\.logger.level", "debug");
+        System.setProperty("sf.my\\.logger.level", "debug");
         final Example example = factory.build(validFile);
         assertThat(example.getLogger().get("level"))
             .isEqualTo("debug");
@@ -225,7 +224,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesNewOverrideWithPeriod() throws Exception {
-        System.setProperty("dw.my\\.logger.com\\.example", "error");
+        System.setProperty("sf.my\\.logger.com\\.example", "error");
         final Example example = factory.build(validFile);
         assertThat(example.getLogger().get("com.example"))
             .isEqualTo("error");
@@ -233,7 +232,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesArrayOverride() throws Exception {
-        System.setProperty("dw.type", "coder,wizard,overridden");
+        System.setProperty("sf.type", "coder,wizard,overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(2))
                 .isEqualTo("overridden");
@@ -243,7 +242,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesArrayOverrideEscaped() throws Exception {
-        System.setProperty("dw.type", "coder,wizard,overr\\,idden");
+        System.setProperty("sf.type", "coder,wizard,overr\\,idden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(2))
                 .isEqualTo("overr,idden");
@@ -253,7 +252,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handlesSingleElementArrayOverride() throws Exception {
-        System.setProperty("dw.type", "overridden");
+        System.setProperty("sf.type", "overridden");
         final Example example = factory.build(validFile);
         assertThat(example.getType().get(0))
                 .isEqualTo("overridden");
@@ -263,7 +262,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayWithIndices() throws Exception {
-        System.setProperty("dw.type[1]", "overridden");
+        System.setProperty("sf.type[1]", "overridden");
         final Example example = factory.build(validFile);
 
         assertThat(example.getType().get(0))
@@ -274,7 +273,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayWithIndicesReverse() throws Exception {
-        System.setProperty("dw.type[0]", "overridden");
+        System.setProperty("sf.type[0]", "overridden");
         final Example example = factory.build(validFile);
 
         assertThat(example.getType().get(0))
@@ -285,8 +284,8 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overridesArrayPropertiesWithIndices() throws Exception {
-        System.setProperty("dw.servers[0].port", "7000");
-        System.setProperty("dw.servers[2].port", "9000");
+        System.setProperty("sf.servers[0].port", "7000");
+        System.setProperty("sf.servers[2].port", "9000");
         final Example example = factory.build(validFile);
 
         assertThat(example.getServers())
@@ -299,7 +298,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void overrideMapProperty() throws Exception {
-        System.setProperty("dw.properties.settings.enabled", "true");
+        System.setProperty("sf.properties.settings.enabled", "true");
         final Example example = factory.build(validFile);
         assertThat(example.getProperties())
                 .contains(MapEntry.entry("debug", "true"),
@@ -308,7 +307,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionOnUnexpectedArrayOverride() throws Exception {
-        System.setProperty("dw.servers.port", "9000");
+        System.setProperty("sf.servers.port", "9000");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -320,14 +319,14 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionOnArrayOverrideWithInvalidType() throws Exception {
-        System.setProperty("dw.servers", "one,two");
+        System.setProperty("sf.servers", "one,two");
 
         assertThatExceptionOfType(ConfigurationParsingException.class).isThrownBy(() -> factory.build(validFile));
     }
 
     @Test
     public void throwsAnExceptionOnOverrideArrayIndexOutOfBounds() throws Exception {
-        System.setProperty("dw.type[2]", "invalid");
+        System.setProperty("sf.type[2]", "invalid");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
@@ -339,7 +338,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionOnOverrideArrayPropertyIndexOutOfBounds() throws Exception {
-        System.setProperty("dw.servers[4].port", "9000");
+        System.setProperty("sf.servers[4].port", "9000");
         try {
             factory.build(validFile);
             failBecauseExceptionWasNotThrown(ArrayIndexOutOfBoundsException.class);
@@ -384,14 +383,14 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void handleOverrideDefaultConfiguration() throws Exception {
-        System.setProperty("dw.name", "Coda Hale Overridden");
-        System.setProperty("dw.type", "coder,wizard,overridden");
-        System.setProperty("dw.properties.settings.enabled", "true");
-        System.setProperty("dw.servers[0].port", "8090");
-        System.setProperty("dw.servers[2].port", "8092");
+        System.setProperty("sf.name", "Coda Hale Overridden");
+        System.setProperty("sf.type", "coder,wizard,overridden");
+        System.setProperty("sf.properties.settings.enabled", "true");
+        System.setProperty("sf.servers[0].port", "8090");
+        System.setProperty("sf.servers[2].port", "8092");
 
         final ExampleWithDefaults example =
-                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
+                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf")
                         .build();
 
         assertThat(example.name).isEqualTo("Coda Hale Overridden");
@@ -405,12 +404,12 @@ public abstract class BaseConfigurationFactoryTest {
     @Test
     public void handleDefaultConfigurationWithoutOverriding() throws Exception {
         final ExampleWithDefaults example =
-                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "dw")
+                new YamlConfigurationFactory<>(ExampleWithDefaults.class, validator, Jackson.newObjectMapper(), "sf")
                         .build();
 
         assertThat(example.name).isEqualTo("Coda Hale");
         assertThat(example.type).isEqualTo(Arrays.asList("coder", "wizard"));
-        assertThat(example.properties).isEqualTo(Maps.of("debug", "true", "settings.enabled", "false"));
+        assertThat(example.properties).isEqualTo(ImmutableMap.of("debug", "true", "settings.enabled", "false"));
         assertThat(example.servers.get(0).getPort()).isEqualTo(8080);
         assertThat(example.servers.get(1).getPort()).isEqualTo(8081);
         assertThat(example.servers.get(2).getPort()).isEqualTo(8082);
@@ -418,7 +417,7 @@ public abstract class BaseConfigurationFactoryTest {
 
     @Test
     public void throwsAnExceptionIfDefaultConfigurationCantBeInstantiated() throws Exception {
-        System.setProperty("dw.name", "Coda Hale Overridden");
+        System.setProperty("sf.name", "Coda Hale Overridden");
         final YamlConfigurationFactory<NonInsatiableExample> factory =
             new YamlConfigurationFactory<>(NonInsatiableExample.class, validator, Jackson.newObjectMapper(), "dw");
         assertThatThrownBy(factory::build)

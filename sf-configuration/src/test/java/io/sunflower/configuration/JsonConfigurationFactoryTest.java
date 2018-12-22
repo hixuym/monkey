@@ -16,7 +16,7 @@ public class JsonConfigurationFactoryTest extends BaseConfigurationFactoryTest {
 
     @Override
     public void setUp() throws Exception {
-        this.factory = new JsonConfigurationFactory<>(Example.class, validator, Jackson.newObjectMapper(), "dw");
+        this.factory = new JsonConfigurationFactory<>(Example.class, validator, Jackson.newObjectMapper(), "sf");
         this.malformedFile = resourceFileName("factory-test-malformed.json");
         this.emptyFile = resourceFileName("factory-test-empty.json");
         this.invalidFile = resourceFileName("factory-test-invalid.json");
@@ -58,7 +58,7 @@ public class JsonConfigurationFactoryTest extends BaseConfigurationFactoryTest {
             .newObjectMapper()
             .configure(Feature.ALLOW_COMMENTS, true);
 
-        JsonConfigurationFactory<Example> factory = new JsonConfigurationFactory<>(Example.class, validator, mapper, "dw");
+        JsonConfigurationFactory<Example> factory = new JsonConfigurationFactory<>(Example.class, validator, mapper, "sf");
         factory.build(commentFile);
     }
 }

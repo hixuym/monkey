@@ -1,9 +1,9 @@
 package io.sunflower.jaxrs.validation;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import io.sunflower.util.Lists;
-import io.sunflower.util.Strings;
+import com.google.common.base.Strings;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import io.sunflower.validation.ValidationMethod;
 import io.sunflower.validation.selfvalidating.SelfValidating;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ConstraintMessage {
 
     private static final Cache<Pair<Path, ? extends ConstraintDescriptor<?>>, String> PREFIX_CACHE =
-            Caffeine.newBuilder()
+            CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
@@ -82,7 +82,8 @@ public class ConstraintMessage {
      * friendly string representation of where the error occurred (eg. "patient.name")
      */
     public static Optional<String> isRequestEntity(ConstraintViolation<?> violation, Method invocable) {
-        final Collection<Path.Node> propertyPath = Lists.of(violation.getPropertyPath());
+
+        final Collection<Path.Node> propertyPath = Lists.newArrayList(violation.getPropertyPath());
         final Path.Node parent = propertyPath.stream()
                 .skip(1L)
                 .findFirst()
@@ -117,7 +118,7 @@ public class ConstraintMessage {
      * Gets a method parameter (or a parameter field) name, if the violation raised in it.
      */
     private static Optional<String> getMemberName(ConstraintViolation<?> violation, Method invocable) {
-        final List<Path.Node> propertyPath = Lists.of(violation.getPropertyPath());
+        final List<Path.Node> propertyPath = Lists.newArrayList(violation.getPropertyPath());
         final int size = propertyPath.size();
         if (size < 2) {
             return Optional.empty();
