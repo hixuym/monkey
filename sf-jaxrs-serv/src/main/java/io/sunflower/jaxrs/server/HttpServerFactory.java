@@ -16,9 +16,9 @@
 package io.sunflower.jaxrs.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.sunflower.jaxrs.server.netty.NettyJaxrsServer;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
-import org.jboss.resteasy.plugins.server.netty.NettyJaxrsServer;
 
 /**
  * HttpServerFactory
