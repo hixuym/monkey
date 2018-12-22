@@ -2,7 +2,7 @@ package io.sunflower.logging;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.jackson.Discoverable;
+import io.sunflower.json.Discoverable;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DefaultLoggingFactory.class)
 public interface LoggingFactory extends Discoverable {

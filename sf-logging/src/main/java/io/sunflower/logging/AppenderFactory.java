@@ -4,7 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.jackson.Discoverable;
+import io.sunflower.json.Discoverable;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.filter.LevelFilterFactory;
 import io.sunflower.logging.layout.LayoutFactory;

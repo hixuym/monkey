@@ -3,7 +3,7 @@ package io.sunflower.metrics;
 import com.codahale.metrics.MetricAttribute;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.configuration.YamlConfigurationFactory;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.logging.BootstrapLogging;
 import io.sunflower.util.Duration;
 import io.sunflower.util.Resources;

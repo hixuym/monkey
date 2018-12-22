@@ -1,7 +1,7 @@
 package io.sunflower;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.logging.AppenderFactory;
 import org.junit.Test;
 

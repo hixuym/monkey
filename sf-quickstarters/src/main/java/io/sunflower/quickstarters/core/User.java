@@ -15,7 +15,7 @@
 
 package io.sunflower.quickstarters.core;
 
-import io.sunflower.ebean.AbstractEntity;
+import io.sunflower.orm.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

@@ -16,7 +16,7 @@
 package io.sunflower.postoffice;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.jackson.Discoverable;
+import io.sunflower.json.Discoverable;
 
 /**
  * @author michael

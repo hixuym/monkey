@@ -9,7 +9,7 @@ import io.sunflower.Application;
 import io.sunflower.Configuration;
 import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.sunflower.validation.valuehandling.OptionalLongValidatedValueUnwrapper;

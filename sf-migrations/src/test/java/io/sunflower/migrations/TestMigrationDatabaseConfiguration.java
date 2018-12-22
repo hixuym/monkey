@@ -1,7 +1,7 @@
 package io.sunflower.migrations;
 
-import io.sunflower.db.DataSourceFactory;
-import io.sunflower.db.DatabaseConfiguration;
+import io.sunflower.datasource.DataSourceFactory;
+import io.sunflower.datasource.DatabaseConfiguration;
 
 public class TestMigrationDatabaseConfiguration implements DatabaseConfiguration<TestMigrationConfiguration> {
 

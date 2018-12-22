@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.db.ManagedDataSource;
+import io.sunflower.datasource.ManagedDataSource;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;

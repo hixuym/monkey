@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
 import io.sunflower.configuration.SubstitutingSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.logging.filter.FilterFactory;
 import io.sunflower.util.Lists;
 import io.sunflower.util.Maps;

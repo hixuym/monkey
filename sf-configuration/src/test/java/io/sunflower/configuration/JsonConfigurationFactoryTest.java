@@ -2,7 +2,7 @@ package io.sunflower.configuration;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import org.junit.Test;
 
 import java.io.File;

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.logging.async.AsyncAppenderFactory;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
 import io.sunflower.logging.filter.LevelFilterFactory;

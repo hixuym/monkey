@@ -1,7 +1,7 @@
 package io.sunflower.migrations;
 
 import io.sunflower.Configuration;
-import io.sunflower.db.DatabaseConfiguration;
+import io.sunflower.datasource.DatabaseConfiguration;
 import liquibase.Liquibase;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;

@@ -1,6 +1,6 @@
 package io.sunflower.migrations;
 
-import io.sunflower.db.DataSourceFactory;
+import io.sunflower.datasource.DataSourceFactory;
 import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.sqlgenerator.core.AddColumnGeneratorSQLite;
 import net.sourceforge.argparse4j.ArgumentParsers;

@@ -37,7 +37,7 @@
             <directory>src/main/java/__packageInPathFormat__/core</directory>
         </fileSet>
 
-        <!-- db (empty) -->
+        <!-- datasource (empty) -->
         <fileSet filtered="true" packaged="false">
             <directory>src/main/java/__packageInPathFormat__/db</directory>
         </fileSet>

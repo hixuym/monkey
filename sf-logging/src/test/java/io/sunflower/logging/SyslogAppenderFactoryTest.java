@@ -6,7 +6,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.net.SyslogAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import io.sunflower.jackson.DiscoverableSubtypeResolver;
+import io.sunflower.json.DiscoverableSubtypeResolver;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
 import io.sunflower.logging.filter.NullLevelFilterFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;

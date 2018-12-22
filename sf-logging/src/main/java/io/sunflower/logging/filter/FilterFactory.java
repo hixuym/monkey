@@ -3,7 +3,7 @@ package io.sunflower.logging.filter;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.jackson.Discoverable;
+import io.sunflower.json.Discoverable;
 
 /**
  * A service provider interface for creating Logback {@link Filter} instances.

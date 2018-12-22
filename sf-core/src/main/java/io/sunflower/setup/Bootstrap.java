@@ -22,7 +22,7 @@ import io.sunflower.configuration.ConfigurationFactoryFactory;
 import io.sunflower.configuration.ConfigurationSourceProvider;
 import io.sunflower.configuration.DefaultConfigurationFactoryFactory;
 import io.sunflower.configuration.FileConfigurationSourceProvider;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.validation.BaseValidator;
 
 import javax.validation.ValidatorFactory;

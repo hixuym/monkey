@@ -4,7 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.LayoutBase;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.sunflower.jackson.Discoverable;
+import io.sunflower.json.Discoverable;
 
 import java.util.TimeZone;
 

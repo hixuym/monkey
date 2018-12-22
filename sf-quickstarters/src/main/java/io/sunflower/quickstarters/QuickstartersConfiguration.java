@@ -2,7 +2,7 @@ package io.sunflower.quickstarters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.Configuration;
-import io.sunflower.db.DataSourceFactory;
+import io.sunflower.datasource.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;

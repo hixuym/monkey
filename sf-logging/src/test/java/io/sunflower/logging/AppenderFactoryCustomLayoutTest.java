@@ -7,7 +7,7 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.configuration.YamlConfigurationFactory;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.logging.async.AsyncLoggingEventAppenderFactory;
 import io.sunflower.logging.filter.NullLevelFilterFactory;
 import io.sunflower.logging.layout.SunflowerLayoutFactory;

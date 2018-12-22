@@ -2,7 +2,7 @@ package io.sunflower.migrations;
 
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
-import io.sunflower.db.DatabaseConfiguration;
+import io.sunflower.datasource.DatabaseConfiguration;
 import io.sunflower.setup.Bootstrap;
 
 public abstract class MigrationsBundle<T extends Configuration> implements ConfiguredBundle<T>, DatabaseConfiguration<T> {

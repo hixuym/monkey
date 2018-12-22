@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.configuration.ResourceConfigurationSourceProvider;
 import io.sunflower.configuration.SubstitutingSourceProvider;
 import io.sunflower.configuration.YamlConfigurationFactory;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.util.Duration;
 import io.sunflower.util.Resources;
 import io.sunflower.util.Size;

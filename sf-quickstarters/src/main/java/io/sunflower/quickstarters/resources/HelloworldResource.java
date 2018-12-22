@@ -15,10 +15,10 @@
 
 package io.sunflower.quickstarters.resources;
 
-import io.sunflower.ebean.Transactional;
+import io.sunflower.orm.Transactional;
 import io.sunflower.quickstarters.core.GreetingService;
 import io.sunflower.quickstarters.core.User;
-import io.sunflower.resteasy.params.IntParam;
+import io.sunflower.jaxrs.params.IntParam;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

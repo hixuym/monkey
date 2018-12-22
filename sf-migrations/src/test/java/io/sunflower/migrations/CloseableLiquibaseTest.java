@@ -2,8 +2,8 @@ package io.sunflower.migrations;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import io.sunflower.db.DataSourceFactory;
-import io.sunflower.db.ManagedPooledDataSource;
+import io.sunflower.datasource.DataSourceFactory;
+import io.sunflower.datasource.ManagedPooledDataSource;
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Before;
 import org.junit.Ignore;

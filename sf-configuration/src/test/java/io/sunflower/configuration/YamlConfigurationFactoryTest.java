@@ -1,6 +1,6 @@
 package io.sunflower.configuration;
 
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

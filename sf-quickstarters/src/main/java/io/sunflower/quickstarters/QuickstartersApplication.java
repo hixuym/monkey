@@ -2,9 +2,8 @@ package io.sunflower.quickstarters;
 
 import io.ebean.config.ServerConfig;
 import io.sunflower.Application;
-import io.sunflower.db.PooledDataSourceFactory;
-import io.sunflower.ebean.EbeanBundle;
-import io.sunflower.quickstarters.core.User;
+import io.sunflower.datasource.PooledDataSourceFactory;
+import io.sunflower.orm.OrmBundle;
 import io.sunflower.quickstarters.resources.HelloworldResource;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -25,7 +24,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
     @Override
     public void initialize(Bootstrap<QuickstartersConfiguration> bootstrap) {
-        bootstrap.addBundle(new EbeanBundle<QuickstartersConfiguration>() {
+        bootstrap.addBundle(new OrmBundle<QuickstartersConfiguration>() {
             @Override
             public PooledDataSourceFactory getDataSourceFactory(QuickstartersConfiguration configuration) {
                 return configuration.getDataSourceFactory();

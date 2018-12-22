@@ -1,6 +1,6 @@
 package io.sunflower.metrics;
 
-import io.sunflower.jackson.DiscoverableSubtypeResolver;
+import io.sunflower.json.DiscoverableSubtypeResolver;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

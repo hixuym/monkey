@@ -1,7 +1,7 @@
 package io.sunflower.migrations;
 
 import io.sunflower.Configuration;
-import io.sunflower.db.DataSourceFactory;
+import io.sunflower.datasource.DataSourceFactory;
 
 public class TestMigrationConfiguration extends Configuration {
 

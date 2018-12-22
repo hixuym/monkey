@@ -1,7 +1,7 @@
 package io.sunflower.logging;
 
 import io.sunflower.configuration.YamlConfigurationFactory;
-import io.sunflower.jackson.Jackson;
+import io.sunflower.json.Jackson;
 import io.sunflower.util.Resources;
 import io.sunflower.validation.BaseValidator;
 import org.junit.Test;
