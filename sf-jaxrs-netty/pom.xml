@@ -51,4 +51,8 @@
             <artifactId>netty-handler</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+
+    </build>
 </project>

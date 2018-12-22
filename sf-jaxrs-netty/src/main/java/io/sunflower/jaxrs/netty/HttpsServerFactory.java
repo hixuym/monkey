@@ -360,7 +360,7 @@ public class HttpsServerFactory extends HttpServerFactory {
     }
 
     @Override
-    protected Server buildNettyServer(NettyJaxrsServer server, Environment environment) {
+    protected Server buildJaxrsServer(NettyJaxrsServer server, Environment environment) {
 
         final SslContextFactory sslContextFactory = new SslContextFactory();
 
@@ -376,7 +376,7 @@ public class HttpsServerFactory extends HttpServerFactory {
 
         server.setSSLContext(sslContext);
 
-        ResteasyNettyServer nettyServer = new ResteasyNettyServer(server, environment);
+        JaxrsNettyServer nettyServer = new JaxrsNettyServer(server, environment);
 
         nettyServer.setApplicationContextPath(getApplicationContextPath());
         nettyServer.setSchema("https");

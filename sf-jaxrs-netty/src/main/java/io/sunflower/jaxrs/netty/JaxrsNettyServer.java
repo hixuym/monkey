@@ -24,14 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ResteasyNettyServer
+ * JaxrsNettyServer
  *
  * @author michael
  * created on 17/11/6 15:53
  */
-public class ResteasyNettyServer extends Server {
+public class JaxrsNettyServer extends Server {
 
-    private static Logger logger = LoggerFactory.getLogger(ResteasyNettyServer.class);
+    private static Logger logger = LoggerFactory.getLogger(JaxrsNettyServer.class);
 
     private final NettyJaxrsServer server;
     private final String nettyVersion;
@@ -43,7 +43,7 @@ public class ResteasyNettyServer extends Server {
 
     private String schema = "http";
 
-    public ResteasyNettyServer(NettyJaxrsServer server, Environment environment) {
+    public JaxrsNettyServer(NettyJaxrsServer server, Environment environment) {
         super(environment);
         this.server = server;
         this.nettyVersion = NettyRuntime.class.getPackage().getImplementationVersion();
