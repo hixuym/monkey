@@ -14,8 +14,17 @@ logging:
 
 server:
   type: https
-  applicationContextPath: /app
-#  port: 8443
+  contextPath: /app
+  port: 8443
+  backlog: 256
+  hostname: localhost
+  ioWorkerCount: 8
+  executorThreadCount: 100
+  idleTimeout: 10
+  maxRequestSize: 20m
+  maxInitialLineLength: 4096
+  maxHeaderSize: 8192
+  maxChunkSize: 8192
 #  validateCerts: true
 #  validatePeers: true
 #  supportedProtocols: ['TLSv1.1', 'TLSv1.2']

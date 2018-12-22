@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-jaxrs-netty</artifactId>
+            <artifactId>sf-jaxrs-serv</artifactId>
         </dependency>
 
         <dependency>

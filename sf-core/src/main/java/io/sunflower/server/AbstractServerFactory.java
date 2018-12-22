@@ -17,6 +17,8 @@ package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.Mode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
@@ -32,23 +34,24 @@ import static io.sunflower.ModeHelper.determineModeFromSystemPropertiesOrDevIfNo
  */
 public abstract class AbstractServerFactory implements ServerFactory {
 
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    @JsonProperty
     private Mode mode;
 
     @NotNull
+    @JsonProperty("properties")
     private Map<String, String> serverProperties = new LinkedHashMap<>(20);
 
     @Override
-    @JsonProperty("properties")
     public Map<String, String> getServerProperties() {
         return this.serverProperties;
     }
 
-    @JsonProperty("properties")
     public void setServerProperties(Map<String, String> serverProperties) {
         this.serverProperties = serverProperties;
     }
 
-    @JsonProperty
     public void setMode(Mode mode) {
         this.mode = mode;
     }

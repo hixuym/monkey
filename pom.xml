@@ -87,8 +87,7 @@
         <module>sf-postoffice</module>
         <module>sf-testing</module>
         <module>sf-archetypes</module>
-        <module>sf-jaxrs</module>
-        <module>sf-jaxrs-netty</module>
+        <module>sf-jaxrs-serv</module>
         <module>sf-quickstarters</module>
     </modules>
 

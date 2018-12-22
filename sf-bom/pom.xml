@@ -871,13 +871,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-jaxrs</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.sunflower</groupId>
-                <artifactId>sf-jaxrs-netty</artifactId>
+                <artifactId>sf-jaxrs-serv</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

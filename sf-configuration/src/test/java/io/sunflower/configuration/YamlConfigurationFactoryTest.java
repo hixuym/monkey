@@ -25,7 +25,7 @@ public class YamlConfigurationFactoryTest extends BaseConfigurationFactoryTest {
     }
 
     @Override
-    public void printsDetailedInformationOnMalformedContent() throws Exception {
+    public void printsDetailedInformationOnMalformedContent() {
         assertThatThrownBy(super::printsDetailedInformationOnMalformedContent)
             .hasMessageContaining(String.format(
                 "%s has an error:%n" +
