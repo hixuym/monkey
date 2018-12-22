@@ -29,7 +29,6 @@ import java.lang.reflect.Method;
  */
 public class LocalTxnInterceptor implements MethodInterceptor {
 
-    @Transactional(rollbackFor = Exception.class)
     private static class Internal {
     }
 
@@ -46,14 +45,18 @@ public class LocalTxnInterceptor implements MethodInterceptor {
         txScope.setBatchSize(transactional.batchSize());
         txScope.setServerName(transactional.serverName());
         txScope.setFlushOnQuery(transactional.flushOnQuery());
+        txScope.setProfileId(transactional.profileId());
+        txScope.setLabel(transactional.label());
+        txScope.setSkipCache(transactional.skipCache());
+        txScope.setReadOnly(transactional.readOnly());
+
+        txScope.setNoRollbackFor(transactional.noRollbackFor());
+        txScope.setRollbackFor(transactional.rollbackFor());
+
 
         if (!transactional.getGeneratedKeys()) {
             txScope.setSkipGeneratedKeys();
         }
-
-        txScope.setReadOnly(transactional.readOnly());
-        txScope.setNoRollbackFor(transactional.noRollbackFor());
-        txScope.setRollbackFor(transactional.rollbackFor());
 
         EbeanServer ebeanServer = Ebean.getServer(txScope.getServerName());
 

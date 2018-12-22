@@ -17,8 +17,10 @@ package io.sunflower.orm;
 
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
+import io.ebeaninternal.server.lib.ShutdownManager;
 import io.sunflower.datasource.ManagedDataSource;
 import io.sunflower.datasource.PooledDataSourceFactory;
+import io.sunflower.lifecycle.Managed;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,13 +62,12 @@ public class EbeanServerFactory {
             properties.setProperty(e.getKey(), e.getValue());
         }
 
-        serverConfig.setPackages(scanPkgs);
-
         serverConfig.loadFromProperties(properties);
 
+        serverConfig.setPackages(scanPkgs);
         serverConfig.setName(name);
         serverConfig.setDataSource(dataSource);
-        serverConfig.setDefaultServer(bundle.isDefault());
+        serverConfig.setDefaultServer((environment.getName() + DB_SUFFIX).equalsIgnoreCase(name));
         serverConfig.setRegister(true);
 
         bundle.configure(serverConfig);
@@ -78,4 +79,22 @@ public class EbeanServerFactory {
         return ebeanServer;
     }
 
+    private static class EbeanServerManager implements Managed {
+        private final ManagedDataSource dataSource;
+
+        public EbeanServerManager(ManagedDataSource dataSource) {
+            this.dataSource = dataSource;
+        }
+
+        @Override
+        public void start() throws Exception {
+            this.dataSource.start();
+        }
+
+        @Override
+        public void stop() throws Exception {
+            this.dataSource.stop();
+            ShutdownManager.shutdown();
+        }
+    }
 }

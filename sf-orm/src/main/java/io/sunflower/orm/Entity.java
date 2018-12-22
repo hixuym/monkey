@@ -15,7 +15,6 @@
 
 package io.sunflower.orm;
 
-import io.ebean.BeanState;
 import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.UpdatedTimestamp;
@@ -31,7 +30,7 @@ import java.sql.Timestamp;
  * created on 16/5/28
  */
 @MappedSuperclass
-public class AbstractEntity extends Model implements Serializable {
+public class Entity extends Model implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -101,21 +100,6 @@ public class AbstractEntity extends Model implements Serializable {
      */
     public void setWhenUpdated(Timestamp whenUpdated) {
         this.whenUpdated = whenUpdated;
-    }
-
-    /**
-     * 未持久化的临时对象
-     */
-    public boolean isNew() {
-        return db().getBeanState(this).isNew();
-    }
-
-    public boolean isNewOrDirty() {
-        return db().getBeanState(this).isNewOrDirty();
-    }
-
-    public BeanState state() {
-        return db().getBeanState(this);
     }
 
 }

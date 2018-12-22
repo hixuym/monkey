@@ -67,8 +67,8 @@ public class HelloworldResource {
 
     @GET
     @Path("/add_user")
-    @Transactional(rollbackFor = Exception.class)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public Message addUser() {
 
         User user = new User();

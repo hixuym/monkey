@@ -18,8 +18,6 @@ package io.sunflower.orm;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
-import com.google.inject.name.Names;
-import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
@@ -76,17 +74,11 @@ public abstract class OrmBundle<T extends Configuration>
     public void run(T configuration, Environment environment) {
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        final EbeanServer ebeanServer = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
+        this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
 
         environment.guice().register(new AbstractModule() {
             @Override
             protected void configure() {
-                if (isDefault()) {
-                    bind(EbeanServer.class).toInstance(ebeanServer);
-                } else {
-                    bind(EbeanServer.class).annotatedWith(Names.named(ebeanServer.getName())).toInstance(ebeanServer);
-                }
-
                 // class-level @Txn
                 LocalTxnInterceptor txnInterceptor = new LocalTxnInterceptor();
 
@@ -113,10 +105,6 @@ public abstract class OrmBundle<T extends Configuration>
      */
     protected String name() {
         return null;
-    }
-
-    protected boolean isDefault() {
-        return true;
     }
 
     protected void configure(ServerConfig serverConfig) {

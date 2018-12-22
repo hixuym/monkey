@@ -15,17 +15,16 @@
 
 package io.sunflower.quickstarters.core;
 
-import io.sunflower.orm.AbstractEntity;
+import io.sunflower.orm.Entity;
 
-import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
  * @author michael
  */
-@Entity
+@javax.persistence.Entity
 @Table(name = "tb_user")
-public class User extends AbstractEntity {
+public class User extends Entity {
 
     private String name;
 

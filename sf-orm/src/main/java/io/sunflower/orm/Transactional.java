@@ -120,7 +120,15 @@ public @interface Transactional {
      */
     String serverName() default "";
 
-    // int timeout() default 0;
+    /**
+     * Set this to true such that the L2 cache is not used by queries that otherwise would.
+     */
+    boolean skipCache() default false;
+
+    /**
+     * Set a label to identify the transaction in performance metrics and logging.
+     */
+    String label() default "";
 
     /**
      * The Throwable's that will explicitly cause a rollback to occur.
@@ -132,5 +140,15 @@ public @interface Transactional {
      */
     Class<? extends Throwable>[] noRollbackFor() default {};
 
+    /**
+     * A key used to identify a specific transaction for profiling purposes.
+     * <p>
+     * If set to -1 this means there should be no profiling on this transaction.
+     * </p>
+     * <p>
+     * If not set (left at 0) this means the profilingId can be automatically set during transactional enhancement.
+     * </p>
+     */
+    int profileId() default 0;
 }
 
