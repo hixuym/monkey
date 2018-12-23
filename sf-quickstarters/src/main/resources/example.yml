@@ -76,7 +76,7 @@ server:
   maxChunkSize: 8192
 
 metrics:
-  frequency: 1 minutes
+  frequency: 15 minutes
   reporters:
     - type: log
       logger: io.sunflower.metrics

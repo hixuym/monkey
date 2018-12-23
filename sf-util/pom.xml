@@ -38,6 +38,10 @@
             <artifactId>jsr305</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <scope>test</scope>

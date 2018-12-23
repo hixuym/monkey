@@ -8,6 +8,7 @@ import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
+import io.sunflower.Configuration;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
@@ -31,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author michael
  */
-public class Environment {
+public class Environment<T extends Configuration> {
 
     private final String name;
     private final MetricRegistry metricRegistry;
@@ -59,7 +60,7 @@ public class Environment {
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
                        HealthCheckRegistry healthCheckRegistry,
-                       GuiceConfig guiceConfig) {
+                       T configuration) {
         this.name = name;
         this.classLoader = classLoader;
 
@@ -69,7 +70,7 @@ public class Environment {
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
         this.validatorFactory = validatorFactory;
 
-        this.guiceEnvironment = new GuiceEnvironment(guiceConfig);
+        this.guiceEnvironment = new GuiceEnvironment(configuration.getGuiceConfig());
         this.guiceEnvironment.register(new BootModule(this));
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
@@ -116,8 +117,8 @@ public class Environment {
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
-                       GuiceConfig config) {
-        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry(), config);
+                       T configuration) {
+        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry(), configuration);
     }
 
     /**

@@ -15,8 +15,6 @@
 
 package io.sunflower.setup;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 
@@ -40,8 +38,6 @@ public class BootModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
-        bind(MetricRegistry.class).toInstance(environment.metrics());
-        bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());
         ValidatorFactory validatorFactory = environment.getValidatorFactory();
         bind(Validator.class).toInstance(validatorFactory.getValidator());
         bind(ValidatorFactory.class).toInstance(validatorFactory);
