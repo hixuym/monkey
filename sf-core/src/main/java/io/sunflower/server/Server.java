@@ -20,6 +20,7 @@ import com.google.inject.Injector;
 import io.sunflower.inject.lifecycle.LifecycleManager;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
+import io.sunflower.setup.GuiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +33,13 @@ public abstract class Server extends ContainerLifeCycle {
 
     private Environment environment;
     private Injector injector;
+    private GuiceConfig guiceConfig;
 
     public Server(Environment environment) {
         this.environment = environment;
         environment.lifecycle().attach(this);
         this.injector = environment.injector();
-
+        this.guiceConfig = environment.guice().getGuiceConfig();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 this.stop();
@@ -50,7 +52,9 @@ public abstract class Server extends ContainerLifeCycle {
     @Override
     protected final void doStart() throws Exception {
         Stopwatch sw = Stopwatch.createStarted();
-        injector.getInstance(LifecycleManager.class).start();
+        if (guiceConfig.isLifecycleEnabled()) {
+            injector.getInstance(LifecycleManager.class).start();
+        }
         super.doStart();
         this.boot();
         sw.stop();
@@ -62,7 +66,9 @@ public abstract class Server extends ContainerLifeCycle {
     @Override
     protected final void doStop() throws Exception {
         Stopwatch sw = Stopwatch.createStarted();
-        injector.getInstance(LifecycleManager.class).stop();
+        if (guiceConfig.isLifecycleEnabled()) {
+            injector.getInstance(LifecycleManager.class).stop();
+        }
         super.doStop();
         this.shutdown();
         sw.stop();

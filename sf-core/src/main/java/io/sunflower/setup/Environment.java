@@ -58,7 +58,8 @@ public class Environment {
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
-                       HealthCheckRegistry healthCheckRegistry) {
+                       HealthCheckRegistry healthCheckRegistry,
+                       GuiceConfig guiceConfig) {
         this.name = name;
         this.classLoader = classLoader;
 
@@ -68,9 +69,7 @@ public class Environment {
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
         this.validatorFactory = validatorFactory;
 
-        this.guiceEnvironment = new GuiceEnvironment();
-        this.guiceEnvironment.enableLifecycle();
-        this.guiceEnvironment.enableMetrics();
+        this.guiceEnvironment = new GuiceEnvironment(guiceConfig);
         this.guiceEnvironment.register(new BootModule(this));
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
@@ -116,8 +115,9 @@ public class Environment {
                        ObjectMapper objectMapper,
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
-                       ClassLoader classLoader) {
-        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry());
+                       ClassLoader classLoader,
+                       GuiceConfig config) {
+        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry(), config);
     }
 
     /**

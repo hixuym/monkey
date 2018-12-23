@@ -19,8 +19,6 @@ import com.google.common.base.Stopwatch;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Stage;
-import io.sunflower.Mode;
 import io.sunflower.inject.*;
 import io.sunflower.inject.advise.AdvisableAnnotatedMethodScanner;
 import io.sunflower.inject.event.guava.GuavaApplicationEventModule;
@@ -51,13 +49,10 @@ public class GuiceEnvironment {
 
     private boolean setuped = false;
 
-    private boolean scheduleEnabled = false;
-    private boolean eventEnabled = false;
-    private boolean adviseEnabled = false;
-    private boolean metricsEnabled = false;
-    private boolean lifecycleEnabled = false;
+    private GuiceConfig guiceConfig;
 
-    public GuiceEnvironment() {
+    public GuiceEnvironment(GuiceConfig config) {
+        this.guiceConfig = config;
         System.setProperty("file.encoding", "utf-8");
         register(new AbstractModule() {
             @Override
@@ -66,26 +61,6 @@ public class GuiceEnvironment {
                 bind(Logger.class).toProvider(LoggerProvider.class);
             }
         });
-    }
-
-    public void enableLifecycle() {
-        this.lifecycleEnabled = true;
-    }
-
-    public void enableMetrics() {
-        this.metricsEnabled = true;
-    }
-
-    public void enableEvent() {
-        this.eventEnabled = true;
-    }
-
-    public void enableAdvise() {
-        this.adviseEnabled = true;
-    }
-
-    public void enableScheduler() {
-        this.scheduleEnabled = true;
     }
 
     public void register(Module... modules) {
@@ -122,32 +97,28 @@ public class GuiceEnvironment {
     }
 
     public void setup() {
-        setup(Mode.prod);
-    }
-
-    public void setup(Mode mode) {
 
         checkNotSetuped();
 
         Stopwatch sw = Stopwatch.createStarted();
 
-        if (scheduleEnabled) {
+        if (guiceConfig.isScheduleEnabled()) {
             register(SchedulerSupport.asModule());
         }
 
-        if (eventEnabled) {
+        if (guiceConfig.isEventEnabled()) {
             register(new GuavaApplicationEventModule());
         }
 
-        if (adviseEnabled) {
+        if (guiceConfig.isAdviseEnabled()) {
             register(AdvisableAnnotatedMethodScanner.asModule());
         }
 
-        if (lifecycleEnabled) {
+        if (guiceConfig.isLifecycleEnabled()) {
             register(LifecycleSupport.asModule());
         }
 
-        if (metricsEnabled) {
+        if (guiceConfig.isMetricsEnabled()) {
             register(new MetricsModule());
         }
 
@@ -162,7 +133,7 @@ public class GuiceEnvironment {
         builder.warnOfStaticInjections()
                 .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
-        this.injector = builder.createInjector(mode == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
+        this.injector = builder.createInjector(guiceConfig.getStage());
 
         sw.stop();
 
@@ -187,5 +158,9 @@ public class GuiceEnvironment {
         if (setuped) {
             throw new IllegalStateException("guice already setuped.");
         }
+    }
+
+    public GuiceConfig getGuiceConfig() {
+        return guiceConfig;
     }
 }

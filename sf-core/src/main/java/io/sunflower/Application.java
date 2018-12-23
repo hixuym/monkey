@@ -143,10 +143,10 @@ public abstract class Application<T extends Configuration> {
 
     private void showSplashScreenViaLogger() {
 
-        String sunflowerVersion = Application.class.getPackage().getImplementationVersion();
+        String sfVersion = Application.class.getPackage().getImplementationVersion();
 
         // log Sunflower splash screen
-        logger.info(LOGO, sunflowerVersion == null ? "@@" : sunflowerVersion);
+        logger.info(LOGO, sfVersion == null ? "@@" : sfVersion);
 
     }
 }

@@ -19,7 +19,6 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -40,7 +39,6 @@ public class BootModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bindConstant().annotatedWith(Names.named("application.name")).to(environment.getName());
         bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
         bind(MetricRegistry.class).toInstance(environment.metrics());
         bind(HealthCheckRegistry.class).toInstance(environment.healthChecks());

@@ -2,7 +2,6 @@ package io.sunflower.cli;
 
 import io.sunflower.Application;
 import io.sunflower.Configuration;
-import io.sunflower.Mode;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -38,20 +37,14 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
                 bootstrap.getValidatorFactory(),
                 bootstrap.getMetricRegistry(),
                 bootstrap.getClassLoader(),
-                bootstrap.getHealthCheckRegistry());
+                bootstrap.getHealthCheckRegistry(),
+                configuration.getGuiceConfig());
 
         configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
-
         configuration.getServerFactory().configure(environment);
-
-        Mode mode = configuration.getServerFactory().getMode();
-
         bootstrap.run(configuration, environment);
-
         application.run(configuration, environment);
-
-        environment.guice().setup(mode);
-
+        environment.guice().setup();
         run(environment, namespace, configuration);
     }
 

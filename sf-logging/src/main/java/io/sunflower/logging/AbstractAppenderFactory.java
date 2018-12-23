@@ -121,7 +121,7 @@ public abstract class AbstractAppenderFactory<E extends DeferredProcessingAware>
     private int discardingThreshold = -1;
 
     @Nullable
-    @MinDuration(value = 0, unit = TimeUnit.SECONDS, inclusive = false)
+    @MinDuration(value = 0, inclusive = false)
     @MaxDuration(value = 1, unit = TimeUnit.MINUTES)
     private Duration messageRate;
 
