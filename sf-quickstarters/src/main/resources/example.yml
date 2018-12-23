@@ -48,9 +48,6 @@ server:
   maxHeaderSize: 8192
   maxChunkSize: 8192
 
-
-
-
 metrics:
   frequency: 1 minutes
   reporters:
