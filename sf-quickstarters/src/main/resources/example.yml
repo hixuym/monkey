@@ -44,8 +44,6 @@ logging:
 server:
   type: https
   sslcontext:
-    keyStorePassword: password
-    trustStorePassword: password
     jceProvider: Conscrypt
     validateCerts: true
     validatePeers: true

@@ -23,9 +23,9 @@ public class SslContextFactoryFactory {
     private static Logger LOGGER = LoggerFactory.getLogger(SslContextFactoryFactory.class);
 
     @JsonProperty
-    private String keyStorePath = "classpath:/io/sunflower/ssl/sf-dev.keystore";
+    private String keyStorePath = "classpath:/io/sunflower/ssl/sf.keystore";
     @JsonProperty
-    private String trustStorePath = "classpath:/io/sunflower/ssl/sf-dev.truststore";
+    private String trustStorePath = "classpath:/io/sunflower/ssl/sf.truststore";
 
     @JsonProperty
     private String keyStorePassword = "sf_pass";
