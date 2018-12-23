@@ -210,6 +210,7 @@
                 <groupId>org.conscrypt</groupId>
                 <artifactId>conscrypt-openjdk-uber</artifactId>
                 <version>${conscrypt.version}</version>
+                <optional>true</optional>
             </dependency>
 
             <dependency>
