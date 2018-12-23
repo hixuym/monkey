@@ -19,11 +19,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
-import io.sunflower.jaxrs.server.netty.NettyJaxrsServer;
 import io.sunflower.jaxrs.server.ssl.SslContextFactory;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.LifeCycle;
@@ -31,6 +26,7 @@ import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.sunflower.validation.ValidationMethod;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.resteasy.plugins.server.netty.NettyJaxrsServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,17 +50,18 @@ public class HttpsServerFactory extends JaxrsServerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpsServerFactory.class);
     private static final AtomicBoolean LOGGED = new AtomicBoolean(false);
 
-    private URI keyStorePath = URI.create("classpath:/io/sunflower/jaxrs/server/sf.keystore");
-    private URI trustStorePath = URI.create("classpath:/io/sunflower/jaxrs/server/sf.keystore");
+    private URI keyStorePath = URI.create("classpath:/io/sunflower/jaxrs/server/sf-dev.keystore");
 
-    private String keyStorePassword = "123456";
+    private String keyStorePassword = "password";
 
     @NotEmpty
     private String keyStoreType = "JKS";
 
     private String keyStoreProvider;
 
-    private String trustStorePassword = "123456";
+    private URI trustStorePath = URI.create("classpath:/io/sunflower/jaxrs/server/sf-dev.truststore");
+
+    private String trustStorePassword = "password";
 
     @NotEmpty
     private String trustStoreType = "JKS";
@@ -362,33 +359,22 @@ public class HttpsServerFactory extends JaxrsServerFactory {
                 !Strings.isNullOrEmpty(keyStorePassword);
     }
 
-//    static {
-//        Security.addProvider(new OpenSSLProvider());
-//    }
-
     @Override
     protected Server buildServer(NettyJaxrsServer server, Environment environment) {
 
-//        final SslContextFactory sslContextFactory = new SslContextFactory();
+        final SslContextFactory sslContextFactory = new SslContextFactory();
 
         try {
-//            sslContextFactory.reload(this::configureSslContextFactory);
-
-            List<String> ciphers = Lists.newArrayList("ECDHE-RSA-AES128-SHA",
-                    "ECDHE-RSA-AES256-SHA", "AES128-SHA", "AES256-SHA", "DES-CBC3-SHA");
-
-            SelfSignedCertificate ssc = new SelfSignedCertificate();
-            SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).ciphers(ciphers).build();
-            server.setSSLContext(sslCtx);
-
+            sslContextFactory.reload(this::configureSslContextFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        final SSLContext sslContext = sslContextFactory.getSslContext();
 
-//        final SSLContext sslContext = sslContextFactory.getSslContext();
+        environment.lifecycle().addLifeCycleListener(logSslInfoOnStart(sslContext));
 
-//        environment.lifecycle().addLifeCycleListener(logSslInfoOnStart(sslContext));
+        server.setSSLContext(sslContext);
 
         JaxrsServer jaxrsServer = new JaxrsServer(server, environment);
 

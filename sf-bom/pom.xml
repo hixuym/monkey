@@ -35,9 +35,6 @@
         <freemarker.version>2.3.28</freemarker.version>
         <undertow.version>2.0.16.Final</undertow.version>
         <netty.version>4.1.32.Final</netty.version>
-        <boringssl.version>2.0.20.Final</boringssl.version>
-        <conscrypt.version>1.4.1</conscrypt.version>
-
         <okhttp.version>3.12.0</okhttp.version>
         <retrofit.version>2.5.0</retrofit.version>
         <okio.version>2.1.0</okio.version>
@@ -73,10 +70,10 @@
         <assertj.version>3.11.1</assertj.version>
         <reflections.version>0.9.11</reflections.version>
         <resteasy.version>3.6.2.Final</resteasy.version>
+        <boringssl.version>2.0.20</boringssl.version>
         <javassist.version>3.24.0-GA</javassist.version>
         <joda-time.version>2.10.1</joda-time.version>
         <caffeine.version>2.6.2</caffeine.version>
-
     </properties>
 
     <dependencyManagement>
@@ -209,12 +206,6 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-tcnative-boringssl-static</artifactId>
                 <version>${boringssl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.conscrypt</groupId>
-                <artifactId>conscrypt-openjdk-uber</artifactId>
-                <version>${conscrypt.version}</version>
             </dependency>
 
             <dependency>

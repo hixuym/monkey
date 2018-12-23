@@ -15,9 +15,9 @@
 
 package io.sunflower.jaxrs.server;
 
-import io.sunflower.jaxrs.server.netty.NettyJaxrsServer;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
+import org.jboss.resteasy.plugins.server.netty.NettyJaxrsServer;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
