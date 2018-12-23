@@ -77,6 +77,7 @@
         <module>sf-json</module>
         <module>sf-util</module>
         <module>sf-validation</module>
+        <module>sf-sslcontext</module>
         <module>sf-metrics</module>
         <module>sf-metrics-graphite</module>
         <module>sf-core</module>

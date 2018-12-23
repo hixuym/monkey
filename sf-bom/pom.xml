@@ -835,6 +835,12 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
+                <artifactId>sf-sslcontext</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
                 <artifactId>sf-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>

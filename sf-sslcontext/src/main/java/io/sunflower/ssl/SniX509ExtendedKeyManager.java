@@ -13,29 +13,31 @@
  * limitations under the License.
  */
 
-package io.sunflower.jaxrs.server.ssl;
+package io.sunflower.ssl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
 import java.net.Socket;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
+
+import javax.net.ssl.SNIMatcher;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.X509ExtendedKeyManager;
 
 /**
- * <p>A {@link X509ExtendedKeyManager} that selects a key with an alias retrieved from SNI
- * information, delegating other processing to a nested X509ExtendedKeyManager.</p> <p>Can only be
- * used on server side.</p>
- * @author michael
+ * <p>A {@link X509ExtendedKeyManager} that selects a key with an alias
+ * retrieved from SNI information, delegating other processing to a nested X509ExtendedKeyManager.</p>
+ * <p>Can only be used on server side.</p>
  */
 public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
-
-    public static final String SNI_X509 = "io.sunflower.sec.ssl.snix509";
+    public static final String SNI_X509 = "org.eclipse.jetty.util.ssl.snix509";
     private static final String NO_MATCHERS = "no_matchers";
     private static final Logger LOG = LoggerFactory.getLogger(SniX509ExtendedKeyManager.class);
 
@@ -55,13 +57,11 @@ public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
         return _delegate.chooseEngineClientAlias(keyType, issuers, engine);
     }
 
-    protected String chooseServerAlias(String keyType, Principal[] issuers,
-                                       Collection<SNIMatcher> matchers, SSLSession session) {
+    protected String chooseServerAlias(String keyType, Principal[] issuers, Collection<SNIMatcher> matchers, SSLSession session) {
         // Look for the aliases that are suitable for the keytype and issuers
         String[] aliases = _delegate.getServerAliases(keyType, issuers);
-        if (aliases == null || aliases.length == 0) {
+        if (aliases == null || aliases.length == 0)
             return null;
-        }
 
         // Look for the SNI information.
         String host = null;
@@ -77,9 +77,8 @@ public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
             }
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled())
             LOG.debug("Matched {} with {} from {}", host, x509, Arrays.asList(aliases));
-        }
 
         // Check if the SNI selected alias is allowable
         if (x509 != null) {
@@ -97,28 +96,21 @@ public class SniX509ExtendedKeyManager extends X509ExtendedKeyManager {
     @Override
     public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
         SSLSocket sslSocket = (SSLSocket) socket;
-
-        String alias = chooseServerAlias(keyType, issuers,
-                sslSocket.getSSLParameters().getSNIMatchers(), sslSocket.getHandshakeSession());
-        if (Objects.equals(alias, NO_MATCHERS)) {
+        String alias = socket == null ? NO_MATCHERS : chooseServerAlias(keyType, issuers, sslSocket.getSSLParameters().getSNIMatchers(), sslSocket.getHandshakeSession());
+        if (alias == NO_MATCHERS)
             alias = _delegate.chooseServerAlias(keyType, issuers, socket);
-        }
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled())
             LOG.debug("Chose alias {}/{} on {}", alias, keyType, socket);
-        }
         return alias;
     }
 
     @Override
     public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
-        String alias = chooseServerAlias(keyType, issuers, engine.getSSLParameters().getSNIMatchers(),
-                engine.getHandshakeSession());
-        if (alias == NO_MATCHERS) {
+        String alias = engine == null ? NO_MATCHERS : chooseServerAlias(keyType, issuers, engine.getSSLParameters().getSNIMatchers(), engine.getHandshakeSession());
+        if (alias == NO_MATCHERS)
             alias = _delegate.chooseEngineServerAlias(keyType, issuers, engine);
-        }
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled())
             LOG.debug("Chose alias {}/{} on {}", alias, keyType, engine);
-        }
         return alias;
     }
 

@@ -13,14 +13,27 @@
  * limitations under the License.
  */
 
-package io.sunflower.jaxrs.server.ssl;
+package io.sunflower.ssl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.*;
-import java.security.cert.*;
+import java.security.GeneralSecurityException;
+import java.security.InvalidParameterException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.Security;
+import java.security.cert.CRL;
+import java.security.cert.CertPathBuilder;
+import java.security.cert.CertPathBuilderResult;
+import java.security.cert.CertPathValidator;
+import java.security.cert.CertStore;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CollectionCertStoreParameters;
+import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.X509CertSelector;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -29,16 +42,14 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Convenience class to handle validation of certificates, aliases and keystores
  * <p>
- * Allows specifying Certificate Revocation List (CRL), as well as enabling CRL Distribution Points
- * Protocol (CRLDP) certificate extension support, and also enabling On-Line Certificate Status
- * Protocol (OCSP) support.
+ * Allows specifying Certificate Revocation List (CRL), as well as enabling
+ * CRL Distribution Points Protocol (CRLDP) certificate extension support,
+ * and also enabling On-Line Certificate Status Protocol (OCSP) support.
  * <p>
- * IMPORTANT: at least one of the above mechanisms *MUST* be configured and operational, otherwise
- * certificate validation *WILL FAIL* unconditionally.
- * @author michael
+ * IMPORTANT: at least one of the above mechanisms *MUST* be configured and
+ * operational, otherwise certificate validation *WILL FAIL* unconditionally.
  */
 public class CertificateValidator {
-
     private static final Logger LOG = LoggerFactory.getLogger(CertificateValidator.class);
     private static AtomicLong __aliasCount = new AtomicLong();
 
@@ -114,7 +125,8 @@ public class CertificateValidator {
             try {
                 validate(keyStore, keyStore.getCertificate(keyAlias));
             } catch (KeyStoreException kse) {
-                LOG.debug("", kse);
+                LOG.debug("Unable to validate certificate" +
+                        " for alias [" + keyAlias + "]: " + kse.getMessage(), kse);
                 throw new CertificateException("Unable to validate certificate" +
                         " for alias [" + keyAlias + "]: " + kse.getMessage(), kse);
             }
@@ -145,7 +157,7 @@ public class CertificateValidator {
 
                 certAlias = keyStore.getCertificateAlias(cert);
                 if (certAlias == null) {
-                    certAlias = "SF" + String.format("%016X", __aliasCount.incrementAndGet());
+                    certAlias = "JETTY" + String.format("%016X", __aliasCount.incrementAndGet());
                     keyStore.setCertificateEntry(certAlias, cert);
                 }
 
@@ -154,10 +166,10 @@ public class CertificateValidator {
                     throw new IllegalStateException("Unable to retrieve certificate chain");
                 }
             } catch (KeyStoreException kse) {
-                LOG.debug("", kse);
+                LOG.debug("Unable to validate certificate" +
+                        (certAlias == null ? "" : " for alias [" + certAlias + "]") + ": " + kse.getMessage());
                 throw new CertificateException("Unable to validate certificate" +
-                        (certAlias == null ? "" : " for alias [" + certAlias + "]") + ": " + kse.getMessage(),
-                        kse);
+                        (certAlias == null ? "" : " for alias [" + certAlias + "]") + ": " + kse.getMessage(), kse);
             }
 
             validate(certChain);
@@ -168,9 +180,8 @@ public class CertificateValidator {
         try {
             ArrayList<X509Certificate> certList = new ArrayList<X509Certificate>();
             for (Certificate item : certChain) {
-                if (item == null) {
+                if (item == null)
                     continue;
-                }
 
                 if (!(item instanceof X509Certificate)) {
                     throw new IllegalStateException("Invalid certificate type in chain");
@@ -189,8 +200,7 @@ public class CertificateValidator {
 
             // Configure certification path builder parameters
             PKIXBuilderParameters pbParams = new PKIXBuilderParameters(_trustStore, certSelect);
-            pbParams.addCertStore(
-                    CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList)));
+            pbParams.addCertStore(CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList)));
 
             // Set maximum certification path length
             pbParams.setMaxPathLength(_maxCertPathLength);
@@ -200,8 +210,7 @@ public class CertificateValidator {
 
             // Set static Certificate Revocation List
             if (_crls != null && !_crls.isEmpty()) {
-                pbParams.addCertStore(
-                        CertStore.getInstance("Collection", new CollectionCertStoreParameters(_crls)));
+                pbParams.addCertStore(CertStore.getInstance("Collection", new CollectionCertStoreParameters(_crls)));
             }
 
             // Enable On-Line Certificate Status Protocol (OCSP) support
@@ -219,7 +228,7 @@ public class CertificateValidator {
             // Validate certification path
             CertPathValidator.getInstance("PKIX").validate(buildResult.getCertPath(), pbParams);
         } catch (GeneralSecurityException gse) {
-            LOG.debug("", gse);
+            LOG.debug("Unable to validate certificate: " + gse.getMessage());
             throw new CertificateException("Unable to validate certificate: " + gse.getMessage(), gse);
         }
     }
@@ -233,8 +242,8 @@ public class CertificateValidator {
     }
 
     /**
-     * @return Maximum number of intermediate certificates in the certification path (-1 for
-     * unlimited)
+     * @return Maximum number of intermediate certificates in
+     * the certification path (-1 for unlimited)
      */
     public int getMaxCertPathLength() {
         return _maxCertPathLength;
@@ -243,13 +252,13 @@ public class CertificateValidator {
     /* ------------------------------------------------------------ */
 
     /**
-     * @param maxCertPathLength maximum number of intermediate certificates in the certification path
-     *                          (-1 for unlimited)
+     * @param maxCertPathLength maximum number of intermediate certificates in
+     *                          the certification path (-1 for unlimited)
      */
     public void setMaxCertPathLength(int maxCertPathLength) {
         _maxCertPathLength = maxCertPathLength;
     }
-    
+
     /* ------------------------------------------------------------ */
 
     /**

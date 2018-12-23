@@ -13,16 +13,18 @@
  * limitations under the License.
  */
 
-package io.sunflower.jaxrs.server.ssl;
+package io.sunflower.ssl;
 
 import io.sunflower.util.Uris;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.security.KeyStore;
 import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @author michael
@@ -35,6 +37,7 @@ public class CertificateUtils {
         KeyStore keystore = null;
 
         if (store != null) {
+            Objects.requireNonNull(storeType, "storeType cannot be null");
             if (storeProvider != null) {
                 keystore = KeyStore.getInstance(storeType, storeProvider);
             } else {
@@ -43,6 +46,8 @@ public class CertificateUtils {
 
             try (InputStream inStream = Uris.openStream(store)) {
                 keystore.load(inStream, storePassword == null ? null : storePassword.toCharArray());
+            } catch (IOException ioe) {
+                throw new IllegalStateException("no valid keystore", ioe);
             }
         }
 

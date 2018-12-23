@@ -14,6 +14,28 @@ logging:
 
 server:
   type: https
+  sslcontext:
+    keyStorePassword: password
+    trustStorePassword: password
+    jceProvider: Conscrypt
+    validateCerts: true
+    validatePeers: true
+    supportedProtocols: ['TLSv1.1', 'TLSv1.2']
+    excludedProtocols:  []
+    supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
+
+    allowRenegotiation: false
+    endpointIdentificationAlgorithm: HTTPS
+    #excludedCipherSuites: []
+    excludedCipherSuites:
+      - SSL_RSA_WITH_DES_CBC_SHA
+      - SSL_DHE_RSA_WITH_DES_CBC_SHA
+      - SSL_DHE_DSS_WITH_DES_CBC_SHA
+      - SSL_RSA_EXPORT_WITH_RC4_40_MD5
+      - SSL_RSA_EXPORT_WITH_DES40_CBC_SHA
+      - SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
+      - SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
+
   contextPath: /app
   port: 8443
   backlog: 256
@@ -25,14 +47,9 @@ server:
   maxInitialLineLength: 4096
   maxHeaderSize: 8192
   maxChunkSize: 8192
-#  validateCerts: true
-#  validatePeers: true
-#  supportedProtocols: ['TLSv1.1', 'TLSv1.2']
-#  excludedProtocols:  []
-#  supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
-#  excludedCipherSuites: []
-#  allowRenegotiation: false
-#  endpointIdentificationAlgorithm: HTTPS
+
+
+
 
 metrics:
   frequency: 1 minutes

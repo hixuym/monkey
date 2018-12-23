@@ -14,7 +14,7 @@
  */
 
 /**
- * Common SSL Utility Classes
+ * Common SSL Utility Classes, jetty util.ssl 9.4.14
  */
-package io.sunflower.jaxrs.server.ssl;
+package io.sunflower.ssl;
 
