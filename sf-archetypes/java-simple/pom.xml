@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>java-simple</artifactId>
+    <artifactId>sf-java-simple</artifactId>
     <packaging>maven-archetype</packaging>
 
     <name>Sunflower Archetype for Simple Java Services</name>
