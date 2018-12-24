@@ -1,6 +1,6 @@
-# Sf framework archetypes
+# Sunflower Archetypes
 
-How to create project using sf-framework archetype (interactive mode)
+How to create project using sunflower archetype (interactive mode)
 ---
 
 ```

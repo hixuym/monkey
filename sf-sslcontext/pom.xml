@@ -10,7 +10,7 @@
 
     <artifactId>sf-sslcontext</artifactId>
 
-    <name>sunflower sslcontext module</name>
+    <name>Sunflower SslContext Support</name>
 
     <dependencyManagement>
         <dependencies>

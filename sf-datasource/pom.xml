@@ -10,7 +10,7 @@
 
     <artifactId>sf-datasource</artifactId>
 
-    <name>sunflower datasource module</name>
+    <name>Sunflower Database Support</name>
 
     <dependencyManagement>
         <dependencies>

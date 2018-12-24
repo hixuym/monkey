@@ -10,7 +10,7 @@
 
     <artifactId>sf-testing</artifactId>
 
-    <name>sunflower testing module</name>
+    <name>Sunflower Test Helpers</name>
 
     <dependencyManagement>
         <dependencies>

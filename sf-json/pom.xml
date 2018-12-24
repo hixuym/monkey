@@ -10,7 +10,7 @@
 
     <artifactId>sf-json</artifactId>
 
-    <name>sunflower json module</name>
+    <name>Sunflower JSON Support</name>
 
     <dependencyManagement>
         <dependencies>

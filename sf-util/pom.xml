@@ -10,7 +10,7 @@
 
     <artifactId>sf-util</artifactId>
 
-    <name>sunflower util module</name>
+    <name>Sunflower Utility Classes</name>
 
     <dependencyManagement>
         <dependencies>
@@ -36,10 +36,6 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okio</groupId>
-            <artifactId>okio</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

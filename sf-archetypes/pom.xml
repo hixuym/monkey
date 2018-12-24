@@ -21,7 +21,7 @@
     <artifactId>sf-archetypes</artifactId>
     <packaging>pom</packaging>
 
-    <name>sunflower framework archetypes</name>
+    <name>Sunflower Archetypes</name>
     <description>
         A collection of Maven Archetypes for bootstrapping development of sunflower.
     </description>

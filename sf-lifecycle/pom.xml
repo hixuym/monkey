@@ -10,7 +10,7 @@
 
     <artifactId>sf-lifecycle</artifactId>
 
-    <name>sunflower lifecycle module</name>
+    <name>Sunflower Lifecycle Support</name>
 
     <dependencyManagement>
         <dependencies>

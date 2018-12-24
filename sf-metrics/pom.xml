@@ -10,7 +10,7 @@
 
     <artifactId>sf-metrics</artifactId>
 
-    <name>sunflower metrics module</name>
+    <name>Sunflower Metrics Support</name>
 
     <dependencyManagement>
         <dependencies>

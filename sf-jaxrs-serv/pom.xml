@@ -10,7 +10,7 @@
 
     <artifactId>sf-jaxrs-serv</artifactId>
 
-    <name>sunflower jaxrs server module</name>
+    <name>Sunflower JAX-RS Server</name>
 
     <dependencyManagement>
         <dependencies>

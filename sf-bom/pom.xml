@@ -12,7 +12,7 @@
     <artifactId>sf-bom</artifactId>
     <packaging>pom</packaging>
 
-    <name>sunflower bom</name>
+    <name>Sunflower BOM</name>
 
     <description>
         Bill of materials to make sure a consistent set of versions is used for Sunflower generics.

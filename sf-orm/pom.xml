@@ -10,7 +10,7 @@
 
     <artifactId>sf-orm</artifactId>
 
-    <name>sunflower orm module</name>
+    <name>Sunflower ORM</name>
 
     <dependencyManagement>
         <dependencies>

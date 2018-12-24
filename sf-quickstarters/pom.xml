@@ -12,7 +12,7 @@
 
     <artifactId>sf-quickstarters</artifactId>
 
-    <name>sunflower quick starters project</name>
+    <name>Sunflower Quick Starters</name>
 
     <dependencyManagement>
         <dependencies>

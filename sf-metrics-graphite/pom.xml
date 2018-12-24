@@ -10,7 +10,7 @@
 
     <artifactId>sf-metrics-graphite</artifactId>
 
-    <name>sunflower metrics graphite module</name>
+    <name>Sunflower Metrics Support for Graphite</name>
 
     <dependencyManagement>
         <dependencies>
