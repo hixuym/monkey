@@ -1,9 +1,6 @@
 template: Hello, %s!
 defaultName: Stranger
 
-guice:
-  stage: PRODUCTION
-
 logging:
   level: INFO
   loggers:
@@ -43,7 +40,7 @@ logging:
 
 server:
   type: https
-  sslcontext:
+  ssl:
 #    jceProvider: Conscrypt
     validateCerts: true
     validatePeers: true
@@ -63,23 +60,22 @@ server:
 #      - SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
 
-  contextPath: /app
   port: 8443
-  backlog: 256
-  hostname: localhost
-  ioWorkerCount: 8
-  executorThreadCount: 100
-  idleTimeout: 10
-  maxRequestSize: 20m
-  maxInitialLineLength: 4096
-  maxHeaderSize: 8192
-  maxChunkSize: 8192
+#  backlog: 256
+#  hostname: localhost
+#  ioWorkerCount: 8
+#  executorThreadCount: 100
+#  idleTimeout: 10
+#  maxRequestSize: 20m
+#  maxInitialLineLength: 4096
+#  maxHeaderSize: 8192
+#  maxChunkSize: 8192
 
 metrics:
   frequency: 15 minutes
   reporters:
     - type: log
-      logger: io.sunflower.metrics
+      logger: io.sunflower.getMetricRegistry
 
 database:
   driverClass: org.h2.Driver

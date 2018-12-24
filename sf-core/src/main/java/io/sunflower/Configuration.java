@@ -7,7 +7,6 @@ import io.sunflower.logging.LoggingFactory;
 import io.sunflower.metrics.MetricsFactory;
 import io.sunflower.server.FakeServerFactory;
 import io.sunflower.server.ServerFactory;
-import io.sunflower.setup.GuiceConfig;
 
 import javax.validation.Valid;
 
@@ -61,9 +60,6 @@ import javax.validation.Valid;
  * @see <a href="http://www.yaml.org/YAML_for_ruby.html">YAML Cookbook</a>
  */
 public class Configuration {
-
-    @JsonProperty("guice")
-    private GuiceConfig guiceConfig = new GuiceConfig();
 
     @Valid
     private ServerFactory serverFactory;
@@ -131,13 +127,6 @@ public class Configuration {
         this.metrics = metrics;
     }
 
-    public GuiceConfig getGuiceConfig() {
-        return guiceConfig;
-    }
-
-    public void setGuiceConfig(GuiceConfig guiceConfig) {
-        this.guiceConfig = guiceConfig;
-    }
 
     @Override
     public String toString() {

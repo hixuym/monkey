@@ -75,8 +75,6 @@ public class MetricsFactory {
      * <p />
      * The reporters are tied in to the given lifecycle, such that their {@link #getFrequency()
      * frequency} for reporting metrics begins when the lifecycle {@link
-     * io.dropwizard.lifecycle.Managed#start() starts}, and stops when the lifecycle
-     * {@link io.dropwizard.lifecycle.Managed#stop() stops}.
      *
      * @param environment the lifecycle to manage the reporters.
      * @param registry the metric registry to report metrics from.

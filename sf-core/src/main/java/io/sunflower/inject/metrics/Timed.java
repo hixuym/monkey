@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation for marking a controller method to be Timed for metrics collection.
+ * An annotation for marking a controller method to be Timed for getMetricRegistry collection.
  * <p>
  * A timer measures both the rate that a particular piece of code is called and the distribution of
  * its duration.

@@ -6,9 +6,9 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.health.SharedHealthCheckRegistries;
 import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
-import io.sunflower.Configuration;
 import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author michael
  */
-public class Environment<T extends Configuration> {
+public final class Environment {
 
     private final String name;
     private final MetricRegistry metricRegistry;
@@ -43,10 +43,11 @@ public class Environment<T extends Configuration> {
     private ValidatorFactory validatorFactory;
 
     private final LifecycleEnvironment lifecycleEnvironment;
-    private final GuiceEnvironment guiceEnvironment;
 
     private final ExecutorService healthCheckExecutorService;
     private final ClassLoader classLoader;
+
+    private Injector injector;
 
     /**
      * Creates a new environment.
@@ -59,8 +60,7 @@ public class Environment<T extends Configuration> {
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        ClassLoader classLoader,
-                       HealthCheckRegistry healthCheckRegistry,
-                       T configuration) {
+                       HealthCheckRegistry healthCheckRegistry) {
         this.name = name;
         this.classLoader = classLoader;
 
@@ -69,9 +69,6 @@ public class Environment<T extends Configuration> {
         this.healthCheckRegistry = healthCheckRegistry;
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
         this.validatorFactory = validatorFactory;
-
-        this.guiceEnvironment = new GuiceEnvironment(configuration.getGuiceConfig());
-        this.guiceEnvironment.register(new BootModule(this));
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
         this.lifecycleEnvironment.manage(new Managed() {
@@ -116,9 +113,8 @@ public class Environment<T extends Configuration> {
                        ObjectMapper objectMapper,
                        ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
-                       ClassLoader classLoader,
-                       T configuration) {
-        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry(), configuration);
+                       ClassLoader classLoader) {
+        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry());
     }
 
     /**
@@ -131,23 +127,15 @@ public class Environment<T extends Configuration> {
     /**
      * Returns the application's {@link MetricRegistry}.
      */
-    public MetricRegistry metrics() {
+    public MetricRegistry getMetricRegistry() {
         return metricRegistry;
     }
 
     /**
      * Returns the application's {@link HealthCheckRegistry}.
      */
-    public HealthCheckRegistry healthChecks() {
+    public HealthCheckRegistry getHealthCheckRegistry() {
         return healthCheckRegistry;
-    }
-
-    /**
-     * returns the guice configuration environment
-     * @return guice configure env
-     */
-    public GuiceEnvironment guice() {
-        return guiceEnvironment;
     }
 
     /**
@@ -185,10 +173,6 @@ public class Environment<T extends Configuration> {
         this.validatorFactory = requireNonNull(validator);
     }
 
-    public Injector injector() {
-        return guiceEnvironment.getInjector();
-    }
-
     /**
      * @return application's {@link ClassLoader}.
      */
@@ -207,10 +191,19 @@ public class Environment<T extends Configuration> {
         });
     }
 
+    public Injector getInjector() {
+        Preconditions.checkArgument(injector != null, "enviroment have not commited.");
+        return injector;
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
+    }
+
     private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
 
     private void logHealthChecks() {
-        if (healthChecks().getNames().size() <= 1) {
+        if (getHealthCheckRegistry().getNames().size() <= 1) {
             LOGGER.warn(String.format(
                     "%n" +  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
                             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
@@ -222,6 +215,6 @@ public class Environment<T extends Configuration> {
                             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             ));
         }
-        LOGGER.info("health checks = {}", healthChecks().getNames());
+        LOGGER.info("health checks = {}", getHealthCheckRegistry().getNames());
     }
 }

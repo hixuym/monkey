@@ -76,7 +76,7 @@ metrics:
   frequency: 1 minutes
   reporters:
     - type: log
-      logger: io.sunflower.metrics
+      logger: io.sunflower.getMetricRegistry
 
 database:
   driverClass: org.h2.Driver

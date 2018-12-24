@@ -52,7 +52,7 @@ import java.util.function.UnaryOperator;
  * TypeLiteral{@literal <}List{@literal <}String{@literal >}{@literal >} LIST_TYPE_LITERAL =  new TypeLiteral{@literal <}List{@literal <}String{@literal >}{@literal >}() {};
  *
  * @Override
- * protected void configure() {
+ * protected void initialize() {
  * register(AdvisableAnnotatedMethodScanner.asModule());
  *
  * AdvisesBinder.bind(binder(), LIST_TYPE_LITERAL).toInstance(new ArrayList{@literal <}{@literal >}());

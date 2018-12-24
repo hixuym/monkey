@@ -32,19 +32,21 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
     @Override
     protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration)
             throws Exception {
+
         final Environment environment = new Environment(bootstrap.getApplication().getName(),
                 bootstrap.getObjectMapper(),
                 bootstrap.getValidatorFactory(),
                 bootstrap.getMetricRegistry(),
                 bootstrap.getClassLoader(),
-                bootstrap.getHealthCheckRegistry(),
-                configuration);
+                bootstrap.getHealthCheckRegistry());
 
-        configuration.getMetricsFactory().configure(environment.lifecycle(), bootstrap.getMetricRegistry());
-        configuration.getServerFactory().configure(environment);
+        configuration.getServerFactory().initialize(bootstrap);
+        configuration.getLoggingFactory().configure(bootstrap.getMetricRegistry(),
+                bootstrap.getApplication().getName());
+        configuration.getMetricsFactory().configure(environment.lifecycle(), environment.getMetricRegistry());
+
         bootstrap.run(configuration, environment);
         application.run(configuration, environment);
-        environment.guice().setup();
         run(environment, namespace, configuration);
     }
 

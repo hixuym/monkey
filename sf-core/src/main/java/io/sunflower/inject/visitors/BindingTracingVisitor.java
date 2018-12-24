@@ -25,7 +25,7 @@ import io.sunflower.inject.InjectorBuilder;
  * To use with {@link InjectorBuilder},
  * <p>
  * <code> InjectorBuilder .withModules(new MyApplicationModule) .forEachElement(new
- * BindingTracingVisitor()) .createInjector(); </code>
+ * BindingTracingVisitor()) .build(); </code>
  */
 public class BindingTracingVisitor extends DefaultElementVisitor<String> {
 

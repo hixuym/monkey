@@ -30,7 +30,12 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-jaxrs-serv</artifactId>
+            <artifactId>sf-http-serv</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.sunflower</groupId>
+            <artifactId>sf-jaxrs</artifactId>
         </dependency>
 
         <dependency>

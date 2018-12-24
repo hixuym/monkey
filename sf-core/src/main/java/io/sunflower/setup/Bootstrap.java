@@ -32,8 +32,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 /**
- * The pre-commit application environment, containing everything required to bootstrap a Dropwizard
- * command.
+ * The pre-commit application environment, containing everything required to bootstrap a sunflower command.
  *
  * @param <T> the configuration type
  * @author michael
@@ -55,10 +54,12 @@ public class Bootstrap<T extends Configuration> {
     private boolean metricsAreRegistered;
     private HealthCheckRegistry healthCheckRegistry;
 
+    private InjectorFacotry injectorFacotry = new InjectorFacotry();
+
     /**
      * Creates a new {@link Bootstrap} for the given application.
      *
-     * @param application a Dropwizard {@link Application}
+     * @param application a Sunflower {@link Application}
      */
     public Bootstrap(Application<T> application) {
         this.application = application;
@@ -75,7 +76,7 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Registers the JVM metrics to the metric register and commit to report the register metrics via
+     * Registers the JVM getMetricRegistry to the metric register and commit to report the register getMetricRegistry via
      * JMX.
      */
     public void registerMetrics() {
@@ -182,6 +183,9 @@ public class Bootstrap<T extends Configuration> {
      * @throws Exception if a bundle throws an exception
      */
     public void run(T configuration, Environment environment) throws Exception {
+        injectorFacotry.register(new BootModule(environment));
+        environment.setInjector(injectorFacotry.build());
+
         for (ConfiguredBundle<? super T> bundle : configuredBundles) {
             bundle.run(configuration, environment);
         }
@@ -195,14 +199,14 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Returns the application metrics.
+     * Returns the application getMetricRegistry.
      */
     public MetricRegistry getMetricRegistry() {
         return metricRegistry;
     }
 
     /**
-     * Sets a custom register for the application metrics.
+     * Sets a custom register for the application getMetricRegistry.
      *
      * @param metricRegistry a custom metric register
      */
@@ -239,5 +243,9 @@ public class Bootstrap<T extends Configuration> {
 
     public void setHealthCheckRegistry(HealthCheckRegistry healthCheckRegistry) {
         this.healthCheckRegistry = healthCheckRegistry;
+    }
+
+    public InjectorFacotry injectorFacotry() {
+        return this.injectorFacotry;
     }
 }

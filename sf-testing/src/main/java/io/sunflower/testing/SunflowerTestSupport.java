@@ -274,7 +274,7 @@ public class SunflowerTestSupport<C extends Configuration> {
     }
 
     public Injector getInjector() {
-        return environment.injector();
+        return environment.getInjector();
     }
 
     @SuppressWarnings("unchecked")

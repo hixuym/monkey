@@ -17,10 +17,8 @@ package io.sunflower.server;
 
 import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
-import io.sunflower.inject.lifecycle.LifecycleManager;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
-import io.sunflower.setup.GuiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +29,10 @@ public abstract class Server extends ContainerLifeCycle {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Environment environment;
     private Injector injector;
-    private GuiceConfig guiceConfig;
 
     public Server(Environment environment) {
-        this.environment = environment;
         environment.lifecycle().attach(this);
-        this.injector = environment.injector();
-        this.guiceConfig = environment.guice().getGuiceConfig();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 this.stop();
@@ -52,9 +45,6 @@ public abstract class Server extends ContainerLifeCycle {
     @Override
     protected final void doStart() throws Exception {
         Stopwatch sw = Stopwatch.createStarted();
-        if (guiceConfig.isLifecycleEnabled()) {
-            injector.getInstance(LifecycleManager.class).start();
-        }
         super.doStart();
         this.boot();
         sw.stop();
@@ -66,9 +56,6 @@ public abstract class Server extends ContainerLifeCycle {
     @Override
     protected final void doStop() throws Exception {
         Stopwatch sw = Stopwatch.createStarted();
-        if (guiceConfig.isLifecycleEnabled()) {
-            injector.getInstance(LifecycleManager.class).stop();
-        }
         super.doStop();
         this.shutdown();
         sw.stop();
@@ -89,11 +76,4 @@ public abstract class Server extends ContainerLifeCycle {
      */
     protected void shutdown() {}
 
-    public Environment getEnvironment() {
-        return environment;
-    }
-
-    public Injector getInjector() {
-        return injector;
-    }
 }

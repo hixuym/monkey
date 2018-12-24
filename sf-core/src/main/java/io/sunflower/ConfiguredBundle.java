@@ -13,18 +13,18 @@ import io.sunflower.setup.Environment;
 public interface ConfiguredBundle<T> {
 
     /**
+     * Initializes the application bootstrap.
+     *
+     * @param bootstrap the application bootstrap
+     */
+    void initialize(Bootstrap<?> bootstrap);
+
+    /**
      * Initializes the environment.
      *
      * @param configuration the configuration object
      * @param environment   the application's {@link Environment}
      * @throws Exception if something goes wrong
      */
-    void run(T configuration, Environment environment) throws Exception;
-
-    /**
-     * Initializes the application bootstrap.
-     *
-     * @param bootstrap the application bootstrap
-     */
-    void initialize(Bootstrap<?> bootstrap);
+    void run(T configuration, Environment environment);
 }

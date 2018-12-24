@@ -132,7 +132,19 @@
 
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-netty</artifactId>
+                <artifactId>resteasy-undertow</artifactId>
+                <version>${resteasy.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.resteasy</groupId>
+                        <artifactId>resteasy-client</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-wadl</artifactId>
                 <version>${resteasy.version}</version>
             </dependency>
 
@@ -808,6 +820,12 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
+                <artifactId>sf-http-serv</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.sunflower</groupId>
                 <artifactId>sf-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -820,7 +838,7 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-jaxrs-serv</artifactId>
+                <artifactId>sf-jaxrs</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

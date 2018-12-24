@@ -68,7 +68,7 @@ public interface PooledDataSourceFactory {
      * Builds a new JDBC data source backed by the connection pool
      * and managed by Dropwizard.
      *
-     * @param metricRegistry the application metrics registry
+     * @param metricRegistry the application getMetricRegistry registry
      * @param healthCheckRegistry the application healthcheck registry
      * @param name           name of the connection pool
      * @return a new JDBC data source as {@code ManagedDataSource}

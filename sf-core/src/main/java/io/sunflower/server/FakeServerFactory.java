@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author michael
  */
 @JsonTypeName("fake")
-public class FakeServerFactory extends AbstractServerFactory {
+public class FakeServerFactory implements ServerFactory {
 
     private static Logger logger = LoggerFactory.getLogger(FakeServerFactory.class);
 
@@ -38,10 +38,6 @@ public class FakeServerFactory extends AbstractServerFactory {
             }
 
         };
-    }
-
-    @Override
-    public void configure(Environment environment) {
     }
 
 }

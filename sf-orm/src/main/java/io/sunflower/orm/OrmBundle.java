@@ -75,8 +75,12 @@ public abstract class OrmBundle<T extends Configuration>
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
         this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
+    }
 
-        environment.guice().register(new AbstractModule() {
+    @Override
+    public void initialize(Bootstrap<?> bootstrap) {
+
+        bootstrap.injectorFacotry().register(new AbstractModule() {
             @Override
             protected void configure() {
                 // class-level @Txn
@@ -91,17 +95,12 @@ public abstract class OrmBundle<T extends Configuration>
                         not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
             }
         });
-
-    }
-
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
         bootstrap.addCommand(new DbMigrationCommand());
     }
 
     /**
-     * Override to configure the name of the bundle (It's used for the bundle health check and
-     * database pool metrics), default use app name + _db
+     * Override to initialize the name of the bundle (It's used for the bundle health check and
+     * database pool getMetricRegistry), default use app name + _db
      */
     protected String name() {
         return null;

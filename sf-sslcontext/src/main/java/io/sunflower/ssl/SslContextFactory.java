@@ -36,7 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * SslContextFactory is used to configure SSL connectors
+ * SslContextFactory is used to initialize SSL connectors
  * as well as HttpClient. It holds all SSL parameters and
  * creates SSL context based on these parameters to be
  * used by the SSL connectors.

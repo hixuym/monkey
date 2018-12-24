@@ -17,9 +17,8 @@ package io.sunflower.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.json.Discoverable;
+import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-
-import java.util.Map;
 
 /**
  * A factory for building {@link Server} instances for sunflower applications.
@@ -38,16 +37,10 @@ public interface ServerFactory extends Discoverable {
     Server build(Environment environment);
 
     /**
-     * Configures the given environment with settings defined in the factory.
+     * initialize the application bootstrap.
      *
-     * @param environment the application's environment
+     * @param bootstrap the application bootstrap
      */
-    void configure(Environment environment);
+    default void initialize(Bootstrap<?> bootstrap) {}
 
-    /**
-     * extra server configuration properties.
-     *
-     * @return Map<String, String>
-     */
-    Map<String, String> getServerProperties();
 }
