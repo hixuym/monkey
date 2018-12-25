@@ -16,7 +16,6 @@
 package io.sunflower.server;
 
 import com.google.common.base.Stopwatch;
-import com.google.inject.Injector;
 import io.sunflower.lifecycle.ContainerLifeCycle;
 import io.sunflower.setup.Environment;
 import org.slf4j.Logger;
@@ -28,8 +27,6 @@ import org.slf4j.LoggerFactory;
 public abstract class Server extends ContainerLifeCycle {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
-    private Injector injector;
 
     public Server(Environment environment) {
         environment.lifecycle().attach(this);

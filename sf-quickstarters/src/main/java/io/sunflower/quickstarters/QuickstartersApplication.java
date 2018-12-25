@@ -3,6 +3,7 @@ package io.sunflower.quickstarters;
 import io.sunflower.Application;
 import io.sunflower.datasource.PooledDataSourceFactory;
 import io.sunflower.jaxrs.setup.JaxrsBundle;
+import io.sunflower.jaxrs.setup.JaxrsDeploymentFactory;
 import io.sunflower.orm.OrmBundle;
 import io.sunflower.quickstarters.resources.HelloworldResource;
 import io.sunflower.setup.Bootstrap;
@@ -38,7 +39,13 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
             }
         });
 
-        bootstrap.addBundle(new JaxrsBundle<>());
+        bootstrap.addBundle(new JaxrsBundle<QuickstartersConfiguration>() {
+
+            @Override
+            public JaxrsDeploymentFactory build(QuickstartersConfiguration configuration) {
+                return configuration.getJaxrsDeploymentFactory();
+            }
+        });
 
         bootstrap.injectorFacotry().register(HelloworldResource.class);
     }

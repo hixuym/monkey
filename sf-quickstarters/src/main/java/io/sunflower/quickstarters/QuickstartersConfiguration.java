@@ -3,6 +3,7 @@ package io.sunflower.quickstarters;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sunflower.Configuration;
 import io.sunflower.datasource.DataSourceFactory;
+import io.sunflower.jaxrs.setup.JaxrsDeploymentFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -22,12 +23,24 @@ public class QuickstartersConfiguration extends Configuration {
     @JsonProperty("database")
     private DataSourceFactory dataSourceFactory = new DataSourceFactory();
 
+    @Valid
+    @JsonProperty("jaxrs")
+    private JaxrsDeploymentFactory jaxrsDeploymentFactory = new JaxrsDeploymentFactory();
+
     public DataSourceFactory getDataSourceFactory() {
         return dataSourceFactory;
     }
 
     public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
         this.dataSourceFactory = dataSourceFactory;
+    }
+
+    public JaxrsDeploymentFactory getJaxrsDeploymentFactory() {
+        return jaxrsDeploymentFactory;
+    }
+
+    public void setJaxrsDeploymentFactory(JaxrsDeploymentFactory jaxrsDeploymentFactory) {
+        this.jaxrsDeploymentFactory = jaxrsDeploymentFactory;
     }
 
     public String getTemplate() {

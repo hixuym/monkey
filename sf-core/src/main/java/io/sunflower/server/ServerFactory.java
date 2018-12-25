@@ -43,4 +43,9 @@ public interface ServerFactory extends Discoverable {
      */
     default void initialize(Bootstrap<?> bootstrap) {}
 
+    default String getHost() { return "localhost" ;};
+
+    default int getPort() {return 8080;}
+
+    default String getSchema() { return ""; }
 }

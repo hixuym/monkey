@@ -27,4 +27,9 @@ public class HttpsServerFactory extends HttpServerFactory {
     public void setSslContextFactoryFactory(SslContextFactoryFactory sslContextFactoryFactory) {
         this.sslContextFactoryFactory = sslContextFactoryFactory;
     }
+
+    @Override
+    public String getSchema() {
+        return "https";
+    }
 }

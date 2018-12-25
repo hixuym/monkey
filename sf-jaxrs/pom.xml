@@ -27,12 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.sunflower</groupId>
-            <artifactId>sf-sslcontext</artifactId>
+            <artifactId>sf-serv-http</artifactId>
         </dependency>
 
         <dependency>
