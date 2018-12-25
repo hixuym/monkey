@@ -8,6 +8,7 @@ import io.sunflower.orm.OrmBundle;
 import io.sunflower.quickstarters.resources.HelloworldResource;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
+import io.sunflower.setup.InjectorFacotry;
 //import org.conscrypt.OpenSSLProvider;
 
 //import java.security.Security;
@@ -45,9 +46,12 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
             public JaxrsDeploymentFactory build(QuickstartersConfiguration configuration) {
                 return configuration.getJaxrsDeploymentFactory();
             }
-        });
 
-        bootstrap.injectorFacotry().register(HelloworldResource.class);
+            @Override
+            protected void bindResources(InjectorFacotry facotry) {
+                facotry.register(HelloworldResource.class);
+            }
+        });
     }
 
     @Override

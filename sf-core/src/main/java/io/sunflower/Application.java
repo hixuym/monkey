@@ -34,7 +34,7 @@ public abstract class Application<T extends Configuration> {
             + " `--. \\ | | | '_ \\|  _| |/ _ \\ \\ /\\ / / _ \\ '__| \n"
             + "/\\__/ / |_| | | | | | | | (_) \\ V  V /  __/ |    \n"
             + "\\____/ \\__,_|_| |_|_| |_|\\___/ \\_/\\_/ \\___|_| \n"
-            + "       Framework@({})                                \n";
+            + "       Framework@({}) {}                             \n";
 
     protected Application() {
         bootstrapLogging();
@@ -146,7 +146,7 @@ public abstract class Application<T extends Configuration> {
         String sfVersion = Application.class.getPackage().getImplementationVersion();
 
         // log Sunflower splash screen
-        logger.info(LOGO, sfVersion == null ? "@@" : sfVersion);
+        logger.info(LOGO, sfVersion == null ? "@@" : sfVersion, getName());
 
     }
 }

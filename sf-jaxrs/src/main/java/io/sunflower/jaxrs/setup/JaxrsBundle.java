@@ -10,6 +10,7 @@ import io.sunflower.jaxrs.validation.Validators;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
+import io.sunflower.setup.InjectorFacotry;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainer;
@@ -36,6 +37,11 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
         bootstrap.setValidatorFactory(Validators.newValidatorFactory());
         bootstrap.injectorFacotry().register(new JaxrsModule(), new RequestScopeModule());
+
+        bindResources(bootstrap.injectorFacotry());
+    }
+
+    protected void bindResources(InjectorFacotry facotry) {
 
     }
 
