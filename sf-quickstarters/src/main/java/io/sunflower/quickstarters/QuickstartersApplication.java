@@ -22,10 +22,6 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 //        Security.addProvider(new OpenSSLProvider());
 //    }
 
-    public static void main(String[] args) throws Exception {
-        new QuickstartersApplication().run(args);
-    }
-
     @Override
     public String getName() {
         return "sf-quickstarters";
@@ -54,8 +50,8 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
         });
     }
 
-    @Override
-    public void run(QuickstartersConfiguration configuration, Environment environment) {
+    public static void main(String[] args) throws Exception {
+        new QuickstartersApplication().run(args);
     }
 
 }
