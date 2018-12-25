@@ -37,7 +37,7 @@ public class CommandTest {
 
     private final Application<Configuration> app = new Application<Configuration>() {
         @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+        public void run(Configuration configuration, Environment environment) {
         }
     };
 

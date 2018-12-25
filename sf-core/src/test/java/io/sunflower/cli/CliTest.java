@@ -28,7 +28,7 @@ public class CliTest {
     private final JarLocation location = mock(JarLocation.class);
     private final Application<Configuration> app = new Application<Configuration>() {
         @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+        public void run(Configuration configuration, Environment environment) {
         }
     };
 

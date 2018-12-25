@@ -27,7 +27,7 @@ public class BootstrapTest {
 
     private final Application<Configuration> application = new Application<Configuration>() {
         @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+        public void run(Configuration configuration, Environment environment) {
         }
     };
     private Bootstrap<Configuration> bootstrap;

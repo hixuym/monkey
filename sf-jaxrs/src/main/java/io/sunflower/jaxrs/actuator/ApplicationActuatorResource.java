@@ -57,7 +57,7 @@ public class ApplicationActuatorResource {
         this.environment = environment;
     }
 
-    @Path("/getMetricRegistry")
+    @Path("/metrics")
     @GET
     public Response metrics() throws Exception {
 

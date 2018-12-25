@@ -46,7 +46,7 @@ public class ApplicationTest {
         }
 
         @Override
-        public void run(C configuration, Environment environment) throws Exception {
+        public void run(C configuration, Environment environment) {
             this.application.run(configuration, environment);
         }
     }
