@@ -1,5 +1,12 @@
 ## Sunflower Framework
 
+###3.2.0 - 2018-12-25
+
+    - sf-serv-http use undertow-core
+    - sf-jaxrs bundle integrate resteasy
+    - sf-grpc init project
+    - Bootstrap for configure guice modules, Enviroment ready use Injector.
+
 ###3.1.0 - 2018-12-23
 
     - sf-sslcontext
