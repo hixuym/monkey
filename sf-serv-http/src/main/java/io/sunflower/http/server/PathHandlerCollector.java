@@ -12,16 +12,16 @@ import java.util.Map;
 /**
  * author michael
  */
-public class ApplicationHandlerRegister {
+public class PathHandlerCollector {
 
-    private static Logger logger = LoggerFactory.getLogger(ApplicationHandlerRegister.class);
+    private static Logger logger = LoggerFactory.getLogger(PathHandlerCollector.class);
 
     private Map<String, HttpHandler> handlerMap = Maps.newConcurrentMap();
 
     private volatile HttpHandler defaultHandler;
 
-    public void registry(String path, HttpHandler handler) {
-        logger.info("registry http hander: {} -> {}.", path, handler);
+    public void addPathHandler(String path, HttpHandler handler) {
+        logger.info("add http path hander: {} -> {}.", path, handler);
 
         if ("/".equalsIgnoreCase(path)) {
             this.defaultHandler = handler;
@@ -33,7 +33,7 @@ public class ApplicationHandlerRegister {
     public HttpHandler buildApplicationHandler() {
 
         if (defaultHandler == null && handlerMap.isEmpty()) {
-            throw new SunflowerException("no http handler found, please registry your handlers by ApplicationHandlerRegister.");
+            throw new SunflowerException("no http handler found, please add your handlers by PathHandlerCollector.");
         }
 
         if (defaultHandler == null) {

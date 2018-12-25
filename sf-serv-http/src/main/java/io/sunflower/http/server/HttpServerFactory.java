@@ -26,12 +26,12 @@ public class HttpServerFactory implements ServerFactory {
     @Override
     public Server build(Environment environment) {
 
-        ApplicationHandlerRegister register = environment.getInjector().getInstance(ApplicationHandlerRegister.class);
+        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
 
         Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
         builder.setHost(host);
         builder.setPort(port);
-        builder.setRootHandler(register.buildApplicationHandler());
+        builder.setRootHandler(collector.buildApplicationHandler());
 
         return buildServer(environment, builder);
     }
@@ -44,7 +44,7 @@ public class HttpServerFactory implements ServerFactory {
 
     @Override
     public void initialize(Bootstrap bootstrap) {
-        bootstrap.injectorFacotry().register(new ApplicationHandlerRegister());
+        bootstrap.injectorFacotry().register(new PathHandlerCollector());
     }
 
     @Override

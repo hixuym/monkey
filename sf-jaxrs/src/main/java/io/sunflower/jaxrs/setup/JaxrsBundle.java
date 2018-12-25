@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.SunflowerException;
-import io.sunflower.http.server.ApplicationHandlerRegister;
+import io.sunflower.http.server.PathHandlerCollector;
 import io.sunflower.jaxrs.validation.Validators;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Bootstrap;
@@ -50,7 +50,7 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
         JaxrsDeploymentFactory jaxrsDeploymentFactory = build(configuration);
 
-        ApplicationHandlerRegister register = environment.getInjector().getInstance(ApplicationHandlerRegister.class);
+        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
 
         DeploymentInfo deploymentInfo = jaxrsDeploymentFactory.build(deployment);
 
@@ -61,7 +61,7 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
         String contextPath = deploymentInfo.getContextPath();
 
         try {
-            register.registry(contextPath, manager.start());
+            collector.addPathHandler(contextPath, manager.start());
         } catch (ServletException e) {
             throw new SunflowerException(e);
         }
