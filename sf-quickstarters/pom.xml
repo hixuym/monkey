@@ -30,7 +30,7 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
-            <artifactId>sf-http-serv</artifactId>
+            <artifactId>sf-serv-http</artifactId>
         </dependency>
 
         <dependency>

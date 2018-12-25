@@ -81,7 +81,7 @@
         <module>sf-metrics</module>
         <module>sf-metrics-graphite</module>
         <module>sf-core</module>
-        <module>sf-http-serv</module>
+        
         <module>sf-lifecycle</module>
         <module>sf-datasource</module>
         <module>sf-orm</module>
@@ -91,6 +91,9 @@
         <module>sf-archetypes</module>
         <module>sf-jaxrs</module>
         <module>sf-quickstarters</module>
+		
+		<module>sf-serv-http</module>
+		<module>sf-serv-grpc</module>
     </modules>
 
     <dependencyManagement>

@@ -8,9 +8,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sf-http-serv</artifactId>
+    <artifactId>sf-serv-grpc</artifactId>
 
-    <name>Sunflower Http Server</name>
+    <name>Sunflower gRPC Server</name>
 
     <dependencyManagement>
         <dependencies>
@@ -25,10 +25,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.sunflower</groupId>
             <artifactId>sf-core</artifactId>

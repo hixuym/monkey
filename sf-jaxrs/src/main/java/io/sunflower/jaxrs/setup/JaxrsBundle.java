@@ -105,7 +105,25 @@ public class JaxrsBundle<T extends Configuration> implements ConfiguredBundle<T>
     }
 
     private void deploy() {
+        if (contextPath == null) contextPath = "/";
+        if (!contextPath.startsWith("/")) contextPath = "/" + contextPath;
         DeploymentInfo deploymentInfo = asUndertowDeployment(deployment);
+        deploymentInfo.setContextPath(this.contextPath);
+        deploymentInfo.setDeploymentName("Resteasy" + contextPath);
+        deploymentInfo.setClassLoader(deployment.getClass().getClassLoader());
+
+        if (contextParams != null) {
+            for (Map.Entry<String, String> e : contextParams.entrySet()) {
+                deploymentInfo.addInitParameter(e.getKey(), e.getValue());
+            }
+        }
+        if (initParams != null) {
+            ServletInfo servletInfo = deploymentInfo.getServlets().get(SERVLET_NAME);
+            for (Map.Entry<String, String> e : initParams.entrySet()) {
+                servletInfo.addInitParam(e.getKey(), e.getValue());
+            }
+        }
+
         DeploymentManager manager = container.addDeployment(deploymentInfo);
         manager.deploy();
         try {
@@ -116,39 +134,25 @@ public class JaxrsBundle<T extends Configuration> implements ConfiguredBundle<T>
     }
 
     private DeploymentInfo asUndertowDeployment(ResteasyDeployment deployment) {
-        if (this.contextPath == null) this.contextPath = "/";
-        if (!this.contextPath.startsWith("/")) this.contextPath = "/" + this.contextPath;
-        if (!this.contextPath.endsWith("/")) this.contextPath += "/";
-        this.contextPath = this.contextPath + "*";
+        return asUndertowDeployment(deployment, "/");
+    }
+
+    private DeploymentInfo asUndertowDeployment(ResteasyDeployment deployment, String mapping) {
+        if (mapping == null) mapping = "/";
+        if (!mapping.startsWith("/")) mapping = "/" + mapping;
+        if (!mapping.endsWith("/")) mapping += "/";
+        mapping = mapping + "*";
         String prefix = null;
-        if (!this.contextPath.equals("/*")) prefix = this.contextPath.substring(0, this.contextPath.length() - 2);
+        if (!mapping.equals("/*")) prefix = mapping.substring(0, mapping.length() - 2);
         ServletInfo resteasyServlet = servlet(SERVLET_NAME, HttpServlet30Dispatcher.class)
                 .setAsyncSupported(true)
                 .setLoadOnStartup(1)
-                .addMapping(this.contextPath);
+                .addMapping(mapping);
         if (prefix != null) resteasyServlet.addInitParam("resteasy.servlet.mapping.prefix", prefix);
 
-        DeploymentInfo deploymentInfo = new DeploymentInfo()
+        return new DeploymentInfo()
                 .addServletContextAttribute(ResteasyDeployment.class.getName(), deployment)
                 .addServlet(resteasyServlet);
-
-        deploymentInfo.setContextPath(this.contextPath);
-        deploymentInfo.setDeploymentName("Resteasy" + contextPath);
-        deploymentInfo.setClassLoader(deployment.getClass().getClassLoader());
-
-        if (contextParams != null) {
-            for (Map.Entry<String, String> e : contextParams.entrySet()) {
-                deploymentInfo.addInitParameter(e.getKey(), e.getValue());
-            }
-        }
-
-        if (initParams != null) {
-            for (Map.Entry<String, String> e : initParams.entrySet()) {
-                resteasyServlet.addInitParam(e.getKey(), e.getValue());
-            }
-        }
-
-        return deploymentInfo;
     }
 
     /**

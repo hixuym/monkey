@@ -820,7 +820,13 @@
 
             <dependency>
                 <groupId>io.sunflower</groupId>
-                <artifactId>sf-http-serv</artifactId>
+                <artifactId>sf-serv-http</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+			
+			<dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-serv-grpc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

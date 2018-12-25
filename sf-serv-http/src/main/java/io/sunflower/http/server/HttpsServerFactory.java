@@ -16,6 +16,7 @@ public class HttpsServerFactory extends HttpServerFactory {
     @Override
     protected Server buildServer(Environment environment, Undertow.ListenerBuilder builder) {
         builder.setType(Undertow.ListenerType.HTTPS);
+        builder.setSslContext(sslContextFactoryFactory.build(environment));
         return new HttpServer(environment, Undertow.builder().addListener(builder).build());
     }
 
