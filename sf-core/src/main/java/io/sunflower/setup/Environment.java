@@ -47,28 +47,23 @@ public final class Environment {
     private final ExecutorService healthCheckExecutorService;
     private final ClassLoader classLoader;
 
+    private GuiceEnvironment guiceEnvironment;
+
     private Injector injector;
 
     /**
      * Creates a new environment.
      *
-     * @param name         the name of the application
-     * @param objectMapper the {@link ObjectMapper} for the application
+     * @param bootstrap    the pre commited env
      */
-    public Environment(String name,
-                       ObjectMapper objectMapper,
-                       ValidatorFactory validatorFactory,
-                       MetricRegistry metricRegistry,
-                       ClassLoader classLoader,
-                       HealthCheckRegistry healthCheckRegistry) {
-        this.name = name;
-        this.classLoader = classLoader;
-
-        this.objectMapper = objectMapper;
-        this.metricRegistry = metricRegistry;
-        this.healthCheckRegistry = healthCheckRegistry;
+    public Environment(Bootstrap bootstrap) {
+        this.name = bootstrap.getApplication().getName();
+        this.classLoader = bootstrap.getClassLoader();
+        this.objectMapper = bootstrap.getObjectMapper();
+        this.metricRegistry = bootstrap.getMetricRegistry();
+        this.healthCheckRegistry = bootstrap.getHealthCheckRegistry();
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
-        this.validatorFactory = validatorFactory;
+        this.validatorFactory = bootstrap.getValidatorFactory();
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
         this.lifecycleEnvironment.manage(new Managed() {
@@ -99,22 +94,15 @@ public final class Environment {
         } catch (IllegalStateException e) {
             SharedMetricRegistries.setDefault("default", metricRegistry);
         }
+
         try {
             SharedHealthCheckRegistries.getDefault();
         } catch (IllegalStateException e) {
             SharedHealthCheckRegistries.setDefault("default", healthCheckRegistry);
         }
-    }
 
-    /**
-     * Creates an environment with default health check register
-     */
-    public Environment(String name,
-                       ObjectMapper objectMapper,
-                       ValidatorFactory validatorFactory,
-                       MetricRegistry metricRegistry,
-                       ClassLoader classLoader) {
-        this(name, objectMapper, validatorFactory, metricRegistry, classLoader, new HealthCheckRegistry());
+        this.guiceEnvironment = new GuiceEnvironment(this);
+
     }
 
     /**
@@ -170,6 +158,7 @@ public final class Environment {
      * Sets the application's {@link Validator}.
      */
     public void setValidatorFactory(ValidatorFactory validator) {
+        checkCommited();
         this.validatorFactory = requireNonNull(validator);
     }
 
@@ -191,12 +180,23 @@ public final class Environment {
         });
     }
 
+    public GuiceEnvironment guice() {
+        checkCommited();
+        return guiceEnvironment;
+    }
+
     public Injector getInjector() {
-        Preconditions.checkArgument(injector != null, "enviroment have not commited.");
+        Preconditions.checkArgument(injector != null, "injector only available in commited enviroment.");
         return injector;
     }
 
-    public void setInjector(Injector injector) {
+    private void checkCommited() {
+        if (injector != null) {
+            throw new IllegalStateException("Enviroment already commited.");
+        }
+    }
+
+    void setInjector(Injector injector) {
         this.injector = injector;
     }
 

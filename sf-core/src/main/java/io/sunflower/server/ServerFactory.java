@@ -38,11 +38,11 @@ public interface ServerFactory extends Discoverable {
     Server build(Environment environment);
 
     /**
-     * initialize the application bootstrap.
+     * Configures the given environment with settings defined in the factory.
      *
-     * @param bootstrap the application bootstrap
+     * @param environment the application's environment
      */
-    default void initialize(Bootstrap<?> bootstrap) {}
+    void configure(Environment environment);
 
     @JsonIgnore
     default String getHost() { return "localhost" ;}

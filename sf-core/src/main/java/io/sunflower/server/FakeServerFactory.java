@@ -40,4 +40,9 @@ public class FakeServerFactory implements ServerFactory {
         };
     }
 
+    @Override
+    public void configure(Environment environment) {
+
+    }
+
 }

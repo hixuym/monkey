@@ -75,12 +75,8 @@ public abstract class OrmBundle<T extends Configuration>
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
         this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
-    }
 
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-
-        bootstrap.injectorFacotry().register(new AbstractModule() {
+        environment.guice().register(new AbstractModule() {
             @Override
             protected void configure() {
                 // class-level @Txn
@@ -95,6 +91,11 @@ public abstract class OrmBundle<T extends Configuration>
                         not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
             }
         });
+    }
+
+    @Override
+    public void initialize(Bootstrap<?> bootstrap) {
+
         bootstrap.addCommand(new DbMigrationCommand());
     }
 

@@ -87,7 +87,7 @@ public abstract class Application<T extends Configuration> {
      * @param environment   the application's {@link Environment}
      * @throws Exception if something goes wrong
      */
-    public void run(T configuration, Environment environment) {}
+    public abstract void run(T configuration, Environment environment) ;
 
     /**
      * Parses command-line arguments and runs the application. Call this method from a {@code public

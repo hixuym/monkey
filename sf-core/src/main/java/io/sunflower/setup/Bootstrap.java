@@ -54,8 +54,6 @@ public class Bootstrap<T extends Configuration> {
     private boolean metricsAreRegistered;
     private HealthCheckRegistry healthCheckRegistry;
 
-    private InjectorFacotry injectorFacotry = new InjectorFacotry();
-
     /**
      * Creates a new {@link Bootstrap} for the given application.
      *
@@ -183,12 +181,11 @@ public class Bootstrap<T extends Configuration> {
      * @throws Exception if a bundle throws an exception
      */
     public void run(T configuration, Environment environment) throws Exception {
-        injectorFacotry.register(new BootModule(environment));
-        environment.setInjector(injectorFacotry.build());
 
         for (ConfiguredBundle<? super T> bundle : configuredBundles) {
             bundle.run(configuration, environment);
         }
+
     }
 
     /**
@@ -245,7 +242,4 @@ public class Bootstrap<T extends Configuration> {
         this.healthCheckRegistry = healthCheckRegistry;
     }
 
-    public InjectorFacotry injectorFacotry() {
-        return this.injectorFacotry;
-    }
 }

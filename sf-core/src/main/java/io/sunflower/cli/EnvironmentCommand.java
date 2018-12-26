@@ -2,6 +2,7 @@ package io.sunflower.cli;
 
 import io.sunflower.Application;
 import io.sunflower.Configuration;
+import io.sunflower.setup.BootModule;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -33,20 +34,21 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
     protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration)
             throws Exception {
 
-        final Environment environment = new Environment(bootstrap.getApplication().getName(),
-                bootstrap.getObjectMapper(),
-                bootstrap.getValidatorFactory(),
-                bootstrap.getMetricRegistry(),
-                bootstrap.getClassLoader(),
-                bootstrap.getHealthCheckRegistry());
+        final Environment environment = new Environment(bootstrap);
 
-        configuration.getServerFactory().initialize(bootstrap);
-        configuration.getLoggingFactory().configure(bootstrap.getMetricRegistry(),
-                bootstrap.getApplication().getName());
+        environment.guice().register(new BootModule(environment));
+        environment.guice().register(configuration);
+
+        configuration.getServerFactory().configure(environment);
+        configuration.getLoggingFactory().configure(environment.getMetricRegistry(), environment.getName());
         configuration.getMetricsFactory().configure(environment.lifecycle(), environment.getMetricRegistry());
 
         bootstrap.run(configuration, environment);
+
         application.run(configuration, environment);
+
+        environment.guice().commit();
+
         run(environment, namespace, configuration);
     }
 

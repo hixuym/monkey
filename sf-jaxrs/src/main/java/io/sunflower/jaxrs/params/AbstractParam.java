@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 /**
- * An abstract base class from which to build Jersey parameter classes.
+ * An abstract base class from which to commit Jersey parameter classes.
  *
  * @param <T> the type of value wrapped by the parameter
  * @author michael

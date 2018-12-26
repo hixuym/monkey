@@ -1,16 +1,18 @@
 package io.sunflower.jaxrs.setup;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.multibindings.MapBinder;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.SunflowerException;
-import io.sunflower.http.server.PathHandlerCollector;
 import io.sunflower.jaxrs.validation.Validators;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.setup.InjectorFacotry;
+import io.sunflower.setup.GuiceEnvironment;
+import io.undertow.server.HttpHandler;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainer;
@@ -36,35 +38,33 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
     public void initialize(Bootstrap<?> bootstrap) {
 
         bootstrap.setValidatorFactory(Validators.newValidatorFactory());
-        bootstrap.injectorFacotry().register(new JaxrsModule(), new RequestScopeModule());
 
-        bindResources(bootstrap.injectorFacotry());
     }
 
-    protected void bindResources(InjectorFacotry facotry) {
+    protected void bindResources(GuiceEnvironment facotry) {
 
     }
 
     @Override
     public void run(T configuration, Environment environment) {
-
         JaxrsDeploymentFactory jaxrsDeploymentFactory = build(configuration);
-
-        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
-
         DeploymentInfo deploymentInfo = jaxrsDeploymentFactory.build(deployment);
-
         ServletContainer container = ServletContainer.Factory.newInstance();
-        DeploymentManager manager = container.addDeployment(deploymentInfo);
-        manager.deploy();
+        final DeploymentManager manager = container.addDeployment(deploymentInfo);
 
-        String contextPath = deploymentInfo.getContextPath();
+        final String contextPath = deploymentInfo.getContextPath();
 
-        try {
-            collector.addPathHandler(contextPath, manager.start());
-        } catch (ServletException e) {
-            throw new SunflowerException(e);
-        }
+        environment.guice().register(new JaxrsModule(), new RequestScopeModule());
+
+        environment.guice().register(new AbstractModule() {
+            @Override
+            protected void configure() {
+                MapBinder<String, HttpHandler> mapBinder = MapBinder.newMapBinder(binder(), String.class, HttpHandler.class);
+                mapBinder.addBinding(contextPath).toProvider(new JaxrsHandlerProvider(manager));
+            }
+        });
+
+        bindResources(environment.guice());
 
         environment.addServerLifecycleListener((server -> {
             scanResources(environment.getInjector());
@@ -76,6 +76,25 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
                     + (contextPath.endsWith("/") ? contextPath : contextPath + "/")
                     + "application.xml");
         }));
+    }
+
+    private static class JaxrsHandlerProvider implements javax.inject.Provider<HttpHandler> {
+
+        private DeploymentManager manager;
+
+        public JaxrsHandlerProvider(DeploymentManager manager) {
+            this.manager = manager;
+        }
+
+        @Override
+        public HttpHandler get() {
+            try {
+                manager.deploy();
+                return manager.start();
+            } catch (ServletException e) {
+                throw new SunflowerException(e);
+            }
+        }
     }
 
     private void scanResources(Injector injector) {

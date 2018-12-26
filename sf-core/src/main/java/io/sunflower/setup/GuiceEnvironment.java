@@ -38,9 +38,9 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author michael
  */
-public class InjectorFacotry {
+public class GuiceEnvironment {
 
-    private static Logger LOG = LoggerFactory.getLogger(InjectorFacotry.class);
+    private static Logger LOG = LoggerFactory.getLogger(GuiceEnvironment.class);
 
     private final List<Module> moduleLoaded = newArrayList();
     private final List<Module> overrideModules = newArrayList();
@@ -50,7 +50,10 @@ public class InjectorFacotry {
 
     private Stage stage = Stage.DEVELOPMENT;
 
-    InjectorFacotry() {
+    private Environment environment;
+
+    GuiceEnvironment(Environment environment) {
+        this.environment = environment;
         System.setProperty("file.encoding", "utf-8");
         register(new AbstractModule() {
             @Override
@@ -93,7 +96,7 @@ public class InjectorFacotry {
         this.modulesProcessors.add(modulesProcessor);
     }
 
-    public Injector build() {
+    public void commit() {
 
         checkNotSetuped();
 
@@ -123,7 +126,7 @@ public class InjectorFacotry {
         this.moduleLoaded.clear();
         this.overrideModules.clear();
         this.modulesProcessors.clear();
-        return injector;
+        this.environment.setInjector(injector);
     }
 
     private void checkNotSetuped() {

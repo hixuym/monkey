@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
-import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.validation.PortRange;
 import io.undertow.Undertow;
@@ -41,10 +40,9 @@ public class HttpServerFactory implements ServerFactory {
         return new HttpServer(environment, Undertow.builder().addListener(builder).build());
     }
 
-
     @Override
-    public void initialize(Bootstrap bootstrap) {
-        bootstrap.injectorFacotry().register(new PathHandlerCollector());
+    public void configure(Environment environment) {
+        environment.guice().register(PathHandlerCollector.class);
     }
 
     @Override

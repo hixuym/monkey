@@ -8,7 +8,7 @@ import io.sunflower.orm.OrmBundle;
 import io.sunflower.quickstarters.resources.HelloworldResource;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.setup.InjectorFacotry;
+import io.sunflower.setup.GuiceEnvironment;
 //import org.conscrypt.OpenSSLProvider;
 
 //import java.security.Security;
@@ -21,6 +21,10 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 //    static {
 //        Security.addProvider(new OpenSSLProvider());
 //    }
+
+    public static void main(String[] args) throws Exception {
+        new QuickstartersApplication().run(args);
+    }
 
     @Override
     public String getName() {
@@ -44,14 +48,15 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
             }
 
             @Override
-            protected void bindResources(InjectorFacotry facotry) {
+            protected void bindResources(GuiceEnvironment facotry) {
                 facotry.register(HelloworldResource.class);
             }
         });
     }
 
-    public static void main(String[] args) throws Exception {
-        new QuickstartersApplication().run(args);
+    @Override
+    public void run(QuickstartersConfiguration configuration, Environment environment) {
+        environment.guice().enableEvent();
     }
 
 }

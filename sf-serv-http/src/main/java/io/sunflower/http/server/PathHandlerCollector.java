@@ -7,6 +7,7 @@ import io.undertow.server.handlers.PathHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 /**
@@ -16,18 +17,13 @@ public class PathHandlerCollector {
 
     private static Logger logger = LoggerFactory.getLogger(PathHandlerCollector.class);
 
-    private Map<String, HttpHandler> handlerMap = Maps.newConcurrentMap();
+    private Map<String, HttpHandler> handlerMap;
 
     private volatile HttpHandler defaultHandler;
 
-    public void addPathHandler(String path, HttpHandler handler) {
-        logger.info("add http path hander: {} -> {}.", path, handler);
-
-        if ("/".equalsIgnoreCase(path)) {
-            this.defaultHandler = handler;
-        } else {
-            this.handlerMap.put(path, handler);
-        }
+    @Inject
+    public PathHandlerCollector(Map<String, HttpHandler> handlerMap) {
+        this.handlerMap = handlerMap;
     }
 
     public HttpHandler buildApplicationHandler() {

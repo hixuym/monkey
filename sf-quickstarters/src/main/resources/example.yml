@@ -80,7 +80,7 @@ metrics:
   frequency: 15 minutes
   reporters:
     - type: log
-      logger: io.sunflower.getMetricRegistry
+      logger: quickstarter.metrics
 
 database:
   driverClass: org.h2.Driver
