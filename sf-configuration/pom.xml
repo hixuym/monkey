@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.sunflower</groupId>
         <artifactId>sunflower-parent</artifactId>
-        <version>3.2.1-SNAPSHOT</version>
+        <version>3.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
