@@ -1,10 +1,14 @@
 package io.sunflower.http.server;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import io.sunflower.server.Server;
 import io.sunflower.setup.Environment;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class HttpServer extends Server {
 
@@ -24,7 +28,16 @@ public class HttpServer extends Server {
         undertow.start();
         started = true;
 
-        logger.info("Started HTTP Server({})", version);
+        List<Undertow.ListenerInfo> listeners = undertow.getListenerInfo();
+
+        List<String> strings = Lists.newArrayList();
+
+        for (Undertow.ListenerInfo info : listeners) {
+            strings.add(info.getProtcol() + "://" + info.getAddress());
+        }
+
+        logger.info("Started HTTP Server({}) With Connectors:", version);
+        logger.info("   {}", Joiner.on("\n").join(strings));
     }
 
     @Override

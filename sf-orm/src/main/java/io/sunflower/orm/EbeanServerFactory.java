@@ -22,8 +22,6 @@ import io.sunflower.datasource.ManagedDataSource;
 import io.sunflower.datasource.PooledDataSourceFactory;
 import io.sunflower.lifecycle.Managed;
 import io.sunflower.setup.Environment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -33,8 +31,6 @@ import java.util.Properties;
  * @author michael
  */
 public class EbeanServerFactory {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EbeanServerFactory.class);
 
     private static final String DB_SUFFIX = "_db";
 

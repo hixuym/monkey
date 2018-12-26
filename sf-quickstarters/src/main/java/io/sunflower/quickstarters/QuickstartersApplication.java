@@ -56,7 +56,6 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
     @Override
     public void run(QuickstartersConfiguration configuration, Environment environment) {
-        environment.guice().enableEvent();
     }
 
 }

@@ -1,5 +1,6 @@
 package io.sunflower.jaxrs.setup;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
@@ -47,6 +48,8 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
     @Override
     public void run(T configuration, Environment environment) {
+        Stopwatch sw = Stopwatch.createStarted();
+
         JaxrsDeploymentFactory jaxrsDeploymentFactory = build(configuration);
         DeploymentInfo deploymentInfo = jaxrsDeploymentFactory.build(deployment);
         ServletContainer container = ServletContainer.Factory.newInstance();
@@ -68,14 +71,11 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
         environment.addServerLifecycleListener((server -> {
             scanResources(environment.getInjector());
-            ServerFactory serverFactory = configuration.getServerFactory();
 
-            logger.info("JAX-RS WADL at: {}", serverFactory.getSchema() + "://"
-                    + (serverFactory.getHost() == null ? "localhost" : serverFactory.getHost())
-                    + ":" + serverFactory.getPort()
-                    + (contextPath.endsWith("/") ? contextPath : contextPath + "/")
-                    + "application.xml");
+            logger.info("JAX-RS WADL at: {}", (contextPath.endsWith("/") ? contextPath : contextPath + "/") + "application.xml");
         }));
+
+        logger.info("JaxrsBundle initialized {}.", sw);
     }
 
     private static class JaxrsHandlerProvider implements javax.inject.Provider<HttpHandler> {

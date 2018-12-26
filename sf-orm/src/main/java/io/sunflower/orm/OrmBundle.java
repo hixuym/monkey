@@ -15,6 +15,7 @@
 
 package io.sunflower.orm;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
@@ -25,6 +26,8 @@ import io.sunflower.datasource.DatabaseConfiguration;
 import io.sunflower.datasource.PooledDataSourceFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -36,6 +39,8 @@ import static com.google.inject.matcher.Matchers.*;
  */
 public abstract class OrmBundle<T extends Configuration>
         implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
+
+    private static Logger logger = LoggerFactory.getLogger(OrmBundle.class);
 
     private static final AbstractMatcher<Method> DECLARED_BY_OBJECT = new AbstractMatcher<Method>() {
         @Override
@@ -72,6 +77,7 @@ public abstract class OrmBundle<T extends Configuration>
 
     @Override
     public void run(T configuration, Environment environment) {
+        Stopwatch sw = Stopwatch.createStarted();
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
         this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
@@ -91,6 +97,10 @@ public abstract class OrmBundle<T extends Configuration>
                         not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
             }
         });
+
+        sw.stop();
+
+        logger.info("OrmBundle initialized {}.", sw);
     }
 
     @Override

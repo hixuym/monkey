@@ -119,9 +119,7 @@ public class GuiceEnvironment {
 
         this.created = true;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Guice initialized.", sw);
-        }
+        LOG.info("Guice initialized {}.", sw);
 
         this.moduleLoaded.clear();
         this.overrideModules.clear();
@@ -155,4 +153,7 @@ public class GuiceEnvironment {
         this.register(AdvisableAnnotatedMethodScanner.asModule());
     }
 
+    public void prodStage() {
+        this.stage = Stage.PRODUCTION;
+    }
 }

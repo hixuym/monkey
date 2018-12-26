@@ -15,10 +15,8 @@
 
 package io.sunflower.server;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.sunflower.json.Discoverable;
-import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 
 /**
@@ -44,10 +42,4 @@ public interface ServerFactory extends Discoverable {
      */
     void configure(Environment environment);
 
-    @JsonIgnore
-    default String getHost() { return "localhost" ;}
-    @JsonIgnore
-    default int getPort() {return 8080;}
-    @JsonIgnore
-    default String getSchema() { return "http"; }
 }

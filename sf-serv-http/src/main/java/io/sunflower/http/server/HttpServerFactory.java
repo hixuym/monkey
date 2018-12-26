@@ -37,6 +37,7 @@ public class HttpServerFactory implements ServerFactory {
 
     protected Server buildServer(Environment environment, Undertow.ListenerBuilder builder) {
         builder.setType(Undertow.ListenerType.HTTP);
+
         return new HttpServer(environment, Undertow.builder().addListener(builder).build());
     }
 
@@ -45,7 +46,6 @@ public class HttpServerFactory implements ServerFactory {
         environment.guice().register(PathHandlerCollector.class);
     }
 
-    @Override
     public String getHost() {
         return host;
     }
@@ -54,17 +54,11 @@ public class HttpServerFactory implements ServerFactory {
         this.host = host;
     }
 
-    @Override
     public int getPort() {
         return port;
     }
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    @Override
-    public String getSchema() {
-        return "http";
     }
 }
