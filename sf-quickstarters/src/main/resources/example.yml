@@ -12,7 +12,7 @@ logging:
     "io.ebean.cache.BEAN": TRACE
     "io.ebean.cache.COLL": TRACE
     "io.ebean.cache.NATKEY": TRACE
-
+    "io.undertow": DEBUG
     "io.sunflower.metrics":
       level: DEBUG
       additive: false
@@ -64,7 +64,7 @@ server:
 #      - SSL_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
-
+  enableHttp2: true
   port: 8443
 #  backlog: 256
 #  hostname: localhost

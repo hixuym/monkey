@@ -10,7 +10,7 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.setup.GuiceEnvironment;
 //import org.conscrypt.OpenSSLProvider;
-
+//
 //import java.security.Security;
 
 /**
@@ -20,6 +20,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
 //    static {
 //        Security.addProvider(new OpenSSLProvider());
+//
 //    }
 
     public static void main(String[] args) throws Exception {
