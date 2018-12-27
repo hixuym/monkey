@@ -1,5 +1,14 @@
 ## Sunflower Framework
 
+###3.4.0 - 2018-12-27
+
+    - add usefull httphandlers
+    - add orm repository support
+    - environment for guice configure, and commit before server start
+    - fix jaxrs validation issue, good intergate resteasy
+    - add server extra configuration items, include http2
+    - add sf-grpc and sf-jaxrs-auth init module
+
 ###3.2.0 - 2018-12-25
 
     - sf-serv-http use undertow-core
