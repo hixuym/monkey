@@ -2,13 +2,20 @@ package io.sunflower.http.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
+import io.sunflower.util.Duration;
 import io.sunflower.util.Size;
 import io.sunflower.validation.PortRange;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.RequestDumpingHandler;
+import io.undertow.server.handlers.RequestLimitingHandler;
+import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +57,20 @@ public class HttpServerFactory implements ServerFactory {
     @JsonProperty
     private Size maxMultipartEntitySize = Size.megabytes(10);
 
+    @JsonProperty
+    private String accessLog;
+
+    @JsonProperty
+    private boolean dumpRequest = false;
+
+    @JsonProperty
+    private int maxConcurrentRequests = -1;
+    @JsonProperty
+    private int maxRequestsQueue = 1000;
+
+    @JsonProperty
+    private Duration slowThreshold;
+
     @Override
     public Server build(Environment environment) {
 
@@ -73,11 +94,36 @@ public class HttpServerFactory implements ServerFactory {
 
     protected Undertow.ListenerBuilder getListener(Environment environment) {
         Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
-        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
         builder.setHost(host);
         builder.setPort(port);
-        builder.setRootHandler(collector.buildApplicationHandler());
+        builder.setRootHandler(getRootHandler(environment));
         return builder;
+    }
+
+    protected HttpHandler getRootHandler(Environment environment) {
+
+        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
+
+        HttpHandler rootHandler = collector.buildApplicationHandler();
+
+        if (!Strings.isNullOrEmpty(accessLog)) {
+            AccessLogHandler.Builder builder = new AccessLogHandler.Builder();
+            rootHandler = builder.build(ImmutableMap.of("format", accessLog)).wrap(rootHandler);
+        }
+
+        if (isDumpRequest()) {
+            rootHandler = new RequestDumpingHandler(rootHandler);
+        }
+
+        if (maxConcurrentRequests > 0) {
+            rootHandler = new RequestLimitingHandler(maxConcurrentRequests, maxRequestsQueue, rootHandler);
+        }
+
+        if (slowThreshold != null) {
+            rootHandler = new SlowRequestLogHandler(slowThreshold, rootHandler);
+        }
+
+        return rootHandler;
     }
 
     @Override
@@ -171,5 +217,45 @@ public class HttpServerFactory implements ServerFactory {
 
     public void setMaxMultipartEntitySize(Size maxMultipartEntitySize) {
         this.maxMultipartEntitySize = maxMultipartEntitySize;
+    }
+
+    public String getAccessLog() {
+        return accessLog;
+    }
+
+    public void setAccessLog(String accessLog) {
+        this.accessLog = accessLog;
+    }
+
+    public boolean isDumpRequest() {
+        return dumpRequest;
+    }
+
+    public void setDumpRequest(boolean dumpRequest) {
+        this.dumpRequest = dumpRequest;
+    }
+
+    public int getMaxConcurrentRequests() {
+        return maxConcurrentRequests;
+    }
+
+    public void setMaxConcurrentRequests(int maxConcurrentRequests) {
+        this.maxConcurrentRequests = maxConcurrentRequests;
+    }
+
+    public int getMaxRequestsQueue() {
+        return maxRequestsQueue;
+    }
+
+    public void setMaxRequestsQueue(int maxRequestsQueue) {
+        this.maxRequestsQueue = maxRequestsQueue;
+    }
+
+    public Duration getSlowThreshold() {
+        return slowThreshold;
+    }
+
+    public void setSlowThreshold(Duration slowThreshold) {
+        this.slowThreshold = slowThreshold;
     }
 }

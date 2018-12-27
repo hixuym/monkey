@@ -64,7 +64,11 @@ server:
 #      - SSL_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
-  enableHttp2: true
+#  enableHttp2: true
+#  accessLog: combined
+  slowThreshold: 10 ms
+#  dumpRequest: true
+#  maxConcurrentRequests: 10
 #  port: 8443
 #  backlog: 256
 #  hostname: localhost

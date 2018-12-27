@@ -1,6 +1,5 @@
 package io.sunflower.http.server;
 
-import com.google.common.collect.Maps;
 import io.sunflower.SunflowerException;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
