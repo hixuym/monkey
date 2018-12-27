@@ -54,7 +54,7 @@ public class HttpServerFactory implements ServerFactory {
     public Server build(Environment environment) {
 
         Undertow.ListenerBuilder builder = getListener(environment);
-
+        builder.setType(Undertow.ListenerType.HTTP);
         Undertow undertow = Undertow.builder()
                 .addListener(builder)
                 .setIoThreads(ioThreads)

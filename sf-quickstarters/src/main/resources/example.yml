@@ -44,11 +44,11 @@ jaxrs:
   initParams:
 
 server:
-  type: https
-  ssl:
+  type: http
+#  ssl:
 #    jceProvider: Conscrypt
-    validateCerts: true
-    validatePeers: true
+#    validateCerts: true
+#    validatePeers: true
 #    supportedProtocols: ['TLSv1.1', 'TLSv1.2']
 #    excludedProtocols:  []
 #    supportedCipherSuites: ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-ECDSA-AES128-GCM-SHA256']
@@ -65,7 +65,7 @@ server:
 #      - SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
 #      - SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
   enableHttp2: true
-  port: 8443
+#  port: 8443
 #  backlog: 256
 #  hostname: localhost
 #  ioWorkerCount: 8
