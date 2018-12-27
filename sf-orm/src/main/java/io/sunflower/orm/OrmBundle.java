@@ -19,6 +19,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
+import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
@@ -80,7 +81,9 @@ public abstract class OrmBundle<T extends Configuration>
         Stopwatch sw = Stopwatch.createStarted();
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
+        EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
+
+        environment.guice().register(server);
 
         environment.guice().register(new AbstractModule() {
             @Override
