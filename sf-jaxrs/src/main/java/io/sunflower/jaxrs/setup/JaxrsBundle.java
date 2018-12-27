@@ -4,6 +4,7 @@ import com.google.common.base.Stopwatch;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.Scopes;
 import com.google.inject.multibindings.MapBinder;
 import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
@@ -119,9 +120,15 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
         for (Binding<?> binding : rootResourceBindings) {
 
             Class<?> beanClass = (Class) binding.getKey().getTypeLiteral().getType();
-            final ResourceFactory resourceFactory = new GuiceResourceFactory(binding.getProvider(), beanClass);
-            logger.info("registering factory for {}", beanClass.getName());
-            deployment.getRegistry().addResourceFactory(resourceFactory);
+
+            if (Scopes.isSingleton(binding)) {
+                logger.info("registering singleton factory for {}, make sure threadsafe.", beanClass.getName());
+                deployment.getRegistry().addSingletonResource(binding.getProvider().get());
+            } else {
+                final ResourceFactory resourceFactory = new GuiceResourceFactory(binding.getProvider(), beanClass);
+                logger.info("registering factory for {}", beanClass.getName());
+                deployment.getRegistry().addResourceFactory(resourceFactory);
+            }
 
         }
     }
