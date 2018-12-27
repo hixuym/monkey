@@ -15,6 +15,8 @@
 
 package io.sunflower.jaxrs.params;
 
+import io.sunflower.jaxrs.validation.FuzzyEnumParamConverterProvider;
+
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 

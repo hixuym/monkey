@@ -18,39 +18,47 @@ package io.sunflower.jaxrs.validation;
 import com.fasterxml.classmate.*;
 import com.fasterxml.classmate.members.RawMethod;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.google.common.collect.ImmutableList;
+import io.sunflower.validation.ConstraintViolations;
+import io.sunflower.validation.Validated;
 import org.jboss.resteasy.spi.HttpRequest;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.spi.validation.GeneralValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ValidationException;
-import javax.validation.Validator;
+import javax.validation.*;
 import javax.validation.executable.ExecutableType;
 import javax.validation.executable.ValidateOnExecution;
+import javax.validation.groups.Default;
+import javax.validation.metadata.BeanDescriptor;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceInfo;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author michael
  */
-class HibernateGeneralValidator implements GeneralValidator {
+class HibernateGeneralValidatorImpl implements GeneralValidator {
 
-    private static Logger logger = LoggerFactory.getLogger(HibernateGeneralValidator.class);
+    private static Logger logger = LoggerFactory.getLogger(HibernateGeneralValidatorImpl.class);
 
-    private final Validator validator;
-    private final boolean isExecutableValidationEnabled;
-    private final ExecutableType[] defaultValidatedExecutableTypes;
+    /**
+     * Used for resolving type parameters. Thread-safe.
+     */
     private TypeResolver typeResolver = new TypeResolver();
+    private final Validator validator;
+    private boolean isExecutableValidationEnabled;
+    private ExecutableType[] defaultValidatedExecutableTypes;
 
-    public HibernateGeneralValidator(Validator validator,
-                                     boolean isExecutableValidationEnabled,
-                                     Set<ExecutableType> defaultValidatedExecutableTypes) {
+    public HibernateGeneralValidatorImpl(Validator validator,
+                                         boolean isExecutableValidationEnabled,
+                                         Set<ExecutableType> defaultValidatedExecutableTypes) {
         this.validator = validator;
         this.defaultValidatedExecutableTypes = defaultValidatedExecutableTypes.toArray(new ExecutableType[]{});
         this.isExecutableValidationEnabled = isExecutableValidationEnabled;
@@ -60,89 +68,120 @@ class HibernateGeneralValidator implements GeneralValidator {
     public void validate(HttpRequest request, Object object, Class<?>... groups) {
         Set<ConstraintViolation<Object>> cvs;
 
-        try {
-            cvs = validator.validate(object, groups);
-        } catch (Exception e) {
-            SimpleViolationsContainer violationsContainer = getViolationsContainer(request, object, null);
-            violationsContainer.setException(e);
-            throw new ResteasyViolationException(violationsContainer.getViolations(), object, null);
+        ResourceInfo resourceInfo = ResteasyProviderFactory.getContextData(ResourceInfo.class);
+
+        final Class<?>[] groupsInfo = getGroup(resourceInfo.getResourceMethod());
+
+        final Set<ConstraintViolation<Object>> violations = new HashSet<>();
+        final BeanDescriptor beanDescriptor = validator.getConstraintsForClass(resourceInfo.getClass());
+
+        if (beanDescriptor.isBeanConstrained()) {
+            violations.addAll(validator.validate(object, groups));
         }
 
-        SimpleViolationsContainer violationsContainer = getViolationsContainer(request, object, null);
-        violationsContainer.addViolations(cvs);
-
-        if (violationsContainer.size() > 0) {
-            throw new ResteasyViolationException(violationsContainer);
+        if (!violations.isEmpty()) {
+            throw new ResteasyViolationException(violations, resourceInfo.getResourceMethod());
         }
     }
 
     @Override
     public void validateAllParameters(HttpRequest request, Object object, Method method, Object[] parameterValues, Class<?>... groups) {
-        SimpleViolationsContainer violationsContainer = getViolationsContainer(request, object, null);
-
-        violationsContainer.setMethod(method);
-
         if (method.getParameterTypes().length == 0) {
-            checkViolations(request);
             return;
         }
 
-        Set<ConstraintViolation<Object>> cvs;
+        final Class<?>[] groupsInfo = getGroup(method);
 
-        try {
-            cvs = validator.forExecutables().validateParameters(object, method, parameterValues, groups);
-        } catch (Exception e) {
-            violationsContainer.setException(e);
-            throw new ResteasyViolationException(violationsContainer.getViolations(), object, method);
-        }
+        final Set<ConstraintViolation<Object>> violations =
+                validator.forExecutables().validateParameters(object, method, parameterValues, groupsInfo);
 
-        violationsContainer.addViolations(cvs);
-
-        if (violationsContainer.size() > 0) {
-            throw new ResteasyViolationException(violationsContainer);
+        if (!violations.isEmpty()) {
+            throw new ResteasyViolationException(violations, method);
         }
     }
 
     @Override
     public void validateReturnValue(HttpRequest request, Object object, Method method, Object returnValue, Class<?>... groups) {
-        SimpleViolationsContainer violationsContainer = getViolationsContainer(request, object, method);
-        violationsContainer.setMethod(method);
-
-        Set<ConstraintViolation<Object>> cvs;
-
-        try {
-            cvs = validator.forExecutables().validateReturnValue(object, method, returnValue, groups);
-        } catch (Exception e) {
-            violationsContainer.setException(e);
-            throw new ResteasyViolationException(violationsContainer);
+        // If the Validated annotation is on a method, then validate the response with
+        // the specified constraint group.
+        final Class<?>[] groupsInfo;
+        if (method.isAnnotationPresent(Validated.class)) {
+            groupsInfo = method.getAnnotation(Validated.class).value();
+        } else {
+            groupsInfo = new Class<?>[]{Default.class};
         }
-        violationsContainer.addViolations(cvs);
 
-        if (violationsContainer.size() > 0) {
-            throw new ResteasyViolationException(violationsContainer);
+        final Set<ConstraintViolation<Object>> violations =
+                validator.forExecutables().validateReturnValue(object, method, returnValue, groupsInfo);
+
+        if (!violations.isEmpty()) {
+            logger.trace("Response validation failed: {}", ConstraintViolations.copyOf(violations));
+            throw new ResteasyViolationException(violations, method);
+        }
+    }
+
+    /**
+     * If the request entity is annotated with {@link Validated} then run
+     * validations in the specified constraint group else validate with the
+     * {@link Default} group
+     */
+    private Class<?>[] getGroup(Method invocable) {
+        final ImmutableList.Builder<Class<?>[]> builder = ImmutableList.builder();
+        for (Parameter parameter : invocable.getParameters()) {
+            if (parameter.isAnnotationPresent(Validated.class)) {
+                builder.add(parameter.getAnnotation(Validated.class).value());
+            }
+        }
+
+        final ImmutableList<Class<?>[]> groups = builder.build();
+        switch (groups.size()) {
+            // No parameters were annotated with Validated, so validate under the default group
+            case 0:
+                return new Class<?>[]{Default.class};
+
+            // A single parameter was annotated with Validated, so use their group
+            case 1:
+                return groups.get(0);
+
+            // Multiple parameters were annotated with Validated, so we must check if
+            // all groups are equal to each other, if not, throw an exception because
+            // the validator is unable to handle parameters validated under different
+            // groups. If the parameters have the same group, we can grab the first
+            // group.
+            default:
+                for (int i = 0; i < groups.size(); i++) {
+                    for (int j = i; j < groups.size(); j++) {
+                        if (!Arrays.deepEquals(groups.get(i), groups.get(j))) {
+                            throw new WebApplicationException("Parameters must have the same validation groups in " +
+                                    invocable.getName(), 500);
+                        }
+                    }
+                }
+                return groups.get(0);
         }
     }
 
     @Override
     public boolean isValidatable(Class<?> clazz) {
-        return true;
+        final BeanDescriptor beanDescriptor = validator.getConstraintsForClass(clazz);
+        return beanDescriptor.isBeanConstrained();
     }
 
     @Override
-    public boolean isMethodValidatable(Method method) {
+    public boolean isMethodValidatable(Method m) {
         if (!isExecutableValidationEnabled) {
             return false;
         }
 
         ExecutableType[] types;
-        List<ExecutableType[]> typesList = getExecutableTypesOnMethodInHierarchy(method);
+        List<ExecutableType[]> typesList = getExecutableTypesOnMethodInHierarchy(m);
         if (typesList.size() > 1) {
             throw new ValidationException("validateOnExceptionOnMultipleMethod");
         }
         if (typesList.size() == 1) {
             types = typesList.get(0);
         } else {
-            ValidateOnExecution voe = method.getDeclaringClass().getAnnotation(ValidateOnExecution.class);
+            ValidateOnExecution voe = m.getDeclaringClass().getAnnotation(ValidateOnExecution.class);
             if (voe == null) {
                 types = defaultValidatedExecutableTypes;
             } else {
@@ -154,7 +193,7 @@ class HibernateGeneralValidator implements GeneralValidator {
             }
         }
 
-        boolean isGetterMethod = isGetter(method);
+        boolean isGetterMethod = isGetter(m);
         for (int i = 0; i < types.length; i++) {
             switch (types[i]) {
                 case IMPLICIT:
@@ -183,30 +222,6 @@ class HibernateGeneralValidator implements GeneralValidator {
         return false;
     }
 
-    @Override
-    public void checkViolations(HttpRequest request) {
-        // Called from jaxrs-jaxrs only if two argument version of isValidatable() returns true.
-        SimpleViolationsContainer violationsContainer = getViolationsContainer(request, null, null);
-
-        if (violationsContainer.size() > 0) {
-            throw new ResteasyViolationException(violationsContainer.getViolations(), violationsContainer.getTarget(), violationsContainer.getMethod());
-        }
-
-    }
-
-    protected SimpleViolationsContainer getViolationsContainer(HttpRequest request, Object target, Method method) {
-        if (request == null) {
-            return new SimpleViolationsContainer(target, method);
-        }
-
-        SimpleViolationsContainer violationsContainer = SimpleViolationsContainer.class.cast(request.getAttribute(SimpleViolationsContainer.class.getName()));
-        if (violationsContainer == null) {
-            violationsContainer = new SimpleViolationsContainer(target, method);
-            request.setAttribute(SimpleViolationsContainer.class.getName(), violationsContainer);
-        }
-
-        return violationsContainer;
-    }
 
     protected List<ExecutableType[]> getExecutableTypesOnMethodInHierarchy(Method method) {
         Class<?> clazz = method.getDeclaringClass();
@@ -278,7 +293,7 @@ class HibernateGeneralValidator implements GeneralValidator {
     }
 
     static protected String convertArrayToString(Object o) {
-        String result = null;
+        String result;
         if (o instanceof Object[]) {
             Object[] array = Object[].class.cast(o);
             StringBuffer sb = new StringBuffer("[").append(convertArrayToString(array[0]));
@@ -304,12 +319,8 @@ class HibernateGeneralValidator implements GeneralValidator {
             if (System.getSecurityManager() == null) {
                 methods = clazz.getDeclaredMethods();
             } else {
-                methods = AccessController.doPrivileged(new PrivilegedExceptionAction<Method[]>() {
-                    @Override
-                    public Method[] run() throws Exception {
-                        return clazz.getDeclaredMethods();
-                    }
-                });
+                methods = AccessController.doPrivileged(
+                        (PrivilegedExceptionAction<Method[]>) clazz::getDeclaredMethods);
             }
         } catch (PrivilegedActionException pae) {
 
@@ -354,21 +365,6 @@ class HibernateGeneralValidator implements GeneralValidator {
         return parametersResolveToSameTypes(subTypeMethod, superTypeMethod);
     }
 
-    static protected class SimpleMethodFilter implements Filter<RawMethod> {
-        private final Method method1;
-        private final Method method2;
-
-        private SimpleMethodFilter(Method method1, Method method2) {
-            this.method1 = method1;
-            this.method2 = method2;
-        }
-
-        @Override
-        public boolean include(RawMethod element) {
-            return element.getRawMember().equals(method1) || element.getRawMember().equals(method2);
-        }
-    }
-
     /**
      * Taken from Hibernate Validator
      */
@@ -386,12 +382,7 @@ class HibernateGeneralValidator implements GeneralValidator {
             if (System.getSecurityManager() == null) {
                 resolvedMethods = typeWithMembers.getMemberMethods();
             } else {
-                resolvedMethods = AccessController.doPrivileged(new PrivilegedExceptionAction<ResolvedMethod[]>() {
-                    @Override
-                    public ResolvedMethod[] run() throws Exception {
-                        return typeWithMembers.getMemberMethods();
-                    }
-                });
+                resolvedMethods = AccessController.doPrivileged((PrivilegedExceptionAction<ResolvedMethod[]>) typeWithMembers::getMemberMethods);
             }
         } catch (PrivilegedActionException pae) {
 
@@ -415,4 +406,75 @@ class HibernateGeneralValidator implements GeneralValidator {
 
         return true;
     }
+
+
+    /**
+     * A filter implementation filtering methods matching given methods.
+     *
+     * @author Gunnar Morling
+     * <p>
+     * Taken from Hibernate Validator
+     */
+    static protected class SimpleMethodFilter implements Filter<RawMethod> {
+        private final Method method1;
+        private final Method method2;
+
+        private SimpleMethodFilter(Method method1, Method method2) {
+            this.method1 = method1;
+            this.method2 = method2;
+        }
+
+        @Override
+        public boolean include(RawMethod element) {
+            return element.getRawMember().equals(method1) || element.getRawMember().equals(method2);
+        }
+    }
+
+    @Override
+    public void checkViolations(HttpRequest request) {
+    }
+
+//    protected Validator getValidator(HttpRequest request) {
+//        Validator v = (Validator) request.getAttribute(Validator.class.getName());
+//        if (v == null) {
+//            Locale locale = getLocale(request);
+//            if (locale == null) {
+//                v = validatorFactory.getValidator();
+//            } else {
+//                MessageInterpolator interpolator = new LocaleSpecificMessageInterpolator(validatorFactory.getMessageInterpolator(), locale);
+//                v = validatorFactory.usingContext().messageInterpolator(interpolator).getValidator();
+//            }
+//            request.setAttribute(Validator.class.getName(), v);
+//        }
+//        return v;
+//    }
+
+    static protected class LocaleSpecificMessageInterpolator implements MessageInterpolator {
+        private final MessageInterpolator interpolator;
+        private final Locale locale;
+
+        public LocaleSpecificMessageInterpolator(MessageInterpolator interpolator, Locale locale) {
+            this.interpolator = interpolator;
+            this.locale = locale;
+        }
+
+        @Override
+        public String interpolate(String messageTemplate, Context context) {
+            return interpolator.interpolate(messageTemplate, context, locale);
+        }
+
+        @Override
+        public String interpolate(String messageTemplate, Context context, Locale locale) {
+            return interpolator.interpolate(messageTemplate, context, locale);
+        }
+    }
+
+    private Locale getLocale(HttpRequest request) {
+        if (request == null) {
+            return null;
+        }
+        List<Locale> locales = request.getHttpHeaders().getAcceptableLanguages();
+        return locales == null || locales.isEmpty() ? null : locales.get(0);
+    }
+
 }

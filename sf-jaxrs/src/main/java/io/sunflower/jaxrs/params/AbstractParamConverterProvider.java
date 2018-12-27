@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 /**
- * Provides converters to jersey for dropwizard's *Param classes.
+ * Provides converters to resteasy for sunflower's *Param classes.
  * <p>
  * <p>When a param class is used as a resource parameter this converter will instantiate the parameter class with the
  * value provided and the name of the parameter, so if value parsing fails the parameter name can be used in the error
@@ -72,7 +72,7 @@ public class AbstractParamConverterProvider implements ParamConverterProvider {
                         if (cause instanceof WebApplicationException) {
                             throw (WebApplicationException) cause;
                         } else {
-                            throw new RuntimeException(cause);
+                            throw new WebApplicationException(cause);
                         }
                     } catch (final Exception ex) {
                         throw new ProcessingException(ex);
@@ -95,5 +95,4 @@ public class AbstractParamConverterProvider implements ParamConverterProvider {
         }
         return null;
     }
-
 }

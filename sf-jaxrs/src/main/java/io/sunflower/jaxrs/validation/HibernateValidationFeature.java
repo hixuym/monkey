@@ -16,9 +16,9 @@
 package io.sunflower.jaxrs.validation;
 
 import javax.inject.Inject;
+import javax.validation.Validator;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
-import javax.validation.Validator;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -39,8 +39,10 @@ public class HibernateValidationFeature implements Feature {
 
     @Override
     public boolean configure(FeatureContext context) {
+
         context.register(new HibernateGeneralValidatorResolver(validator));
         context.register(new ResteasyViolationExceptionMapper());
+
         return true;
     }
 }

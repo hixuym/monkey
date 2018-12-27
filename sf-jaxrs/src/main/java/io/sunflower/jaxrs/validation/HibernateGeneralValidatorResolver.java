@@ -17,10 +17,7 @@ package io.sunflower.jaxrs.validation;
 
 import org.jboss.resteasy.spi.validation.GeneralValidator;
 
-import javax.validation.BootstrapConfiguration;
-import javax.validation.Configuration;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.*;
 import javax.validation.executable.ExecutableType;
 import javax.ws.rs.ext.ContextResolver;
 import java.util.Set;
@@ -35,19 +32,19 @@ class HibernateGeneralValidatorResolver implements ContextResolver<GeneralValida
 
     private final static Object RD_LOCK = new Object();
     private volatile BootstrapConfiguration bootstrapConfiguration;
-    private final Validator validator;
+
+    private final GeneralValidator generalValidator;
 
     public HibernateGeneralValidatorResolver(Validator validator) {
-        this.validator = validator;
+        BootstrapConfiguration bootstrapConfiguration = getConfig();
+        boolean isExecutableValidationEnabled = bootstrapConfiguration.isExecutableValidationEnabled();
+        Set<ExecutableType> defaultValidatedExecutableTypes = bootstrapConfiguration.getDefaultValidatedExecutableTypes();
+        generalValidator = new HibernateGeneralValidatorImpl(validator, isExecutableValidationEnabled, defaultValidatedExecutableTypes);
     }
 
     @Override
     public GeneralValidator getContext(Class<?> type) {
-        BootstrapConfiguration bootstrapConfiguration = getConfig();
-        boolean isExecutableValidationEnabled = bootstrapConfiguration.isExecutableValidationEnabled();
-        Set<ExecutableType> defaultValidatedExecutableTypes = bootstrapConfiguration.getDefaultValidatedExecutableTypes();
-
-        return new HibernateGeneralValidator(validator, isExecutableValidationEnabled, defaultValidatedExecutableTypes);
+        return generalValidator;
     }
 
     private BootstrapConfiguration getConfig() {

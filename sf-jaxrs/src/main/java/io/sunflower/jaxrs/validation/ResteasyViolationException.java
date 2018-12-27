@@ -24,31 +24,16 @@ import java.util.Set;
  * @author michael
  */
 public class ResteasyViolationException extends ConstraintViolationException {
-
     private static final long serialVersionUID = -2084629736062306666L;
-    private final Method method;
-    private final Object target;
+    private final Method invocable;
 
-    public ResteasyViolationException(SimpleViolationsContainer container) {
-        super(container.getViolations());
-
-        this.target = container.getTarget();
-        this.method = container.getMethod();
-    }
-
-    public ResteasyViolationException(Set<? extends ConstraintViolation<?>> constraintViolations,
-                                      Object target,
-                                      Method method) {
+    public ResteasyViolationException(Set<? extends ConstraintViolation<?>> constraintViolations, Method invocable) {
         super(constraintViolations);
-        this.method = method;
-        this.target = target;
+        this.invocable = invocable;
     }
 
-    public Method getMethod() {
-        return method;
-    }
 
-    public Object getTarget() {
-        return target;
+    public Method getInvocable() {
+        return invocable;
     }
 }

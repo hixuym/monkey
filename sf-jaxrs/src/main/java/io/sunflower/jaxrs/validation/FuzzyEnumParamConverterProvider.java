@@ -1,5 +1,6 @@
 package io.sunflower.jaxrs.validation;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import io.sunflower.jaxrs.errors.ErrorMessage;
 import io.sunflower.util.Enums;
@@ -26,9 +27,9 @@ import java.util.stream.Collectors;
 import static io.sunflower.jaxrs.validation.ResteasyParameterNameProvider.getParameterNameFromAnnotations;
 
 /**
- * Provides converters to jersey for enums used as resource parameters.
+ * Provides converters to resteasy for enums used as resource parameters.
  *
- * <p>By default jersey will return a 404 if a resource parameter of an enum type cannot be converted. This class
+ * <p>By default resteasy will return a 404 if a resource parameter of an enum type cannot be converted. This class
  * provides converters for all enum types used as resource parameters that provide better error handling. If an
  * invalid value is provided for the parameter a {@code 400 Bad Request} is returned and the error message will
  * include the parameter name and a list of valid values.</p>
@@ -48,7 +49,7 @@ public class FuzzyEnumParamConverterProvider implements ParamConverterProvider {
         final Class<Enum<?>> type = (Class<Enum<?>>) rawType;
         final Enum<?>[] constants = type.getEnumConstants();
         final String parameterName = getParameterNameFromAnnotations(annotations).orElse("Parameter");
-        Method fromStringMethod = AccessController.doPrivileged(getStringToObjectMethodPA(rawType, "fromString"));
+        Method fromStringMethod = AccessController.doPrivileged(getStringToObjectMethodPA(rawType));
 
         return new ParamConverter<T>() {
             @Override
@@ -91,10 +92,8 @@ public class FuzzyEnumParamConverterProvider implements ParamConverterProvider {
                     return (T) constant;
                 }
 
-                final String constantsList = Arrays.stream(constants)
-                        .map(Enum::toString)
-                        .collect(Collectors.joining(", "));
-                final String errMsg = String.format("%s must be one of [%s]", parameterName, constantsList);
+                final String errMsg = String.format("%s must be one of [%s]",
+                        parameterName, Joiner.on(", ").join(constants));
                 throw new WebApplicationException(getErrorResponse(errMsg));
             }
 
@@ -114,10 +113,10 @@ public class FuzzyEnumParamConverterProvider implements ParamConverterProvider {
     }
 
 
-    private static PrivilegedAction<Method> getStringToObjectMethodPA(Class<?> clazz, final String methodName) {
+    private static PrivilegedAction<Method> getStringToObjectMethodPA(Class<?> clazz) {
         return (PrivilegedAction) () -> {
             try {
-                Method method = clazz.getDeclaredMethod(methodName, new Class[]{String.class});
+                Method method = clazz.getDeclaredMethod("fromString", String.class);
                 if ((Modifier.isStatic(method.getModifiers())) && (method.getReturnType() == clazz)) {
                     return method;
                 }

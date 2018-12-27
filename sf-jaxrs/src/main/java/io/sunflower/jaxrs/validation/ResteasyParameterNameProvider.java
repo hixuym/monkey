@@ -32,10 +32,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Adds jersey support to parameter name discovery in hibernate validator.
+ * Adds resteasy support to parameter name discovery in hibernate validator.
  *
  * <p>This provider will behave like the hibernate-provided {@link ReflectionParameterNameProvider} except when a
- * method parameter is annotated with a jersey parameter annotation, like {@link QueryParam}. If a jersey parameter
+ * method parameter is annotated with a jersey parameter annotation, like {@link QueryParam}. If a resteasy parameter
  * annotation is present the value of the annotation is used as the parameter name.</p>
  * @author michael
  */

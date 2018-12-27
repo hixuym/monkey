@@ -15,8 +15,6 @@
 
 package io.sunflower.jaxrs.validation;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author michael
@@ -36,12 +36,12 @@ class ResteasyViolationExceptionMapper implements ExceptionMapper<ResteasyViolat
 
     @Override
     public Response toResponse(final ResteasyViolationException exception) {
-        LOGGER.debug("Object validation failure");
 
         final Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
-        final Method invocable = exception.getMethod();
-        final ImmutableList<String> errors = FluentIterable.from(exception.getConstraintViolations())
-                .transform(violation -> ConstraintMessage.getMessage(violation, invocable)).toList();
+        final Method invocable = exception.getInvocable();
+        final List<String> errors = violations.stream()
+                .map(violation -> ConstraintMessage.getMessage(violation, invocable))
+                .collect(Collectors.toList());
 
         final int status = ConstraintMessage.determineStatus(violations, invocable);
         return Response.status(status)

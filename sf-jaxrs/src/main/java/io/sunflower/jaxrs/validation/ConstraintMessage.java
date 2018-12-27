@@ -1,9 +1,12 @@
 package io.sunflower.jaxrs.validation;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.sun.jndi.toolkit.url.Uri;
 import io.sunflower.validation.ValidationMethod;
 import io.sunflower.validation.selfvalidating.SelfValidating;
 import org.apache.commons.lang3.StringUtils;
@@ -14,20 +17,25 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ElementKind;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
-import javax.ws.rs.BeanParam;
+import javax.ws.rs.*;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.Context;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class ConstraintMessage {
 
     private static final Cache<Pair<Path, ? extends ConstraintDescriptor<?>>, String> PREFIX_CACHE =
             CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
-            .build();
+                    .expireAfterWrite(1, TimeUnit.HOURS)
+                    .build();
 
     private ConstraintMessage() {
     }
@@ -67,7 +75,7 @@ public class ConstraintMessage {
             // if the request entity is simple (eg. byte[], String, etc), the entity
             // string will be empty, so prepend a message about the request body
             final String prefix = Strings.isNullOrEmpty(entity.get()) ? "The request body" : entity.get();
-            return prefix + " " ;
+            return prefix + " ";
         }
 
         // Check if the violation occurred on a *Param annotation and if so,
@@ -83,55 +91,62 @@ public class ConstraintMessage {
      */
     public static Optional<String> isRequestEntity(ConstraintViolation<?> violation, Method invocable) {
 
-        final Collection<Path.Node> propertyPath = Lists.newArrayList(violation.getPropertyPath());
-        final Path.Node parent = propertyPath.stream()
-                .skip(1L)
-                .findFirst()
-                .orElse(null);
+        final Path.Node parent = Iterables.get(violation.getPropertyPath(), 1, null);
+
         if (parent == null) {
             return Optional.empty();
         }
+
         final List<Parameter> parameters = Arrays.asList(invocable.getParameters());
 
         if (parent.getKind() == ElementKind.PARAMETER) {
             final Parameter param = parameters.get(parent.as(Path.ParameterNode.class).getParameterIndex());
-
-            final String path = propertyPath.stream()
-                        .skip(2L)
-                        .map(Path.Node::toString)
-                        .collect(Collectors.joining("."));
-
-            return Optional.of(path);
-
-//            if (param.getSource().equals(Parameter.Source.UNKNOWN)) {
-//                final String path = propertyPath.stream()
-//                        .skip(2L)
-//                        .map(Path.Node::toString)
-//                        .collect(Collectors.joining("."));
-//            }
+            if (unknowParameterKind(param)) {
+                return Optional.of(Joiner.on('.').join(Iterables.skip(violation.getPropertyPath(), 2)));
+            }
         }
 
         return Optional.empty();
+    }
+
+    private static Set<Class<?>> annotations =
+            ImmutableSet.of(
+                    Context.class,
+                    CookieParam.class,
+                    FormParam.class,
+                    HeaderParam.class,
+                    MatrixParam.class,
+                    PathParam.class,
+                    QueryParam.class,
+                    Suspended.class,
+                    Uri.class,
+                    BeanParam.class);
+
+    private static boolean unknowParameterKind(Parameter param) {
+        for (Annotation ann : param.getAnnotations()) {
+            if (annotations.contains(ann.annotationType())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
      * Gets a method parameter (or a parameter field) name, if the violation raised in it.
      */
     private static Optional<String> getMemberName(ConstraintViolation<?> violation, Method invocable) {
-        final List<Path.Node> propertyPath = Lists.newArrayList(violation.getPropertyPath());
-        final int size = propertyPath.size();
+        final int size = Iterables.size(violation.getPropertyPath());
         if (size < 2) {
             return Optional.empty();
         }
 
-        final Path.Node parent = propertyPath.get(size - 2);
-        final Path.Node member = propertyPath.get(size - 1);
-
+        final Path.Node parent = Iterables.get(violation.getPropertyPath(), size - 2);
+        final Path.Node member = Iterables.getLast(violation.getPropertyPath());
         switch (parent.getKind()) {
             case PARAMETER:
                 // Constraint violation most likely failed with a BeanParam
-                final List<Parameter> parameters = Arrays.asList(invocable.getParameters());
-                final Parameter param = parameters.get(parent.as(Path.ParameterNode.class).getParameterIndex());
+                final Parameter[] parameters = invocable.getParameters();
+                final Parameter param = parameters[parent.as(Path.ParameterNode.class).getParameterIndex()];
 
                 // Extract the failing *Param annotation inside the Bean Param
                 if (param.isAnnotationPresent(BeanParam.class)) {
@@ -189,9 +204,8 @@ public class ConstraintMessage {
                     case PARAMETER:
                         // Now determine if the parameter is the request entity
                         final int index = node.as(Path.ParameterNode.class).getParameterIndex();
-//                        final Parameter parameter = invocable.getParameters().get(index);
-//                        return parameter.getSource().equals(Parameter.Source.UNKNOWN) ? 422 : 400;
-                        return 400;
+                        final Parameter parameter = invocable.getParameters()[index];
+                        return unknowParameterKind(parameter) ? 422 : 400;
                     default:
                         continue;
                 }

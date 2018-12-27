@@ -20,6 +20,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.codahale.metrics.json.HealthCheckModule;
 import com.codahale.metrics.json.MetricsModule;
 import com.codahale.metrics.jvm.ThreadDump;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
 import java.util.SortedMap;
@@ -59,21 +63,19 @@ public class ApplicationActuatorResource {
 
     @Path("/metrics")
     @GET
-    public Response metrics() throws Exception {
+    public Response metrics() {
 
         MetricRegistry metricRegistry = environment.getMetricRegistry();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.SECONDS, true));
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-        mapper.writerWithDefaultPrettyPrinter().writeValue(bout, metricRegistry);
+        StreamingOutput output = out -> mapper.writerWithDefaultPrettyPrinter().writeValue(out, metricRegistry);
 
         return Response.ok()
                 .cacheControl(CacheControl.valueOf("must-revalidate,no-cache,no-store"))
                 .type(MediaType.APPLICATION_JSON)
-                .entity(bout.toString())
+                .entity(output)
                 .build();
     }
 
@@ -94,11 +96,17 @@ public class ApplicationActuatorResource {
 
         HealthCheckRegistry healthCheckRegistry = environment.getHealthCheckRegistry();
 
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.registerModule(new HealthCheckModule());
+
         SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks();
+
+        StreamingOutput output = out -> mapper.writerWithDefaultPrettyPrinter().writeValue(out, results);
 
         Response.ResponseBuilder responseBuilder = Response.ok()
                 .cacheControl(CacheControl.valueOf("must-revalidate,no-cache,no-store"))
-                .entity(results);
+                .entity(output);
 
         if (!isAllHealthy(results)) {
             responseBuilder.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -117,7 +125,7 @@ public class ApplicationActuatorResource {
     }
 
     @Path("/gc")
-    @POST
+    @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String gc(@QueryParam("n") @DefaultValue("3") IntParam gcCount) {
 
@@ -138,22 +146,24 @@ public class ApplicationActuatorResource {
     }
 
     @Path("/thread-dump")
-    @POST
+    @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String threadDump() {
+    public Response threadDump() {
 
         ThreadDump threadDump = new ThreadDump(ManagementFactory.getThreadMXBean());
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        StreamingOutput output = threadDump::dump;
 
-        threadDump.dump(bout);
-
-        return bout.toString();
+        return Response.ok()
+                .cacheControl(CacheControl.valueOf("must-revalidate,no-cache,no-store"))
+                .type(MediaType.TEXT_PLAIN)
+                .entity(output)
+                .build();
     }
 
     @Path("/log-level")
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public String logConfiguration(@QueryParam("logger") @NotNull String logger,
                                    @QueryParam("level") @NotNull String level) {
         ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger(logger).setLevel(Level.valueOf(level));
