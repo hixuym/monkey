@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class ModeHelper {
     
-    static Logger logger = LoggerFactory.getLogger(ModeHelper.class);
+    private static Logger logger = LoggerFactory.getLogger(ModeHelper.class);
     
     /**
      * returns an empty Optional<Mode> if no mode is set. Or the valid mode

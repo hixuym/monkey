@@ -23,6 +23,7 @@ import org.junit.Test;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -53,7 +54,7 @@ public class AdvisesBinderTest {
         });
 
         List<String> list = injector.getInstance(Key.get(LIST_TYPE_LITERAL));
-        Assert.assertEquals(Arrays.asList("a"), list);
+        Assert.assertEquals(Collections.singletonList("a"), list);
     }
 
     @Test

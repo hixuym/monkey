@@ -66,7 +66,7 @@ class AdvisedProvider<T> implements ProviderWithExtensionVisitor<T>, HasDependen
                 AdviceElementImpl adviceElement = (AdviceElementImpl) bindingKey.getAnnotation();
                 if (name.equals(adviceElement.name())) {
                     if (adviceElement.type() == AdviceElement.Type.ADVICE) {
-                        adviceBindings.add(new ProvisionAdviceHolder<UnaryOperator<T>>((Binding<UnaryOperator<T>>) binding, adviceElement.getOrder()));
+                        adviceBindings.add(new ProvisionAdviceHolder<>((Binding<UnaryOperator<T>>) binding, adviceElement.getOrder()));
                     }
                     dependencies.add(Dependency.get(bindingKey));
                 }
@@ -76,15 +76,12 @@ class AdvisedProvider<T> implements ProviderWithExtensionVisitor<T>, HasDependen
         adviceBindings.sort(ByOrder);
     }
     
-    static Comparator<ProvisionAdviceHolder<?>> ByOrder = new Comparator<ProvisionAdviceHolder<?>>() {
-        @Override
-        public int compare(ProvisionAdviceHolder<?> o1, ProvisionAdviceHolder<?> o2) {
-            int rv =  Integer.compare(o1.order, o2.order);
-            if (rv == 0) {
-                return Integer.compare(System.identityHashCode(o1.hashCode()), System.identityHashCode(o2.hashCode()));
-            }
-            return rv;
+    static Comparator<ProvisionAdviceHolder<?>> ByOrder = (o1, o2) -> {
+        int rv =  Integer.compare(o1.order, o2.order);
+        if (rv == 0) {
+            return Integer.compare(System.identityHashCode(o1.hashCode()), System.identityHashCode(o2.hashCode()));
         }
+        return rv;
     };
     
     static class ProvisionAdviceHolder<T>  {
