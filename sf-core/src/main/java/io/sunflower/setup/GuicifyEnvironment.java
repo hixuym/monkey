@@ -21,6 +21,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import io.sunflower.Mode;
 import io.sunflower.inject.InjectorBuilder;
 import io.sunflower.inject.ModulesEx;
 import io.sunflower.inject.ModulesProcessor;
@@ -48,8 +49,6 @@ public class GuicifyEnvironment {
     private final List<ModulesProcessor> modulesProcessors = newArrayList();
 
     private boolean created = false;
-
-    private Stage stage = Stage.DEVELOPMENT;
 
     private Environment environment;
 
@@ -111,7 +110,7 @@ public class GuicifyEnvironment {
         builder.warnOfStaticInjections()
                 .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
-        Injector injector = builder.createInjector(this.stage);
+        Injector injector = builder.createInjector(this.environment.getMode() == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
 
         sw.stop();
 
@@ -141,7 +140,4 @@ public class GuicifyEnvironment {
         this.register(new MetricsModule());
     }
 
-    public void prodStage() {
-        this.stage = Stage.PRODUCTION;
-    }
 }

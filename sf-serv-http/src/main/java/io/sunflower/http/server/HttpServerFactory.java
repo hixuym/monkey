@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import io.sunflower.Mode;
 import io.sunflower.server.Server;
 import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Environment;
@@ -111,7 +112,7 @@ public class HttpServerFactory implements ServerFactory {
             rootHandler = builder.build(ImmutableMap.of("format", accessLog)).wrap(rootHandler);
         }
 
-        if (isDumpRequest()) {
+        if (isDumpRequest() && environment.getMode() == Mode.dev) {
             rootHandler = new RequestDumpingHandler(rootHandler);
         }
 

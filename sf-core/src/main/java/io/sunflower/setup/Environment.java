@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
+import io.sunflower.Mode;
+import io.sunflower.ModeHelper;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.Managed;
@@ -49,6 +51,8 @@ public final class Environment {
     private GuicifyEnvironment guicifyEnvironment;
 
     private Injector injector;
+
+    private final Mode mode;
 
     /**
      * Creates a new environment.
@@ -101,6 +105,7 @@ public final class Environment {
         }
 
         this.guicifyEnvironment = new GuicifyEnvironment(this);
+        this.mode = ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet();
 
     }
 
@@ -197,6 +202,10 @@ public final class Environment {
 
     void setInjector(Injector injector) {
         this.injector = injector;
+    }
+
+    public Mode getMode() {
+        return mode;
     }
 
     private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
