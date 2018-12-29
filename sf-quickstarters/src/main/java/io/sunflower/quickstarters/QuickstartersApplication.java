@@ -8,7 +8,7 @@ import io.sunflower.orm.OrmBundle;
 import io.sunflower.quickstarters.resources.HelloworldResource;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.setup.GuiceEnvironment;
+import io.sunflower.setup.GuicifyEnvironment;
 //import org.conscrypt.OpenSSLProvider;
 //
 //import java.security.Security;
@@ -49,7 +49,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
             }
 
             @Override
-            protected void bindResources(GuiceEnvironment facotry) {
+            protected void bindResources(GuicifyEnvironment facotry) {
                 facotry.register(HelloworldResource.class);
             }
         });

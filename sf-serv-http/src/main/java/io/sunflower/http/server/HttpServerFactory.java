@@ -128,7 +128,7 @@ public class HttpServerFactory implements ServerFactory {
 
     @Override
     public void configure(Environment environment) {
-        environment.guice().register(PathHandlerCollector.class);
+        environment.guicify().register(PathHandlerCollector.class);
     }
 
     public String getHost() {

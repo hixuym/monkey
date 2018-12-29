@@ -17,9 +17,10 @@ package io.sunflower.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
+import io.sunflower.inject.advise.AdvisableAnnotatedMethodScanner;
+import io.sunflower.inject.event.guava.GuavaApplicationEventModule;
 
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 /**
  * BootModule
@@ -37,10 +38,11 @@ public class BootModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        install(AdvisableAnnotatedMethodScanner.asModule());
+        install(new GuavaApplicationEventModule());
+
         bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
-        ValidatorFactory validatorFactory = environment.getValidatorFactory();
-        bind(Validator.class).toInstance(validatorFactory.getValidator());
-        bind(ValidatorFactory.class).toInstance(validatorFactory);
+        bind(Validator.class).toInstance(environment.getValidatorFactory().getValidator());
         bind(Environment.class).toInstance(environment);
     }
 }

@@ -36,8 +36,8 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
         final Environment environment = new Environment(bootstrap);
 
-        environment.guice().register(new BootModule(environment));
-        environment.guice().register(configuration);
+        environment.guicify().register(new BootModule(environment));
+        environment.guicify().register(configuration);
 
         configuration.getServerFactory().configure(environment);
         configuration.getLoggingFactory().configure(environment.getMetricRegistry(), environment.getName());
@@ -47,7 +47,7 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
 
         application.run(configuration, environment);
 
-        environment.guice().commit();
+        environment.guicify().commit();
 
         run(environment, namespace, configuration);
     }

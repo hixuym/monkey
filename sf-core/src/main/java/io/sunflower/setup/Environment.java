@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
-import io.sunflower.lifecycle.AbstractLifeCycle;
 import io.sunflower.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.sunflower.lifecycle.LifeCycle;
 import io.sunflower.lifecycle.Managed;
@@ -47,7 +46,7 @@ public final class Environment {
     private final ExecutorService healthCheckExecutorService;
     private final ClassLoader classLoader;
 
-    private GuiceEnvironment guiceEnvironment;
+    private GuicifyEnvironment guicifyEnvironment;
 
     private Injector injector;
 
@@ -73,7 +72,7 @@ public final class Environment {
             }
         });
 
-        lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+        lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycleListener() {
             @Override
             public void lifeCycleStarting(LifeCycle event) {
                 logHealthChecks();
@@ -101,7 +100,7 @@ public final class Environment {
             SharedHealthCheckRegistries.setDefault("default", healthCheckRegistry);
         }
 
-        this.guiceEnvironment = new GuiceEnvironment(this);
+        this.guicifyEnvironment = new GuicifyEnvironment(this);
 
     }
 
@@ -180,9 +179,9 @@ public final class Environment {
         });
     }
 
-    public GuiceEnvironment guice() {
+    public GuicifyEnvironment guicify() {
         checkCommited();
-        return guiceEnvironment;
+        return guicifyEnvironment;
     }
 
     public Injector getInjector() {

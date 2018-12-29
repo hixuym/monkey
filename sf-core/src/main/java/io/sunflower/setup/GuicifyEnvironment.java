@@ -15,14 +15,15 @@
 
 package io.sunflower.setup;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import io.sunflower.inject.*;
-import io.sunflower.inject.advise.AdvisableAnnotatedMethodScanner;
-import io.sunflower.inject.event.guava.GuavaApplicationEventModule;
+import io.sunflower.inject.InjectorBuilder;
+import io.sunflower.inject.ModulesEx;
+import io.sunflower.inject.ModulesProcessor;
 import io.sunflower.inject.lifecycle.LifecycleSupport;
 import io.sunflower.inject.metrics.MetricsModule;
 import io.sunflower.inject.scheduler.SchedulerSupport;
@@ -38,9 +39,9 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author michael
  */
-public class GuiceEnvironment {
+public class GuicifyEnvironment {
 
-    private static Logger LOG = LoggerFactory.getLogger(GuiceEnvironment.class);
+    private static Logger LOG = LoggerFactory.getLogger(GuicifyEnvironment.class);
 
     private final List<Module> moduleLoaded = newArrayList();
     private final List<Module> overrideModules = newArrayList();
@@ -52,7 +53,7 @@ public class GuiceEnvironment {
 
     private Environment environment;
 
-    GuiceEnvironment(Environment environment) {
+    GuicifyEnvironment(Environment environment) {
         this.environment = environment;
         System.setProperty("file.encoding", "utf-8");
         register(new AbstractModule() {
@@ -97,11 +98,8 @@ public class GuiceEnvironment {
     }
 
     public void commit() {
-
-        checkNotSetuped();
-
         Stopwatch sw = Stopwatch.createStarted();
-
+        checkNotSetuped();
         modulesProcessors.forEach(it -> it.process(moduleLoaded));
 
         InjectorBuilder builder = InjectorBuilder.fromModules(moduleLoaded);
@@ -119,26 +117,20 @@ public class GuiceEnvironment {
 
         this.created = true;
 
-        LOG.info("Guice initialized {}.", sw);
-
         this.moduleLoaded.clear();
         this.overrideModules.clear();
         this.modulesProcessors.clear();
         this.environment.setInjector(injector);
+
+        LOG.info("Guice initialized {}.", sw);
     }
 
     private void checkNotSetuped() {
-        if (created) {
-            throw new IllegalStateException("Guice already initialized.");
-        }
+        Preconditions.checkState(!created, "Guice already initialized.");
     }
 
     public void enableLifecyle() {
         this.register(LifecycleSupport.asModule());
-    }
-
-    public void enableEvent() {
-        this.register(new GuavaApplicationEventModule());
     }
 
     public void enableSchedule() {
@@ -147,10 +139,6 @@ public class GuiceEnvironment {
 
     public void enableMetrics() {
         this.register(new MetricsModule());
-    }
-
-    public void enableAdvise() {
-        this.register(AdvisableAnnotatedMethodScanner.asModule());
     }
 
     public void prodStage() {

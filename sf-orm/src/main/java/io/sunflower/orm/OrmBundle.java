@@ -83,9 +83,9 @@ public abstract class OrmBundle<T extends Configuration>
 
         EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
 
-        environment.guice().register(server);
+        environment.guicify().register(server);
 
-        environment.guice().register(new AbstractModule() {
+        environment.guicify().register(new AbstractModule() {
             @Override
             protected void configure() {
                 // class-level @Txn

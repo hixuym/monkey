@@ -10,10 +10,9 @@ import io.sunflower.Configuration;
 import io.sunflower.ConfiguredBundle;
 import io.sunflower.SunflowerException;
 import io.sunflower.jaxrs.validation.Validators;
-import io.sunflower.server.ServerFactory;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.setup.GuiceEnvironment;
+import io.sunflower.setup.GuicifyEnvironment;
 import io.undertow.server.HttpHandler;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
@@ -43,7 +42,7 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
     }
 
-    protected void bindResources(GuiceEnvironment facotry) {
+    protected void bindResources(GuicifyEnvironment facotry) {
 
     }
 
@@ -58,9 +57,9 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
 
         final String contextPath = deploymentInfo.getContextPath();
 
-        environment.guice().register(new JaxrsModule(), new RequestScopeModule());
+        environment.guicify().register(new JaxrsModule(), new RequestScopeModule());
 
-        environment.guice().register(new AbstractModule() {
+        environment.guicify().register(new AbstractModule() {
             @Override
             protected void configure() {
                 MapBinder<String, HttpHandler> mapBinder = MapBinder.newMapBinder(binder(), String.class, HttpHandler.class);
@@ -68,7 +67,7 @@ public abstract class JaxrsBundle<T extends Configuration> implements Configured
             }
         });
 
-        bindResources(environment.guice());
+        bindResources(environment.guicify());
 
         environment.addServerLifecycleListener((server -> {
             scanResources(environment.getInjector());
