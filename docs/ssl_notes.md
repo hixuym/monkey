@@ -4,7 +4,7 @@ keytool -keystore keystore -alias Monkey -genkey -keyalg RSA -sigalg SHA256withR
 
 2、keytool -list -v -keystore monkey.keystore
 
-3、keytool -export -alias Monkey -keystore monkey.jks -rfc -file monkey.cer
+3、keytool -export -alias Monkey -keystore monkey.keystore -rfc -file monkey.cer
 
 4、Keytool -import -alias Monkey -file monkey.cer -keystore monkey.truststore
 

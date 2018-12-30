@@ -10,7 +10,7 @@
 
     <artifactId>monkey-testing</artifactId>
 
-    <name>monkey Test Helpers</name>
+    <name>Monkey Test Helpers</name>
 
     <dependencyManagement>
         <dependencies>
