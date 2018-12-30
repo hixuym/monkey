@@ -96,6 +96,7 @@
 		<module>monkey-serv-grpc</module>
 
         <module>monkey-testing</module>
+        <module>monkey-benchmarks</module>
         <module>monkey-quickstarters</module>
     </modules>
 
