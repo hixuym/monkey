@@ -1,0 +1,3 @@
+io.monkey.metrics.ConsoleReporterFactory
+io.monkey.metrics.CsvReporterFactory
+io.monkey.metrics.Slf4jReporterFactory

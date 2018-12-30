@@ -3,17 +3,17 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.sunflower</groupId>
-    <artifactId>sunflower-parent</artifactId>
+    <groupId>io.monkey</groupId>
+    <artifactId>monkey-parent</artifactId>
     <version>3.4.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Sunflower Project</name>
+    <name>Monkey Project</name>
 
-    <url>${sunflower.url}</url>
+    <url>${monkey.url}</url>
 
     <description>
-        Sunflower Project.
+        Monkey Project.
     </description>
 
     <developers>
@@ -28,7 +28,7 @@
 
     <mailingLists>
         <mailingList>
-            <name>sunflower Users</name>
+            <name>Monkey Users</name>
             <post>hixuym@126.com</post>
         </mailingList>
     </mailingLists>
@@ -42,24 +42,24 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/hixuym/sf-framework</url>
-        <connection>scm:git:git@github.com:hixuym/sf-framework.git</connection>
-        <developerConnection>scm:git:git@github.com:hixuym/sf-framework.git</developerConnection>
+        <url>https://github.com/hixuym/monkey</url>
+        <connection>scm:git:git@github.com:hixuym/monkey.git</connection>
+        <developerConnection>scm:git:git@github.com:hixuym/monkey.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/hixuym/sf-framework/issues/</url>
+        <url>https://github.com/hixuym/monkey/issues/</url>
     </issueManagement>
 
     <ciManagement>
         <system>Travis CI</system>
-        <url>https://travis-ci.org/hixuym/sf-framework/</url>
+        <url>https://travis-ci.org/hixuym/monkey/</url>
     </ciManagement>
 
     <properties>
-        <sunflower.url>http://www.sunflower.io/${project.version}</sunflower.url>
+        <monkey.url>http://www.monkey.io/${project.version}</monkey.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
@@ -71,32 +71,32 @@
     </properties>
 
     <modules>
-        <module>sf-bom</module>
-        <module>sf-archetypes</module>
+        <module>monkey-bom</module>
+        <module>monkey-archetypes</module>
 
-        <module>sf-logging</module>
-        <module>sf-configuration</module>
-        <module>sf-json</module>
-        <module>sf-util</module>
-        <module>sf-validation</module>
-        <module>sf-lifecycle</module>
-        <module>sf-metrics</module>
-        <module>sf-metrics-graphite</module>
-        <module>sf-core</module>
+        <module>monkey-logging</module>
+        <module>monkey-configuration</module>
+        <module>monkey-json</module>
+        <module>monkey-util</module>
+        <module>monkey-validation</module>
+        <module>monkey-lifecycle</module>
+        <module>monkey-metrics</module>
+        <module>monkey-metrics-graphite</module>
+        <module>monkey-core</module>
 
-        <module>sf-datasource</module>
-        <module>sf-orm</module>
-        <module>sf-migrations</module>
-        <module>sf-postoffice</module>
+        <module>monkey-datasource</module>
+        <module>monkey-orm</module>
+        <module>monkey-migrations</module>
+        <module>monkey-postoffice</module>
 
-        <module>sf-jaxrs</module>
-        <module>sf-jaxrs-auth</module>
-        <module>sf-sslcontext</module>
-		<module>sf-serv-http</module>
-		<module>sf-serv-grpc</module>
+        <module>monkey-jaxrs</module>
+        <module>monkey-jaxrs-auth</module>
+        <module>monkey-ssl</module>
+		<module>monkey-serv-http</module>
+		<module>monkey-serv-grpc</module>
 
-        <module>sf-testing</module>
-        <module>sf-quickstarters</module>
+        <module>monkey-testing</module>
+        <module>monkey-quickstarters</module>
     </modules>
 
     <dependencyManagement>
@@ -181,9 +181,9 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <site>
-            <id>sunflower-site</id>
-            <name>sunflower</name>
-            <url>http://sunflower.io/${project.version}</url>
+            <id>monkey-site</id>
+            <name>monkey</name>
+            <url>http://monkey.io/${project.version}</url>
         </site>
     </distributionManagement>
 
@@ -576,7 +576,7 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <excludes>
-                            <exclude>io/sunflower/benchmarks/**/*.class</exclude>
+                            <exclude>io/monkey/benchmarks/**/*.class</exclude>
                             <exclude>org/openjdk/jmh/**/*.class</exclude>
                         </excludes>
                     </instrumentation>

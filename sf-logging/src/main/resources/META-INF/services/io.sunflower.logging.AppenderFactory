@@ -1,5 +1,0 @@
-io.sunflower.logging.ConsoleAppenderFactory
-io.sunflower.logging.FileAppenderFactory
-io.sunflower.logging.SyslogAppenderFactory
-io.sunflower.logging.TcpSocketAppenderFactory
-io.sunflower.logging.UdpSocketAppenderFactory
