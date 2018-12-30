@@ -28,14 +28,14 @@ public class SslContextFactoryFactory {
     private String trustStorePath = "classpath:/io/monkey/ssl/monkey.truststore";
 
     @JsonProperty
-    private String keyStorePassword = "sf_pass";
+    private String keyStorePassword = "monkey";
     @NotEmpty
     @JsonProperty
     private String keyStoreType = "JKS";
     @JsonProperty
     private String keyStoreProvider;
     @JsonProperty
-    private String trustStorePassword = "sf_pass";
+    private String trustStorePassword = "monkey";
     @NotEmpty
     @JsonProperty
     private String trustStoreType = "JKS";

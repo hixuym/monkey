@@ -1,16 +1,17 @@
-keytool -keystore keystore -alias mk -genkey -keyalg RSA -sigalg SHA256withRSA
+keytool -keystore keystore -alias Monkey -genkey -keyalg RSA -sigalg SHA256withRSA
+
+1、keytool -genkeypair -alias Monkey -keyalg RSA -validity 36500 -keystore monkey.keystore
+
+2、keytool -list -v -keystore monkey.keystore
+
+3、keytool -export -alias Monkey -keystore monkey.jks -rfc -file monkey.cer
+
+4、Keytool -import -alias Monkey -file monkey.cer -keystore monkey.truststore
+
+5、keytool -list -v -keystore monkey.truststore
 
 https://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
 
-keytool -genkeypair -alias monkey -keyalg RSA -validity 36500 -keystore monkey.jks
-
-keytool -list -v -keystore monkey.jks
-
-keytool -export -alias monkey -keystore monkey.jks -rfc -file monkey.cer
-
-Keytool -import -alias monkey -file monkey.cer -keystore monkey_truststore.jks
-
-keytool -list -v -keystore monkey_truststore.jks
 
 
 
