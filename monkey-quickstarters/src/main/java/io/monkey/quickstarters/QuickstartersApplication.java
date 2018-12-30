@@ -2,10 +2,10 @@ package io.monkey.quickstarters;
 
 import io.monkey.Application;
 import io.monkey.datasource.PooledDataSourceFactory;
-import io.monkey.jaxrs.auth.basic.BasicAuthModule;
 import io.monkey.jaxrs.setup.JaxrsBundle;
 import io.monkey.jaxrs.setup.JaxrsDeploymentFactory;
 import io.monkey.orm.OrmBundle;
+import io.monkey.quickstarters.auth.BasicAuthModule;
 import io.monkey.quickstarters.resources.HelloworldResource;
 import io.monkey.setup.Bootstrap;
 import io.monkey.setup.Environment;
@@ -25,12 +25,14 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 //    }
 
     public static void main(String[] args) throws Exception {
+//        String text = BaseEncoding.base64().encode("admin:123456".getBytes(Charsets.UTF_8));
+//        System.out.println(text);
         new QuickstartersApplication().run(args);
     }
 
     @Override
     public String getName() {
-        return "mk-quickstarters";
+        return "quickstarters";
     }
 
     @Override
@@ -58,12 +60,7 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
     @Override
     public void run(QuickstartersConfiguration configuration, Environment environment) {
-        environment.guicify().register(new BasicAuthModule() {
-            @Override
-            protected void configureAuthenticator() {
-                
-            }
-        });
+        environment.guicify().register(new BasicAuthModule());
     }
 
 }

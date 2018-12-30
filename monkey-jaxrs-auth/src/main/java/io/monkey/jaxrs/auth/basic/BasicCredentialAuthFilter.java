@@ -19,9 +19,6 @@ import java.security.Principal;
 @Priority(Priorities.AUTHENTICATION)
 public class BasicCredentialAuthFilter<P extends Principal> extends AuthFilter<BasicCredentials, P> {
 
-    private BasicCredentialAuthFilter() {
-    }
-
     @Override
     public void filter(ContainerRequestContext requestContext) {
         final BasicCredentials credentials =

@@ -67,7 +67,7 @@ server:
 #  enableHttp2: true
 #  accessLog: combined
   slowThreshold: 10 ms
-#  dumpRequest: true
+  dumpRequest: true
 #  maxConcurrentRequests: 10
 #  port: 8443
 #  backlog: 256
