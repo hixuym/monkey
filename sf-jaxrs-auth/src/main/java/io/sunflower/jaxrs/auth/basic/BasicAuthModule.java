@@ -27,7 +27,7 @@ public abstract class BasicAuthModule extends AbstractModule {
         configureAuthenticator();
     }
 
-    abstract void configureAuthenticator();
+    protected abstract void configureAuthenticator();
 
     @Provides
     @Singleton

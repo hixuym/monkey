@@ -2,6 +2,7 @@ package io.sunflower.quickstarters;
 
 import io.sunflower.Application;
 import io.sunflower.datasource.PooledDataSourceFactory;
+import io.sunflower.jaxrs.auth.basic.BasicAuthModule;
 import io.sunflower.jaxrs.setup.JaxrsBundle;
 import io.sunflower.jaxrs.setup.JaxrsDeploymentFactory;
 import io.sunflower.orm.OrmBundle;
@@ -57,6 +58,12 @@ public class QuickstartersApplication extends Application<QuickstartersConfigura
 
     @Override
     public void run(QuickstartersConfiguration configuration, Environment environment) {
+        environment.guicify().register(new BasicAuthModule() {
+            @Override
+            protected void configureAuthenticator() {
+                
+            }
+        });
     }
 
 }

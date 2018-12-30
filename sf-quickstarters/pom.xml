@@ -39,6 +39,11 @@
 
         <dependency>
             <groupId>io.sunflower</groupId>
+            <artifactId>sf-jaxrs-auth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.sunflower</groupId>
             <artifactId>sf-orm</artifactId>
         </dependency>
 
