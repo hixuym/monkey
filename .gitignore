@@ -1,26 +1,26 @@
-out/
-.DS_Store
-*.ipr
+# Maven
+target/
+dependency-reduced-pom.xml
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# IntelliJ IDEA
+.idea/
 *.iml
+*.ipr
 *.iws
-*.class
-WebRoot/WEB-INF/classes/
-.externalToolBuilders
-target
-test-output
-temp-testng*.xml
-build/
-.gradle
-*~
-\#*
-.idea
-.svn
-.history
-.cache
-.settings
-.project
+
+# Eclipse
+.settings/
 .classpath
-*.swp
+.project
+
+nb-configuration.xml
+atlassian-ide-plugin.xml
+
 logs
 *all.sql
-dependency-reduced-pom.xml
+*.swp
+.svn
+.cache
