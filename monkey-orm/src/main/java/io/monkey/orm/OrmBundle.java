@@ -81,13 +81,13 @@ public abstract class OrmBundle<T extends Configuration>
         Stopwatch sw = Stopwatch.createStarted();
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
-
-        environment.guicify().register(server);
+        final EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
 
         environment.guicify().register(new AbstractModule() {
             @Override
             protected void configure() {
+                bind(EbeanServer.class).toInstance(server);
+
                 // class-level @Txn
                 LocalTxnInterceptor txnInterceptor = new LocalTxnInterceptor();
 

@@ -65,12 +65,12 @@ public abstract class Server extends ContainerLifeCycle {
      * boot the real server
      *
      */
-    protected void boot() {}
+    protected void boot() throws Exception {}
 
     /**
      * shutdown the real server
      *
      */
-    protected void shutdown() {}
+    protected void shutdown() throws Exception {}
 
 }

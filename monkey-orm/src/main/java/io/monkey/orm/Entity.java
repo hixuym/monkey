@@ -15,7 +15,6 @@
 
 package io.monkey.orm;
 
-import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.UpdatedTimestamp;
 
@@ -30,7 +29,7 @@ import java.sql.Timestamp;
  * created on 16/5/28
  */
 @MappedSuperclass
-public class Entity extends Model implements Serializable {
+public class Entity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

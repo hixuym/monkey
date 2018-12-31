@@ -19,6 +19,7 @@ import io.monkey.jaxrs.params.IntParam;
 import io.monkey.orm.Transactional;
 import io.monkey.quickstarters.core.GreetingService;
 import io.monkey.quickstarters.core.User;
+import io.monkey.quickstarters.core.UserRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,6 +42,9 @@ import java.util.Optional;
 public class HelloworldResource {
 
     private final GreetingService greetingService;
+
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     public HelloworldResource(GreetingService greetingService) {
@@ -76,9 +80,9 @@ public class HelloworldResource {
         user.setAge(35);
         user.setName("michael");
 
-        user.save();
+        userRepository.save(user);
 
-        int userCount = User.db().find(User.class).findCount();
+        int userCount = userRepository.findAll().size();
 
         Message message = new Message();
 

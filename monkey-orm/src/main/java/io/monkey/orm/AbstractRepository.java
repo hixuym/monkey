@@ -23,7 +23,7 @@ public abstract class AbstractRepository<ID, E> extends BeanRepository<ID, E> {
      * @param type   The bean type
      * @param server The EbeanServer instance typically created via Guice factory or equivalent
      */
-    protected AbstractRepository(Class type, EbeanServer server) {
+    protected AbstractRepository(Class<E> type, EbeanServer server) {
         super(type, server);
     }
 }

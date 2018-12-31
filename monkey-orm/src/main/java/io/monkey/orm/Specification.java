@@ -3,7 +3,7 @@ package io.monkey.orm;
 /**
  * Specificaiton interface.
  * <p/>
- * Use {@link se.citerus.dddsample.domain.shared.AbstractSpecification} as base for creating specifications, and
+ * Use {@link AbstractSpecification} as base for creating specifications, and
  * only the method {@link #isSatisfiedBy(Object)} must be implemented.
  */
 public interface Specification<T> {

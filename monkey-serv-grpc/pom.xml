@@ -33,6 +33,10 @@
             <groupId>io.monkey</groupId>
             <artifactId>monkey-ssl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
