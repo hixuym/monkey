@@ -76,7 +76,7 @@ metrics:
   frequency: 1 minutes
   reporters:
     - type: log
-      logger: io.monkey.getMetricRegistry
+      logger: io.monkey.metrics
 
 database:
   driverClass: org.h2.Driver

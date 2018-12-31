@@ -39,7 +39,7 @@ public class EbeanServerFactory {
                              PooledDataSourceFactory dbConfig,
                              List<String> scanPkgs) {
         String name = bundle.name() == null ? environment.getName() + DB_SUFFIX : bundle.name();
-        final ManagedDataSource dataSource = dbConfig.build(environment.getMetricRegistry(), environment.getHealthCheckRegistry(), name);
+        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks(), name);
         return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
     }
 

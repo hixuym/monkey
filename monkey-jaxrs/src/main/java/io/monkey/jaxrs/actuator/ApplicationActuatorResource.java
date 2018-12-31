@@ -62,7 +62,7 @@ public class ApplicationActuatorResource {
     @GET
     public Response metrics() {
 
-        MetricRegistry metricRegistry = environment.getMetricRegistry();
+        MetricRegistry metricRegistry = environment.metrics();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.SECONDS, true));
@@ -91,7 +91,7 @@ public class ApplicationActuatorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response healthCheck() {
 
-        HealthCheckRegistry healthCheckRegistry = environment.getHealthCheckRegistry();
+        HealthCheckRegistry healthCheckRegistry = environment.healthChecks();
 
         ObjectMapper mapper = new ObjectMapper();
 

@@ -126,7 +126,7 @@ public @interface Transactional {
     boolean skipCache() default false;
 
     /**
-     * Set a label to identify the transaction in performance getMetricRegistry and logging.
+     * Set a label to identify the transaction in performance metrics and logging.
      */
     String label() default "";
 

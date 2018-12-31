@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author michael
  */
-public final class Environment {
+public class Environment {
 
     private final String name;
     private final MetricRegistry metricRegistry;
@@ -119,14 +119,14 @@ public final class Environment {
     /**
      * Returns the application's {@link MetricRegistry}.
      */
-    public MetricRegistry getMetricRegistry() {
+    public MetricRegistry metrics() {
         return metricRegistry;
     }
 
     /**
      * Returns the application's {@link HealthCheckRegistry}.
      */
-    public HealthCheckRegistry getHealthCheckRegistry() {
+    public HealthCheckRegistry healthChecks() {
         return healthCheckRegistry;
     }
 
@@ -211,7 +211,7 @@ public final class Environment {
     private static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
 
     private void logHealthChecks() {
-        if (getHealthCheckRegistry().getNames().size() <= 1) {
+        if (healthChecks().getNames().size() <= 1) {
             LOGGER.warn(String.format(
                     "%n" +  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
                             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%n" +
@@ -223,6 +223,6 @@ public final class Environment {
                             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             ));
         }
-        LOGGER.info("health checks = {}", getHealthCheckRegistry().getNames());
+        LOGGER.info("health checks = {}", healthChecks().getNames());
     }
 }

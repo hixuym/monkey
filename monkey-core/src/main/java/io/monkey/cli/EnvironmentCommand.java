@@ -40,8 +40,8 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
         environment.guicify().register(configuration);
 
         configuration.getServerFactory().configure(environment);
-        configuration.getLoggingFactory().configure(environment.getMetricRegistry(), environment.getName());
-        configuration.getMetricsFactory().configure(environment.lifecycle(), environment.getMetricRegistry());
+        configuration.getLoggingFactory().configure(environment.metrics(), environment.getName());
+        configuration.getMetricsFactory().configure(environment.lifecycle(), environment.metrics());
 
         bootstrap.run(configuration, environment);
 

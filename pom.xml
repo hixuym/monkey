@@ -86,6 +86,7 @@
 
         <module>monkey-datasource</module>
         <module>monkey-orm</module>
+        <module>monkey-jdbc</module>
         <module>monkey-migrations</module>
         <module>monkey-postoffice</module>
 

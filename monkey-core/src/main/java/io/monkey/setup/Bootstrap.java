@@ -67,7 +67,7 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Registers the JVM getMetricRegistry to the metric register and commit to report the register getMetricRegistry via
+     * Registers the JVM metrics to the metric register and commit to report the register metrics via
      * JMX.
      */
     public void registerMetrics() {
@@ -189,14 +189,14 @@ public class Bootstrap<T extends Configuration> {
     }
 
     /**
-     * Returns the application getMetricRegistry.
+     * Returns the application metrics.
      */
     public MetricRegistry getMetricRegistry() {
         return metricRegistry;
     }
 
     /**
-     * Sets a custom register for the application getMetricRegistry.
+     * Sets a custom register for the application metrics.
      *
      * @param metricRegistry a custom metric register
      */

@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation for marking a controller method to be Counted for getMetricRegistry collection.
+ * An annotation for marking a controller method to be Counted for metrics collection.
  * <p>
  * A counter increments on method execution and optionally decrements at execution completion.
  * <p>

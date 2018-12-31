@@ -114,7 +114,7 @@ public abstract class OrmBundle<T extends Configuration>
 
     /**
      * Override to initialize the name of the bundle (It's used for the bundle health check and
-     * database pool getMetricRegistry), default use app name + _db
+     * database pool metrics), default use app name + _db
      */
     protected String name() {
         return null;
