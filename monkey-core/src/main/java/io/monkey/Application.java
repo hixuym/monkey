@@ -27,14 +27,14 @@ public abstract class Application<T extends Configuration> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final String LOGO = "\n"
-            + " _____              __ _                       \n"
-            + "/  ___|            / _| |                       \n"
-            + "\\ `--. _   _ _ __ | |_| | _____      _____ _ __ \n"
-            + " `--. \\ | | | '_ \\|  _| |/ _ \\ \\ /\\ / / _ \\ '__| \n"
-            + "/\\__/ / |_| | | | | | | | (_) \\ V  V /  __/ |    \n"
-            + "\\____/ \\__,_|_| |_|_| |_|\\___/ \\_/\\_/ \\___|_| \n"
-            + "       Framework@({}) {}                             \n";
+    private static final String LOGO = "\n" +
+        "  __  __                   _                   \n" +
+        " |  \\/  |   ___    _ __   | | __   ___   _   _ \n" +
+        " | |\\/| |  / _ \\  | '_ \\  | |/ /  / _ \\ | | | |\n" +
+        " | |  | | | (_) | | | | | |   <  |  __/ | |_| |\n" +
+        " |_|  |_|  \\___/  |_| |_| |_|\\_\\  \\___|  \\__, |\n" +
+        "                                         |___/ \n" +
+        "         Framework@({}) {}                      \n";
 
     protected Application() {
         bootstrapLogging();
