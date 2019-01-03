@@ -3,7 +3,7 @@ package io.monkey.logging.filter;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.monkey.json.Discoverable;
+import io.monkey.jackson.Discoverable;
 
 /**
  * A service provider interface for creating Logback {@link Filter} instances.

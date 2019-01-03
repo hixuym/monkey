@@ -1,7 +1,7 @@
 package io.monkey;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.logging.AppenderFactory;
 import org.junit.Test;
 

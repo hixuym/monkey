@@ -7,7 +7,7 @@ import io.monkey.configuration.ConfigurationValidationException;
 import io.monkey.configuration.FileConfigurationSourceProvider;
 import io.monkey.configuration.SubstitutingSourceProvider;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.util.Duration;
 import io.monkey.validation.BaseValidator;
 import org.apache.commons.text.StringSubstitutor;

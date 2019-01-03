@@ -1,0 +1,91 @@
+logging:
+  level: INFO
+  loggers:
+    "io.monkey": DEBUG
+  appenders:
+    - type: console
+      threshold: ALL
+      queueSize: 512
+      discardingThreshold: 0
+      timeZone: UTC
+      target: stdout
+      logFormat: "%-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
+
+server:
+  type: dubbo
+
+  application:
+    name:
+    version:
+    owner:
+    organization:
+    architecture:
+    environment:
+    compiler:
+    logger:
+
+  registry:
+    address:
+    username:
+    password:
+    port:
+    protocol:
+    transporter:
+    server:
+    client:
+    cluster:
+    group:
+    timeout:
+    session:
+    file:
+    wait:
+    check:
+    dynamic:
+    register:
+    subscribe:
+
+  protocol:
+    name:
+    host:
+    port:
+    contextPath:
+    threadpool:
+    threads:
+    ioThreads:
+    queues:
+    accepts:
+    codec:
+    serialization:
+    charset:
+    payload:
+    buffer:
+    heartbeat:
+    accesslog:
+    transporter:
+    exchanger:
+    dispatcher:
+    networker:
+    server:
+    client:
+    telnet:
+    prompt:
+    status:
+    register:
+    keepAlive:
+    optimmizer:
+    extension:
+
+  monitor:
+    protocol:
+    address:
+    username:
+    password:
+    group:
+    version:
+    interval:
+
+metrics:
+  frequency: 15 minutes
+  reporters:
+    - type: log
+      logger: starter-dubbo.metrics

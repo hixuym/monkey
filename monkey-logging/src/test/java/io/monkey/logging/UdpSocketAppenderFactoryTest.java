@@ -4,7 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.BaseValidator;
 import org.junit.After;
 import org.junit.Before;

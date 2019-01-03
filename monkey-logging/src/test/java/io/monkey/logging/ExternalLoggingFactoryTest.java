@@ -2,8 +2,8 @@ package io.monkey.logging;
 
 import com.google.common.io.Resources;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.DiscoverableSubtypeResolver;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.DiscoverableSubtypeResolver;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.BaseValidator;
 import org.junit.Test;
 

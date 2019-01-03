@@ -12,5 +12,5 @@ trim_trailing_whitespace = true
 [*.properties]
 charset = latin1
 
-[.travis.yml]
+[*.yml]
 indent_size = 2

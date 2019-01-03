@@ -5,7 +5,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import io.monkey.configuration.ResourceConfigurationSourceProvider;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.util.Duration;
 import io.monkey.validation.BaseValidator;
 import org.junit.After;

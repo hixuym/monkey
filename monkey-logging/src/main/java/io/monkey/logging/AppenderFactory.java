@@ -4,7 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.monkey.json.Discoverable;
+import io.monkey.jackson.Discoverable;
 import io.monkey.logging.async.AsyncAppenderFactory;
 import io.monkey.logging.filter.LevelFilterFactory;
 import io.monkey.logging.layout.LayoutFactory;

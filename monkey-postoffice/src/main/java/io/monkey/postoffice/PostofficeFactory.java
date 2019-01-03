@@ -16,7 +16,7 @@
 package io.monkey.postoffice;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.monkey.json.Discoverable;
+import io.monkey.jackson.Discoverable;
 
 /**
  * @author michael

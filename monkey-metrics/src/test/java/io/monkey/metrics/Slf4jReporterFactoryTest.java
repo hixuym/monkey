@@ -1,6 +1,6 @@
 package io.monkey.metrics;
 
-import io.monkey.json.DiscoverableSubtypeResolver;
+import io.monkey.jackson.DiscoverableSubtypeResolver;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

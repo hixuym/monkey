@@ -3,7 +3,7 @@ package io.monkey.configuration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.BaseValidator;
 import org.junit.Test;
 

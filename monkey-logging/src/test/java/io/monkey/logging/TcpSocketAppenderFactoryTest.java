@@ -7,7 +7,7 @@ import com.google.common.io.Resources;
 import io.monkey.configuration.ResourceConfigurationSourceProvider;
 import io.monkey.configuration.SubstitutingSourceProvider;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.util.Duration;
 import io.monkey.util.Size;
 import io.monkey.validation.BaseValidator;

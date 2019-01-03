@@ -14,7 +14,7 @@ import io.monkey.configuration.ConfigurationFactoryFactory;
 import io.monkey.configuration.ConfigurationSourceProvider;
 import io.monkey.configuration.DefaultConfigurationFactoryFactory;
 import io.monkey.configuration.FileConfigurationSourceProvider;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.BaseValidator;
 
 import javax.validation.ValidatorFactory;

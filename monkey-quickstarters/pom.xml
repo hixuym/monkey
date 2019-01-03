@@ -10,8 +10,15 @@
     </parent>
 
     <artifactId>monkey-quickstarters</artifactId>
-
+    <packaging>pom</packaging>
     <name>Monkey Quick Starters</name>
+
+    <modules>
+        <module>starter-undertow</module>
+        <module>starter-resteasy</module>
+        <module>starter-dubbo</module>
+        <module>starter-core</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -24,120 +31,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>io.monkey</groupId>
-            <artifactId>monkey-serv-http</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.monkey</groupId>
-            <artifactId>monkey-jaxrs</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.monkey</groupId>
-            <artifactId>monkey-jaxrs-auth</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.monkey</groupId>
-            <artifactId>monkey-orm</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.monkey</groupId>
-            <artifactId>monkey-testing</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <createDependencyReducedPom>true</createDependencyReducedPom>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>io.monkey.quickstarters.QuickstartersApplication</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>io.repaint.maven</groupId>
-                <artifactId>tiles-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <tiles>
-                        <!-- other tiles ... -->
-                        <tile>org.avaje.tile:java-compile:1.1</tile>
-                        <tile>io.ebean.tile:enhancement:6.1</tile>
-                    </tiles>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

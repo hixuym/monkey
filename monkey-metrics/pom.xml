@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>io.monkey</groupId>
-            <artifactId>monkey-json</artifactId>
+            <artifactId>monkey-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>io.monkey</groupId>

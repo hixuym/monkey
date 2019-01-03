@@ -72,32 +72,33 @@
 
     <modules>
         <module>monkey-bom</module>
-        <module>monkey-archetypes</module>
+        <module>monkey-core</module>
 
         <module>monkey-logging</module>
         <module>monkey-configuration</module>
-        <module>monkey-json</module>
+        <module>monkey-jackson</module>
         <module>monkey-util</module>
         <module>monkey-validation</module>
         <module>monkey-lifecycle</module>
         <module>monkey-metrics</module>
         <module>monkey-metrics-graphite</module>
-        <module>monkey-core</module>
 
         <module>monkey-datasource</module>
-        <module>monkey-orm</module>
-        <module>monkey-jdbc</module>
+        <module>monkey-ebean</module>
+        <module>monkey-jdbi</module>
         <module>monkey-migrations</module>
         <module>monkey-postoffice</module>
 
-        <module>monkey-jaxrs</module>
-        <module>monkey-jaxrs-auth</module>
+        <module>monkey-resteasy</module>
+        <module>monkey-resteasy-auth</module>
         <module>monkey-ssl</module>
-		<module>monkey-serv-http</module>
-		<module>monkey-serv-grpc</module>
+
+		<module>monkey-undertow</module>
+		<module>monkey-dubbo</module>
 
         <module>monkey-testing</module>
         <module>monkey-benchmarks</module>
+        <module>monkey-archetypes</module>
         <module>monkey-quickstarters</module>
     </modules>
 

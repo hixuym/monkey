@@ -8,7 +8,7 @@ import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import io.monkey.configuration.YamlConfigurationFactory;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.logging.async.AsyncLoggingEventAppenderFactory;
 import io.monkey.logging.filter.NullLevelFilterFactory;
 import io.monkey.logging.layout.MonkeyLayoutFactory;

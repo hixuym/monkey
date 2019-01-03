@@ -3,7 +3,7 @@ package io.monkey.metrics;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.monkey.json.Discoverable;
+import io.monkey.jackson.Discoverable;
 import io.monkey.util.Duration;
 
 import java.util.Optional;

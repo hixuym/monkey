@@ -1,6 +1,6 @@
 package io.monkey.configuration;
 
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

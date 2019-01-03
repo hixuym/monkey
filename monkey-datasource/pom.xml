@@ -10,7 +10,7 @@
 
     <artifactId>monkey-datasource</artifactId>
 
-    <name>Monkey Database Support</name>
+    <name>Monkey DataSource Support</name>
 
     <dependencyManagement>
         <dependencies>

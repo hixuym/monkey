@@ -16,7 +16,7 @@
 package io.monkey.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.monkey.json.Discoverable;
+import io.monkey.jackson.Discoverable;
 import io.monkey.setup.Environment;
 
 /**

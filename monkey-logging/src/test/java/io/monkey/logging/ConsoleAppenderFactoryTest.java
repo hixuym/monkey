@@ -5,7 +5,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import io.monkey.json.DiscoverableSubtypeResolver;
+import io.monkey.jackson.DiscoverableSubtypeResolver;
 import io.monkey.logging.async.AsyncLoggingEventAppenderFactory;
 import io.monkey.logging.filter.NullLevelFilterFactory;
 import io.monkey.logging.layout.MonkeyLayoutFactory;

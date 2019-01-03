@@ -2,7 +2,7 @@ package io.monkey.configuration;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import org.junit.Test;
 
 import java.io.File;

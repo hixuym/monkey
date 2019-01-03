@@ -9,7 +9,7 @@ import io.monkey.Application;
 import io.monkey.Configuration;
 import io.monkey.configuration.DefaultConfigurationFactoryFactory;
 import io.monkey.configuration.FileConfigurationSourceProvider;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.valuehandling.OptionalDoubleValidatedValueUnwrapper;
 import io.monkey.validation.valuehandling.OptionalIntValidatedValueUnwrapper;
 import io.monkey.validation.valuehandling.OptionalLongValidatedValueUnwrapper;

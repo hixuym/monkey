@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
-import io.monkey.json.Jackson;
+import io.monkey.jackson.Jackson;
 import io.monkey.validation.BaseValidator;
 import org.assertj.core.data.MapEntry;
 import org.junit.After;
