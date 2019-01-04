@@ -1,4 +1,5 @@
 /*
+ * Copyright 2018-2023 Monkey, Inc
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,20 +13,23 @@
  * limitations under the License.
  */
 
-package io.monkey.motan;
+package io.monkey.quickstarters.motan;
 
+import io.monkey.motan.annotation.MotanReferer;
 
-import com.weibo.api.motan.config.ProtocolConfig;
-import com.weibo.api.motan.config.RegistryConfig;
+import javax.inject.Inject;
 
 /**
  * @author Michael
- * Created at: 2019/1/3 22:27
+ * Created at: 2019/1/4 15:58
  */
-public interface DubboFactory {
+public class GreetingServiceClient {
 
-    RegistryConfig getRegistryConfig();
+    @Inject
+    @MotanReferer
+    private GreetingService greetingService;
 
-    ProtocolConfig getProtocolConfig();
-
+    public String sayHi(String name) {
+        return greetingService.greet(name);
+    }
 }

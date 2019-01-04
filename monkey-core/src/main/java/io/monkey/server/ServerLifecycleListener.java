@@ -30,4 +30,6 @@ public interface ServerLifecycleListener extends EventListener {
      */
     void serverStarted(Server server);
 
+    default void serverStopping(Server server) {}
+
 }

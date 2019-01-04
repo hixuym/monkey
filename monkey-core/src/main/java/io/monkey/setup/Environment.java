@@ -181,6 +181,13 @@ public class Environment {
                     lifecycleListener.serverStarted((Server) event);
                 }
             }
+
+            @Override
+            public void lifeCycleStopping(LifeCycle event) {
+                if (event instanceof Server) {
+                    lifecycleListener.serverStopping((Server) event);
+                }
+            }
         });
     }
 

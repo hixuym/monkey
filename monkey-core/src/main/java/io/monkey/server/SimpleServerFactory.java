@@ -17,8 +17,6 @@ package io.monkey.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.monkey.setup.Environment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author michael
@@ -26,17 +24,12 @@ import org.slf4j.LoggerFactory;
 @JsonTypeName("simple")
 public class SimpleServerFactory implements ServerFactory {
 
-    private static Logger logger = LoggerFactory.getLogger(SimpleServerFactory.class);
-
     @Override
     public Server build(Environment environment) {
         return new Server(environment) {
-
             @Override
             protected void boot() {
-                logger.info("do nothing, just use for testing.");
             }
-
         };
     }
 

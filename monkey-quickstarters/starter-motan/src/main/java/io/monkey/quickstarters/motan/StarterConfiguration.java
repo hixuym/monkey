@@ -18,34 +18,29 @@
 
 package io.monkey.quickstarters.motan;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.monkey.Configuration;
+import io.monkey.motan.DefaultMotanFactory;
+import io.monkey.motan.MotanFactory;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
 
 /**
  * @author michael
  * created on 17/9/2
  */
 public class StarterConfiguration extends Configuration {
-    @NotEmpty
-    private String template;
 
-    @NotEmpty
-    private String defaultName = "Stranger";
+    @JsonProperty("motan")
+    @Valid
+    private MotanFactory motanFactory = new DefaultMotanFactory();
 
-    public String getTemplate() {
-        return template;
+    public MotanFactory getMotanFactory() {
+        return motanFactory;
     }
 
-    public void setTemplate(String template) {
-        this.template = template;
+    public void setMotanFactory(MotanFactory motanFactory) {
+        this.motanFactory = motanFactory;
     }
-
-    public String getDefaultName() {
-        return defaultName;
-    }
-
-    public void setDefaultName(String name) {
-        this.defaultName = name;
-    }
-
 }

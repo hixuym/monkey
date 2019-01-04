@@ -1,4 +1,5 @@
 /*
+ * Copyright 2018-2023 Monkey, Inc
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,16 +13,16 @@
  * limitations under the License.
  */
 
-package io.monkey.motan;
+package io.monkey.quickstarters.motan;
 
-import io.monkey.Configuration;
+import io.monkey.motan.annotation.MotanService;
 
 /**
  * @author Michael
- * Created at: 2019/1/3 22:26
+ * Created at: 2019/1/4 15:53
  */
-public interface DubboConfiguration<T extends Configuration> {
+@MotanService(export = "motan:9911")
+public interface GreetingService {
 
-    DubboFactory getDubboFactory(T configuration);
-
+    String greet(String name);
 }

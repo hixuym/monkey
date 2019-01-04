@@ -1,4 +1,5 @@
 /*
+ * Copyright 2018-2023 Monkey, Inc
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,12 +13,18 @@
  * limitations under the License.
  */
 
-package io.monkey.motan;
+package io.monkey.quickstarters.motan;
+
+import javax.inject.Singleton;
 
 /**
  * @author Michael
- * Created at: 2019/1/3 22:06
+ * Created at: 2019/1/4 15:54
  */
-public class DubboModule {
+@Singleton
+public class GreetingServiceImpl implements GreetingService {
+    @Override
+    public String greet(String name) {
+        return "Hi, " + name;
+    }
 }
-

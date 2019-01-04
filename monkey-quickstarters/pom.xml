@@ -16,7 +16,7 @@
     <modules>
         <module>starter-undertow</module>
         <module>starter-resteasy</module>
-        <module>starter-dubbo</module>
+        <module>starter-motan</module>
         <module>starter-core</module>
     </modules>
 
