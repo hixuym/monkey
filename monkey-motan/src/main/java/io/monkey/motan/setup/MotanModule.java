@@ -13,10 +13,12 @@
  * limitations under the License.
  */
 
-package io.monkey.motan;
+package io.monkey.motan.setup;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
+import io.monkey.motan.MotanFactory;
+import io.monkey.setup.Environment;
 
 /**
  * @author Michael
@@ -25,13 +27,15 @@ import com.google.inject.matcher.Matchers;
 public class MotanModule extends AbstractModule {
 
     private final MotanFactory motanFactory;
+    private final Environment environment;
 
-    public MotanModule(MotanFactory motanFactory) {
+    public MotanModule(MotanFactory motanFactory, Environment environment) {
         this.motanFactory = motanFactory;
+        this.environment = environment;
     }
 
     @Override
     protected void configure() {
-        bindListener(Matchers.any(), new MotanRefererListener(motanFactory));
+        bindListener(Matchers.any(), new MotanTypeListener(motanFactory, environment));
     }
 }

@@ -14,18 +14,14 @@
 
 package io.monkey.motan;
 
-import com.google.common.base.Strings;
-import com.google.inject.AbstractModule;
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.matcher.Matchers;
 import com.weibo.api.motan.common.MotanConstants;
-import com.weibo.api.motan.config.*;
+import com.weibo.api.motan.config.RefererConfig;
+import com.weibo.api.motan.config.ServiceConfig;
 import com.weibo.api.motan.core.extension.ExtensionLoader;
 import com.weibo.api.motan.util.MotanSwitcherUtil;
 import io.monkey.Configuration;
 import io.monkey.ConfiguredBundle;
-import io.monkey.motan.annotation.MotanService;
+import io.monkey.motan.setup.MotanModule;
 import io.monkey.server.Server;
 import io.monkey.server.ServerLifecycleListener;
 import io.monkey.setup.Bootstrap;
@@ -33,9 +29,6 @@ import io.monkey.setup.Environment;
 import io.monkey.setup.GuicifyEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Provider;
-import java.lang.reflect.Type;
 
 /**
  * @author Michael
@@ -56,13 +49,13 @@ public abstract class MotanBundle<T extends Configuration> implements Configured
 
         bindService(environment.guicify());
 
-        environment.guicify().register(new MotanModule(motanFactory));
+        environment.guicify().register(new MotanModule(motanFactory, environment));
 
         // export motan services
         environment.addServerLifecycleListener(new ServerLifecycleListener() {
             @Override
             public void serverStarted(Server server) {
-                scanAndExportMotanService(environment.getInjector(), motanFactory);
+                MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER, true);
             }
 
             @Override
@@ -79,50 +72,6 @@ public abstract class MotanBundle<T extends Configuration> implements Configured
 
     protected <E> void addSpi(Class<E> interfaceClass, Class<E> implClass) {
         ExtensionLoader.getExtensionLoader(interfaceClass).addExtensionClass(implClass);
-    }
-
-    private void scanAndExportMotanService(Injector injector, MotanFactory motanFactory) {
-        for (final Binding<?> binding : injector.getBindings().values()) {
-            final Type type = binding.getKey().getTypeLiteral().getRawType();
-            if (type instanceof Class) {
-                final Class<?> beanClass = (Class) type;
-
-                if (beanClass.isAnnotationPresent(MotanService.class)) {
-                    logger.info("registering motan service instance for {}", beanClass.getName());
-                    registerServiceConfig(beanClass, binding.getProvider(), motanFactory);
-                }
-            }
-        }
-
-        motanFactory.getServicesConfig().values().forEach(ServiceConfig::export);
-
-        MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER, true);
-    }
-
-    private void registerServiceConfig(Class<?> beanClass, Provider provider, MotanFactory motanFactory) {
-        MotanService service = beanClass.getAnnotation(MotanService.class);
-
-        String id = service.id();
-
-        if (Strings.isNullOrEmpty(id)) {
-            id = beanClass.getName();
-        }
-
-        ServiceConfig serviceConfig = motanFactory.getServicesConfig().get(id);
-
-        if (serviceConfig == null) {
-            serviceConfig = new ServiceConfig();
-        }
-
-        serviceConfig.setRef(provider.get());
-        serviceConfig.setInterface(beanClass);
-
-        if (Strings.isNullOrEmpty(serviceConfig.getExport()) && !Strings.isNullOrEmpty(service.export())) {
-            serviceConfig.setExport(service.export());
-        }
-
-        motanFactory.registerService(id, serviceConfig);
-
     }
 
 }

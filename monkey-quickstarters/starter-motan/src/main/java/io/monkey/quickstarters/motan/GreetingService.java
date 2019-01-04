@@ -15,13 +15,10 @@
 
 package io.monkey.quickstarters.motan;
 
-import io.monkey.motan.annotation.MotanService;
-
 /**
  * @author Michael
  * Created at: 2019/1/4 15:53
  */
-@MotanService(export = "motan:9911")
 public interface GreetingService {
 
     String greet(String name);

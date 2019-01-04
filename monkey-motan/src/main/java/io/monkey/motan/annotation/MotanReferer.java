@@ -18,14 +18,14 @@ package io.monkey.motan.annotation;
 import java.lang.annotation.*;
 
 /**
- * @author fld
  * Reference Annotation
- * Created by fld on 16/5/13.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface MotanReferer {
+
+    Class<?> interfaceClass() default void.class;
 
     String id() default "";
 

@@ -15,13 +15,13 @@
 
 package io.monkey.quickstarters.motan;
 
-import javax.inject.Singleton;
+import io.monkey.motan.annotation.MotanService;
 
 /**
  * @author Michael
  * Created at: 2019/1/4 15:54
  */
-@Singleton
+@MotanService(export = "motan:9911")
 public class GreetingServiceImpl implements GreetingService {
     @Override
     public String greet(String name) {

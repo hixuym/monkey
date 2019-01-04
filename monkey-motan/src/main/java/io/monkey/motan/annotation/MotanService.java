@@ -19,13 +19,14 @@ package io.monkey.motan.annotation;
 import java.lang.annotation.*;
 
 /**
- * @author fld
  * Service Annotation
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface MotanService {
+
+    Class<?> interfaceClass() default void.class;
 
     String id() default "";
 
