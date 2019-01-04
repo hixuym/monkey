@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>starter-dubbo</artifactId>
+    <artifactId>starter-motan</artifactId>
 
-    <name>Monkey Quick Starters - Dubbo</name>
+    <name>Monkey Quick Starters - Motan</name>
 
     <dependencyManagement>
         <dependencies>
@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>io.monkey</groupId>
-            <artifactId>monkey-dubbo</artifactId>
+            <artifactId>monkey-motan</artifactId>
         </dependency>
     </dependencies>
 

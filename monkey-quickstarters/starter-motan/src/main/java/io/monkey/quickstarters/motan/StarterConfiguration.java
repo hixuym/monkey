@@ -16,7 +16,7 @@
  *
  */
 
-package io.monkey.quickstarters.dubbo;
+package io.monkey.quickstarters.motan;
 
 import io.monkey.Configuration;
 import org.hibernate.validator.constraints.NotEmpty;

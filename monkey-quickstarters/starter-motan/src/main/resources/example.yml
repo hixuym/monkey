@@ -12,7 +12,7 @@ logging:
       logFormat: "%-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
 
 server:
-  type: dubbo
+  type: motan
 
   application:
     name:
@@ -88,4 +88,4 @@ metrics:
   frequency: 15 minutes
   reporters:
     - type: log
-      logger: starter-dubbo.metrics
+      logger: starter-motan.metrics

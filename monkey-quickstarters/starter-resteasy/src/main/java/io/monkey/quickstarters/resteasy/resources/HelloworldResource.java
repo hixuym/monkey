@@ -18,11 +18,11 @@
 
 package io.monkey.quickstarters.resteasy.resources;
 
-import io.monkey.resteasy.params.IntParam;
 import io.monkey.ebean.Transactional;
 import io.monkey.quickstarters.resteasy.core.GreetingService;
 import io.monkey.quickstarters.resteasy.core.User;
 import io.monkey.quickstarters.resteasy.core.UserRepository;
+import io.monkey.resteasy.params.IntParam;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

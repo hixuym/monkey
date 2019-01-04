@@ -204,6 +204,18 @@
                 <groupId>com.weibo</groupId>
                 <artifactId>motan-core</artifactId>
                 <version>${motan.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alibaba</groupId>
+                        <artifactId>fastjson</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.weibo</groupId>
+                <artifactId>motan-transport-netty</artifactId>
+                <version>${motan.version}</version>
             </dependency>
 
             <dependency>
@@ -920,7 +932,7 @@
 
             <dependency>
                 <groupId>io.monkey</groupId>
-                <artifactId>monkey-dubbo</artifactId>
+                <artifactId>monkey-motan</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author michael
  */
-@JsonTypeName("fake")
-public class FakeServerFactory implements ServerFactory {
+@JsonTypeName("simple")
+public class SimpleServerFactory implements ServerFactory {
 
-    private static Logger logger = LoggerFactory.getLogger(FakeServerFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(SimpleServerFactory.class);
 
     @Override
     public Server build(Environment environment) {

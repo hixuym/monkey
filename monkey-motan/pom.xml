@@ -8,9 +8,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>monkey-dubbo</artifactId>
+    <artifactId>monkey-motan</artifactId>
 
-    <name>Monkey Dubbo Support</name>
+    <name>Monkey Motan Support</name>
 
     <dependencyManagement>
         <dependencies>
@@ -30,8 +30,12 @@
             <artifactId>monkey-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dubbo</artifactId>
+            <groupId>com.weibo</groupId>
+            <artifactId>motan-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.weibo</groupId>
+            <artifactId>motan-transport-netty</artifactId>
         </dependency>
     </dependencies>
 

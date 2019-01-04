@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 import io.monkey.logging.DefaultLoggingFactory;
 import io.monkey.logging.LoggingFactory;
 import io.monkey.metrics.MetricsFactory;
-import io.monkey.server.FakeServerFactory;
+import io.monkey.server.SimpleServerFactory;
 import io.monkey.server.ServerFactory;
 
 import javax.validation.Valid;
@@ -78,7 +78,7 @@ public class Configuration {
     @JsonProperty("server")
     public ServerFactory getServerFactory() {
         if (serverFactory == null) {
-            this.serverFactory = new FakeServerFactory();
+            this.serverFactory = new SimpleServerFactory();
         }
         return serverFactory;
     }

@@ -1,1 +1,1 @@
-io.monkey.server.FakeServerFactory
+io.monkey.server.SimpleServerFactory

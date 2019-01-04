@@ -16,7 +16,7 @@
  *
  */
 
-package io.monkey.quickstarters.dubbo;
+package io.monkey.quickstarters.motan;
 
 import io.monkey.Application;
 import io.monkey.setup.Bootstrap;
@@ -43,7 +43,7 @@ public class StarterApplication extends Application<StarterConfiguration> {
 
     @Override
     public String getName() {
-        return "dubbo";
+        return "motan";
     }
 
     @Override

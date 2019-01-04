@@ -94,7 +94,7 @@
         <module>monkey-ssl</module>
 
 		<module>monkey-undertow</module>
-		<module>monkey-dubbo</module>
+		<module>monkey-motan</module>
 
         <module>monkey-testing</module>
         <module>monkey-benchmarks</module>

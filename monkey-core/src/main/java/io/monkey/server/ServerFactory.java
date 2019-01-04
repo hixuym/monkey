@@ -24,7 +24,7 @@ import io.monkey.setup.Environment;
  *
  * @author michael
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = FakeServerFactory.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleServerFactory.class)
 public interface ServerFactory extends Discoverable {
 
     /**
