@@ -1,5 +1,6 @@
 server:
   type: simple
+
 logging:
   level: INFO
   loggers:
@@ -13,13 +14,14 @@ logging:
       timeZone: UTC
       target: stdout
       logFormat: "%-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
+
 metrics:
   frequency: 15 minutes
   reporters:
     - type: log
       logger: starter-motan.metrics
 
-#motan:
+motan:
 #  registries:
 #    -
 #      name:
@@ -62,9 +64,9 @@ metrics:
 #      async:
 #      parameters:
 #
-#  basicService:
-#    module:
-#    group:
+  basicService:
+    module: test
+    group: test
 #    version:
 #    proxy:
 #    filter:

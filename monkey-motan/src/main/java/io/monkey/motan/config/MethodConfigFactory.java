@@ -15,6 +15,7 @@
 
 package io.monkey.motan.config;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.weibo.api.motan.config.MethodConfig;
 
 /**
@@ -23,15 +24,20 @@ import com.weibo.api.motan.config.MethodConfig;
  */
 public class MethodConfigFactory {
     // 方法名
+    @JsonProperty
     private String name;
     // 超时时间
+    @JsonProperty
     private Integer requestTimeout;
     // 失败重试次数（默认为0，不重试）
+    @JsonProperty
     private Integer retries;
     // 最大并发调用
     // TODO 暂未实现
+    @JsonProperty
     private Integer actives;
     // 参数类型（逗号分隔）
+    @JsonProperty
     private String argumentTypes;
 
     MethodConfig build() {

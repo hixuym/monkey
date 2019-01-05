@@ -20,9 +20,7 @@ package io.monkey.quickstarters.motan;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.monkey.Configuration;
-import io.monkey.motan.DefaultMotanFactory;
 import io.monkey.motan.MotanFactory;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 
@@ -34,7 +32,7 @@ public class StarterConfiguration extends Configuration {
 
     @JsonProperty("motan")
     @Valid
-    private MotanFactory motanFactory = new DefaultMotanFactory();
+    private MotanFactory motanFactory = new MotanFactory();
 
     public MotanFactory getMotanFactory() {
         return motanFactory;
