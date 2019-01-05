@@ -29,6 +29,13 @@ import java.util.stream.Collectors;
  * Created at: 2019/1/4 12:27
  */
 public class AbstractInterfaceConfigFactory {
+
+    @JsonProperty
+    private String registry;
+
+    @JsonProperty
+    private String protocol;
+
     @JsonProperty
     private String id;
 
@@ -383,5 +390,21 @@ public class AbstractInterfaceConfigFactory {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getRegistry() {
+        return registry;
+    }
+
+    public void setRegistry(String registry) {
+        this.registry = registry;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 }

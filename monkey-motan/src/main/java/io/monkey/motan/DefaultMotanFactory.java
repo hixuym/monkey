@@ -17,6 +17,7 @@ package io.monkey.motan;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -24,6 +25,7 @@ import com.weibo.api.motan.common.MotanConstants;
 import com.weibo.api.motan.config.*;
 import com.weibo.api.motan.exception.MotanErrorMsgConstant;
 import com.weibo.api.motan.exception.MotanFrameworkException;
+import com.weibo.api.motan.util.CollectionUtil;
 import com.weibo.api.motan.util.MotanFrameworkUtil;
 import io.monkey.motan.config.BasicRefererConfigFactory;
 import io.monkey.motan.config.BasicServiceConfigFactory;
@@ -138,16 +140,8 @@ public class DefaultMotanFactory implements MotanFactory {
         if (basicRefererConfigFactory != null) {
             basicRefererInterfaceConfig = basicRefererConfigFactory.buildBasicReferer();
 
-            Map<String, RegistryConfig> registryConfigMap = getRegistryConfig();
-            Map<String, ProtocolConfig> protocolConfigMap = getProtocolConfig();
-
-            if (!registryConfigMap.isEmpty()) {
-                basicRefererInterfaceConfig.setRegistries(Lists.newArrayList(registryConfigMap.values()));
-            }
-
-            if (!protocolConfigMap.isEmpty()) {
-                basicRefererInterfaceConfig.setProtocols(Lists.newArrayList(protocolConfigMap.values()));
-            }
+            basicRefererInterfaceConfig.setRegistries(getRegistryConfig(basicRefererConfigFactory.getRegistry()));
+            basicRefererInterfaceConfig.setProtocols(getProtocolConfig(basicRefererConfigFactory.getProtocol()));
         }
 
         return basicRefererInterfaceConfig;
@@ -157,14 +151,10 @@ public class DefaultMotanFactory implements MotanFactory {
     public BasicServiceInterfaceConfig getBasicServiceConfig() {
 
         if (basicServiceConfigFactory != null) {
-            Map<String, RegistryConfig> registryConfigMap = getRegistryConfig();
-            Map<String, ProtocolConfig> protocolConfigMap = getProtocolConfig();
-
             basicServiceInterfaceConfig = basicServiceConfigFactory.buildBasicService();
-            if (!registryConfigMap.isEmpty())
-                basicServiceInterfaceConfig.setRegistries(Lists.newArrayList(registryConfigMap.values()));
-            if (!protocolConfigMap.isEmpty())
-                basicServiceInterfaceConfig.setProtocols(Lists.newArrayList(protocolConfigMap.values()));
+            String protocol = ConfigUtil.extractProtocols(basicServiceInterfaceConfig.getExport());
+            basicServiceInterfaceConfig.setRegistries(getRegistryConfig(basicServiceConfigFactory.getRegistry()));
+            basicServiceInterfaceConfig.setProtocols(getProtocolConfig(protocol));
         }
 
         return basicServiceInterfaceConfig;
@@ -177,6 +167,9 @@ public class DefaultMotanFactory implements MotanFactory {
             for (BasicRefererConfigFactory refererConfigFactory :referersConfigFactory) {
                 RefererConfig refererConfig = refererConfigFactory.buildReferer();
 
+                refererConfig.setRegistries(getRegistryConfig(refererConfigFactory.getRegistry()));
+                refererConfig.setProtocols(getProtocolConfig(refererConfigFactory.getProtocol()));
+
                 checkAndConfigReferer(refererConfig);
 
                 refererConfigMap.put(refererConfig.getId(), refererConfig);
@@ -188,24 +181,45 @@ public class DefaultMotanFactory implements MotanFactory {
         return refererConfigMap;
     }
 
+    @Override
+    public Map<String, ServiceConfig> getServicesConfig() {
+
+        if (servicesConfigFactory != null && !serviceConfiged) {
+            for (BasicServiceConfigFactory serviceConfigFactory :servicesConfigFactory) {
+                ServiceConfig serviceConfig = serviceConfigFactory.buildService();
+
+                serviceConfig.setRegistries(getRegistryConfig(serviceConfigFactory.getRegistry()));
+                serviceConfig.setProtocols(getProtocolConfig(serviceConfigFactory.getProtocol()));
+
+                checkAndConfigService(serviceConfig);
+
+                serviceConfigMap.put(serviceConfig.getId(), serviceConfig);
+            }
+
+            serviceConfiged = true;
+        }
+
+        return serviceConfigMap;
+    }
+
     private void checkAndConfigReferer(RefererConfig refererConfig) {
         if (basicRefererInterfaceConfig != null) {
             refererConfig.setBasicReferer(basicRefererInterfaceConfig);
 
-            if (refererConfig.getProtocols() == null || refererConfig.getProtocols().isEmpty()) {
+            if (CollectionUtil.isEmpty(refererConfig.getProtocols())) {
                 refererConfig.setProtocols(basicRefererInterfaceConfig.getProtocols());
             }
 
-            if (refererConfig.getRegistries() == null || refererConfig.getRegistries().isEmpty()) {
+            if (CollectionUtil.isEmpty(refererConfig.getRegistries())) {
                 refererConfig.setRegistries(basicRefererInterfaceConfig.getRegistries());
             }
         }
 
-        if (refererConfig.getProtocols() == null || refererConfig.getProtocols().isEmpty()) {
+        if (CollectionUtil.isEmpty(refererConfig.getProtocols())) {
             refererConfig.setProtocol(MotanFrameworkUtil.getDefaultProtocolConfig());
         }
 
-        if (refererConfig.getRegistries() == null || refererConfig.getRegistries().isEmpty()) {
+        if (CollectionUtil.isEmpty(refererConfig.getRegistries())) {
             refererConfig.setRegistry(MotanFrameworkUtil.getDefaultRegistryConfig());
         }
     }
@@ -214,29 +228,25 @@ public class DefaultMotanFactory implements MotanFactory {
 
         if (basicServiceInterfaceConfig != null) {
             serviceConfig.setBasicService(basicServiceInterfaceConfig);
+        }
 
-            if (serviceConfig.getRegistries() == null || serviceConfig.getRegistries().isEmpty()) {
-                serviceConfig.setRegistries(basicRefererInterfaceConfig.getRegistries());
-            }
-
-            if (serviceConfig.getProtocols() == null || serviceConfig.getProtocols().isEmpty()) {
-                serviceConfig.setProtocols(basicServiceInterfaceConfig.getProtocols());
-            }
-
-            if (Strings.isNullOrEmpty(serviceConfig.getExport())) {
-                serviceConfig.setExport(basicServiceInterfaceConfig.getExport());
+        if (Strings.isNullOrEmpty(serviceConfig.getExport())
+            && serviceConfig.getBasicService() != null
+            && !Strings.isNullOrEmpty(serviceConfig.getBasicService().getExport())) {
+            serviceConfig.setExport(serviceConfig.getBasicService().getExport());
+            if (serviceConfig.getBasicService().getProtocols() != null) {
+                serviceConfig.setProtocols(new ArrayList<>(serviceConfig.getBasicService().getProtocols()));
             }
         }
 
-        if (!Strings.isNullOrEmpty(serviceConfig.getExport())
-            && (serviceConfig.getProtocols() == null || serviceConfig.getProtocols().isEmpty())) {
-            Map<String, ProtocolConfig> protocolConfigMap = getProtocolConfig();
+        if (CollectionUtil.isEmpty(serviceConfig.getProtocols())
+            && !Strings.isNullOrEmpty(serviceConfig.getExport())) {
 
             Map<String, Integer> exportMap = ConfigUtil.parseExport(serviceConfig.getExport());
             if (!exportMap.isEmpty()) {
                 List<ProtocolConfig> protos = new ArrayList<>();
                 for (String p : exportMap.keySet()) {
-                    ProtocolConfig proto = protocolConfigMap.get(p);
+                    ProtocolConfig proto = getProtocolConfig().get(p);
                     if (proto == null) {
                         if (MotanConstants.PROTOCOL_MOTAN.equals(p)) {
                             proto = MotanFrameworkUtil.getDefaultProtocolConfig();
@@ -253,33 +263,66 @@ public class DefaultMotanFactory implements MotanFactory {
         }
 
         if (Strings.isNullOrEmpty(serviceConfig.getExport())
-            || (serviceConfig.getProtocols() == null || serviceConfig.getProtocols().isEmpty())) {
-            throw new MotanFrameworkException(String.format("%s ServiceConfig must config right export value!", serviceConfig.getInterface().getName()),
+            || CollectionUtil.isEmpty(serviceConfig.getProtocols())) {
+            throw new MotanFrameworkException(String.format("%s ServiceConfig must config right export value!",
+                serviceConfig.getInterface().getName()),
                 MotanErrorMsgConstant.FRAMEWORK_INIT_ERROR);
         }
 
-        if (serviceConfig.getRegistries() == null || serviceConfig.getRegistries().isEmpty()) {
+        if (CollectionUtil.isEmpty(serviceConfig.getRegistries())
+            && serviceConfig.getBasicService() != null
+            && !CollectionUtil.isEmpty(serviceConfig.getBasicService().getRegistries())) {
+            serviceConfig.setRegistries(serviceConfig.getBasicService().getRegistries());
+        }
+
+        if (CollectionUtil.isEmpty(serviceConfig.getRegistries())) {
             serviceConfig.setRegistry(MotanFrameworkUtil.getDefaultRegistryConfig());
         }
 
     }
 
-    @Override
-    public Map<String, ServiceConfig> getServicesConfig() {
+    private List<RegistryConfig> getRegistryConfig(String names) {
 
-        if (servicesConfigFactory != null && !serviceConfiged) {
-            for (BasicServiceConfigFactory serviceConfigFactory :servicesConfigFactory) {
-                ServiceConfig serviceConfig = serviceConfigFactory.buildService();
-
-                checkAndConfigService(serviceConfig);
-
-                serviceConfigMap.put(serviceConfig.getId(), serviceConfig);
-            }
-
-            serviceConfiged = true;
+        if (Strings.isNullOrEmpty(names)) {
+            return null;
         }
 
-        return serviceConfigMap;
+        Iterable<String> iter = Splitter.on(",").trimResults().split(names);
+
+        List<RegistryConfig> results = Lists.newArrayList();
+
+        for (String s : iter) {
+
+            if (getRegistryConfig().containsKey(s)) {
+                results.add(getRegistryConfig().get(s));
+            }
+
+        }
+
+        return results.isEmpty() ? null : results;
+
+    }
+
+    private List<ProtocolConfig> getProtocolConfig(String names) {
+
+        if (Strings.isNullOrEmpty(names)) {
+            return null;
+        }
+
+        Iterable<String> iter = Splitter.on(",").trimResults().split(names);
+
+        List<ProtocolConfig> results = Lists.newArrayList();
+
+        for (String s : iter) {
+
+            if (getProtocolConfig().containsKey(s)) {
+                results.add(getProtocolConfig().get(s));
+            }
+
+        }
+
+        return results.isEmpty() ? null : results;
+
     }
 
     public List<RegistryConfigFactory> getRegistryConfigFactory() {
