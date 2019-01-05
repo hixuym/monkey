@@ -57,13 +57,13 @@ public class DbMigrationCommand extends Command {
         subparser.addArgument("-o", "--output")
                 .nargs("?")
                 .dest("output")
-                .setDefault("src/main/resources")
+                .setDefault(System.getProperty("user.home"))
                 .help("database migration file output dir.");
 
         subparser.addArgument("--name")
                 .dest("name")
                 .nargs("?")
-                .setDefault("db_schame")
+                .setDefault("db_migration")
                 .help("database migration name.");
     }
 
@@ -82,9 +82,8 @@ public class DbMigrationCommand extends Command {
 
             DbMigrationConfig dbMigrationConfig = new DbMigrationConfig();
 
-            dbMigrationConfig.setPlatform(Platform.valueOf(namespace.getString("platform")));
-
-//            dbMigrationConfig.setName(namespace.getString("name"));
+            dbMigrationConfig.setPlatform(Platform.valueOf(platform));
+            dbMigrationConfig.setApplyPrefix("V");
 
             serverConfig.setMigrationConfig(dbMigrationConfig);
 

@@ -25,6 +25,8 @@ import io.monkey.Mode;
 import io.monkey.inject.InjectorBuilder;
 import io.monkey.inject.ModulesEx;
 import io.monkey.inject.ModulesProcessor;
+import io.monkey.inject.advise.AdvisableAnnotatedMethodScanner;
+import io.monkey.inject.event.guava.GuavaApplicationEventModule;
 import io.monkey.inject.lifecycle.LifecycleSupport;
 import io.monkey.inject.metrics.MetricsModule;
 import io.monkey.inject.scheduler.SchedulerSupport;
@@ -54,13 +56,6 @@ public class GuicifyEnvironment {
 
     GuicifyEnvironment(Environment environment) {
         this.environment = environment;
-        System.setProperty("file.encoding", "utf-8");
-        register(new AbstractModule() {
-            @Override
-            protected void configure() {
-                binder().disableCircularProxies();
-            }
-        });
     }
 
     public void register(Module... modules) {
@@ -107,8 +102,8 @@ public class GuicifyEnvironment {
             builder.overrideWith(overrideModules);
         }
 
-        builder.warnOfStaticInjections()
-                .forEachElement(new BindingTracingVisitor(), LOG::debug);
+//        builder.warnOfStaticInjections()
+//                .forEachElement(new BindingTracingVisitor(), LOG::debug);
 
         Injector injector = builder.createInjector(this.environment.getMode() == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
 
@@ -138,6 +133,14 @@ public class GuicifyEnvironment {
 
     public void enableMetrics() {
         this.register(new MetricsModule());
+    }
+
+    public void enableAdvise() {
+        this.register(AdvisableAnnotatedMethodScanner.asModule());
+    }
+
+    public void enableEvent() {
+        this.register(new GuavaApplicationEventModule());
     }
 
 }

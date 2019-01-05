@@ -23,32 +23,25 @@ import io.monkey.datasource.PooledDataSourceFactory;
 import io.monkey.lifecycle.Managed;
 import io.monkey.setup.Environment;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 /**
  * @author michael
  */
-public class EbeanServerFactory {
+class EbeanServerFactory {
 
-    private static final String DB_SUFFIX = "_db";
-
-    public EbeanServer build(EbeanBundle<?> bundle,
-                             Environment environment,
-                             PooledDataSourceFactory dbConfig,
-                             List<String> scanPkgs) {
-        String name = bundle.name() == null ? environment.getName() + DB_SUFFIX : bundle.name();
-        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks(), name);
-        return build(bundle, environment, dbConfig, dataSource, scanPkgs, name);
+    EbeanServer build(EbeanBundle<?> bundle,
+                      Environment environment,
+                      PooledDataSourceFactory dbConfig) {
+        final ManagedDataSource dataSource = dbConfig.build(environment.metrics(), environment.healthChecks());
+        return build(bundle, environment, dbConfig, dataSource);
     }
 
-    public EbeanServer build(EbeanBundle<?> bundle,
-                             Environment environment,
-                             PooledDataSourceFactory dbConfig,
-                             ManagedDataSource dataSource,
-                             List<String> scanPkgs,
-                             String name) {
+    private EbeanServer build(EbeanBundle<?> bundle,
+                              Environment environment,
+                              PooledDataSourceFactory dbConfig,
+                              ManagedDataSource dataSource) {
 
         ServerConfig serverConfig = new ServerConfig();
 
@@ -60,15 +53,20 @@ public class EbeanServerFactory {
 
         serverConfig.loadFromProperties(properties);
 
-        serverConfig.setPackages(scanPkgs);
-        serverConfig.setName(name);
+        serverConfig.setName(dbConfig.getDatabaseName());
         serverConfig.setDataSource(dataSource);
-        serverConfig.setDefaultServer((environment.getName() + DB_SUFFIX).equalsIgnoreCase(name));
+        serverConfig.setDefaultServer(dbConfig.isDefault());
         serverConfig.setRegister(true);
 
         bundle.configure(serverConfig);
 
         EbeanServer ebeanServer = io.ebean.EbeanServerFactory.create(serverConfig);
+
+        FlywayMigrationEngine flywayMigrationEngine = new FlywayMigrationEngine(ebeanServer, environment.getName());
+
+        flywayMigrationEngine.generate();
+
+        flywayMigrationEngine.migrate();
 
         environment.lifecycle().manage(new EbeanServerManager(dataSource));
 

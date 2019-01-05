@@ -101,6 +101,8 @@ public abstract class Application<T extends Configuration> {
 
         showSplashScreenViaLogger();
 
+        System.setProperty("file.encoding", "utf-8");
+
         final Bootstrap<T> bootstrap = new Bootstrap<>(this);
         addDefaultCommands(bootstrap);
 

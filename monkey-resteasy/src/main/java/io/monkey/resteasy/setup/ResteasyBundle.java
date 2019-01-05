@@ -70,8 +70,7 @@ public abstract class ResteasyBundle<T extends Configuration> implements Configu
         bindResources(environment.guicify());
 
         environment.addServerLifecycleListener((server -> {
-            scanResources(environment.getInjector());
-
+            scanResources(server.getInjector());
             logger.info("JAX-RS WADL at: {}", (contextPath.endsWith("/") ? contextPath : contextPath + "/") + "application.xml");
         }));
 

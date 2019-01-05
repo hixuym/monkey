@@ -118,7 +118,7 @@ public @interface Transactional {
      * The name of the server that you want the transaction to be created from. <p> If left blank the
      * 'default' server is used. </p>
      */
-    String serverName() default "";
+    String dbName() default "";
 
     /**
      * Set this to true such that the L2 cache is not used by queries that otherwise would.

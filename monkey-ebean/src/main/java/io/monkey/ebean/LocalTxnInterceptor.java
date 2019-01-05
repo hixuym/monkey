@@ -43,7 +43,7 @@ public class LocalTxnInterceptor implements MethodInterceptor {
         txScope.setBatch(transactional.batch());
         txScope.setBatchOnCascade(transactional.batchOnCascade());
         txScope.setBatchSize(transactional.batchSize());
-        txScope.setServerName(transactional.serverName());
+        txScope.setServerName(transactional.dbName());
         txScope.setFlushOnQuery(transactional.flushOnQuery());
         txScope.setProfileId(transactional.profileId());
         txScope.setLabel(transactional.label());

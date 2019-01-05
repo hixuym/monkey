@@ -38,6 +38,7 @@ public class DataSourceFactoryTest {
         factory.setUrl("jdbc:h2:mem:DbTest-" + System.currentTimeMillis() + ";user=sa");
         factory.setDriverClass("org.h2.Driver");
         factory.setValidationQuery("SELECT 1");
+        factory.setDatabaseName("test");
     }
 
     @After
@@ -48,7 +49,7 @@ public class DataSourceFactoryTest {
     }
 
     private ManagedDataSource dataSource() throws Exception {
-        dataSource = factory.build(metricRegistry, healthCheckRegistry, "test");
+        dataSource = factory.build(metricRegistry, healthCheckRegistry);
         dataSource.start();
         return dataSource;
     }
@@ -92,7 +93,7 @@ public class DataSourceFactoryTest {
         factory.setDriverClass("org.example.no.driver.here");
 
         assertThatExceptionOfType(RuntimeException.class).isThrownBy(() ->
-            factory.build(metricRegistry, healthCheckRegistry, "test").getConnection());
+            factory.build(metricRegistry, healthCheckRegistry).getConnection());
     }
 
     @Test

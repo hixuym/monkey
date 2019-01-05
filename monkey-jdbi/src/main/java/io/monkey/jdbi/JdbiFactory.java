@@ -31,17 +31,15 @@ public class JdbiFactory {
      *
      * @param environment
      * @param configuration
-     * @param name
      * @return A fully configured {@link Jdbi} object using a managed data source
      * based on the specified environment and configuration
      * @see #build(Environment, PooledDataSourceFactory, ManagedDataSource,
      * String)
      */
     public Jdbi build(Environment environment,
-                      PooledDataSourceFactory configuration,
-                      String name) {
-        final ManagedDataSource dataSource = configuration.build(environment.metrics(), environment.healthChecks(), name);
-        return build(environment, configuration, dataSource, name);
+                      PooledDataSourceFactory configuration) {
+        final ManagedDataSource dataSource = configuration.build(environment.metrics(), environment.healthChecks());
+        return build(environment, configuration, dataSource);
     }
 
     /**
@@ -53,13 +51,11 @@ public class JdbiFactory {
      * @param environment
      * @param configuration
      * @param dataSource
-     * @param name
      * @return A fully configured {@link Jdbi} object
      */
     public Jdbi build(Environment environment,
                       PooledDataSourceFactory configuration,
-                      ManagedDataSource dataSource,
-                      String name) {
+                      ManagedDataSource dataSource) {
 
         // Create the instance
         final Jdbi jdbi = newInstance(dataSource);

@@ -16,6 +16,8 @@
 package io.monkey.server;
 
 import com.google.common.base.Stopwatch;
+import com.google.inject.Injector;
+import io.monkey.inject.lifecycle.LifecycleManager;
 import io.monkey.lifecycle.ContainerLifeCycle;
 import io.monkey.setup.Environment;
 import org.slf4j.Logger;
@@ -28,10 +30,14 @@ public abstract class Server extends ContainerLifeCycle {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final Injector injector;
+
     public Server(Environment environment) {
         environment.lifecycle().attach(this);
+        this.injector = environment.getInjector();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
+                environment.getValidatorFactory().close();
                 this.stop();
             } catch (Exception e) {
                 logger.warn("Failure during stop server", e);
@@ -73,4 +79,7 @@ public abstract class Server extends ContainerLifeCycle {
      */
     protected void shutdown() throws Exception {}
 
+    public Injector getInjector() {
+        return injector;
+    }
 }

@@ -307,6 +307,11 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @NotEmpty
+    private String databaseName = "app_db";
+
+    private boolean defaultDatabase = true;
+
+    @NotEmpty
     private String driverClass = "";
 
     @Min(0)
@@ -589,12 +594,12 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         this.rollbackOnReturn = rollbackOnReturn;
     }
 
-    @JsonProperty
+    @JsonProperty("autoCommit")
     public boolean getAutoCommitByDefault() {
         return autoCommitByDefault;
     }
 
-    @JsonProperty
+    @JsonProperty("autoCommit")
     public void setAutoCommitByDefault(boolean autoCommit) {
         this.autoCommitByDefault = autoCommit;
     }
@@ -820,7 +825,34 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @Override
-    public ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry, String name) {
+    @JsonProperty("name")
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    @JsonProperty("name")
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDefault() {
+        return defaultDatabase;
+    }
+
+    @JsonProperty("default")
+    public boolean isDefaultDatabase() {
+        return defaultDatabase;
+    }
+
+    @JsonProperty("default")
+    public void setDefaultDatabase(boolean defaultDatabase) {
+        this.defaultDatabase = defaultDatabase;
+    }
+
+    @Override
+    public ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry) {
         final Properties properties = new Properties();
         for (Map.Entry<String, String> property : this.properties.entrySet()) {
             properties.setProperty(property.getKey(), property.getValue());
@@ -832,7 +864,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         hikariConfig.setMetricRegistry(metricRegistry);
         hikariConfig.setHealthCheckRegistry(healthCheckRegistry);
 
-        hikariConfig.setPoolName(name);
+        hikariConfig.setPoolName(databaseName);
         hikariConfig.setCatalog(defaultCatalog);
         hikariConfig.setAutoCommit(autoCommitByDefault);
         hikariConfig.setJdbcUrl(url);

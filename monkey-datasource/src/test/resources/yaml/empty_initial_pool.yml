@@ -4,3 +4,4 @@ password: iAMs00perSecrEET
 url: jdbc:postgresql://db.example.com/db-prod
 initialSize: 0
 minSize: 0
+name: test

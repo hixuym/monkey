@@ -14,6 +14,18 @@ import java.util.Optional;
 public interface PooledDataSourceFactory {
 
     /**
+     *
+     * @return default db
+     */
+    boolean isDefault();
+
+    /**
+     *
+     * @return db name
+     */
+    String getDatabaseName();
+
+    /**
      * Whether ORM tools allowed to add comments to SQL queries.
      *
      * @return {@code true}, if allowed
@@ -70,8 +82,7 @@ public interface PooledDataSourceFactory {
      *
      * @param metricRegistry the application metrics registry
      * @param healthCheckRegistry the application healthcheck registry
-     * @param name           name of the connection pool
      * @return a new JDBC data source as {@code ManagedDataSource}
      */
-    ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry, String name);
+    ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry);
 }

@@ -16,9 +16,9 @@
 package io.monkey.ebean;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.name.Names;
 import io.ebean.EbeanServer;
 import io.ebean.config.ServerConfig;
 import io.monkey.Configuration;
@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import static com.google.inject.matcher.Matchers.*;
 
@@ -39,7 +38,7 @@ import static com.google.inject.matcher.Matchers.*;
  * @author michael
  */
 public abstract class EbeanBundle<T extends Configuration>
-        implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
+    implements ConfiguredBundle<T>, DatabaseConfiguration<T> {
 
     private static Logger logger = LoggerFactory.getLogger(EbeanBundle.class);
 
@@ -59,19 +58,11 @@ public abstract class EbeanBundle<T extends Configuration>
 
     private final EbeanServerFactory ebeanServerFactory;
 
-    private final ImmutableList<String> scanPkgs;
-
-    protected EbeanBundle(String... scanPkgs) {
-        this(new EbeanServerFactory(), scanPkgs);
+    protected EbeanBundle() {
+        this(new EbeanServerFactory());
     }
 
-    protected EbeanBundle(EbeanServerFactory ebeanServerFactory, String... scanPkgs) {
-
-        ImmutableList.Builder<String> builder = ImmutableList.builder();
-
-        builder.addAll(Arrays.asList(scanPkgs));
-
-        this.scanPkgs = builder.build();
+    protected EbeanBundle(EbeanServerFactory ebeanServerFactory) {
 
         this.ebeanServerFactory = ebeanServerFactory;
     }
@@ -81,23 +72,27 @@ public abstract class EbeanBundle<T extends Configuration>
         Stopwatch sw = Stopwatch.createStarted();
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        final EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig, scanPkgs);
+        final EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig);
 
         environment.guicify().register(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(EbeanServer.class).toInstance(server);
+                if (dbConfig.isDefault()) {
+                    bind(EbeanServer.class).toInstance(server);
+                } else {
+                    bind(EbeanServer.class).annotatedWith(Names.named(dbConfig.getDatabaseName())).toInstance(server);
+                }
 
                 // class-level @Txn
                 LocalTxnInterceptor txnInterceptor = new LocalTxnInterceptor();
 
                 bindInterceptor(any(),
-                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)), txnInterceptor);
+                    not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(annotatedWith(Transactional.class)), txnInterceptor);
                 // Intercept classes annotated with Transactional, but avoid "double"
                 // interception when a mathod is also annotated inside an annotated
                 // class.
                 bindInterceptor(annotatedWith(Transactional.class),
-                        not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
+                    not(SYNTHETIC).and(not(DECLARED_BY_OBJECT)).and(not(annotatedWith(Transactional.class))), txnInterceptor);
             }
         });
 

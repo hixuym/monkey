@@ -21,8 +21,9 @@ public class CloseableLiquibaseTest {
         factory.setDriverClass(org.h2.Driver.class.getName());
         factory.setUrl("jdbc:h2:mem:DbTest-" + System.currentTimeMillis());
         factory.setUser("DbTest");
+        factory.setDatabaseName("DbTest");
 
-        dataSource = (ManagedPooledDataSource) factory.build(new MetricRegistry(), new HealthCheckRegistry(), "DbTest");
+        dataSource = (ManagedPooledDataSource) factory.build(new MetricRegistry(), new HealthCheckRegistry());
         liquibase = new CloseableLiquibaseWithClassPathMigrationsFile(dataSource, "migrations.xml");
     }
 

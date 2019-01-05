@@ -58,7 +58,7 @@ public class JdbiTest {
         dataSourceFactory.setAutoCommitByDefault(true);
         dataSourceFactory.asSingleConnectionPool();
 
-        dbi = new JdbiFactory(new TimedAnnotationNameStrategy()).build(environment, dataSourceFactory, "h2");
+        dbi = new JdbiFactory(new TimedAnnotationNameStrategy()).build(environment, dataSourceFactory);
         dbi.useTransaction(h -> {
             h.createScript(Resources.toString(Resources.getResource("schema.sql"), Charsets.UTF_8)).execute();
             h.createScript(Resources.toString(Resources.getResource("data.sql"), Charsets.UTF_8)).execute();

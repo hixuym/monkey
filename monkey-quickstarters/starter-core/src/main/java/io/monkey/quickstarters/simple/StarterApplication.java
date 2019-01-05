@@ -19,6 +19,8 @@
 package io.monkey.quickstarters.simple;
 
 import io.monkey.Application;
+import io.monkey.configuration.EnvironmentVariableSubstitutor;
+import io.monkey.configuration.SubstitutingSourceProvider;
 import io.monkey.setup.Bootstrap;
 import io.monkey.setup.Environment;
 //import org.conscrypt.OpenSSLProvider;
@@ -48,7 +50,12 @@ public class StarterApplication extends Application<StarterConfiguration> {
 
     @Override
     public void initialize(Bootstrap<StarterConfiguration> bootstrap) {
-
+        // Enable variable substitution with environment variables
+        bootstrap.setConfigurationSourceProvider(
+            new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+                new EnvironmentVariableSubstitutor(false)
+            )
+        );
     }
 
     @Override

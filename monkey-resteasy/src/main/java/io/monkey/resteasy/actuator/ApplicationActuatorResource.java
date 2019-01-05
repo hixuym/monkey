@@ -97,7 +97,7 @@ public class ApplicationActuatorResource {
 
         mapper.registerModule(new HealthCheckModule());
 
-        SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks();
+        SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks(environment.getHealthCheckExecutorService());
 
         StreamingOutput output = out -> mapper.writerWithDefaultPrettyPrinter().writeValue(out, results);
 

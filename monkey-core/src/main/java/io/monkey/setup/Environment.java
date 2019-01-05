@@ -13,7 +13,6 @@ import io.monkey.Mode;
 import io.monkey.ModeHelper;
 import io.monkey.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.monkey.lifecycle.LifeCycle;
-import io.monkey.lifecycle.Managed;
 import io.monkey.lifecycle.setup.LifecycleEnvironment;
 import io.monkey.server.Server;
 import io.monkey.server.ServerLifecycleListener;
@@ -69,12 +68,6 @@ public class Environment {
         this.validatorFactory = bootstrap.getValidatorFactory();
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
-        this.lifecycleEnvironment.manage(new Managed() {
-            @Override
-            public void stop() throws Exception {
-                validatorFactory.close();
-            }
-        });
 
         lifecycleEnvironment.addLifeCycleListener(new AbstractLifeCycleListener() {
             @Override
@@ -186,6 +179,20 @@ public class Environment {
             public void lifeCycleStopping(LifeCycle event) {
                 if (event instanceof Server) {
                     lifecycleListener.serverStopping((Server) event);
+                }
+            }
+
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                if (event instanceof Server) {
+                    lifecycleListener.serverStarting((Server) event);
+                }
+            }
+
+            @Override
+            public void lifeCycleStopped(LifeCycle event) {
+                if (event instanceof Server) {
+                    lifecycleListener.serverStopped((Server) event);
                 }
             }
         });

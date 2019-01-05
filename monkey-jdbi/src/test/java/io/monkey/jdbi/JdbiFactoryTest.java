@@ -35,7 +35,7 @@ public class JdbiFactoryTest {
         when(environment.lifecycle()).thenReturn(lifecycle);
         when(environment.healthChecks()).thenReturn(healthChecks);
 
-        when(configuration.build(metrics, healthChecks, name)).thenReturn(dataSource);
+        when(configuration.build(metrics, healthChecks)).thenReturn(dataSource);
         when(configuration.getValidationQuery()).thenReturn(validationQuery);
         when(configuration.isAutoCommentsEnabled()).thenReturn(true);
 
@@ -45,7 +45,7 @@ public class JdbiFactoryTest {
 
         when(factory.newInstance(dataSource)).thenReturn(jdbi);
 
-        final Jdbi result = factory.build(environment, configuration, name);
+        final Jdbi result = factory.build(environment, configuration);
 
         assertThat(result).isSameAs(jdbi);
         verify(lifecycle).manage(dataSource);

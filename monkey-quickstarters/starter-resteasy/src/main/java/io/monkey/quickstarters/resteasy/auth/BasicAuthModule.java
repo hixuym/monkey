@@ -20,7 +20,6 @@ package io.monkey.quickstarters.resteasy.auth;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import io.monkey.inject.advise.ProvidesWithAdvice;
 import io.monkey.resteasy.auth.Authenticator;
 import io.monkey.resteasy.auth.Authorizer;
 import io.monkey.resteasy.auth.PrincipalImpl;
@@ -47,7 +46,7 @@ public class BasicAuthModule extends AbstractModule {
     protected void configure() {
     }
 
-    @ProvidesWithAdvice
+    @Provides
     @Singleton
     public Authenticator<BasicCredentials, PrincipalImpl> buildAuthenticator() {
 

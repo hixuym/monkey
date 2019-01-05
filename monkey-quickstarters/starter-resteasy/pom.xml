@@ -48,6 +48,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -105,7 +110,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>QuickstartersApplication</mainClass>
+                                    <mainClass>io.monkey.quickstarters.resteasy.StarterApplication</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -132,8 +137,7 @@
                 <configuration>
                     <tiles>
                         <!-- other tiles ... -->
-                        <tile>org.avaje.tile:java-compile:1.1</tile>
-                        <tile>io.ebean.tile:enhancement:6.1</tile>
+                        <tile>io.ebean.tile:enhancement:7.2</tile>
                     </tiles>
                 </configuration>
             </plugin>
