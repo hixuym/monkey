@@ -57,6 +57,8 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 public class MonkeyTestSupport<C extends Configuration> {
 
     protected final Class<? extends Application<C>> applicationClass;
+
+    @Nullable
     protected final String configPath;
     protected final Set<ConfigOverride> configOverrides;
     protected final Optional<String> customPropertyPrefix;
@@ -69,12 +71,16 @@ public class MonkeyTestSupport<C extends Configuration> {
      */
     protected final boolean explicitConfig;
 
+    @Nullable
     protected C configuration;
+    @Nullable
     protected Application<C> application;
+    @Nullable
     protected Environment environment;
-    protected List<ServiceListener<C>> listeners = new ArrayList<>();
-
+    @Nullable
     protected Server server;
+
+    protected List<ServiceListener<C>> listeners = new ArrayList<>();
 
     public MonkeyTestSupport(Class<? extends Application<C>> applicationClass,
                              @Nullable String configPath,
@@ -96,7 +102,7 @@ public class MonkeyTestSupport<C extends Configuration> {
         this.configOverrides = ImmutableSet
                 .copyOf(firstNonNull(configOverrides, new ConfigOverride[0]));
         this.customPropertyPrefix = customPropertyPrefix;
-        explicitConfig = false;
+        this.explicitConfig = false;
         this.commandInstantiator = commandInstantiator;
     }
 

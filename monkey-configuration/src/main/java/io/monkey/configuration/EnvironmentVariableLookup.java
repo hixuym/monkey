@@ -3,7 +3,7 @@ package io.monkey.configuration;
 import org.apache.commons.text.lookup.StringLookup;
 
 /**
- * A custom {@link org.apache.commons.text.StrLookup} implementation using environment variables as lookup source.
+ * A custom {@link org.apache.commons.text.lookup.StringLookup} implementation using environment variables as lookup source.
  */
 public class EnvironmentVariableLookup implements StringLookup {
     private final boolean strict;

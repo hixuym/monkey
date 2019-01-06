@@ -4,7 +4,7 @@
 #
 
 # defaults
-SF_VERSION="${project.version}"
+MONKEY_VERSION="${project.version}"
 SHADED="true"
 PACKAGE=
 NAME=
@@ -103,10 +103,10 @@ do
     "--artifact="*)
       error "Invalid artifact tag format, must be: [GROUPID]:[ARTIFACTID]:[VERSION]";;
     "--version="[0-9]"."[0-9]"."[0-9])
-      SF_VERSION="${1:10}"
+      MONKEY_VERSION="${1:10}"
       shift;;
     "--version="[0-9]"."[0-9]"."[0-9]"-SNAPSHOT")
-      SF_VERSION="${1:10}"
+      MONKEY_VERSION="${1:10}"
       warn "Selected monkey version is a SNAPSHOT. It is recommended that you use a stable release." true
       shift;;
     "--version="*)
@@ -172,9 +172,9 @@ PACKAGING_TYPE=
 if [ "true" == $SHADED ]; then
   PACKAGING_TYPE="shaded "
 fi
-echo "Creating ${PACKAGING_TYPE}project $NAME with root package $PACKAGE using monkey $SF_VERSION and ID $GROUP:$ARTIFACT:$VERSION ..."
+echo "Creating ${PACKAGING_TYPE}project $NAME with root package $PACKAGE using monkey $MONKEY_VERSION and ID $GROUP:$ARTIFACT:$VERSION ..."
 echo
 
 # create from archetype
-$MAVEN "archetype:generate" "-DinteractiveMode=false" "-DarchetypeGroupId=io.monkey.archetypes" "-DarchetypeArtifactId=java-simple" "-DarchetypeVersion=$SF_VERSION" "-DgroupId=$GROUP" "-DartifactId=$ARTIFACT" "-Dpackage=$PACKAGE" "-Dname=$NAME" "-Dversion=$VERSION" "-Dshaded=$SHADED" "-Ddescription=$DESCRIPTION"
+$MAVEN "archetype:generate" "-DinteractiveMode=false" "-DarchetypeGroupId=io.monkey.archetypes" "-DarchetypeArtifactId=java-simple" "-DarchetypeVersion=$MONKEY_VERSION" "-DgroupId=$GROUP" "-DartifactId=$ARTIFACT" "-Dpackage=$PACKAGE" "-Dname=$NAME" "-Dversion=$VERSION" "-Dshaded=$SHADED" "-Ddescription=$DESCRIPTION"
 

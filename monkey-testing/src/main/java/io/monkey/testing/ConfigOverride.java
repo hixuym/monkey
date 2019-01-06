@@ -18,8 +18,8 @@ package io.monkey.testing;
 import java.util.function.Supplier;
 
 /**
- * An override for a field in dropwizard configuration intended for use with {@link
- * DropwizardAppRule}. <p> Given a configuration file containing
+ * An override for a field in monkey configuration intended for use with {@link
+ * MonkeyAppRule}. <p> Given a configuration file containing
  * <pre>
  * ---
  * server:
