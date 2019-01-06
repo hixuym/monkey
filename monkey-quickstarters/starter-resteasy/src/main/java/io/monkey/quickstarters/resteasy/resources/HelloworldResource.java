@@ -18,7 +18,7 @@
 
 package io.monkey.quickstarters.resteasy.resources;
 
-import io.monkey.ebean.Transactional;
+import io.ebean.annotation.Transactional;
 import io.monkey.quickstarters.resteasy.core.GreetingService;
 import io.monkey.quickstarters.resteasy.core.User;
 import io.monkey.quickstarters.resteasy.core.UserRepository;

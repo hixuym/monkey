@@ -1,0 +1,3 @@
+entity-packages: io.monkey.quickstarters.resteasy.core
+transactional-packages: io.monkey.quickstarters.resteasy.resources
+querybean-packages: none
