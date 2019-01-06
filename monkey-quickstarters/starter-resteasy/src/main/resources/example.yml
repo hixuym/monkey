@@ -96,6 +96,7 @@ database:
   initialSize: 0
   minSize: 0
   properties:
-    search.packages: io.monkey.quickstarters.resteasy
+    search.packages: io.monkey.quickstarters.resteasy, io.monkey.ssl
+    migration.run: true
 #    ddl.generate: true
 #    ddl.run: true

@@ -50,8 +50,8 @@ public abstract class ResteasyBundle<T extends Configuration> implements Configu
     public void run(T configuration, Environment environment) {
         Stopwatch sw = Stopwatch.createStarted();
 
-        ResteasyDeploymentFactory resteasyDeploymentFactory = build(configuration);
-        DeploymentInfo deploymentInfo = resteasyDeploymentFactory.build(deployment);
+        ResteasyFactory resteasyFactory = build(configuration);
+        DeploymentInfo deploymentInfo = resteasyFactory.build(deployment);
         ServletContainer container = ServletContainer.Factory.newInstance();
         final DeploymentManager manager = container.addDeployment(deploymentInfo);
 

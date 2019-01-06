@@ -24,7 +24,7 @@ import io.monkey.ebean.EbeanBundle;
 import io.monkey.quickstarters.resteasy.auth.BasicAuthModule;
 import io.monkey.quickstarters.resteasy.resources.HelloworldResource;
 import io.monkey.resteasy.setup.ResteasyBundle;
-import io.monkey.resteasy.setup.ResteasyDeploymentFactory;
+import io.monkey.resteasy.setup.ResteasyFactory;
 import io.monkey.setup.Bootstrap;
 import io.monkey.setup.Environment;
 import io.monkey.setup.GuicifyEnvironment;
@@ -65,8 +65,8 @@ public class StarterApplication extends Application<StarterConfiguration> {
         bootstrap.addBundle(new ResteasyBundle<StarterConfiguration>() {
 
             @Override
-            public ResteasyDeploymentFactory build(StarterConfiguration configuration) {
-                return configuration.getResteasyDeploymentFactory();
+            public ResteasyFactory build(StarterConfiguration configuration) {
+                return configuration.getResteasyFactory();
             }
 
             @Override

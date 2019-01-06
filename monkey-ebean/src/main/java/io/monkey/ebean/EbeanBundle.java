@@ -56,23 +56,14 @@ public abstract class EbeanBundle<T extends Configuration>
         }
     };
 
-    private final EbeanServerFactory ebeanServerFactory;
-
-    protected EbeanBundle() {
-        this(new EbeanServerFactory());
-    }
-
-    protected EbeanBundle(EbeanServerFactory ebeanServerFactory) {
-
-        this.ebeanServerFactory = ebeanServerFactory;
-    }
-
     @Override
     public void run(T configuration, Environment environment) {
         Stopwatch sw = Stopwatch.createStarted();
         final PooledDataSourceFactory dbConfig = getDataSourceFactory(configuration);
 
-        final EbeanServer server = this.ebeanServerFactory.build(this, environment, dbConfig);
+        final EbeanServerFactory ebeanServerFactory = new EbeanServerFactory();
+
+        final EbeanServer server = ebeanServerFactory.build(this, environment, dbConfig);
 
         environment.guicify().register(new AbstractModule() {
             @Override
@@ -103,16 +94,6 @@ public abstract class EbeanBundle<T extends Configuration>
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-
-        bootstrap.addCommand(new DbMigrationCommand());
-    }
-
-    /**
-     * Override to initialize the name of the bundle (It's used for the bundle health check and
-     * database pool metrics), default use app name + _db
-     */
-    protected String name() {
-        return null;
     }
 
     protected void configure(ServerConfig serverConfig) {

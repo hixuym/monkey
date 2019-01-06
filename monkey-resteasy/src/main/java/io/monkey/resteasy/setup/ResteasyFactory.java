@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static io.undertow.servlet.Servlets.servlet;
 
-public class ResteasyDeploymentFactory {
+public class ResteasyFactory {
 
     private final static String SERVLET_NAME = "ResteasyServlet";
 

@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
  * @author michael
  * created on 16/12/7
  */
-public class LocalTxnInterceptor implements MethodInterceptor {
+class LocalTxnInterceptor implements MethodInterceptor {
 
     private static class Internal {
     }

@@ -21,7 +21,7 @@ package io.monkey.quickstarters.resteasy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.monkey.Configuration;
 import io.monkey.datasource.DataSourceFactory;
-import io.monkey.resteasy.setup.ResteasyDeploymentFactory;
+import io.monkey.resteasy.setup.ResteasyFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -43,7 +43,7 @@ public class StarterConfiguration extends Configuration {
 
     @Valid
     @JsonProperty("resteasy")
-    private ResteasyDeploymentFactory resteasyDeploymentFactory = new ResteasyDeploymentFactory();
+    private ResteasyFactory resteasyFactory = new ResteasyFactory();
 
     public DataSourceFactory getDataSourceFactory() {
         return dataSourceFactory;
@@ -53,12 +53,12 @@ public class StarterConfiguration extends Configuration {
         this.dataSourceFactory = dataSourceFactory;
     }
 
-    public ResteasyDeploymentFactory getResteasyDeploymentFactory() {
-        return resteasyDeploymentFactory;
+    public ResteasyFactory getResteasyFactory() {
+        return resteasyFactory;
     }
 
-    public void setResteasyDeploymentFactory(ResteasyDeploymentFactory resteasyDeploymentFactory) {
-        this.resteasyDeploymentFactory = resteasyDeploymentFactory;
+    public void setResteasyFactory(ResteasyFactory resteasyFactory) {
+        this.resteasyFactory = resteasyFactory;
     }
 
     public String getTemplate() {

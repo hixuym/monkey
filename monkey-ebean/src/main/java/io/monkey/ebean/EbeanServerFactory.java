@@ -62,12 +62,6 @@ class EbeanServerFactory {
 
         EbeanServer ebeanServer = io.ebean.EbeanServerFactory.create(serverConfig);
 
-        FlywayMigrationEngine flywayMigrationEngine = new FlywayMigrationEngine(ebeanServer, environment.getName());
-
-        flywayMigrationEngine.generate();
-
-        flywayMigrationEngine.migrate();
-
         environment.lifecycle().manage(new EbeanServerManager(dataSource));
 
         return ebeanServer;
