@@ -17,7 +17,6 @@ package io.monkey.setup;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
@@ -30,7 +29,6 @@ import io.monkey.inject.event.guava.GuavaApplicationEventModule;
 import io.monkey.inject.lifecycle.LifecycleSupport;
 import io.monkey.inject.metrics.MetricsModule;
 import io.monkey.inject.scheduler.SchedulerSupport;
-import io.monkey.inject.visitors.BindingTracingVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

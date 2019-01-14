@@ -22,9 +22,12 @@ import io.ebean.annotation.Transactional;
 import io.monkey.quickstarters.resteasy.core.GreetingService;
 import io.monkey.quickstarters.resteasy.core.User;
 import io.monkey.quickstarters.resteasy.core.UserRepository;
+import io.monkey.resteasy.auth.Auth;
+import io.monkey.resteasy.auth.PrincipalImpl;
 import io.monkey.resteasy.params.IntParam;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.validation.constraints.Size;
 import javax.ws.rs.GET;
@@ -32,6 +35,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.util.Optional;
 
 /**
@@ -48,6 +52,9 @@ public class HelloworldResource {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private Provider<SecurityContext> securityContextProvider;
 
     @Inject
     public HelloworldResource(GreetingService greetingService) {
@@ -67,7 +74,7 @@ public class HelloworldResource {
 
         Message message = new Message();
 
-        message.content = greetingService.greeting(name);
+        message.content = greetingService.greeting(securityContextProvider.get().getUserPrincipal().getName());
 
         return message;
     }
