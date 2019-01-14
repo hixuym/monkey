@@ -65,7 +65,7 @@ public class StarterApplication extends Application<StarterConfiguration> {
         bootstrap.addBundle(new ResteasyBundle<StarterConfiguration>() {
 
             @Override
-            public ResteasyFactory build(StarterConfiguration configuration) {
+            public ResteasyFactory getResteasyFactory(StarterConfiguration configuration) {
                 return configuration.getResteasyFactory();
             }
 

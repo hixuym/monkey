@@ -5,8 +5,8 @@ import com.google.common.base.MoreObjects;
 import io.monkey.logging.DefaultLoggingFactory;
 import io.monkey.logging.LoggingFactory;
 import io.monkey.metrics.MetricsFactory;
-import io.monkey.server.SimpleServerFactory;
 import io.monkey.server.ServerFactory;
+import io.monkey.server.SimpleServerFactory;
 
 import javax.validation.Valid;
 

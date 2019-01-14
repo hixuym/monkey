@@ -307,7 +307,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @NotEmpty
-    private String databaseName = "app_db";
+    private String databaseName = "monkey";
 
     private boolean defaultDatabase = true;
 

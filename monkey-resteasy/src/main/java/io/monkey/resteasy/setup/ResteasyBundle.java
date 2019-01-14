@@ -33,7 +33,7 @@ public abstract class ResteasyBundle<T extends Configuration> implements Configu
 
     private static final Logger logger = LoggerFactory.getLogger(ResteasyBundle.class);
 
-    private ResteasyDeployment deployment = new ResteasyDeployment();
+    private final ResteasyDeployment deployment = new ResteasyDeployment();
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
@@ -50,7 +50,7 @@ public abstract class ResteasyBundle<T extends Configuration> implements Configu
     public void run(T configuration, Environment environment) {
         Stopwatch sw = Stopwatch.createStarted();
 
-        ResteasyFactory resteasyFactory = build(configuration);
+        ResteasyFactory resteasyFactory = getResteasyFactory(configuration);
         DeploymentInfo deploymentInfo = resteasyFactory.build(deployment);
         ServletContainer container = ServletContainer.Factory.newInstance();
         final DeploymentManager manager = container.addDeployment(deploymentInfo);

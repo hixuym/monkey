@@ -33,8 +33,7 @@ public class JdbiFactory {
      * @param configuration
      * @return A fully configured {@link Jdbi} object using a managed data source
      * based on the specified environment and configuration
-     * @see #build(Environment, PooledDataSourceFactory, ManagedDataSource,
-     * String)
+     * @see #build(Environment, PooledDataSourceFactory, ManagedDataSource)
      */
     public Jdbi build(Environment environment,
                       PooledDataSourceFactory configuration) {
