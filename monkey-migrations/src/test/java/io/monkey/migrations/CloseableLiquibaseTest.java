@@ -2,8 +2,12 @@ package io.monkey.migrations;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import io.monkey.Application;
+import io.monkey.Configuration;
 import io.monkey.datasource.DataSourceFactory;
 import io.monkey.datasource.ManagedPooledDataSource;
+import io.monkey.setup.Bootstrap;
+import io.monkey.setup.Environment;
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -23,7 +27,7 @@ public class CloseableLiquibaseTest {
         factory.setUser("DbTest");
         factory.setDatabaseName("DbTest");
 
-        dataSource = (ManagedPooledDataSource) factory.build(new MetricRegistry(), new HealthCheckRegistry());
+        dataSource = (ManagedPooledDataSource) factory.build(new Environment());
         liquibase = new CloseableLiquibaseWithClassPathMigrationsFile(dataSource, "migrations.xml");
     }
 

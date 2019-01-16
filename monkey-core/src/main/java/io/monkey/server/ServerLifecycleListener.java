@@ -24,16 +24,11 @@ import java.util.EventListener;
  */
 public interface ServerLifecycleListener extends EventListener {
 
-    default void serverStarting(Server server) {}
-
     /**
      * notify when server started
      * @param server
      */
     void serverStarted(Server server);
 
-    default void serverStopping(Server server) {}
-
-    default void serverStopped(Server server) {}
 
 }

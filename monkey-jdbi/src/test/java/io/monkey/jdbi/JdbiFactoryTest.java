@@ -35,7 +35,7 @@ public class JdbiFactoryTest {
         when(environment.lifecycle()).thenReturn(lifecycle);
         when(environment.healthChecks()).thenReturn(healthChecks);
 
-        when(configuration.build(metrics, healthChecks)).thenReturn(dataSource);
+        when(configuration.build(environment)).thenReturn(dataSource);
         when(configuration.getValidationQuery()).thenReturn(validationQuery);
         when(configuration.isAutoCommentsEnabled()).thenReturn(true);
 

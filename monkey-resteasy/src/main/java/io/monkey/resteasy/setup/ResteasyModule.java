@@ -16,6 +16,7 @@
 package io.monkey.resteasy.setup;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.MapBinder;
 import io.monkey.resteasy.actuator.ApplicationActuatorResource;
 import io.monkey.resteasy.caching.CacheControlledResponseFeature;
 import io.monkey.resteasy.errors.ErrorsMapperFeature;
@@ -23,6 +24,8 @@ import io.monkey.resteasy.jackson.JacksonFeature;
 import io.monkey.resteasy.optional.OptionalParamFeature;
 import io.monkey.resteasy.params.BasicParamFeature;
 import io.monkey.resteasy.validation.HibernateValidationFeature;
+import io.undertow.server.HttpHandler;
+import io.undertow.servlet.api.DeploymentManager;
 import org.jboss.resteasy.wadl.ResteasyWadlDefaultResource;
 
 import javax.ws.rs.core.Response;
@@ -33,7 +36,15 @@ import javax.ws.rs.ext.RuntimeDelegate;
 /**
  * @author michael
  */
-public class ResteasyModule extends AbstractModule {
+class ResteasyModule extends AbstractModule {
+
+    private final DeploymentManager manager;
+    private final String contextPath;
+
+    public ResteasyModule(DeploymentManager manager, String contextPath) {
+        this.manager = manager;
+        this.contextPath = contextPath;
+    }
 
     @Override
     public void configure() {
@@ -52,6 +63,9 @@ public class ResteasyModule extends AbstractModule {
 
         bind(ResteasyWadlDefaultResource.class);
         bind(ApplicationActuatorResource.class);
+
+        MapBinder<String, HttpHandler> mapBinder = MapBinder.newMapBinder(binder(), String.class, HttpHandler.class);
+        mapBinder.addBinding(contextPath).toProvider(new ResteasyHandlerProvider(manager));
     }
 
 }

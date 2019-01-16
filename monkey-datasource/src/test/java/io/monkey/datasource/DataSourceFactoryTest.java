@@ -3,9 +3,13 @@ package io.monkey.datasource;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import io.monkey.Application;
+import io.monkey.Configuration;
 import io.monkey.configuration.ResourceConfigurationSourceProvider;
 import io.monkey.configuration.YamlConfigurationFactory;
 import io.monkey.jackson.Jackson;
+import io.monkey.setup.Bootstrap;
+import io.monkey.setup.Environment;
 import io.monkey.util.Duration;
 import io.monkey.validation.BaseValidator;
 import org.junit.After;
@@ -24,8 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class DataSourceFactoryTest {
-    private final MetricRegistry metricRegistry = new MetricRegistry();
-    private final HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+    private final Environment environment = new Environment();
 
     private DataSourceFactory factory;
 
@@ -49,7 +52,7 @@ public class DataSourceFactoryTest {
     }
 
     private ManagedDataSource dataSource() throws Exception {
-        dataSource = factory.build(metricRegistry, healthCheckRegistry);
+        dataSource = factory.build(environment);
         dataSource.start();
         return dataSource;
     }
@@ -93,7 +96,7 @@ public class DataSourceFactoryTest {
         factory.setDriverClass("org.example.no.driver.here");
 
         assertThatExceptionOfType(RuntimeException.class).isThrownBy(() ->
-            factory.build(metricRegistry, healthCheckRegistry).getConnection());
+            factory.build(environment).getConnection());
     }
 
     @Test
@@ -113,7 +116,7 @@ public class DataSourceFactoryTest {
     @Test
     public void metricsRecorded() throws Exception {
         dataSource();
-        Map<String, Gauge> poolMetrics = metricRegistry.getGauges();
+        Map<String, Gauge> poolMetrics = environment.metrics().getGauges();
         assertThat(poolMetrics.keySet()).contains(
                 "test.pool.ActiveConnections",
                 "test.pool.IdleConnections",

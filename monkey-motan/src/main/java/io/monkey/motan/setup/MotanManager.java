@@ -15,27 +15,34 @@
 
 package io.monkey.motan.setup;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.matcher.Matchers;
+import com.weibo.api.motan.common.MotanConstants;
+import com.weibo.api.motan.config.RefererConfig;
+import com.weibo.api.motan.config.ServiceConfig;
+import com.weibo.api.motan.util.MotanSwitcherUtil;
+import io.monkey.lifecycle.Managed;
 import io.monkey.motan.MotanFactory;
-import io.monkey.setup.Environment;
 
 /**
  * @author Michael
- * Created at: 2019/1/4 17:22
+ * Created at: 2019/1/15 17:05
  */
-class MotanModule extends AbstractModule {
+class MotanManager implements Managed {
 
     private final MotanFactory motanFactory;
-    private final Environment environment;
 
-    MotanModule(MotanFactory motanFactory, Environment environment) {
+    MotanManager(MotanFactory motanFactory) {
         this.motanFactory = motanFactory;
-        this.environment = environment;
     }
 
     @Override
-    protected void configure() {
-        bindListener(Matchers.any(), new MotanTypeListener(motanFactory, environment));
+    public void start() {
+        MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER, true);
+    }
+
+    @Override
+    public void stop() {
+        motanFactory.getServicesConfig().values().forEach(ServiceConfig::unexport);
+        motanFactory.getReferersConfig().values().forEach(RefererConfig::destroy);
+        MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER, false);
     }
 }

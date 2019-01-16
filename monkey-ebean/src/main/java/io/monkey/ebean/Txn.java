@@ -64,8 +64,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated // use ebean's Transactional instead.
-public @interface Transactional {
+public @interface Txn {
 
     /**
      * The type of transaction scoping. Defaults to REQUIRED.

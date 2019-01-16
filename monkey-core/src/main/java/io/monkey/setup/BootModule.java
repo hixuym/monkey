@@ -39,7 +39,7 @@ public class BootModule extends AbstractModule {
         binder().disableCircularProxies();
 
         bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
-        bind(Validator.class).toInstance(environment.getValidatorFactory().getValidator());
+        bind(Validator.class).toInstance(environment.getValidator());
         bind(Environment.class).toInstance(environment);
     }
 }

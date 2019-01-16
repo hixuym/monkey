@@ -24,7 +24,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 /**
  * @author michael
  */
-public class VariantListBuilderProvider implements Provider<Variant.VariantListBuilder> {
+class VariantListBuilderProvider implements Provider<Variant.VariantListBuilder> {
     private final RuntimeDelegate runtimeDelegate;
 
     @Inject

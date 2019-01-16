@@ -18,13 +18,10 @@
 
 package io.monkey.quickstarters.motan;
 
-import com.google.inject.AbstractModule;
 import io.monkey.Application;
-import io.monkey.motan.MotanBundle;
-import io.monkey.motan.MotanFactory;
+import io.monkey.motan.setup.MotanBundle;
 import io.monkey.setup.Bootstrap;
 import io.monkey.setup.Environment;
-import io.monkey.setup.GuicifyEnvironment;
 //import org.conscrypt.OpenSSLProvider;
 //
 //import java.security.Security;
@@ -52,29 +49,12 @@ public class StarterApplication extends Application<StarterConfiguration> {
 
     @Override
     public void initialize(Bootstrap<StarterConfiguration> bootstrap) {
-
-        bootstrap.addBundle(new MotanBundle<StarterConfiguration>() {
-            @Override
-            public MotanFactory getMotanFactory(StarterConfiguration configuration) {
-                return configuration.getMotanFactory();
-            }
-
-            @Override
-            protected void bindService(GuicifyEnvironment guicify) {
-                guicify.register(new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(GreetingService.class).to(GreetingServiceImpl.class);
-                    }
-                });
-            }
-        });
+        bootstrap.addBundle(new MotanBundle<>(StarterConfiguration::getMotanFactory));
     }
 
     @Override
     public void run(StarterConfiguration configuration, Environment environment) {
         environment.guicify().register(GreetingServiceClient.class);
-
         environment.addServerLifecycleListener(server -> System.out.println(environment.getInjector().getInstance(GreetingServiceClient.class).sayHi("michael")));
     }
 

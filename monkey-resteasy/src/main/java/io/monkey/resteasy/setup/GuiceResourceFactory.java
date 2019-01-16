@@ -21,7 +21,7 @@ import org.jboss.resteasy.spi.*;
 /**
  * @author michael
  */
-public class GuiceResourceFactory implements ResourceFactory {
+class GuiceResourceFactory implements ResourceFactory {
 
     private final Provider provider;
     private final Class<?> scannableClass;

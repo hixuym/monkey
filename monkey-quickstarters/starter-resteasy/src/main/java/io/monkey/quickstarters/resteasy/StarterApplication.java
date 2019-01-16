@@ -19,15 +19,12 @@
 package io.monkey.quickstarters.resteasy;
 
 import io.monkey.Application;
-import io.monkey.datasource.PooledDataSourceFactory;
-import io.monkey.ebean.EbeanBundle;
+import io.monkey.ebean.setup.EbeanBundle;
 import io.monkey.quickstarters.resteasy.auth.BasicAuthModule;
 import io.monkey.quickstarters.resteasy.resources.HelloworldResource;
 import io.monkey.resteasy.setup.ResteasyBundle;
-import io.monkey.resteasy.setup.ResteasyFactory;
 import io.monkey.setup.Bootstrap;
 import io.monkey.setup.Environment;
-import io.monkey.setup.GuicifyEnvironment;
 //import org.conscrypt.OpenSSLProvider;
 //
 //import java.security.Security;
@@ -39,12 +36,9 @@ public class StarterApplication extends Application<StarterConfiguration> {
 
 //    static {
 //        Security.addProvider(new OpenSSLProvider());
-//
 //    }
 
     public static void main(String[] args) throws Exception {
-//        String text = BaseEncoding.base64().encode("admin:123456".getBytes(Charsets.UTF_8));
-//        System.out.println(text);
         new StarterApplication().run(args);
     }
 
@@ -55,29 +49,13 @@ public class StarterApplication extends Application<StarterConfiguration> {
 
     @Override
     public void initialize(Bootstrap<StarterConfiguration> bootstrap) {
-        bootstrap.addBundle(new EbeanBundle<StarterConfiguration>() {
-            @Override
-            public PooledDataSourceFactory getDataSourceFactory(StarterConfiguration configuration) {
-                return configuration.getDataSourceFactory();
-            }
-        });
-
-        bootstrap.addBundle(new ResteasyBundle<StarterConfiguration>() {
-
-            @Override
-            public ResteasyFactory getResteasyFactory(StarterConfiguration configuration) {
-                return configuration.getResteasyFactory();
-            }
-
-            @Override
-            protected void bindResources(GuicifyEnvironment facotry) {
-                facotry.register(HelloworldResource.class);
-            }
-        });
+        bootstrap.addBundle(new EbeanBundle<>(StarterConfiguration::getDataSourceFactory));
+        bootstrap.addBundle(new ResteasyBundle<>(StarterConfiguration::getResteasyFactory));
     }
 
     @Override
     public void run(StarterConfiguration configuration, Environment environment) {
+        environment.guicify().register(HelloworldResource.class);
         environment.guicify().register(new BasicAuthModule());
     }
 

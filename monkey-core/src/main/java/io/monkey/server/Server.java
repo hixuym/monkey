@@ -37,7 +37,6 @@ public abstract class Server extends ContainerLifeCycle {
         this.injector = environment.getInjector();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                environment.getValidatorFactory().close();
                 this.stop();
             } catch (Exception e) {
                 logger.warn("Failure during stop server", e);

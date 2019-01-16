@@ -2,6 +2,7 @@ package io.monkey.datasource;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import io.monkey.setup.Environment;
 import io.monkey.util.Duration;
 
 import java.util.Map;
@@ -80,9 +81,8 @@ public interface PooledDataSourceFactory {
      * Builds a new JDBC data source backed by the connection pool
      * and managed by Dropwizard.
      *
-     * @param metricRegistry the application metrics registry
-     * @param healthCheckRegistry the application healthcheck registry
+     * @param environment the application environment
      * @return a new JDBC data source as {@code ManagedDataSource}
      */
-    ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry);
+    ManagedDataSource build(Environment environment);
 }

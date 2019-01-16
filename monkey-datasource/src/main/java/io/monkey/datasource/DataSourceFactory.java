@@ -5,6 +5,8 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zaxxer.hikari.HikariConfig;
+import io.monkey.lifecycle.Managed;
+import io.monkey.setup.Environment;
 import io.monkey.util.Duration;
 import io.monkey.validation.MinDuration;
 import io.monkey.validation.ValidationMethod;
@@ -852,7 +854,7 @@ public class DataSourceFactory implements PooledDataSourceFactory {
     }
 
     @Override
-    public ManagedDataSource build(MetricRegistry metricRegistry, HealthCheckRegistry healthCheckRegistry) {
+    public ManagedDataSource build(Environment environment) {
         final Properties properties = new Properties();
         for (Map.Entry<String, String> property : this.properties.entrySet()) {
             properties.setProperty(property.getKey(), property.getValue());
@@ -861,8 +863,8 @@ public class DataSourceFactory implements PooledDataSourceFactory {
         HikariConfig hikariConfig = new HikariConfig();
 
         hikariConfig.setDataSourceProperties(properties);
-        hikariConfig.setMetricRegistry(metricRegistry);
-        hikariConfig.setHealthCheckRegistry(healthCheckRegistry);
+        hikariConfig.setMetricRegistry(environment.metrics());
+        hikariConfig.setHealthCheckRegistry(environment.healthChecks());
 
         hikariConfig.setPoolName(databaseName);
         hikariConfig.setCatalog(defaultCatalog);
@@ -887,7 +889,10 @@ public class DataSourceFactory implements PooledDataSourceFactory {
             hikariConfig.setValidationTimeout((int) getValidationQueryTimeout().get().toMilliseconds());
         }
 
+        final ManagedDataSource managedDataSource = new ManagedPooledDataSource(hikariConfig);
 
-        return new ManagedPooledDataSource(hikariConfig);
+        environment.lifecycle().manage(managedDataSource);
+
+        return managedDataSource;
     }
 }

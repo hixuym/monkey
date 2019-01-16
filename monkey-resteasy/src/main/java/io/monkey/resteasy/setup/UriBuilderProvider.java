@@ -24,7 +24,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 /**
  * @author michael
  */
-public class UriBuilderProvider implements Provider<UriBuilder> {
+class UriBuilderProvider implements Provider<UriBuilder> {
     private final RuntimeDelegate runtimeDelegate;
 
     @Inject

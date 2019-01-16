@@ -13,29 +13,34 @@
  * limitations under the License.
  */
 
-package io.monkey.motan.setup;
+package io.monkey.resteasy.setup;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.matcher.Matchers;
-import io.monkey.motan.MotanFactory;
-import io.monkey.setup.Environment;
+import io.monkey.MonkeyException;
+import io.undertow.server.HttpHandler;
+import io.undertow.servlet.api.DeploymentManager;
+
+import javax.inject.Provider;
+import javax.servlet.ServletException;
 
 /**
  * @author Michael
- * Created at: 2019/1/4 17:22
+ * Created at: 2019/1/15 17:26
  */
-class MotanModule extends AbstractModule {
+class ResteasyHandlerProvider implements Provider<HttpHandler> {
 
-    private final MotanFactory motanFactory;
-    private final Environment environment;
+    private DeploymentManager manager;
 
-    MotanModule(MotanFactory motanFactory, Environment environment) {
-        this.motanFactory = motanFactory;
-        this.environment = environment;
+    ResteasyHandlerProvider(DeploymentManager manager) {
+        this.manager = manager;
     }
 
     @Override
-    protected void configure() {
-        bindListener(Matchers.any(), new MotanTypeListener(motanFactory, environment));
+    public HttpHandler get() {
+        try {
+            manager.deploy();
+            return manager.start();
+        } catch (ServletException e) {
+            throw new MonkeyException(e);
+        }
     }
 }

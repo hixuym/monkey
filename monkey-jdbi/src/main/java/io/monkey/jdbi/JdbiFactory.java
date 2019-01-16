@@ -37,7 +37,7 @@ public class JdbiFactory {
      */
     public Jdbi build(Environment environment,
                       PooledDataSourceFactory configuration) {
-        final ManagedDataSource dataSource = configuration.build(environment.metrics(), environment.healthChecks());
+        final ManagedDataSource dataSource = configuration.build(environment);
         return build(environment, configuration, dataSource);
     }
 

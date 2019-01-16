@@ -1,13 +1,12 @@
 package io.monkey.migrations;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.health.HealthCheckRegistry;
 import io.monkey.Configuration;
 import io.monkey.cli.ConfiguredCommand;
 import io.monkey.datasource.DatabaseConfiguration;
 import io.monkey.datasource.ManagedDataSource;
 import io.monkey.datasource.PooledDataSourceFactory;
 import io.monkey.setup.Bootstrap;
+import io.monkey.setup.Environment;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
@@ -76,7 +75,7 @@ public abstract class AbstractLiquibaseCommand<T extends Configuration> extends 
     CloseableLiquibase openLiquibase(final PooledDataSourceFactory dataSourceFactory, final Namespace namespace)
             throws SQLException, LiquibaseException {
         final CloseableLiquibase liquibase;
-        final ManagedDataSource dataSource = dataSourceFactory.build(new MetricRegistry(), new HealthCheckRegistry());
+        final ManagedDataSource dataSource = dataSourceFactory.build(new Environment());
         final Database database = createDatabase(dataSource, namespace);
         final String migrationsFile = namespace.getString("migrations-file");
         if (migrationsFile == null) {

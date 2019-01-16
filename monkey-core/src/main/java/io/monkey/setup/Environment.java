@@ -11,21 +11,21 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import io.monkey.Mode;
 import io.monkey.ModeHelper;
+import io.monkey.jackson.Jackson;
 import io.monkey.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.monkey.lifecycle.LifeCycle;
 import io.monkey.lifecycle.setup.LifecycleEnvironment;
 import io.monkey.server.Server;
 import io.monkey.server.ServerLifecycleListener;
+import io.monkey.validation.BaseValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A monkey application's environment.
@@ -40,7 +40,7 @@ public class Environment {
 
     private final ObjectMapper objectMapper;
 
-    private ValidatorFactory validatorFactory;
+    private Validator validator;
 
     private final LifecycleEnvironment lifecycleEnvironment;
 
@@ -56,16 +56,21 @@ public class Environment {
     /**
      * Creates a new environment.
      *
-     * @param bootstrap    the pre commited env
      */
-    public Environment(Bootstrap bootstrap) {
-        this.name = bootstrap.getApplication().getName();
-        this.classLoader = bootstrap.getClassLoader();
-        this.objectMapper = bootstrap.getObjectMapper();
-        this.metricRegistry = bootstrap.getMetricRegistry();
-        this.healthCheckRegistry = bootstrap.getHealthCheckRegistry();
+    public Environment(String name,
+                       ObjectMapper objectMapper,
+                       Validator validator,
+                       MetricRegistry metricRegistry,
+                       @Nullable ClassLoader classLoader,
+                       HealthCheckRegistry healthCheckRegistry) {
+
+        this.name = name;
+        this.classLoader = classLoader;
+        this.objectMapper = objectMapper;
+        this.metricRegistry = metricRegistry;
+        this.healthCheckRegistry = healthCheckRegistry;
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
-        this.validatorFactory = bootstrap.getValidatorFactory();
+        this.validator = validator;
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -77,13 +82,13 @@ public class Environment {
         });
 
         this.healthCheckExecutorService = this.lifecycle()
-                .executorService("TimeBoundHealthCheck-pool-%d")
-                .workQueue(new ArrayBlockingQueue<>(1))
-                .minThreads(1)
-                .maxThreads(4)
-                .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
-                .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
-                .build();
+            .executorService("TimeBoundHealthCheck-pool-%d")
+            .workQueue(new ArrayBlockingQueue<>(1))
+            .minThreads(1)
+            .maxThreads(4)
+            .threadFactory(new ThreadFactoryBuilder().setDaemon(true).build())
+            .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
+            .build();
 
         try {
             SharedMetricRegistries.getDefault();
@@ -100,6 +105,37 @@ public class Environment {
         this.guicifyEnvironment = new GuicifyEnvironment(this);
         this.mode = ModeHelper.determineModeFromSystemPropertiesOrDevIfNotSet();
 
+    }
+
+    /**
+     * Creates an environment with default health check registry
+     */
+    public Environment(String name,
+                       ObjectMapper objectMapper,
+                       Validator validator,
+                       MetricRegistry metricRegistry,
+                       @Nullable ClassLoader classLoader) {
+        this(name, objectMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
+    }
+
+    /**
+     * simple created, just for test
+     */
+    public Environment() {
+        this("Test",
+            Jackson.newObjectMapper(),
+            BaseValidator.newValidator(),
+            new MetricRegistry(),
+            Environment.class.getClassLoader(),
+            new HealthCheckRegistry());
+    }
+
+    public Validator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 
     /**
@@ -145,21 +181,6 @@ public class Environment {
     }
 
     /**
-     * Returns the application's {@link Validator}.
-     */
-    public ValidatorFactory getValidatorFactory() {
-        return validatorFactory;
-    }
-
-    /**
-     * Sets the application's {@link Validator}.
-     */
-    public void setValidatorFactory(ValidatorFactory validator) {
-        checkCommited();
-        this.validatorFactory = requireNonNull(validator);
-    }
-
-    /**
      * @return application's {@link ClassLoader}.
      */
     public ClassLoader classLoader() {
@@ -172,27 +193,6 @@ public class Environment {
             public void lifeCycleStarted(LifeCycle event) {
                 if (event instanceof Server) {
                     lifecycleListener.serverStarted((Server) event);
-                }
-            }
-
-            @Override
-            public void lifeCycleStopping(LifeCycle event) {
-                if (event instanceof Server) {
-                    lifecycleListener.serverStopping((Server) event);
-                }
-            }
-
-            @Override
-            public void lifeCycleStarting(LifeCycle event) {
-                if (event instanceof Server) {
-                    lifecycleListener.serverStarting((Server) event);
-                }
-            }
-
-            @Override
-            public void lifeCycleStopped(LifeCycle event) {
-                if (event instanceof Server) {
-                    lifecycleListener.serverStopped((Server) event);
                 }
             }
         });

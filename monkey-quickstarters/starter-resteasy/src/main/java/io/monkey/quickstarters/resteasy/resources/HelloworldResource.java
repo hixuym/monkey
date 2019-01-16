@@ -18,12 +18,10 @@
 
 package io.monkey.quickstarters.resteasy.resources;
 
-import io.ebean.annotation.Transactional;
+import io.monkey.ebean.Txn;
 import io.monkey.quickstarters.resteasy.core.GreetingService;
 import io.monkey.quickstarters.resteasy.core.User;
 import io.monkey.quickstarters.resteasy.core.UserRepository;
-import io.monkey.resteasy.auth.Auth;
-import io.monkey.resteasy.auth.PrincipalImpl;
 import io.monkey.resteasy.params.IntParam;
 
 import javax.inject.Inject;
@@ -82,7 +80,7 @@ public class HelloworldResource {
     @GET
     @Path("/add_user")
     @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Txn
     public Message addUser() {
 
         User user = new User();

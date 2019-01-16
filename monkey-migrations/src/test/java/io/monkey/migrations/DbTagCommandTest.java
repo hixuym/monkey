@@ -1,5 +1,9 @@
 package io.monkey.migrations;
 
+import io.monkey.Application;
+import io.monkey.Configuration;
+import io.monkey.setup.Bootstrap;
+import io.monkey.setup.Environment;
 import net.jcip.annotations.NotThreadSafe;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.Test;

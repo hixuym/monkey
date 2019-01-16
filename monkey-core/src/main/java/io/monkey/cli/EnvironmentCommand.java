@@ -31,10 +31,14 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
     }
 
     @Override
-    protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration)
-            throws Exception {
+    protected void run(Bootstrap<T> bootstrap, Namespace namespace, T configuration) throws Exception {
 
-        final Environment environment = new Environment(bootstrap);
+        final Environment environment = new Environment(bootstrap.getApplication().getName(),
+            bootstrap.getObjectMapper(),
+            bootstrap.getValidatorFactory().getValidator(),
+            bootstrap.getMetricRegistry(),
+            bootstrap.getClassLoader(),
+            bootstrap.getHealthCheckRegistry());
 
         environment.guicify().register(new BootModule(environment));
         environment.guicify().register(configuration);
@@ -61,5 +65,5 @@ public abstract class EnvironmentCommand<T extends Configuration> extends Config
      * @throws Exception if something goes wrong
      */
     protected abstract void run(Environment environment, Namespace namespace, T configuration)
-            throws Exception;
+        throws Exception;
 }

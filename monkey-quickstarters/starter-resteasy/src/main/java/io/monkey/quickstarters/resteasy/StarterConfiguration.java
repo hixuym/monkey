@@ -21,7 +21,7 @@ package io.monkey.quickstarters.resteasy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.monkey.Configuration;
 import io.monkey.datasource.DataSourceFactory;
-import io.monkey.resteasy.setup.ResteasyFactory;
+import io.monkey.resteasy.ResteasyFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;

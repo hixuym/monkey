@@ -31,7 +31,7 @@ import javax.ws.rs.core.*;
  *
  * @author michael
  */
-public class RequestScopeModule extends AbstractModule {
+class RequestScopeModule extends AbstractModule {
     @Override
     protected void configure() {
         bindScope(RequestScoped.class, new Scope() {

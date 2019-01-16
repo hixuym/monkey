@@ -13,29 +13,28 @@
  * limitations under the License.
  */
 
-package io.monkey.motan.setup;
+package io.monkey.ebean.setup;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.matcher.Matchers;
-import io.monkey.motan.MotanFactory;
-import io.monkey.setup.Environment;
+import io.ebean.EbeanServer;
+import io.ebean.EbeanServerFactory;
+import io.ebean.config.ServerConfig;
+
+import javax.inject.Provider;
 
 /**
  * @author Michael
- * Created at: 2019/1/4 17:22
+ * Created at: 2019/1/15 17:45
  */
-class MotanModule extends AbstractModule {
+public class EbeanServerProvider implements Provider<EbeanServer> {
 
-    private final MotanFactory motanFactory;
-    private final Environment environment;
+    private final ServerConfig serverConfig;
 
-    MotanModule(MotanFactory motanFactory, Environment environment) {
-        this.motanFactory = motanFactory;
-        this.environment = environment;
+    EbeanServerProvider(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
     }
 
     @Override
-    protected void configure() {
-        bindListener(Matchers.any(), new MotanTypeListener(motanFactory, environment));
+    public EbeanServer get() {
+        return EbeanServerFactory.create(serverConfig);
     }
 }
