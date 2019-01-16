@@ -50,14 +50,15 @@
         <argparse4j.version>0.8.1</argparse4j.version>
         <jsr305.version>3.0.2</jsr305.version>
         <reflections.version>0.9.11</reflections.version>
-        <javassist.version>3.24.0-GA</javassist.version>
+        <javassist.version>3.24.1-GA</javassist.version>
+
         <caffeine.version>2.6.2</caffeine.version>
 
         <jackson.version>2.9.7</jackson.version>
         <woodstox.version>5.2.0</woodstox.version>
         <hessian.version>4.0.51</hessian.version>
 
-        <undertow.version>2.0.16.Final</undertow.version>
+        <undertow.version>2.0.17.Final</undertow.version>
         <netty.version>4.1.32.Final</netty.version>
         <resteasy.version>3.6.2.Final</resteasy.version>
         <motan.version>1.1.3</motan.version>
@@ -75,11 +76,11 @@
         <sharding.jdbc.version>2.0.3</sharding.jdbc.version>
         <cassandra.driver.version>3.6.0</cassandra.driver.version>
         <rocksdb.version>5.17.2</rocksdb.version>
-        <jedis.version>3.0.0</jedis.version>
+        <jedis.version>3.0.1</jedis.version>
         <spymemcached.version>2.12.3</spymemcached.version>
-        <ebean.version>11.31.1</ebean.version>
+        <ebean.version>11.32.1</ebean.version>
         <jdbi3.version>3.5.1</jdbi3.version>
-        <hikaricp.version>3.2.0</hikaricp.version>
+        <hikaricp.version>3.3.0</hikaricp.version>
         <liquibase.version>3.6.2</liquibase.version>
         <flyway.version>5.2.4</flyway.version>
 
