@@ -27,6 +27,7 @@ public class BaseValidator {
         return Validation
                 .byProvider(HibernateValidator.class)
                 .configure()
+                .constraintValidatorFactory(new MutableValidatorFactory())
                 .addValidatedValueHandler(new OptionalDoubleValidatedValueUnwrapper())
                 .addValidatedValueHandler(new OptionalIntValidatedValueUnwrapper())
                 .addValidatedValueHandler(new OptionalLongValidatedValueUnwrapper());

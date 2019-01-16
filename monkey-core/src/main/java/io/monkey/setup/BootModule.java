@@ -17,6 +17,7 @@ package io.monkey.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
+import io.monkey.inject.validation.InjectingConstraintValidatorFactory;
 
 import javax.validation.Validator;
 
@@ -41,5 +42,6 @@ public class BootModule extends AbstractModule {
         bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
         bind(Validator.class).toInstance(environment.getValidator());
         bind(Environment.class).toInstance(environment);
+        bind(InjectingConstraintValidatorFactory.class);
     }
 }

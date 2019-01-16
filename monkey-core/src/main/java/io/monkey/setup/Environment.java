@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import io.monkey.Mode;
 import io.monkey.ModeHelper;
+import io.monkey.inject.validation.InjectingConstraintValidatorFactory;
 import io.monkey.jackson.Jackson;
 import io.monkey.lifecycle.AbstractLifeCycle.AbstractLifeCycleListener;
 import io.monkey.lifecycle.LifeCycle;
@@ -18,11 +19,14 @@ import io.monkey.lifecycle.setup.LifecycleEnvironment;
 import io.monkey.server.Server;
 import io.monkey.server.ServerLifecycleListener;
 import io.monkey.validation.BaseValidator;
+import io.monkey.validation.MutableValidatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import javax.validation.ConstraintValidatorFactory;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -59,7 +63,7 @@ public class Environment {
      */
     public Environment(String name,
                        ObjectMapper objectMapper,
-                       Validator validator,
+                       ValidatorFactory validatorFactory,
                        MetricRegistry metricRegistry,
                        @Nullable ClassLoader classLoader,
                        HealthCheckRegistry healthCheckRegistry) {
@@ -70,7 +74,7 @@ public class Environment {
         this.metricRegistry = metricRegistry;
         this.healthCheckRegistry = healthCheckRegistry;
         this.healthCheckRegistry.register("deadlocks", new ThreadDeadlockHealthCheck());
-        this.validator = validator;
+        this.validator = validatorFactory.getValidator();
 
         this.lifecycleEnvironment = new LifecycleEnvironment();
 
@@ -78,6 +82,13 @@ public class Environment {
             @Override
             public void lifeCycleStarting(LifeCycle event) {
                 logHealthChecks();
+
+                enableInjectingConstraintValidatorFactory(validatorFactory);
+            }
+
+            @Override
+            public void lifeCycleStopping(LifeCycle event) {
+                validatorFactory.close();
             }
         });
 
@@ -107,15 +118,18 @@ public class Environment {
 
     }
 
-    /**
-     * Creates an environment with default health check registry
-     */
-    public Environment(String name,
-                       ObjectMapper objectMapper,
-                       Validator validator,
-                       MetricRegistry metricRegistry,
-                       @Nullable ClassLoader classLoader) {
-        this(name, objectMapper, validator, metricRegistry, classLoader, new HealthCheckRegistry());
+    private void enableInjectingConstraintValidatorFactory(ValidatorFactory validatorFactory) {
+        ConstraintValidatorFactory constraintValidatorFactory = validatorFactory.getConstraintValidatorFactory();
+
+        if (constraintValidatorFactory instanceof MutableValidatorFactory) {
+            MutableValidatorFactory mutableValidatorFactory = (MutableValidatorFactory) constraintValidatorFactory;
+            final ConstraintValidatorFactory injectableValidatorFactory =
+                getInjector().getInstance(InjectingConstraintValidatorFactory.class);
+
+            mutableValidatorFactory.setValidatorFactory(injectableValidatorFactory);
+
+            LOGGER.info("Setup InjectingConstraintValidatorFactory.");
+        }
     }
 
     /**
@@ -124,7 +138,7 @@ public class Environment {
     public Environment() {
         this("Test",
             Jackson.newObjectMapper(),
-            BaseValidator.newValidator(),
+            BaseValidator.newConfiguration().buildValidatorFactory(),
             new MetricRegistry(),
             Environment.class.getClassLoader(),
             new HealthCheckRegistry());

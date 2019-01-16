@@ -32,7 +32,6 @@ public class Validators {
      */
     public static HibernateValidatorConfiguration newConfiguration() {
         return BaseValidator.newConfiguration()
-                .constraintValidatorFactory(new MutableValidatorFactory())
                 .parameterNameProvider(new ResteasyParameterNameProvider())
                 .addValidatedValueHandler(new NonEmptyStringParamUnwrapper())
                 .addValidatedValueHandler(new ParamValidatorUnwrapper());
