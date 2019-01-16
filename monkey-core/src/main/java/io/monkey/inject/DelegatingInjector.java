@@ -16,6 +16,7 @@
 package io.monkey.inject;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 import com.google.inject.spi.TypeConverterBinding;
 
 import java.lang.annotation.Annotation;

@@ -16,6 +16,7 @@
 package io.monkey.inject.scheduler;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 import com.google.inject.name.Names;
 import io.monkey.inject.lifecycle.FailedStartException;
 import io.monkey.inject.lifecycle.LifecycleManager;

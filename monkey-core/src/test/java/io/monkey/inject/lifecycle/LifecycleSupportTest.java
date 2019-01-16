@@ -16,6 +16,7 @@
 package io.monkey.inject.lifecycle;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 import org.junit.Before;
 import org.junit.Test;
 

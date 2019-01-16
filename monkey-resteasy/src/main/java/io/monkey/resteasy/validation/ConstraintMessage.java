@@ -6,7 +6,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.sun.jndi.toolkit.url.Uri;
+
 import io.monkey.validation.ValidationMethod;
 import io.monkey.validation.selfvalidating.SelfValidating;
 import org.apache.commons.lang3.StringUtils;
@@ -119,7 +119,6 @@ public class ConstraintMessage {
                     PathParam.class,
                     QueryParam.class,
                     Suspended.class,
-                    Uri.class,
                     BeanParam.class);
 
     private static boolean unknowParameterKind(Parameter param) {
