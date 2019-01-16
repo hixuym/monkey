@@ -54,7 +54,7 @@
 
         <caffeine.version>2.6.2</caffeine.version>
 
-        <jackson.version>2.9.7</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
         <woodstox.version>5.2.0</woodstox.version>
         <hessian.version>4.0.51</hessian.version>
 
