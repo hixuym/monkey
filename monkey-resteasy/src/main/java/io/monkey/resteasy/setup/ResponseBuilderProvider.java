@@ -24,7 +24,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 /**
  * @author michael
  */
-public class ResponseBuilderProvider implements Provider<Response.ResponseBuilder> {
+class ResponseBuilderProvider implements Provider<Response.ResponseBuilder> {
     private final RuntimeDelegate runtimeDelegate;
 
     @Inject
