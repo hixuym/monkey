@@ -31,7 +31,7 @@
         <grpc.version>1.17.1</grpc.version>
         <protobuf.version>3.6.1</protobuf.version>
 
-        <metrics4.version>4.0.3</metrics4.version>
+        <metrics4.version>4.0.5</metrics4.version>
         <freemarker.version>2.3.28</freemarker.version>
 
         <okio.version>2.1.0</okio.version>
