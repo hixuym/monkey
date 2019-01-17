@@ -20,8 +20,10 @@ package io.monkey.quickstarters.resteasy.auth;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.multibindings.Multibinder;
-import io.monkey.resteasy.auth.*;
+import io.monkey.resteasy.auth.Authenticator;
+import io.monkey.resteasy.auth.Authorizer;
+import io.monkey.resteasy.auth.PrincipalImpl;
+import io.monkey.resteasy.auth.UnauthorizedHandler;
 import io.monkey.resteasy.auth.basic.BasicCredentialAuthFilter;
 import io.monkey.resteasy.auth.basic.BasicCredentials;
 
@@ -47,7 +49,6 @@ public class BasicAuthModule extends AbstractModule {
     @Provides
     @Singleton
     public Authenticator<BasicCredentials, PrincipalImpl> buildAuthenticator() {
-
         return new SimpleAuthenticator();
     }
 

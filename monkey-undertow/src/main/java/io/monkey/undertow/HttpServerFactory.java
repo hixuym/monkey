@@ -20,23 +20,21 @@ package io.monkey.undertow;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
-import io.monkey.Mode;
 import io.monkey.server.Server;
 import io.monkey.server.ServerFactory;
 import io.monkey.setup.Environment;
+import io.monkey.undertow.setup.UndertowModule;
 import io.monkey.util.Duration;
 import io.monkey.util.Size;
 import io.monkey.validation.PortRange;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
-import io.undertow.server.handlers.RequestDumpingHandler;
-import io.undertow.server.handlers.RequestLimitingHandler;
-import io.undertow.server.handlers.accesslog.AccessLogHandler;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.Valid;
 
 @JsonTypeName("http")
 public class HttpServerFactory implements ServerFactory {
@@ -90,64 +88,39 @@ public class HttpServerFactory implements ServerFactory {
     @JsonProperty
     private Duration slowThreshold;
 
+    @Valid
+    private AssetsConfig assetsConfig;
+
     @Override
     public Server build(Environment environment) {
-
         Undertow.ListenerBuilder builder = getListener(environment);
         builder.setType(Undertow.ListenerType.HTTP);
         Undertow undertow = Undertow.builder()
-                .addListener(builder)
-                .setIoThreads(ioThreads)
-                .setWorkerThreads(workerThreads)
-                .setDirectBuffers(directBuffers)
-                .setBufferSize((int) bufferSize.toBytes() - 20)
-                .setServerOption(UndertowOptions.ENABLE_HTTP2, enableHttp2)
-                .setServerOption(UndertowOptions.MAX_HEADER_SIZE, (int) maxHeaderSize.toBytes())
-                .setServerOption(UndertowOptions.MAX_ENTITY_SIZE, maxEntitySize.toBytes())
-                .setServerOption(UndertowOptions.MULTIPART_MAX_ENTITY_SIZE, maxMultipartEntitySize.toBytes())
-                .setServerOption(UndertowOptions.HTTP2_SETTINGS_ENABLE_PUSH, enableHttp2Push)
-                .build();
+            .addListener(builder)
+            .setIoThreads(ioThreads)
+            .setWorkerThreads(workerThreads)
+            .setDirectBuffers(directBuffers)
+            .setBufferSize((int) bufferSize.toBytes() - 20)
+            .setServerOption(UndertowOptions.ENABLE_HTTP2, enableHttp2)
+            .setServerOption(UndertowOptions.MAX_HEADER_SIZE, (int) maxHeaderSize.toBytes())
+            .setServerOption(UndertowOptions.MAX_ENTITY_SIZE, maxEntitySize.toBytes())
+            .setServerOption(UndertowOptions.MULTIPART_MAX_ENTITY_SIZE, maxMultipartEntitySize.toBytes())
+            .setServerOption(UndertowOptions.HTTP2_SETTINGS_ENABLE_PUSH, enableHttp2Push)
+            .build();
 
         return new HttpServer(environment, undertow);
     }
 
     protected Undertow.ListenerBuilder getListener(Environment environment) {
-        Undertow.ListenerBuilder builder = new Undertow.ListenerBuilder();
-        builder.setHost(host);
-        builder.setPort(port);
-        builder.setRootHandler(getRootHandler(environment));
-        return builder;
-    }
-
-    protected HttpHandler getRootHandler(Environment environment) {
-
-        PathHandlerCollector collector = environment.getInjector().getInstance(PathHandlerCollector.class);
-
-        HttpHandler rootHandler = collector.buildApplicationHandler();
-
-        if (!Strings.isNullOrEmpty(accessLog)) {
-            AccessLogHandler.Builder builder = new AccessLogHandler.Builder();
-            rootHandler = builder.build(ImmutableMap.of("format", accessLog)).wrap(rootHandler);
-        }
-
-        if (isDumpRequest() && environment.getMode() == Mode.dev) {
-            rootHandler = new RequestDumpingHandler(rootHandler);
-        }
-
-        if (maxConcurrentRequests > 0) {
-            rootHandler = new RequestLimitingHandler(maxConcurrentRequests, maxRequestsQueue, rootHandler);
-        }
-
-        if (slowThreshold != null) {
-            rootHandler = new SlowRequestLogHandler(slowThreshold, rootHandler);
-        }
-
-        return rootHandler;
+        return new Undertow.ListenerBuilder()
+            .setHost(host)
+            .setPort(port)
+            .setRootHandler(environment.getInjector().getInstance(HttpHandler.class));
     }
 
     @Override
     public void configure(Environment environment) {
-        environment.guicify().register(PathHandlerCollector.class);
+        environment.guicify().register(new UndertowModule(this));
     }
 
     public String getHost() {
@@ -276,5 +249,55 @@ public class HttpServerFactory implements ServerFactory {
 
     public void setSlowThreshold(Duration slowThreshold) {
         this.slowThreshold = slowThreshold;
+    }
+
+    @JsonProperty("assets")
+    public AssetsConfig getAssetsConfig() {
+        return assetsConfig;
+    }
+
+    @JsonProperty("assets")
+    public void setAssetsConfig(AssetsConfig assetsConfig) {
+        this.assetsConfig = assetsConfig;
+    }
+
+    public static class AssetsConfig {
+        @NotEmpty
+        private String resourcePath;
+
+        @NotEmpty
+        private String uriPath = "/assets";
+
+        private boolean allowListing = false;
+
+        @JsonProperty
+        public String getResourcePath() {
+            return resourcePath;
+        }
+
+        @JsonProperty
+        public void setResourcePath(String resourcePath) {
+            this.resourcePath = resourcePath;
+        }
+
+        @JsonProperty
+        public String getUriPath() {
+            return uriPath;
+        }
+
+        @JsonProperty
+        public void setUriPath(String uriPath) {
+            this.uriPath = uriPath;
+        }
+
+        @JsonProperty
+        public boolean isAllowListing() {
+            return allowListing;
+        }
+
+        @JsonProperty
+        public void setAllowListing(boolean allowListing) {
+            this.allowListing = allowListing;
+        }
     }
 }

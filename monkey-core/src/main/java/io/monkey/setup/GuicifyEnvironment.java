@@ -29,6 +29,7 @@ import io.monkey.inject.event.guava.GuavaApplicationEventModule;
 import io.monkey.inject.lifecycle.LifecycleSupport;
 import io.monkey.inject.metrics.MetricsModule;
 import io.monkey.inject.scheduler.SchedulerSupport;
+import io.monkey.inject.visitors.BindingTracingVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,8 +101,10 @@ public class GuicifyEnvironment {
             builder.overrideWith(overrideModules);
         }
 
-//        builder.warnOfStaticInjections()
-//                .forEachElement(new BindingTracingVisitor(), LOG::debug);
+        if (LOG.isDebugEnabled()) {
+            builder.warnOfStaticInjections()
+                .forEachElement(new BindingTracingVisitor(), LOG::debug);
+        }
 
         Injector injector = builder.createInjector(this.environment.getMode() == Mode.prod ? Stage.PRODUCTION : Stage.DEVELOPMENT);
 

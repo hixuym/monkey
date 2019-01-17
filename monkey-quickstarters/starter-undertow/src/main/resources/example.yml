@@ -2,30 +2,7 @@ logging:
   level: INFO
   loggers:
     "io.monkey": DEBUG
-    "io.ebean.SQL": TRACE
-    "io.ebean.TXN": TRACE
-    "io.ebean.SUM": TRACE
-    "io.ebean.cache.QUERY": TRACE
-    "io.ebean.cache.BEAN": TRACE
-    "io.ebean.cache.COLL": TRACE
-    "io.ebean.cache.NATKEY": TRACE
     "io.undertow": DEBUG
-    "io.monkey.metrics":
-      level: DEBUG
-      additive: false
-      appenders:
-        - type: file
-          currentLogFilename: logs\\app_metrics.log
-          threshold: ALL
-          queueSize: 512
-          discardingThreshold: 0
-          archive: true
-          archivedLogFilenamePattern: logs\\app_metrics-%d.log.gz
-          archivedFileCount: 5
-          timeZone: UTC
-          logFormat: "%-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
-          bufferSize: 8KB
-          immediateFlush: true
   appenders:
     - type: console
       threshold: ALL
@@ -34,12 +11,6 @@ logging:
       timeZone: UTC
       target: stdout
       logFormat: "%-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
-
-jaxrs:
-  contextPath: /app
-  contextParams:
-  initParams:
-
 server:
   type: http
 #  ssl:
@@ -65,6 +36,9 @@ server:
 #  accessLog: combined
   slowThreshold: 10 ms
   dumpRequest: true
+  assets:
+    resourcePath: www
+    allowListing: false
 #  maxConcurrentRequests: 10
 #  port: 8443
 #  backlog: 256
@@ -82,16 +56,3 @@ metrics:
   reporters:
     - type: log
       logger: quickstarter.metrics
-
-database:
-  driverClass: org.h2.Driver
-  user: sa
-  autoCommitByDefault: false
-  password: ""
-  url: jdbc:h2:mem:test_db
-  initialSize: 0
-  minSize: 0
-  properties:
-    search.packages: io.monkey.quickstarters.core
-    ddl.generate: true
-    ddl.run: true
