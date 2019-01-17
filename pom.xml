@@ -95,6 +95,7 @@
 
 		<module>monkey-undertow</module>
 		<module>monkey-motan</module>
+        <module>monkey-rtdb</module>
 
         <module>monkey-testing</module>
         <module>monkey-benchmarks</module>

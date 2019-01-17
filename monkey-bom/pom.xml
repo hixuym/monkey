@@ -593,7 +593,6 @@
                 <version>${rocksdb.version}</version>
             </dependency>
 
-
             <!-- 当当网 分库分表 -->
             <dependency>
                 <groupId>com.dangdang</groupId>
