@@ -41,6 +41,9 @@ import java.util.List;
 public class MetricsFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetricsFactory.class);
 
+    @JsonProperty
+    public boolean reportOnStop = false;
+
     @Valid
     @NotNull
     private Duration frequency = Duration.minutes(1);
@@ -84,7 +87,7 @@ public class MetricsFactory {
             try {
                 final ScheduledReporterManager manager =
                         new ScheduledReporterManager(reporter.build(registry),
-                                                     reporter.getFrequency().orElseGet(this::getFrequency));
+                                                     reporter.getFrequency().orElseGet(this::getFrequency), reportOnStop);
                 environment.manage(manager);
             } catch (Exception e) {
                 LOGGER.warn("Failed to create reporter, metrics may not be properly reported.", e);
@@ -94,6 +97,6 @@ public class MetricsFactory {
 
     @Override
     public String toString() {
-        return "MetricsFactory{frequency=" + frequency + ", reporters=" + reporters + '}';
+        return "MetricsFactory{frequency=" + frequency + ", reporters=" + reporters + ", reportOnStop=" + reportOnStop + '}';
     }
 }

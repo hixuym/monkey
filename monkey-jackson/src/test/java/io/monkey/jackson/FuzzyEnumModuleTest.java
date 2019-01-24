@@ -1,6 +1,7 @@
 package io.monkey.jackson;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -66,6 +67,9 @@ public class FuzzyEnumModuleTest {
 
         @JsonProperty("forgot password")
         FORGOT_PASSWORD,
+
+        @JsonEnumDefaultValue
+        DEFAULT
     }
 
     @Before
@@ -167,5 +171,19 @@ public class FuzzyEnumModuleTest {
         assertThat(result[0]).isEqualTo(EnumWithPropertyAnno.B);
         assertThat(result[1]).isEqualTo(EnumWithPropertyAnno.A);
         assertThat(result[2]).isEqualTo(EnumWithPropertyAnno.FORGOT_PASSWORD);
+    }
+
+    @Test
+    public void readsUnknownEnumValuesAsNull() throws Exception {
+        final ObjectMapper toStringEnumsMapper = mapper.copy()
+            .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+        assertThat(toStringEnumsMapper.readValue("\"Pound sterling\"", CurrencyCode.class)).isNull();
+    }
+
+    @Test
+    public void readsUnknownEnumValuesUsingDefaultValue() throws Exception {
+        final ObjectMapper toStringEnumsMapper = mapper.copy()
+            .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true);
+        assertThat(toStringEnumsMapper.readValue("\"Pound sterling\"", EnumWithPropertyAnno.class)).isEqualTo(EnumWithPropertyAnno.DEFAULT);
     }
 }

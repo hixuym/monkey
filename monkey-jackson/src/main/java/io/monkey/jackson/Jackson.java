@@ -62,7 +62,6 @@ public class Jackson {
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new JavaTimeModule());// use jsr310 instead of joda
-        mapper.registerModule(new SafeJavaTimeModule());
         mapper.setPropertyNamingStrategy(new AnnotationSensitivePropertyNamingStrategy());
         mapper.setSubtypeResolver(new DiscoverableSubtypeResolver());
         mapper.disable(FAIL_ON_UNKNOWN_PROPERTIES);

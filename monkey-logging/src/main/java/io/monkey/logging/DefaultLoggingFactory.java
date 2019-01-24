@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
+import io.dropwizard.logback.AsyncAppenderBaseProxy;
 import io.monkey.jackson.Jackson;
 import io.monkey.logging.async.AsyncAppenderFactory;
 import io.monkey.logging.async.AsyncLoggingEventAppenderFactory;

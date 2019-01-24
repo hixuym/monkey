@@ -79,7 +79,7 @@
         <jedis.version>3.0.1</jedis.version>
         <spymemcached.version>2.12.3</spymemcached.version>
         <ebean.version>11.32.1</ebean.version>
-        <jdbi3.version>3.5.1</jdbi3.version>
+        <jdbi3.version>3.6.0</jdbi3.version>
         <hikaricp.version>3.3.0</hikaricp.version>
         <liquibase.version>3.6.2</liquibase.version>
         <flyway.version>5.2.4</flyway.version>
@@ -95,6 +95,11 @@
     <dependencyManagement>
 
         <dependencies>
+            <dependency>
+                <groupId>io.dropwizard.logback</groupId>
+                <artifactId>logback-throttling-appender</artifactId>
+                <version>1.0.1</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>

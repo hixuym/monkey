@@ -19,7 +19,7 @@ import java.util.TreeMap;
 import static java.util.Objects.requireNonNull;
 
 /**
- * The command-line runner for Dropwizard application.
+ * The command-line runner for Monkey application.
  *
  * @author michael
  */

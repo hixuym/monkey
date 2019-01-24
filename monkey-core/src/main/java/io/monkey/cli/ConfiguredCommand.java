@@ -29,6 +29,8 @@ import java.io.IOException;
  */
 public abstract class ConfiguredCommand<T extends Configuration> extends Command {
 
+    private static final String PROPERTY_OVERRIDE_PREFIX = "mk";
+
     static Logger LOG = LoggerFactory.getLogger(ConfiguredCommand.class);
 
     private boolean asynchronous;
@@ -129,7 +131,7 @@ public abstract class ConfiguredCommand<T extends Configuration> extends Command
                                  Class<T> klass,
                                  ObjectMapper objectMapper) throws IOException, ConfigurationException {
         final ConfigurationFactory<T> configurationFactory = configurationFactoryFactory
-                .create(klass, validator, objectMapper, "mk");
+                .create(klass, validator, objectMapper, PROPERTY_OVERRIDE_PREFIX);
         if (path != null) {
             return configurationFactory.build(provider, path);
         }

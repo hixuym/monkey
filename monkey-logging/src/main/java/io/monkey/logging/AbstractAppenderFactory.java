@@ -11,6 +11,7 @@ import ch.qos.logback.core.pattern.PatternLayoutBase;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
+import io.dropwizard.logback.ThrottlingAppenderWrapper;
 import io.monkey.logging.async.AsyncAppenderFactory;
 import io.monkey.logging.filter.FilterFactory;
 import io.monkey.logging.layout.DiscoverableLayoutFactory;
@@ -252,7 +253,7 @@ public abstract class AbstractAppenderFactory<E extends DeferredProcessingAware>
         if (messageRate == null) {
             return asyncAppender;
         } else {
-            return new ThrottlingAppenderWrapper<>(asyncAppender, messageRate);
+            return new ThrottlingAppenderWrapper<>(asyncAppender, messageRate.getQuantity(), messageRate.getUnit());
         }
     }
 
