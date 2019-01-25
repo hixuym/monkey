@@ -34,7 +34,7 @@
         <metrics4.version>4.0.5</metrics4.version>
         <freemarker.version>2.3.28</freemarker.version>
 
-        <okio.version>2.1.0</okio.version>
+        <okio.version>2.2.1</okio.version>
         <jwt.version>3.4.1</jwt.version>
         <validator.version>5.4.2.Final</validator.version>
         <javax.el.version>3.0.0</javax.el.version>
@@ -78,7 +78,7 @@
         <rocksdb.version>5.17.2</rocksdb.version>
         <jedis.version>3.0.1</jedis.version>
         <spymemcached.version>2.12.3</spymemcached.version>
-        <ebean.version>11.32.1</ebean.version>
+        <ebean.version>11.33.1</ebean.version>
         <jdbi3.version>3.6.0</jdbi3.version>
         <hikaricp.version>3.3.0</hikaricp.version>
         <liquibase.version>3.6.2</liquibase.version>
