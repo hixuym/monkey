@@ -1,5 +1,0 @@
-io.monkey.logging.ConsoleAppenderFactory
-io.monkey.logging.FileAppenderFactory
-io.monkey.logging.SyslogAppenderFactory
-io.monkey.logging.TcpSocketAppenderFactory
-io.monkey.logging.UdpSocketAppenderFactory
