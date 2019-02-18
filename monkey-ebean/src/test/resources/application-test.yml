@@ -1,0 +1,6 @@
+datasources.default: {}
+
+ebean.default:
+    packagesToScan: io.monkey.ebean
+    ddlGenerate: true
+    ddlRun: true
