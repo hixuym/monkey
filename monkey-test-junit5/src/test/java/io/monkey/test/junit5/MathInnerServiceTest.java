@@ -15,30 +15,38 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.monkey.test.extensions.junit5.MonkeyTest;
+import io.micronaut.test.annotation.MockBean;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-/**
- * @author Michael
- * Created at: 2019/2/17 21:13
- */
 @MonkeyTest
-public class HelloControllerTest {
+class MathInnerServiceTest {
 
     @Inject
-    HelloClient helloClient;
+    MathService mathService;
+
 
     @Test
-    public void testHello() {
-        assertEquals(
-            "Hello Fred!",
-            helloClient.hello("Fred").blockingGet());
+    void testInnerMock() {
+        final int result = mathService.compute(10);
+
+        Assertions.assertEquals(
+                50,
+                result
+        );
+        Assertions.assertTrue(mathService instanceof MyService);
     }
 
+    @MockBean(MathServiceImpl.class)
+    static class MyService implements MathService {
+
+        @Override
+        public Integer compute(Integer num) {
+            return 50;
+        }
+    }
 }

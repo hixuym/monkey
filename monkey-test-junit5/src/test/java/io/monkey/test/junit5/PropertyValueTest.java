@@ -15,28 +15,33 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import io.micronaut.context.annotation.Property;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.NotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Michael
- * Created at: 2019/2/17 20:57
- */
-@Controller
-@Validated
-public class HelloController {
+@MonkeyTest
+@Property(name = "foo.bar", value = "stuff")
+class PropertyValueTest {
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
+    @Property(name = "foo.bar")
+    String val;
 
-        return Single.just("Hello " + name + "!");
+    @Test
+    void testInitialValue() {
+        assertEquals("stuff", val);
     }
 
+    @Property(name = "foo.bar", value = "changed")
+    @Test
+    void testValueChanged() {
+        assertEquals("changed", val);
+    }
+
+    @Test
+    void testValueRestored() {
+        assertEquals("stuff", val);
+    }
 }

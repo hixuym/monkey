@@ -15,28 +15,30 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import javax.validation.constraints.NotNull;
+import javax.inject.Inject;
 
-/**
- * @author Michael
- * Created at: 2019/2/17 20:57
- */
-@Controller
-@Validated
-public class HelloController {
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
+@MonkeyTest // <1>
+class MathServiceTest {
 
-        return Single.just("Hello " + name + "!");
+    @Inject
+    MathService mathService; // <2>
+
+
+    @ParameterizedTest
+    @CsvSource({"2,8", "3,12"})
+    void testComputeNumToSquare(Integer num, Integer square) {
+        final Integer result = mathService.compute(num); // <3>
+
+        Assertions.assertEquals(
+                square,
+                result
+        );
     }
-
 }

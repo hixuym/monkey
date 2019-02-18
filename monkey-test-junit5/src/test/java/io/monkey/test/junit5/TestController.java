@@ -15,28 +15,23 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
 
-import javax.validation.constraints.NotNull;
+@Controller("/test")
+public class TestController {
 
-/**
- * @author Michael
- * Created at: 2019/2/17 20:57
- */
-@Controller
-@Validated
-public class HelloController {
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
+    final TestService testService;
 
-        return Single.just("Hello " + name + "!");
+    TestController(TestService testService) {
+        this.testService = testService;
     }
 
+    @Get
+    String index() {
+        return testService.doStuff();
+    }
 }

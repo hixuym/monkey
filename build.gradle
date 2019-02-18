@@ -74,14 +74,19 @@ subprojects { subproject ->
         runtimeOnly "ch.qos.logback:logback-classic:$logbackVersion"
 
         testImplementation "io.micronaut:micronaut-inject-java"
-        testImplementation "junit:junit:4.12"
-        testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.24.0'
+        testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+        testImplementation('org.mockito:mockito-junit-jupiter:2.24.0')
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
         testAnnotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
     }
 
     test {
-        useJUnit()
-        maxHeapSize = '1G'
+        useJUnitPlatform {
+            includeEngines 'junit-jupiter'
+        }
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
 
     apply from: "${rootProject.rootDir}/gradle/publishing.gradle"

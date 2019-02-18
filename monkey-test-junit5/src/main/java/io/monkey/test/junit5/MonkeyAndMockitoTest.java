@@ -15,28 +15,21 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.validation.constraints.NotNull;
+import java.lang.annotation.*;
 
 /**
- * @author Michael
- * Created at: 2019/2/17 20:57
+ * mockito enabled.
  */
-@Controller
-@Validated
-public class HelloController {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
+@Documented
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
-
-        return Single.just("Hello " + name + "!");
-    }
-
+@MonkeyTest
+@ExtendWith(MockitoExtension.class)
+public @interface MonkeyAndMockitoTest {
 }

@@ -12,31 +12,38 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package hello.world;
+package io.monkey.context;
 
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import io.micronaut.context.ApplicationContext;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.NotNull;
+import javax.inject.Singleton;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Michael
- * Created at: 2019/2/17 20:57
+ * Created at: 2019/2/17 16:59
  */
-@Controller
-@Validated
-public class HelloController {
+public class MonkeyApplicationContextTest {
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
+    @Test
+    public void testMonkeyApplicationContext() {
 
-        return Single.just("Hello " + name + "!");
+        try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+            assertEquals("greeting", context.getBean(Greeting.class).greet());
+        }
+
+    }
+
+    @Singleton
+    static class Greeting {
+
+        public String greet() {
+            return "greeting";
+        }
     }
 
 }

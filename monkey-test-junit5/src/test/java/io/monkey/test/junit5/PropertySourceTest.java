@@ -15,28 +15,21 @@
  *
  */
 
-package hello.world;
+package io.monkey.test.junit5;
 
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import io.micronaut.context.annotation.Property;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.NotNull;
+@MonkeyTest(propertySources = "myprops.properties")
+class PropertySourceTest {
 
-/**
- * @author Michael
- * Created at: 2019/2/17 20:57
- */
-@Controller
-@Validated
-public class HelloController {
+    @Property(name = "foo.bar")
+    String val;
 
-    @Get(uri = "hello/{name}", produces = MediaType.TEXT_PLAIN)
-    public Single<String> hello(@NotNull String name) {
 
-        return Single.just("Hello " + name + "!");
+    @Test
+    void testPropertySource() {
+        Assertions.assertEquals("foo", val);
     }
-
 }
