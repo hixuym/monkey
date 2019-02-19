@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.ebean.setup;
+package io.monkey.ebean;
 
 import io.ebean.annotation.PersistBatch;
 import io.ebean.config.ServerConfig;

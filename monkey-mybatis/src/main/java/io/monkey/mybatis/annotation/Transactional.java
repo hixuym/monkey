@@ -15,37 +15,21 @@
  *
  */
 
-package io.monkey.ebean;
+package io.monkey.mybatis.annotation;
 
-import io.ebean.EbeanServer;
-import io.monkey.ebean.annotation.Transactional;
+import io.micronaut.aop.Around;
 
-import javax.inject.Singleton;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Michael
- * Created at: 2019/2/18 22:19
+ * Created at: 2019/2/19 16:47
  */
-@Singleton
-public class UserServiceImpl implements UserService {
-
-    private final EbeanServer ebeanServer;
-
-    public UserServiceImpl(EbeanServer ebeanServer) {
-        this.ebeanServer = ebeanServer;
-    }
-
-    @Transactional
-    @Override
-    public int saveAndQueryUser() {
-
-        User user = new User();
-
-        user.setAge(10);
-        user.setName("michael");
-
-        ebeanServer.save(user);
-
-        return ebeanServer.find(User.class).findCount();
-    }
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Around
+public @interface Transactional {
 }
