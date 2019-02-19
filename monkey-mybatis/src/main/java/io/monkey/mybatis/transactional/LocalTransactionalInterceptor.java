@@ -15,24 +15,21 @@
  *
  */
 
-package io.monkey.mybatis.annotation;
+package io.monkey.mybatis.transactional;
 
-import io.micronaut.aop.Around;
-import io.micronaut.context.annotation.Type;
-import io.monkey.mybatis.transactional.LocalTransactionalInterceptor;
+import io.micronaut.aop.MethodInterceptor;
+import io.micronaut.aop.MethodInvocationContext;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Singleton;
 
 /**
  * @author Michael
- * Created at: 2019/2/19 16:47
+ * Created at: 2019/2/19 18:00
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Around
-@Type(LocalTransactionalInterceptor.class)
-public @interface Transactional {
+@Singleton
+public class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
+    @Override
+    public Object intercept(MethodInvocationContext<Object, Object> context) {
+        return null;
+    }
 }
