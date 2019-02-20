@@ -17,7 +17,7 @@
 
 package io.monkey.mybatis;
 
-import io.monkey.mybatis.annotation.Transactional;
+import io.monkey.mybatis.transactional.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

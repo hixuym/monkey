@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.ebean;
+package io.monkey.ebean.transactional;
 
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
@@ -26,7 +26,7 @@ import io.ebean.annotation.TxType;
 import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.core.annotation.AnnotationValue;
-import io.monkey.ebean.annotation.Transactional;
+import io.monkey.ebean.transactional.Transactional;
 
 import javax.inject.Singleton;
 
@@ -35,7 +35,7 @@ import javax.inject.Singleton;
  * Created at: 2019/2/18 22:28
  */
 @Singleton
-public class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
+class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
 
     @Override
     public Object intercept(MethodInvocationContext<Object, Object> context) {

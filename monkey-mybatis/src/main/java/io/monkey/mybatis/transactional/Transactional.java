@@ -15,14 +15,11 @@
  *
  */
 
-package io.monkey.mybatis.annotation;
+package io.monkey.mybatis.transactional;
 
 import io.micronaut.aop.Around;
 import io.micronaut.context.annotation.Type;
-import io.monkey.mybatis.interceptor.LocalTransactionalInterceptor;
-import io.monkey.mybatis.transactional.Isolation;
 import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.TransactionIsolationLevel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

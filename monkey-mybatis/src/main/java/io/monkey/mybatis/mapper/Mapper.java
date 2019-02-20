@@ -15,13 +15,12 @@
  *
  */
 
-package io.monkey.mybatis.annotation;
+package io.monkey.mybatis.mapper;
 
 import io.micronaut.aop.Introduction;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Executable;
 import io.micronaut.context.annotation.Type;
-import io.monkey.mybatis.interceptor.MapperIntroductionAdvice;
 
 import javax.inject.Singleton;
 import java.lang.annotation.*;

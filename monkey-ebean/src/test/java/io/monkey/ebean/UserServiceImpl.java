@@ -18,7 +18,7 @@
 package io.monkey.ebean;
 
 import io.ebean.EbeanServer;
-import io.monkey.ebean.annotation.Transactional;
+import io.monkey.ebean.transactional.Transactional;
 
 import javax.inject.Singleton;
 

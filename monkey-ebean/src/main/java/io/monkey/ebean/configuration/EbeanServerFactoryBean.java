@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.ebean;
+package io.monkey.ebean.configuration;
 
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  * Created at: 2019/2/18 16:03
  */
 @Factory
-public class EbeanServerFactoryBean {
+class EbeanServerFactoryBean {
 
     private final EbeanConfiguration ebeanConfiguration;
     private final BeanLocator beanLocator;

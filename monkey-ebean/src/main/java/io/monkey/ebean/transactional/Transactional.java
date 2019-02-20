@@ -15,14 +15,13 @@
  *
  */
 
-package io.monkey.ebean.annotation;
+package io.monkey.ebean.transactional;
 
 import io.ebean.annotation.PersistBatch;
 import io.ebean.annotation.TxIsolation;
 import io.ebean.annotation.TxType;
 import io.micronaut.aop.Around;
 import io.micronaut.context.annotation.Type;
-import io.monkey.ebean.LocalTransactionalInterceptor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

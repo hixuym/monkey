@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.mybatis;
+package io.monkey.mybatis.configuration;
 
 import io.micronaut.context.BeanLocator;
 import io.micronaut.context.annotation.EachProperty;
@@ -23,8 +23,10 @@ import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.jdbc.BasicJdbcConfiguration;
-import io.monkey.mybatis.binder.SimpleMapperRegistry;
+import org.apache.ibatis.binding.BindingException;
+import org.apache.ibatis.binding.MapperProxyFactory;
 import org.apache.ibatis.binding.MapperRegistry;
+import org.apache.ibatis.builder.annotation.MapperAnnotationBuilder;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
@@ -46,8 +48,8 @@ import java.util.Map;
 @EachProperty(value = MybatisConfiguration.PREFIX, primary = "default")
 @Requires(property = MybatisConfiguration.PREFIX + ".default")
 @Requires(property = BasicJdbcConfiguration.PREFIX + ".default")
-public class MybatisConfiguration extends Configuration {
-    public static final String PREFIX = "mybatis";
+class MybatisConfiguration extends Configuration {
+    static final String PREFIX = "mybatis";
 
     private boolean failFast = false;
 
@@ -131,5 +133,42 @@ public class MybatisConfiguration extends Configuration {
     @Override
     public MapperRegistry getMapperRegistry() {
         return mapperRegistry;
+    }
+
+    private static class SimpleMapperRegistry extends MapperRegistry {
+
+        private final Configuration configuration;
+        private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
+
+        public SimpleMapperRegistry(Configuration config) {
+            super(config);
+            this.configuration = config;
+        }
+
+        public <T> boolean hasMapper(Class<T> type) {
+            return knownMappers.containsKey(type);
+        }
+
+        public <T> void addMapper(Class<T> type) {
+            if (type.isInterface()) {
+                if (hasMapper(type)) {
+                    throw new BindingException("Type " + type + " is already known to the MapperRegistry.");
+                }
+                boolean loadCompleted = false;
+                try {
+                    knownMappers.put(type, null);
+                    // It's important that the type is added before the parser is run
+                    // otherwise the binding may automatically be attempted by the
+                    // mapper parser. If the type is already known, it won't try.
+                    MapperAnnotationBuilder parser = new MapperAnnotationBuilder(configuration, type);
+                    parser.parse();
+                    loadCompleted = true;
+                } finally {
+                    if (!loadCompleted) {
+                        knownMappers.remove(type);
+                    }
+                }
+            }
+        }
     }
 }
