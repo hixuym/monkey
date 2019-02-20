@@ -14,17 +14,7 @@
  * limitations under the License.
  *
  */
-
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
-
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
-
-    implementation "io.micronaut:micronaut-inject"
-
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
-}
+/**
+ * Contains classes to mark and handle transactional methods.
+ */
+package io.monkey.mybatis.transactional;

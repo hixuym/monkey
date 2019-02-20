@@ -15,16 +15,24 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.mybatis;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import io.monkey.mybatis.annotation.Mapper;
+import io.monkey.mybatis.annotation.Transactional;
+import org.apache.ibatis.annotations.Param;
 
-    implementation "io.micronaut:micronaut-inject"
+import java.util.Map;
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+/**
+ * @author Michael
+ * Created at: 2019/2/19 23:02
+ */
+@Mapper
+public interface UserMapper extends CrudService {
+
+    void createTable();
+
+    Integer findUserCount(@Param("id") int userId);
+
+    void save(Map<String, String> user);
 }

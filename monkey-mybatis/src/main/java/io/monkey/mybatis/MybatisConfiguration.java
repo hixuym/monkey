@@ -17,11 +17,25 @@
 
 package io.monkey.mybatis;
 
+import io.micronaut.context.BeanLocator;
 import io.micronaut.context.annotation.EachProperty;
-import org.apache.ibatis.session.AutoMappingBehavior;
+import io.micronaut.context.annotation.Parameter;
+import io.micronaut.context.annotation.Requires;
+import io.micronaut.inject.qualifiers.Qualifiers;
+import io.micronaut.jdbc.BasicJdbcConfiguration;
+import io.monkey.mybatis.binder.SimpleMapperRegistry;
+import org.apache.ibatis.binding.MapperRegistry;
+import org.apache.ibatis.mapping.DatabaseIdProvider;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,135 +44,72 @@ import java.util.Map;
  * Created at: 2019/2/19 15:47
  */
 @EachProperty(value = MybatisConfiguration.PREFIX, primary = "default")
-public class MybatisConfiguration {
+@Requires(property = MybatisConfiguration.PREFIX + ".default")
+@Requires(property = BasicJdbcConfiguration.PREFIX + ".default")
+public class MybatisConfiguration extends Configuration {
     public static final String PREFIX = "mybatis";
 
-    private boolean lazyLoadingEnabled = false;
-    private boolean aggressiveLazyLoading = true;
-    private boolean multipleResultSetsEnabled = true;
-    private boolean useGeneratedKeys = false;
-    private boolean useColumnLabel = true;
-    private boolean cacheEnabled = true;
-    private ExecutorType defaultExecutorType = ExecutorType.SIMPLE;
-    private AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
-    private boolean callSettersOnNulls = false;
-    private Integer defaultStatementTimeout;
-    private boolean mapUnderscoreToCamelCase = false;
     private boolean failFast = false;
-
-    private String[] packagesToScan;
 
     private Map<String, Class> aliases = new HashMap<>();
 
-    public Configuration build() {
-        Configuration configuration = new Configuration();
-        configuration.setLazyLoadingEnabled(lazyLoadingEnabled);
-        configuration.setAggressiveLazyLoading(aggressiveLazyLoading);
-        configuration.setMultipleResultSetsEnabled(multipleResultSetsEnabled);
-        configuration.setUseGeneratedKeys(useGeneratedKeys);
-        configuration.setUseColumnLabel(useColumnLabel);
-        configuration.setCacheEnabled(cacheEnabled);
-        configuration.setDefaultExecutorType(defaultExecutorType);
-        configuration.setAutoMappingBehavior(autoMappingBehavior);
-        configuration.setCallSettersOnNulls(callSettersOnNulls);
-        configuration.setDefaultStatementTimeout(defaultStatementTimeout);
-        configuration.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
+    private final SimpleMapperRegistry mapperRegistry = new SimpleMapperRegistry(this);
+
+    private final String dataSourceName;
+
+    public MybatisConfiguration(@Parameter String dataSourceName) {
+        this.dataSourceName = dataSourceName;
+    }
+
+    @PostConstruct
+    public void init(DataSource dataSource, BeanLocator beanLocator) {
 
         if (failFast) {
-            configuration.getMappedStatementNames();
+            this.getMappedStatementNames();
         }
 
-        aliases.forEach((alias, type) -> configuration.getTypeAliasRegistry().registerAlias(alias, type));
+        aliases.forEach((alias, type) -> this.getTypeAliasRegistry().registerAlias(alias, type));
 
-        return configuration;
+        TransactionFactory transactionFactory = beanLocator.findBean(TransactionFactory.class,
+            Qualifiers.byName(dataSourceName)).orElse(new JdbcTransactionFactory());
+
+        Environment environment = new Environment.Builder(dataSourceName)
+            .dataSource(dataSource)
+            .transactionFactory(transactionFactory)
+            .build();
+
+        beanLocator.streamOfType(Interceptor.class,
+            Qualifiers.byName(dataSourceName)).forEach(this::addInterceptor);
+
+        DatabaseIdProvider databaseIdProvider =  beanLocator.findBean(DatabaseIdProvider.class,
+            Qualifiers.byName(dataSourceName)).orElse(new VendorDatabaseIdProvider());
+
+        this.setEnvironment(environment);
     }
 
-    public boolean isLazyLoadingEnabled() {
-        return lazyLoadingEnabled;
+    @Override
+    public void addMappers(String packageName, Class<?> superType) {
+        throw new UnsupportedOperationException();
     }
 
-    public void setLazyLoadingEnabled(boolean lazyLoadingEnabled) {
-        this.lazyLoadingEnabled = lazyLoadingEnabled;
+    @Override
+    public void addMappers(String packageName) {
+        throw new UnsupportedOperationException();
     }
 
-    public boolean isAggressiveLazyLoading() {
-        return aggressiveLazyLoading;
+    @Override
+    public <T> void addMapper(Class<T> type) {
+        this.mapperRegistry.addMapper(type);
     }
 
-    public void setAggressiveLazyLoading(boolean aggressiveLazyLoading) {
-        this.aggressiveLazyLoading = aggressiveLazyLoading;
+    @Override
+    public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
+        throw new UnsupportedOperationException();
     }
 
-    public boolean isMultipleResultSetsEnabled() {
-        return multipleResultSetsEnabled;
-    }
-
-    public void setMultipleResultSetsEnabled(boolean multipleResultSetsEnabled) {
-        this.multipleResultSetsEnabled = multipleResultSetsEnabled;
-    }
-
-    public boolean isUseGeneratedKeys() {
-        return useGeneratedKeys;
-    }
-
-    public void setUseGeneratedKeys(boolean useGeneratedKeys) {
-        this.useGeneratedKeys = useGeneratedKeys;
-    }
-
-    public boolean isUseColumnLabel() {
-        return useColumnLabel;
-    }
-
-    public void setUseColumnLabel(boolean useColumnLabel) {
-        this.useColumnLabel = useColumnLabel;
-    }
-
-    public boolean isCacheEnabled() {
-        return cacheEnabled;
-    }
-
-    public void setCacheEnabled(boolean cacheEnabled) {
-        this.cacheEnabled = cacheEnabled;
-    }
-
-    public ExecutorType getDefaultExecutorType() {
-        return defaultExecutorType;
-    }
-
-    public void setDefaultExecutorType(ExecutorType defaultExecutorType) {
-        this.defaultExecutorType = defaultExecutorType;
-    }
-
-    public AutoMappingBehavior getAutoMappingBehavior() {
-        return autoMappingBehavior;
-    }
-
-    public void setAutoMappingBehavior(AutoMappingBehavior autoMappingBehavior) {
-        this.autoMappingBehavior = autoMappingBehavior;
-    }
-
-    public boolean isCallSettersOnNulls() {
-        return callSettersOnNulls;
-    }
-
-    public void setCallSettersOnNulls(boolean callSettersOnNulls) {
-        this.callSettersOnNulls = callSettersOnNulls;
-    }
-
-    public Integer getDefaultStatementTimeout() {
-        return defaultStatementTimeout;
-    }
-
-    public void setDefaultStatementTimeout(Integer defaultStatementTimeout) {
-        this.defaultStatementTimeout = defaultStatementTimeout;
-    }
-
-    public boolean isMapUnderscoreToCamelCase() {
-        return mapUnderscoreToCamelCase;
-    }
-
-    public void setMapUnderscoreToCamelCase(boolean mapUnderscoreToCamelCase) {
-        this.mapUnderscoreToCamelCase = mapUnderscoreToCamelCase;
+    @Override
+    public boolean hasMapper(Class<?> type) {
+        return this.mapperRegistry.hasMapper(type);
     }
 
     public boolean isFailFast() {
@@ -177,11 +128,8 @@ public class MybatisConfiguration {
         this.aliases = aliases;
     }
 
-    public String[] getPackagesToScan() {
-        return packagesToScan;
-    }
-
-    public void setPackagesToScan(String[] packagesToScan) {
-        this.packagesToScan = packagesToScan;
+    @Override
+    public MapperRegistry getMapperRegistry() {
+        return mapperRegistry;
     }
 }

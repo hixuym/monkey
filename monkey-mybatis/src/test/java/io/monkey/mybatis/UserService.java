@@ -15,21 +15,29 @@
  *
  */
 
-package io.monkey.mybatis.transactional;
+package io.monkey.mybatis;
 
-import io.micronaut.aop.MethodInterceptor;
-import io.micronaut.aop.MethodInvocationContext;
+import io.monkey.mybatis.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
  * @author Michael
- * Created at: 2019/2/19 18:00
+ * Created at: 2019/2/20 17:05
  */
 @Singleton
-public class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
-    @Override
-    public Object intercept(MethodInvocationContext<Object, Object> context) {
-        return null;
+public class UserService {
+
+    @Inject private UserMapper userMapper;
+
+    @Transactional
+    public int findUserCount(int id) {
+        return userMapper.findUserCount(id);
+    }
+
+    @Transactional
+    public void createTable() {
+        userMapper.createTable();
     }
 }

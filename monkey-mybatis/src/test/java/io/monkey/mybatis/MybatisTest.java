@@ -15,13 +15,29 @@
  *
  */
 
-/**
- * @author Michael
- * Created at: 2019/2/19 15:26
- */
-@Configuration
-@Requires(classes = org.apache.ibatis.session.Configuration.class)
 package io.monkey.mybatis;
 
-import io.micronaut.context.annotation.Configuration;
-import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.ApplicationContext;
+import io.monkey.context.MonkeyApplicationContext;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+/**
+ * @author Michael
+ * Created at: 2019/2/19 21:48
+ */
+public class MybatisTest {
+
+    @Test
+    public void testMybatis() {
+        try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+
+            UserService userRepository = context.getBean(UserService.class);
+
+            userRepository.createTable();
+
+            Assertions.assertEquals(0, userRepository.findUserCount(100));
+
+        }
+    }
+}
