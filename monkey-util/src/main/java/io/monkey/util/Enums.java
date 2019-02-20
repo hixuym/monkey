@@ -26,7 +26,6 @@ public class Enums {
 
     /**
      * Convert a string to an enum with more permissive rules than {@link Enum} valueOf().
-     * <p/>
      * This method is more permissive in the following ways:
      * <ul>
      * <li>Whitespace is permitted but stripped from the input.</li>

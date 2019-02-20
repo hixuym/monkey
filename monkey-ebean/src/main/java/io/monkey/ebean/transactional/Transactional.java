@@ -29,18 +29,28 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specify transaction scoping for a method. <p> <b><i> This is only supported if "Enhancement" is
- * used via javaagent, ANT task or IDE enhancement plugin etc. </i></b> </p> <p> Note: Currently
- * there are 3 known annotations that perform this role. <ul> <li>EJB's
- * javax.ejb.TransactionAttribute</li> <li>Spring's org.springframework.transaction.annotation.Transactional</li>
- * <li>and this one, Ebean's own Transactional</li> </ul> Spring created their one because the EJB
+ * Specify transaction scoping for a method.
+ * <p> <b><i> This is only supported if "Enhancement" is
+ * used via javaagent, ANT task or IDE enhancement plugin etc. </i></b> </p>
+ *
+ * <p> Note: Currently
+ * there are 3 known annotations that perform this role.
+ * <ul>
+ * <li>EJB's javax.ejb.TransactionAttribute</li>
+ * <li>Spring's org.springframework.transaction.annotation.Transactional</li>
+ * <li>and this one, Ebean's own Transactional</li>
+ * </ul>
+ * <p>
+ * Spring created their one because the EJB
  * annotation does not support features such as isolation level and specifying rollbackOn,
  * noRollbackOn exceptions. This one exists for Ebean because I agree that the standard one is
- * insufficient and don't want to include a dependency on Spring. </p> <p> The default behaviour of
+ * insufficient and don't want to include a dependency on Spring. </p>
+ *
+ * <p> The default behaviour of
  * EJB (and hence Spring) is to NOT ROLLBACK on checked exceptions. I find this very
  * counter-intuitive. Ebean will provide a property to set the default behaviour to rollback on any
  * exception and optionally change the setting to be consistent with EJB/Spring if people wish to do
- * so. </p> <p>
+ * so. </p>
  * <pre>{@code
  *
  *  // a normal class
@@ -48,7 +58,7 @@ import java.lang.annotation.Target;
  *
  *    // this method is transactional automatically handling
  *    // transaction begin, commit and rollback etc
- *    @Txn
+ *    Transactional
  *    public void runInTrans() throws IOException {
  *
  *      // tasks performed within the transaction
@@ -74,11 +84,13 @@ public @interface Transactional {
 
     /**
      * The type of transaction scoping. Defaults to REQUIRED.
+     * @return type
      */
     TxType type() default TxType.REQUIRED;
 
     /**
      * Persist batch mode for the transaction.
+     * @return batch
      */
     PersistBatch batch() default PersistBatch.INHERIT;
 
@@ -86,12 +98,14 @@ public @interface Transactional {
      * Persist batch mode for the request if not set on the transaction. <p> If batch is set to NONE
      * then batchOnCascade can be set to INSERT or ALL and then each save(), delete(), insert(),
      * update() request that cascades to child beans can use JDBC batch. </p>
+     * @return batchOnCascade
      */
     PersistBatch batchOnCascade() default PersistBatch.INHERIT;
 
     /**
      * The batch size to use when using JDBC batch mode. <p> If unset this defaults to the value set
      * in ServerConfig. </p>
+     * @return batchSize
      */
     int batchSize() default 0;
 
@@ -100,6 +114,7 @@ public @interface Transactional {
      * of large batch inserts where we get a performance benefit from not calling getGeneratedKeys (as
      * we are going to insert a lot of rows and have no need for the Id values after the insert).
      * </p>
+     * @return getGeneratedKeys
      */
     boolean getGeneratedKeys() default true;
 

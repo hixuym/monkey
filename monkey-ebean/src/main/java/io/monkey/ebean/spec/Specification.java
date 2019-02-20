@@ -19,7 +19,6 @@ package io.monkey.ebean.spec;
 
 /**
  * Specificaiton interface.
- * <p/>
  * Use {@link AbstractSpecification} as base for creating specifications, and
  * only the method {@link #isSatisfiedBy(Object)} must be implemented.
  *
