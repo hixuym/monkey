@@ -18,8 +18,6 @@
 package io.monkey.mybatis.annotation;
 
 import io.micronaut.aop.Around;
-import io.micronaut.context.annotation.Type;
-import io.monkey.mybatis.transactional.LocalTransactionalInterceptor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -33,6 +31,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Around
-@Type(LocalTransactionalInterceptor.class)
 public @interface Transactional {
 }
