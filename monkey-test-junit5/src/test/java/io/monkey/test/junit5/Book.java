@@ -15,16 +15,34 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-    implementation "io.micronaut:micronaut-inject"
+@Entity
+public class Book {
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+    @GeneratedValue
+    @Id
+    private Long id;
+
+    private String title;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

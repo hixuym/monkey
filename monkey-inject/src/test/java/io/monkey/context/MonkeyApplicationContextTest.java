@@ -12,32 +12,38 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package io.monkey.mybatis;
+package io.monkey.context;
 
 import io.micronaut.context.ApplicationContext;
-import io.monkey.context.MonkeyApplicationContext;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import javax.inject.Singleton;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Michael
- * Created at: 2019/2/19 21:48
+ * Created at: 2019/2/17 16:59
  */
-public class MybatisTest {
+public class MonkeyApplicationContextTest {
 
     @Test
-    public void testMybatis() {
+    public void testMonkeyApplicationContext() {
+
         try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+            assertEquals("greeting", context.getBean(Greeting.class).greet());
+        }
 
-            UserService userRepository = context.getBean(UserService.class);
+    }
 
-            userRepository.createTable();
+    @Singleton
+    static class Greeting {
 
-            Assertions.assertEquals(0, userRepository.findUserCount(100));
-
+        public String greet() {
+            return "greeting";
         }
     }
+
 }

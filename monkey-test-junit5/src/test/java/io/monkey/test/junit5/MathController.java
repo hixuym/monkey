@@ -15,16 +15,22 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 
-    implementation "io.micronaut:micronaut-inject"
+@Controller("/math")
+public class MathController {
+    MathService mathService;
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+    MathController(MathService mathService) {
+        this.mathService = mathService;
+    }
+
+    @Get(uri = "/compute/{number}", processes = MediaType.TEXT_PLAIN)
+    String compute(Integer number) {
+        return String.valueOf(mathService.compute(number));
+    }
 }

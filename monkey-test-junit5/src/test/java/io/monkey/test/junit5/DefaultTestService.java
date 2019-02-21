@@ -15,16 +15,14 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import javax.inject.Singleton;
 
-    implementation "io.micronaut:micronaut-inject"
-
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+@Singleton
+public class DefaultTestService implements TestService {
+    @Override
+    public String doStuff() {
+        return "original";
+    }
 }

@@ -15,29 +15,38 @@
  *
  */
 
-package io.monkey.mybatis;
+package io.monkey.test.junit5;
 
-import io.micronaut.context.ApplicationContext;
-import io.monkey.context.MonkeyApplicationContext;
+import io.micronaut.test.annotation.MockBean;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * @author Michael
- * Created at: 2019/2/19 21:48
- */
-public class MybatisTest {
+import javax.inject.Inject;
+
+@MonkeyTest
+class MathInnerServiceTest {
+
+    @Inject
+    MathService mathService;
+
 
     @Test
-    public void testMybatis() {
-        try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+    void testInnerMock() {
+        final int result = mathService.compute(10);
 
-            UserService userRepository = context.getBean(UserService.class);
+        Assertions.assertEquals(
+                50,
+                result
+        );
+        Assertions.assertTrue(mathService instanceof MyService);
+    }
 
-            userRepository.createTable();
+    @MockBean(MathServiceImpl.class)
+    static class MyService implements MathService {
 
-            Assertions.assertEquals(0, userRepository.findUserCount(100));
-
+        @Override
+        public Integer compute(Integer num) {
+            return 50;
         }
     }
 }

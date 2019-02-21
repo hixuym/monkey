@@ -15,16 +15,30 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-    implementation "io.micronaut:micronaut-inject"
+import javax.inject.Inject;
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+
+@MonkeyTest // <1>
+class MathServiceTest {
+
+    @Inject
+    MathService mathService; // <2>
+
+
+    @ParameterizedTest
+    @CsvSource({"2,8", "3,12"})
+    void testComputeNumToSquare(Integer num, Integer square) {
+        final Integer result = mathService.compute(num); // <3>
+
+        Assertions.assertEquals(
+                square,
+                result
+        );
+    }
 }

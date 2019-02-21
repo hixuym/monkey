@@ -15,31 +15,33 @@
  *
  */
 
-buildscript {
-    repositories {
-        mavenCentral()
+package io.monkey.test.junit5;
+
+import io.micronaut.context.annotation.Property;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@MonkeyTest
+@Property(name = "foo.bar", value = "stuff")
+class PropertyValueTest {
+
+    @Property(name = "foo.bar")
+    String val;
+
+    @Test
+    void testInitialValue() {
+        assertEquals("stuff", val);
     }
-    dependencies {
-        classpath "io.ebean:ebean-gradle-plugin:11.34.1"
+
+    @Property(name = "foo.bar", value = "changed")
+    @Test
+    void testValueChanged() {
+        assertEquals("changed", val);
     }
-}
 
-apply plugin: 'io.ebean'
-
-ebean {
-    debugLevel = 1
-}
-
-test {
-    testLogging.showStandardStreams = true
-}
-
-dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
-    api "io.ebean:ebean:$ebeanVersion"
-    
-    testImplementation project(":monkey-inject")
-    testRuntimeOnly "com.h2database:h2:1.4.197"
+    @Test
+    void testValueRestored() {
+        assertEquals("stuff", val);
+    }
 }

@@ -15,16 +15,15 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import javax.inject.Singleton;
 
-    implementation "io.micronaut:micronaut-inject"
+@Singleton
+class MathServiceImpl implements MathService {
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+    @Override
+    public Integer compute(Integer num) {
+        return num * 4;
+    }
 }

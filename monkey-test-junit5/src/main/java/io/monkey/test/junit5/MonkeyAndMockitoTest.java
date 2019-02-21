@@ -15,16 +15,21 @@
  *
  */
 
-dependencies {
-    
-    api "org.mybatis:mybatis:$mybatisVersion"
-    api "io.micronaut:micronaut-aop"
-    api "io.micronaut.configuration:micronaut-jdbc-hikari"
+package io.monkey.test.junit5;
 
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-    implementation "io.micronaut:micronaut-inject"
+import java.lang.annotation.*;
 
-    testImplementation project(":monkey-inject")
-    testImplementation "com.h2database:h2:1.4.197"
+/**
+ * mockito enabled.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
+@Documented
+
+@MonkeyTest
+@ExtendWith(MockitoExtension.class)
+public @interface MonkeyAndMockitoTest {
 }
