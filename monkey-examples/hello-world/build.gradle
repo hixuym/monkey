@@ -39,9 +39,8 @@ dependencies {
     implementation "io.micronaut:micronaut-http-server-netty:$micronautVersion"
 
     // Use JUnit test framework
-    testCompileOnly "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation "io.monkey:monkey-test-junit5:$monkeyVersion"
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+    testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
+    testImplementation "junit:junit:4.12"
 }
 
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
@@ -55,13 +54,4 @@ compileTestJava.options.compilerArgs += '-parameters'
 // Merging Service Files
 shadowJar {
     mergeServiceFiles()
-}
-
-test {
-    useJUnitPlatform {
-        includeEngines 'junit-jupiter'
-    }
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
 }

@@ -12,37 +12,38 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package io.monkey.test.junit5;
+package io.monkey.context;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import io.micronaut.context.ApplicationContext;
+import org.junit.Test;
 
-@Entity
-public class Book {
+import javax.inject.Singleton;
 
-    @GeneratedValue
-    @Id
-    private Long id;
+import static org.junit.Assert.assertEquals;
 
-    private String title;
+/**
+ * @author Michael
+ * Created at: 2019/2/17 16:59
+ */
+public class MonkeyApplicationContextTests {
 
-    public Long getId() {
-        return id;
+    @Test
+    public void testMonkeyApplicationContext() {
+
+        try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+            assertEquals("greeting", context.getBean(Greeting.class).greet());
+        }
+
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Singleton
+    static class Greeting {
+
+        public String greet() {
+            return "greeting";
+        }
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

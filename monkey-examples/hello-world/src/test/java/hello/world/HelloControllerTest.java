@@ -17,24 +17,25 @@
 
 package hello.world;
 
-import io.monkey.test.extensions.junit5.MonkeyTest;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Michael
  * Created at: 2019/2/17 21:13
  */
-@MonkeyTest
 public class HelloControllerTest {
 
     @Inject
     HelloClient helloClient;
 
     @Test
+    @Ignore
     public void testHello() {
         assertEquals(
             "Hello Fred!",
