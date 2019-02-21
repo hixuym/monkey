@@ -17,27 +17,21 @@
 
 package io.monkey.mybatis;
 
-import io.monkey.mybatis.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import io.micronaut.context.annotation.EachBean;
+import io.micronaut.context.annotation.Factory;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 /**
  * @author Michael
- * Created at: 2019/2/20 17:05
+ * Created at: 2019/2/19 15:58
  */
-@Singleton
-public class UserService {
+@Factory
+public class MyBatisFactoryBean {
 
-    @Inject private UserMapper userMapper;
-
-    @Transactional
-    public int findUserCount(int id) {
-        return userMapper.findUserCount(id);
-    }
-
-    @Transactional
-    public void createTable() {
-        userMapper.createTable();
+    @EachBean(Configuration.class)
+    protected SqlSessionFactory mybatisSqlSessionFactory(Configuration configuration) {
+        return new SqlSessionFactoryBuilder().build(configuration);
     }
 }

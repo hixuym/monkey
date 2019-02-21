@@ -21,9 +21,9 @@
 
 <mapper namespace="io.monkey.mybatis.UserMapper">
 
-    <!--<select id="findUserCount" parameterType="int" resultType="int">-->
-        <!--select count(*) from users where id=#{id}-->
-    <!--</select>-->
+    <select id="findUserCount" parameterType="int" resultType="int">
+        select count(*) from users where id=#{id}
+    </select>
 
     <update id="createTable">
         create table users(id int primary key not null)

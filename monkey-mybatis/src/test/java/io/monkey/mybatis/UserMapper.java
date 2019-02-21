@@ -17,9 +17,9 @@
 
 package io.monkey.mybatis;
 
-import io.monkey.mybatis.mapper.Mapper;
+import io.monkey.mybatis.annotation.Mapper;
+import io.monkey.mybatis.annotation.Transactional;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.Map;
 
@@ -32,7 +32,6 @@ public interface UserMapper extends CrudService {
 
     void createTable();
 
-    @Select("select count(*) from users where id = ${id}")
     Integer findUserCount(@Param("id") int userId);
 
     void save(Map<String, String> user);

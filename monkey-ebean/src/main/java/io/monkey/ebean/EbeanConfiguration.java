@@ -15,17 +15,15 @@
  *
  */
 
-package io.monkey.ebean.configuration;
+package io.monkey.ebean;
 
 import io.ebean.annotation.PersistBatch;
 import io.ebean.config.ServerConfig;
 import io.ebeaninternal.server.lib.ShutdownManager;
 import io.micronaut.context.annotation.EachProperty;
 import io.micronaut.context.annotation.Parameter;
-import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.convert.format.MapFormat;
 import io.micronaut.core.util.ArrayUtils;
-import io.micronaut.jdbc.BasicJdbcConfiguration;
 
 import javax.annotation.PreDestroy;
 import java.util.HashMap;
@@ -38,10 +36,9 @@ import java.util.Properties;
  * Created at: 2019/2/18 16:02
  */
 @EachProperty(value = EbeanConfiguration.PREFIX, primary = "default")
-@Requires(property = BasicJdbcConfiguration.PREFIX + ".default")
-class EbeanConfiguration implements AutoCloseable {
+public class EbeanConfiguration implements AutoCloseable {
 
-    static final String PREFIX = "ebean";
+    public static final String PREFIX = "ebean";
 
     private final String name;
 
@@ -80,7 +77,7 @@ class EbeanConfiguration implements AutoCloseable {
      * build ebean server config
      * @return ebean server config
      */
-    ServerConfig buildServerConfig() {
+    public ServerConfig buildServerConfig() {
 
         ServerConfig serverConfig = new ServerConfig();
 
@@ -278,7 +275,7 @@ class EbeanConfiguration implements AutoCloseable {
 
     @PreDestroy
     @Override
-    public void close() {
+    public void close() throws Exception {
         ShutdownManager.shutdown();
     }
 }

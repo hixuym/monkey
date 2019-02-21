@@ -15,12 +15,13 @@
  *
  */
 
-package io.monkey.mybatis.mapper;
+package io.monkey.mybatis.binder;
 
 import io.micronaut.context.BeanContext;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.processor.BeanDefinitionProcessor;
 import io.micronaut.inject.BeanDefinition;
+import io.monkey.mybatis.annotation.Mapper;
 import org.apache.ibatis.session.Configuration;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.ibatis.session.Configuration;
  * Created at: 2019/2/20 12:53
  */
 @Context
-class MapperBeanDefinitionProcessor implements BeanDefinitionProcessor<Mapper> {
+public class MapperBeanDefinitionProcessor implements BeanDefinitionProcessor<Mapper> {
 
     private final Configuration configuration;
 

@@ -15,12 +15,14 @@
  *
  */
 
-package io.monkey.mybatis.transactional;
+package io.monkey.mybatis.interceptor;
 
 import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.core.annotation.AnnotationValue;
-import io.monkey.mybatis.session.SqlSessionManager;
+import io.micronaut.inject.ExecutableMethod;
+import io.monkey.mybatis.annotation.Transactional;
+import io.monkey.mybatis.transactional.Isolation;
 import org.apache.ibatis.session.ExecutorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,7 @@ import static java.lang.Thread.currentThread;
  * Created at: 2019/2/19 18:00
  */
 @Singleton
-class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
+public class LocalTransactionalInterceptor implements MethodInterceptor<Object, Object> {
 
     private static final Logger log = LoggerFactory.getLogger(LocalTransactionalInterceptor.class);
 

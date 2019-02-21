@@ -15,14 +15,13 @@
  *
  */
 
-package io.monkey.mybatis.mapper;
+package io.monkey.mybatis.interceptor;
 
 import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.type.Argument;
 import io.micronaut.inject.ExecutableMethod;
-import io.monkey.mybatis.session.SqlSessionManager;
 import org.apache.ibatis.annotations.Flush;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
@@ -31,11 +30,9 @@ import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.StatementType;
+import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.*;
 
 import javax.inject.Singleton;
 import java.lang.reflect.Array;
@@ -47,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created at: 2019/2/19 20:39
  */
 @Singleton
-class MapperIntroductionAdvice implements MethodInterceptor<Object, Object> {
+public class MapperIntroductionAdvice implements MethodInterceptor<Object, Object> {
 
     private final Configuration configuration;
     private SqlSessionManager sqlSessionManager;

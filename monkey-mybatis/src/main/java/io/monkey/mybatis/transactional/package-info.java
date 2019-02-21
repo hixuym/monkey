@@ -14,24 +14,7 @@
  * limitations under the License.
  *
  */
-
-package io.monkey.mybatis.configuration;
-
-import io.micronaut.context.annotation.EachBean;
-import io.micronaut.context.annotation.Factory;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
 /**
- * @author Michael
- * Created at: 2019/2/19 15:58
+ * Contains classes to mark and handle transactional methods.
  */
-@Factory
-class MyBatisFactoryBean {
-
-    @EachBean(Configuration.class)
-    protected SqlSessionFactory mybatisSqlSessionFactory(Configuration configuration) {
-        return new SqlSessionFactoryBuilder().build(configuration);
-    }
-}
+package io.monkey.mybatis.transactional;

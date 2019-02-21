@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.mybatis.session;
+package io.monkey.mybatis.interceptor;
 
 import org.apache.ibatis.session.*;
 
