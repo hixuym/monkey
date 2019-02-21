@@ -21,7 +21,10 @@
  */
 @Configuration
 @Requires(classes = org.apache.ibatis.session.Configuration.class)
+@Requires(beans = DataSource.class)
 package io.monkey.mybatis;
 
 import io.micronaut.context.annotation.Configuration;
 import io.micronaut.context.annotation.Requires;
+
+import javax.sql.DataSource;
