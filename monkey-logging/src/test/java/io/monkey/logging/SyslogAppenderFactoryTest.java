@@ -1,0 +1,91 @@
+package io.monkey.logging;
+
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.net.SyslogAppender;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import io.monkey.jackson.DiscoverableSubtypeResolver;
+import io.monkey.logging.async.AsyncLoggingEventAppenderFactory;
+import io.monkey.logging.filter.NullLevelFilterFactory;
+import io.monkey.logging.layout.MonkeyLayoutFactory;
+import org.junit.Test;
+import org.slf4j.LoggerFactory;
+
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+
+public class SyslogAppenderFactoryTest {
+
+    static {
+        BootstrapLogging.bootstrap();
+    }
+
+    @Test
+    public void isDiscoverable() throws Exception {
+        assertThat(new DiscoverableSubtypeResolver().getDiscoveredSubtypes())
+                .contains(SyslogAppenderFactory.class);
+    }
+
+    @Test
+    public void defaultIncludesAppName() throws Exception {
+        assertThat(new SyslogAppenderFactory().getLogFormat())
+                .contains("%app");
+    }
+
+    @Test
+    public void defaultIncludesPid() throws Exception {
+        assertThat(new SyslogAppenderFactory().getLogFormat())
+                .contains("%pid");
+    }
+
+    @Test
+    public void patternIncludesAppNameAndPid() throws Exception {
+        final AsyncAppender wrapper = (AsyncAppender) new SyslogAppenderFactory()
+                .build(new LoggerContext(), "MyApplication", new MonkeyLayoutFactory(), new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+        assertThat(((SyslogAppender) wrapper.getAppender("syslog-appender")).getSuffixPattern())
+                .matches("^MyApplication\\[\\d+\\].+");
+    }
+
+    @Test
+    public void stackTracePatternCanBeSet() throws Exception {
+        final SyslogAppenderFactory syslogAppenderFactory = new SyslogAppenderFactory();
+        syslogAppenderFactory.setStackTracePrefix("--->");
+        final AsyncAppender wrapper = (AsyncAppender) syslogAppenderFactory
+                .build(new LoggerContext(), "MyApplication", new MonkeyLayoutFactory(), new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+        assertThat(((SyslogAppender) wrapper.getAppender("syslog-appender"))
+                .getStackTracePattern()).isEqualTo("--->");
+    }
+
+    @Test
+    public void appenderContextIsSet() throws Exception {
+        final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        final SyslogAppenderFactory appenderFactory = new SyslogAppenderFactory();
+        final Appender<ILoggingEvent> appender = appenderFactory.build(root.getLoggerContext(), "test", new MonkeyLayoutFactory(),
+            new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+
+        assertThat(appender.getContext()).isEqualTo(root.getLoggerContext());
+    }
+
+    @Test
+    public void appenderNameIsSet() throws Exception {
+        final Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        final SyslogAppenderFactory appenderFactory = new SyslogAppenderFactory();
+        final Appender<ILoggingEvent> appender = appenderFactory.build(root.getLoggerContext(), "test", new MonkeyLayoutFactory(),
+            new NullLevelFilterFactory<>(), new AsyncLoggingEventAppenderFactory());
+
+        assertThat(appender.getName()).isEqualTo("async-syslog-appender");
+    }
+
+    @Test
+    public void syslogFacilityTest() {
+        for (SyslogAppenderFactory.Facility facility : SyslogAppenderFactory.Facility.values()) {
+            assertThatCode(() ->
+                    SyslogAppender.facilityStringToint(facility.toString().toLowerCase(Locale.ENGLISH)))
+                .doesNotThrowAnyException();
+        }
+    }
+}

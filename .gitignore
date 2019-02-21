@@ -1,20 +1,26 @@
-dist/
-.DS_Store
+# Maven
 target/
-.gradle/
+dependency-reduced-pom.xml
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# IntelliJ IDEA
 .idea/
-build/
-classes/
-out/
-*.db
-*.log
 *.iml
-.classpath
-.factorypath
-bin/
-.settings/
-.project
-*/test/
-*/META-INF/
 *.ipr
 *.iws
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+nb-configuration.xml
+atlassian-ide-plugin.xml
+
+logs
+*all.sql
+*.swp
+.svn
+.cache

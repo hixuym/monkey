@@ -1,0 +1,3 @@
+entity-packages: io.monkey.ebean
+transactional-packages: none
+querybean-packages: none

@@ -1,0 +1,4 @@
+io.monkey.logging.AppenderFactory
+io.monkey.logging.LoggingFactory
+io.monkey.logging.filter.FilterFactory
+io.monkey.logging.layout.DiscoverableLayoutFactory
