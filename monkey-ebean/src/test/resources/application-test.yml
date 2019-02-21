@@ -4,3 +4,19 @@ ebean.default:
     packagesToScan: io.monkey.ebean
     ddlGenerate: true
     ddlRun: true
+
+logging:
+  level: INFO
+  loggers:
+    "io.dropwizard": INFO
+    "org.hibernate.SQL":
+      level: DEBUG
+      additive: false
+      appenders.file:
+        currentLogFilename: /var/log/myapplication-sql.log
+        archivedLogFilenamePattern: /var/log/myapplication-sql-%d.log.gz
+        archivedFileCount: 5
+      appenders.console:
+
+  appenders.console: {}
+

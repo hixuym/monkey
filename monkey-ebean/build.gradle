@@ -39,7 +39,6 @@ dependencies {
     api "io.micronaut:micronaut-aop"
     api "io.micronaut.configuration:micronaut-jdbc-hikari"
     api "io.ebean:ebean:$ebeanVersion"
-    
-    testImplementation project(":monkey-inject")
+
     testRuntimeOnly "com.h2database:h2:1.4.197"
 }

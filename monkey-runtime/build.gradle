@@ -1,6 +1,0 @@
-dependencies {
-
-    api project(":monkey-inject")
-
-    api 'io.micronaut:micronaut-runtime'
-}

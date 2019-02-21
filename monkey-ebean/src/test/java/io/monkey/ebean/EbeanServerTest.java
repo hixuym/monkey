@@ -19,7 +19,6 @@ package io.monkey.ebean;
 
 import io.ebean.EbeanServer;
 import io.micronaut.context.ApplicationContext;
-import io.monkey.context.MonkeyApplicationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +33,7 @@ public class EbeanServerTest {
 
     @Test
     void testDataSourceSetup() {
-        try (ApplicationContext context = MonkeyApplicationContext.run("test")) {
+        try (ApplicationContext context = ApplicationContext.run()) {
             DataSource dataSource = context.getBean(DataSource.class);
             Assertions.assertNotNull(dataSource);
         }
@@ -42,7 +41,7 @@ public class EbeanServerTest {
 
     @Test
     void testEbeanServerSetup() {
-        try (ApplicationContext context = MonkeyApplicationContext.run("test")) {
+        try (ApplicationContext context = ApplicationContext.run()) {
             EbeanServer ebeanServer = context.getBean(EbeanServer.class);
             Assertions.assertNotNull(ebeanServer);
         }
@@ -50,7 +49,7 @@ public class EbeanServerTest {
 
     @Test
     void testEbeanServerWork() {
-        try (ApplicationContext context = MonkeyApplicationContext.run("test")) {
+        try (ApplicationContext context = ApplicationContext.run()) {
             EbeanServer ebeanServer = context.getBean(EbeanServer.class);
             List<User> user = ebeanServer.find(User.class).findList();
             Assertions.assertEquals(0, user.size());
@@ -59,7 +58,7 @@ public class EbeanServerTest {
 
     @Test
     void testTxnWork() {
-        try (ApplicationContext context = MonkeyApplicationContext.run("test")) {
+        try (ApplicationContext context = ApplicationContext.run()) {
             UserService userService = context.getBean(UserService.class);
             Assertions.assertEquals(1, userService.saveAndQueryUser());
         }

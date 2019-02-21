@@ -18,7 +18,6 @@
 package io.monkey.mybatis;
 
 import io.micronaut.context.ApplicationContext;
-import io.monkey.context.MonkeyApplicationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +29,7 @@ public class MybatisTest {
 
     @Test
     public void testMybatis() {
-        try(ApplicationContext context = MonkeyApplicationContext.run("test")) {
+        try(ApplicationContext context = ApplicationContext.run()) {
 
             UserService userRepository = context.getBean(UserService.class);
 
