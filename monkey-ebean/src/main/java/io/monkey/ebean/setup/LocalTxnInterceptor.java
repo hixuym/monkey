@@ -25,7 +25,7 @@ import io.ebean.annotation.TxIsolation;
 import io.ebean.annotation.TxType;
 import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
-import io.micronaut.core.annotation.AnnotationValue;
+import io.micronaut.core.annotation.AnnotationMetadata;
 import io.monkey.ebean.Txn;
 
 import javax.inject.Singleton;
@@ -40,24 +40,24 @@ public class LocalTxnInterceptor implements MethodInterceptor<Object, Object> {
     @Override
     public Object intercept(MethodInvocationContext<Object, Object> context) {
 
-        AnnotationValue<Txn> txn = context.getExecutableMethod().getAnnotation(Txn.class);
+        AnnotationMetadata am = context.getExecutableMethod();
 
         TxScope txScope = new TxScope();
+        am.getValue(Txn.class, "type", TxType.class).ifPresent(txScope::setType);
+        am.getValue(Txn.class, "batch", PersistBatch.class).ifPresent(txScope::setBatch);
+        am.getValue(Txn.class, "batchOnCascade", PersistBatch.class).ifPresent(txScope::setBatchOnCascade);
+        am.getValue(Txn.class, "batchSize", int.class).ifPresent(txScope::setBatchSize);
+        am.getValue(Txn.class, "isolation", TxIsolation.class).ifPresent(txScope::setIsolation);
+        am.getValue(Txn.class, "flushOnQuery", boolean.class).ifPresent(txScope::setFlushOnQuery);
+        am.getValue(Txn.class, "readOnly", boolean.class).ifPresent(txScope::setReadOnly);
+        am.getValue(Txn.class, "skipCache", boolean.class).ifPresent(txScope::setSkipCache);
+        am.getValue(Txn.class, "label", String.class).ifPresent(txScope::setLabel);
+        am.getValue(Txn.class, "profileId", int.class).ifPresent(txScope::setProfileId);
+        am.getValue(Txn.class, "rollbackFor", Class[].class).ifPresent(txScope::setRollbackFor);
+        am.getValue(Txn.class, "noRollbackFor", Class[].class).ifPresent(txScope::setNoRollbackFor);
 
-        txn.get("type", TxType.class).ifPresent(txScope::setType);
-        txn.get("batch", PersistBatch.class).ifPresent(txScope::setBatch);
-        txn.get("batchOnCascade", PersistBatch.class).ifPresent(txScope::setBatchOnCascade);
-        txn.get("batchSize", int.class).ifPresent(txScope::setBatchSize);
-        txn.get("isolation", TxIsolation.class).ifPresent(txScope::setIsolation);
-        txn.get("flushOnQuery", boolean.class).ifPresent(txScope::setFlushOnQuery);
-        txn.get("readOnly", boolean.class).ifPresent(txScope::setReadOnly);
-        txn.get("skipCache", boolean.class).ifPresent(txScope::setSkipCache);
-        txn.get("label", String.class).ifPresent(txScope::setLabel);
-        txn.get("profileId", int.class).ifPresent(txScope::setProfileId);
-        txn.get("rollbackFor", Class[].class).ifPresent(txScope::setRollbackFor);
-        txn.get("noRollbackFor", Class[].class).ifPresent(txScope::setNoRollbackFor);
-        txn.get("dbName", String.class).ifPresent(txScope::setServerName);
-        txn.get("getGeneratedKeys", boolean.class).ifPresent(b -> {
+        am.getValue(Txn.class, "dbName", String.class).ifPresent(txScope::setServerName);
+        am.getValue(Txn.class, "getGeneratedKeys", boolean.class).ifPresent(b -> {
             if (!b) {
                 txScope.setSkipGeneratedKeys();
             }
