@@ -15,14 +15,14 @@
  *
  */
 
-package io.monkey.ebean.annotation;
+package io.monkey.ebean;
 
 import io.ebean.annotation.PersistBatch;
 import io.ebean.annotation.TxIsolation;
 import io.ebean.annotation.TxType;
 import io.micronaut.aop.Around;
 import io.micronaut.context.annotation.Type;
-import io.monkey.ebean.LocalTransactionalInterceptor;
+import io.monkey.ebean.setup.LocalTxnInterceptor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -70,8 +70,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Around
-@Type(LocalTransactionalInterceptor.class)
-public @interface Transactional {
+@Type(LocalTxnInterceptor.class)
+public @interface Txn {
 
     /**
      * The type of transaction scoping. Defaults to REQUIRED.

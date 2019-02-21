@@ -12,7 +12,5 @@ rootProject.name = 'monkey-parent'
 include 'monkey-inject'
 include 'monkey-runtime'
 include 'monkey-ebean'
-include 'monkey-mybatis'
-include 'monkey-util'
 include 'monkey-test-junit5'
 

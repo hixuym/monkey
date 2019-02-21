@@ -15,7 +15,7 @@
  *
  */
 
-package io.monkey.ebean;
+package io.monkey.ebean.setup;
 
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
